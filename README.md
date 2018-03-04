@@ -1,4 +1,8 @@
+# Drupal Admin UI
+
 ![alt text](https://i.imgur.com/ZZv48Vi.gif "Demo of vfancy falling back to Drupal routes")
+
+## Installation
 
 ```
 git clone https://github.com/drupal/drupal
