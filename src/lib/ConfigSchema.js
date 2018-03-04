@@ -1,7 +1,7 @@
 import immutable from "immutable";
 import React from 'react';
 
-const configSchemaToReactComponent = (name, configSchema, onChangeField) => {
+const configSchemaToReactComponent = (name, state, configSchema, onChangeField) => {
   const configSchemaWithWidgets = immutable.fromJS(configSchema).mergeDeep(configSchemaToUiSchema(configSchema)).toJS();
   switch (configSchemaWithWidgets['ui:widget']) {
     case 'textfield':
@@ -9,7 +9,7 @@ const configSchemaToReactComponent = (name, configSchema, onChangeField) => {
         <div key={name}>
           <label>
             {configSchema.label}
-            <input type="textfield" name={name} onChange={onChangeField(name)}/>
+            <input type="textfield" name={name} onChange={onChangeField(name)} value={state[name]}/>
           </label>
         </div>
       );
@@ -18,7 +18,7 @@ const configSchemaToReactComponent = (name, configSchema, onChangeField) => {
         <div key={name}>
           <label>
             {configSchema.label}
-            <input type="number" name={name} onChange={onChangeField(name)}/>
+            <input type="number" name={name} onChange={onChangeField(name)} value={state[name]}/>
           </label>
         </div>
       );
@@ -27,7 +27,7 @@ const configSchemaToReactComponent = (name, configSchema, onChangeField) => {
         <div key={name}>
           <label>
             {configSchema.label}
-            <input type="checkbox" name={name} onChange={onChangeField(name)}/>
+            <input type="checkbox" name={name} onChange={onChangeField(name)} value={state[name]}/>
           </label>
         </div>
       );
@@ -35,7 +35,7 @@ const configSchemaToReactComponent = (name, configSchema, onChangeField) => {
       return (
         <div key={'root'}>
           <fieldset>
-            {Object.entries(configSchema.mapping).map(pair => configSchemaToReactComponent(pair[0], pair[1], onChangeField))}
+            {Object.entries(configSchema.mapping).map(pair => configSchemaToReactComponent(pair[0], state, pair[1], onChangeField))}
           </fieldset>
         </div>
       );
@@ -45,7 +45,7 @@ const configSchemaToReactComponent = (name, configSchema, onChangeField) => {
           <label>
             {configSchema.label}
             <fieldset>
-              {Object.entries(configSchema.mapping).map(pair => configSchemaToReactComponent(pair[0], pair[1], onChangeField))}
+              {Object.entries(configSchema.mapping).map(pair => configSchemaToReactComponent(pair[0], state, pair[1], onChangeField))}
             </fieldset>
           </label>
         </div>
