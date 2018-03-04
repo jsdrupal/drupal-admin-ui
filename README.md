@@ -1,4 +1,4 @@
-![Demo of vfancy falling back to Drupal for an unknown route](https://i.imgur.com/zbNrH2u.gifv)
+![Demo of vfancy falling back to Drupal for an unknown route](https://i.imgur.com/JW7CdkZ.gifv)
 
 
 ```
