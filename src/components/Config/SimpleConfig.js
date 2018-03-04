@@ -55,7 +55,7 @@ class SimpleConfig extends React.Component {
     }
     return (
       <form>
-        {ConfigSchema.configSchemaToReactComponent('', configSchema[this.props.name], this.onChangeField)}
+        {ConfigSchema.configSchemaToReactComponent('', this.state, configSchema[this.props.name], this.onChangeField)}
         <button onClick={this.onSubmit}>Save</button>
       </form>
     );

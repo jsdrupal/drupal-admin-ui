@@ -1,6 +1,8 @@
 import immutable from "immutable";
 import React from 'react';
 
+// @todo Support nested values.
+
 const configSchemaToReactComponent = (name, state, configSchema, onChangeField) => {
   const configSchemaWithWidgets = immutable.fromJS(configSchema).mergeDeep(configSchemaToUiSchema(configSchema)).toJS();
   switch (configSchemaWithWidgets['ui:widget']) {
@@ -129,6 +131,15 @@ const fetchSimpleConfig = (name) => {
     })
     .catch(console.error);
 };
+
+const convertFormValuesToNormalized = (object) => {
+  return object;
+};
+
+const convertNormalizedToFormValues = (normalized) => {
+  return normalized;
+};
+
 
 export {
   configSchemaToReactComponent,
