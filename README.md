@@ -11,7 +11,7 @@ yarn build
 
 # Link vfancy to Drupal
 cd ../drupal
-ln -s ../drupal-admin-ui vfancy
+ln -s ../drupal-admin-ui/build vfancy
 
 # Install Drupal and start webserver
 composer install
@@ -19,4 +19,4 @@ php -S localhost:8000
 ```
 
 - Open `http://localhost:8000` and install with SQLite
-- Visit `http://localhost:8000/vfancy/build`
+- Visit `http://localhost:8000/vfancy`
