@@ -1,6 +1,6 @@
 # Drupal Admin UI
 
-![alt text](https://i.imgur.com/ZZv48Vi.gif "Demo of vfancy falling back to Drupal routes")
+![Demo of vfancy falling back to Drupal for an unknown route](https://i.imgur.com/WMXDQEx.gif)
 
 ## Installation
 
