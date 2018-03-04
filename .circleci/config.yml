@@ -1,0 +1,77 @@
+aliases:
+  - &defaults
+    docker:
+      - image: circleci/node:8-browsers
+  - &restore-modules
+    restore_cache:
+      keys:
+        - v1-dependencies-{{ checksum "yarn.lock" }}
+  - &restore-build
+    restore_cache:
+      keys:
+        - build-v1-{{ .Branch }}-{{ .Revision }}
+
+version: 2
+jobs:
+  build:
+    <<: *defaults
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+          - v1-dependencies-{{ checksum "yarn.lock" }}
+      - run: yarn install
+      - run: yarn build
+      - save_cache:
+          paths:
+            - node_modules
+          key: v1-dependencies-{{ checksum "yarn.lock" }}
+      - save_cache:
+          paths:
+            - build
+            - node_modules
+          key: build-v1-{{ .Branch }}-{{ .Revision }}
+
+  test:
+    <<: *defaults
+    steps:
+      - checkout
+      - *restore-build
+      - run: yarn test
+
+  dist:
+    <<: *defaults
+    steps:
+      - add_ssh_keys:
+          fingerprints:
+            - "${FINGERPRINT_DIST}"
+      - checkout
+      - *restore-build
+      - run: |
+          mv ~/project/build ~
+          git config --global user.name "⬅️✌️➡️"
+          git config --global user.email "no-reply@drupal.org"
+          git clone git@github.com:jsdrupal/drupal-admin-ui-dist.git ~/build-repo
+          mv ~/build-repo/.git ~/build
+          cd ~/build
+          cp ~/project/.circleci/composer.json .
+          git add .
+          git commit -m "Auto build from master"
+          git push origin master
+
+workflows:
+  version: 2
+  package:
+    jobs:
+      - build
+      - test:
+          requires:
+            - build
+      - dist:
+          requires:
+            - test
+            - build
+          filters:
+           branches:
+            only:
+              - master

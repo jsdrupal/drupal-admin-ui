@@ -1,0 +1,8 @@
+{
+  "name": "justafish/drupal-admin-ui",
+  "description": "This is the v fancy React admin UI for Drupal",
+  "license": "MIT",
+  "require": {
+    "php": "^5.5.9 || ^7.0"
+  }
+}
