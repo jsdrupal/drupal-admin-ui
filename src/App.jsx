@@ -5,24 +5,11 @@ import {
   Link
 } from 'react-router-dom'
 
+import Home from './components/05_pages/Home/Home';
+import Permissions from './components/05_pages/Permissions/Permissions';
 
-const Home = () => (
-  <div>
-    <h1>Hello, world!</h1>
-  </div>
-);
-
-const Permissions = () => (
-  <div>
-    <h1>Permissions</h1>
-    <p>This will be the permissions page.</p>
-  </div>
-);
-
-const routes = {
-  '/': Home,
-  '/admin/people/permissions': Permissions,
-};
+import normalize from './styles/normalize'; // eslint-disable-line no-unused-vars
+import base from './styles/base'; // eslint-disable-line no-unused-vars
 
 class NoMatch extends Component {
   componentWillReceiveProps(nextProps) {
@@ -33,6 +20,11 @@ class NoMatch extends Component {
   render() {
     return null;
   }
+};
+
+// @todo Share this with Drupal
+const routes = {
+  '/admin/people/permissions': Permissions,
 };
 
 class App extends Component {
@@ -50,10 +42,12 @@ class App extends Component {
             <li><Link to="/node/add">Content</Link></li>
           </ul>
 
-          <hr/>
+          <hr />
 
-          <Route exact path="/" component={Home}/>
-          <Route path="/admin/people/permissions" component={Permissions}/>
+          <Route exact path="/" component={Home} />
+          {Object.keys(routes).map(route => (
+            <Route path={route} component={routes[route]} key={route} />
+          ))}
           <Route component={NoMatch} />
         </div>
       </Router>
