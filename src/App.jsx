@@ -5,8 +5,7 @@ import {
   Link
 } from 'react-router-dom'
 
-import Home from './components/05_pages/Home/Home';
-import Permissions from './components/05_pages/Permissions/Permissions';
+import { Home, Permissions } from './components';
 
 import normalize from './styles/normalize'; // eslint-disable-line no-unused-vars
 import base from './styles/base'; // eslint-disable-line no-unused-vars
