@@ -1,9 +1,5 @@
-import React, { Component } from 'react'
-import {
-  BrowserRouter as Router,
-  Route,
-  Link
-} from 'react-router-dom'
+import React, { Component } from 'react';
+import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 
 import Home from './components/05_pages/Home/Home';
 import Permissions from './components/05_pages/Permissions/Permissions';
@@ -20,7 +16,7 @@ class NoMatch extends Component {
   render() {
     return null;
   }
-};
+}
 
 // @todo Share this with Drupal
 const routes = {
@@ -36,10 +32,18 @@ class App extends Component {
       <Router>
         <div>
           <ul>
-            <li><Link to="/">Home</Link></li>
-            <li><Link to="/admin/people/permissions">Permissions</Link></li>
-            <li><Link to="/admin/appearance">Appearance</Link></li>
-            <li><Link to="/node/add">Content</Link></li>
+            <li>
+              <Link to="/">Home</Link>
+            </li>
+            <li>
+              <Link to="/admin/people/permissions">Permissions</Link>
+            </li>
+            <li>
+              <Link to="/admin/appearance">Appearance</Link>
+            </li>
+            <li>
+              <Link to="/node/add">Content</Link>
+            </li>
           </ul>
 
           <hr />
@@ -53,6 +57,6 @@ class App extends Component {
       </Router>
     );
   }
-};
+}
 
 export default App;
