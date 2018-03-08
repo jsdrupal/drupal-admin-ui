@@ -20,8 +20,8 @@
     "react-scripts": "1.1.1"
   },
   "scripts": {
-    "prettier": "./node_modules/.bin/prettier --write 'src/**/*.jsx' 'src/**/*.js'",
-    "lint": "./node_modules/.bin/eslint -c .eslintrc.json .",
+    "prettier": "prettier --write 'src/**/*.jsx' 'src/**/*.js'",
+    "lint": "eslint -c .eslintrc.json ./src",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
