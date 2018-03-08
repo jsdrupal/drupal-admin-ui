@@ -1,13 +1,15 @@
 {
   "extends": [
-    "eslint-config-airbnb",
+    "airbnb",
     "plugin:prettier/recommended"
   ],
   "parser": "babel-eslint",
   "root": true,
   "env": {
     "browser": true,
-    "es6": true
+    "es6": true,
+    "jest": true,
+    "serviceworker": true
   },
   "rules": {
     "react/jsx-filename-extension": [1, { "extensions": [".js"] }]
