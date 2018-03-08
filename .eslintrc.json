@@ -1,0 +1,17 @@
+{
+  "extends": [
+    "eslint-config-airbnb",
+    "plugin:prettier/recommended"
+  ],
+  "parser": "babel-eslint",
+  "root": true,
+  "env": {
+    "browser": true,
+    "es6": true
+  },
+  "rules": {
+    "no-param-reassign": [0],
+    "no-underscore-dangle": [0],
+    "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }]
+  }
+}

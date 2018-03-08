@@ -9,9 +9,19 @@
     "react-router-dom": "^4.2.2"
   },
   "devDependencies": {
+    "eslint": "^4.9.0",
+    "eslint-config-airbnb": "^16.1.0",
+    "eslint-config-prettier": "^2.9.0",
+    "eslint-plugin-import": "^2.7.0",
+    "eslint-plugin-jsx-a11y": "^6.0.2",
+    "eslint-plugin-prettier": "^2.6.0",
+    "eslint-plugin-react": "^7.4.0",
+    "prettier": "^1.11.1",
     "react-scripts": "1.1.1"
   },
   "scripts": {
+    "prettier": "./node_modules/.bin/prettier --write 'src/**/*.jsx' 'src/**/*.js'",
+    "lint": "./node_modules/.bin/eslint -c .eslintrc.json .",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
