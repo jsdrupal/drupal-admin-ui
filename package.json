@@ -16,6 +16,7 @@
     "eslint-plugin-jsx-a11y": "^6.0.2",
     "eslint-plugin-prettier": "^2.6.0",
     "eslint-plugin-react": "^7.4.0",
+    "jest-junit": "^3.6.0",
     "prettier": "^1.11.1",
     "react-scripts": "1.1.1"
   },
@@ -25,7 +26,9 @@
     "build": "react-scripts build",
     "test": "yarn test:lint && yarn test:unit",
     "test:unit": "react-scripts test --env=jsdom",
+    "test:unit:ci": "CI=true JEST_JUNIT_OUTPUT=reports/jest-junit.xml react-scripts test --testResultsProcessor ./node_modules/jest-junit --env=jsdom",
     "test:lint": "eslint ./src",
+    "test:lint:ci": "eslint ./src --format junit -o reports/eslint-junit.xml",
     "eject": "react-scripts eject"
   }
 }
