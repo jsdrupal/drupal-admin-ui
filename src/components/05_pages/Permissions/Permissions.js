@@ -1,6 +1,12 @@
 import React from 'react';
 import { css } from 'emotion';
 
+const styles = {
+  title: css`
+    text-decoration: underline;
+  `,
+};
+
 const Permissions = () => (
   <div>
     <h1 className={styles.title}>Permissions</h1>
@@ -8,11 +14,4 @@ const Permissions = () => (
   </div>
 );
 
-const styles = {
-  title: css`
-    text-decoration: underline;
-  `,
-};
-
 export default Permissions;
-

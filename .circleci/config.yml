@@ -32,12 +32,23 @@ jobs:
             - node_modules
           key: build-v1-{{ .Branch }}-{{ .Revision }}
 
-  test:
+  lint:
     <<: *defaults
     steps:
       - checkout
       - *restore-build
-      - run: yarn test
+      - run: yarn test:lint:ci
+      - store_test_results:
+          path: reports
+
+  unit:
+    <<: *defaults
+    steps:
+      - checkout
+      - *restore-build
+      - run: yarn test:unit:ci
+      - store_test_results:
+          path: reports
 
   dist:
     <<: *defaults
@@ -64,12 +75,16 @@ workflows:
   package:
     jobs:
       - build
-      - test:
+      - lint:
+          requires:
+            - build
+      - unit:
           requires:
             - build
       - dist:
           requires:
-            - test
+            - lint
+            - unit
             - build
           filters:
            branches:

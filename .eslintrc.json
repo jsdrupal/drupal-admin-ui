@@ -1,0 +1,20 @@
+{
+  "extends": [
+    "airbnb",
+    "plugin:prettier/recommended"
+  ],
+  "parser": "babel-eslint",
+  "env": {
+    "browser": true,
+    "es6": true,
+    "jest": true,
+    "serviceworker": true
+  },
+  "rules": {
+    "react/jsx-filename-extension": [1, { "extensions": [".js"] }],
+    "jsx-a11y/anchor-is-valid": [ "error", {
+      "aspects": [ "noHref" ]
+    }],
+    "no-param-reassign": [2, { "props": false }]
+  }
+}
