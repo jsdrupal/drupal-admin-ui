@@ -1,27 +1,13 @@
 import React, { Component } from 'react';
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 
+import routes from './routes';
+
 import Home from './components/05_pages/Home/Home';
-import Permissions from './components/05_pages/Permissions/Permissions';
+import NoMatch from './NoMatch';
 
 import normalize from './styles/normalize'; // eslint-disable-line no-unused-vars
 import base from './styles/base'; // eslint-disable-line no-unused-vars
-
-class NoMatch extends Component {
-  componentWillReceiveProps(nextProps) {
-    if (!Object.keys(routes).includes(nextProps.location.pathname)) {
-      window.location = window.location.href;
-    }
-  }
-  render() {
-    return null;
-  }
-}
-
-// @todo Share this with Drupal
-const routes = {
-  '/admin/people/permissions': Permissions,
-};
 
 class App extends Component {
   componentDidMount() {
