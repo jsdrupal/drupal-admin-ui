@@ -20,11 +20,12 @@
     "react-scripts": "1.1.1"
   },
   "scripts": {
-    "prettier": "prettier --write 'src/**/*.jsx' 'src/**/*.js'",
-    "lint": "eslint -c .eslintrc.json ./src",
+    "prettier": "prettier --write 'src/**/*.js'",
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test --env=jsdom",
+    "test": "yarn test:lint && yarn test:unit",
+    "test:unit": "react-scripts test --env=jsdom",
+    "test:lint": "eslint ./src",
     "eject": "react-scripts eject"
   }
 }

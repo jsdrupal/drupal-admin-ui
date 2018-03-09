@@ -3,8 +3,6 @@
     "airbnb",
     "plugin:prettier/recommended"
   ],
-  "parser": "babel-eslint",
-  "root": true,
   "env": {
     "browser": true,
     "es6": true,
