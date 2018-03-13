@@ -28,15 +28,6 @@ const Permissions = class Permissions extends Component {
   componentWillUnmount() {
     this.cancelFetch();
   }
-  fetchData = () =>
-    Promise.all([
-      fetch(
-        `${process.env.REACT_APP_DRUPAL_BASE_URL}/permissions?_format=json`,
-      ).then(res => res.json()),
-      fetch(
-        `${process.env.REACT_APP_DRUPAL_BASE_URL}/jsonapi/user_role/user_role`,
-      ).then(res => res.json()),
-    ]);
   groupPermissions = permissions =>
     Object.entries(
       Object.keys(permissions)
