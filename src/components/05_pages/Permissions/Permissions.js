@@ -3,6 +3,14 @@ import makeCancelable from 'makecancelable';
 import React, { Fragment, Component } from 'react';
 import Loading from '../../Helpers/Loading';
 
+import {
+  TableRow,
+  TableData,
+  Table,
+  TableBody,
+  TableHeaderSimple,
+} from '../../UI';
+
 const Permissions = class Permissions extends Component {
   state = {
     loaded: false,
@@ -42,36 +50,34 @@ const Permissions = class Permissions extends Component {
     return !this.state.loaded ? (
       <Loading />
     ) : (
-      <table>
-        <thead>
-          <tr>
-            {[
-              'PERMISSION',
-              ...this.state.roles.map(({ attributes: { label } }) =>
-                label.toUpperCase(),
-              ),
-            ].map(label => <td key={`column-${label}`}>{label}</td>)}
-          </tr>
-        </thead>
-        <tbody>
+      <Table zebra>
+        <TableHeaderSimple
+          data={[
+            'PERMISSION',
+            ...this.state.roles.map(({ attributes: { label } }) =>
+              label.toUpperCase(),
+            ),
+          ]}
+        />
+        <TableBody>
           {this.groupPermissions(this.state.permissions).map(
             ([permissionGroupName, permissions]) =>
               permissions.length && (
                 <Fragment key={`fragment-${permissionGroupName}`}>
-                  <tr key={`permissionGroup-${permissionGroupName}`}>
-                    <td colSpan={this.state.roles.length + 1}>
+                  <TableRow key={`permissionGroup-${permissionGroupName}`}>
+                    <TableData colSpan={this.state.roles.length + 1}>
                       <b>{permissionGroupName}</b>
-                    </td>
-                  </tr>
+                    </TableData>
+                  </TableRow>
                   {permissions.map(permission => (
-                    <tr
+                    <TableRow
                       key={`permissionGroup-${permissionGroupName}-${
                         permission.title
                       }`}
                     >
-                      <td>{permission.title}</td>
+                      <TableData>{permission.title}</TableData>
                       {this.state.roles.map(({ attributes }) => (
-                        <td
+                        <TableData
                           key={`role-${attributes.id}-permission-${
                             permission.id
                           }`}
@@ -87,15 +93,15 @@ const Permissions = class Permissions extends Component {
                               )}
                             />
                           )}
-                        </td>
+                        </TableData>
                       ))}
-                    </tr>
+                    </TableRow>
                   ))}
                 </Fragment>
               ),
           )}
-        </tbody>
-      </table>
+        </TableBody>
+      </Table>
     );
   }
 };
