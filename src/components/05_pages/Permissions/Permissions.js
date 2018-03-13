@@ -1,15 +1,9 @@
 import makeCancelable from 'makecancelable';
 
-import React, { Fragment, Component } from 'react';
+import React, { Component } from 'react';
 import Loading from '../../Helpers/Loading';
 
-import {
-  TableRow,
-  TableData,
-  Table,
-  TableBody,
-  TableHeaderSimple,
-} from '../../UI';
+import { Table, TableBody, TableHeaderSimple } from '../../UI';
 
 const Permissions = class Permissions extends Component {
   state = {
@@ -59,48 +53,39 @@ const Permissions = class Permissions extends Component {
             ),
           ]}
         />
-        <TableBody>
-          {this.groupPermissions(this.state.permissions).map(
-            ([permissionGroupName, permissions]) =>
-              permissions.length && (
-                <Fragment key={`fragment-${permissionGroupName}`}>
-                  <TableRow key={`permissionGroup-${permissionGroupName}`}>
-                    <TableData colSpan={this.state.roles.length + 1}>
-                      <b>{permissionGroupName}</b>
-                    </TableData>
-                  </TableRow>
-                  {permissions.map(permission => (
-                    <TableRow
-                      key={`permissionGroup-${permissionGroupName}-${
-                        permission.title
-                      }`}
-                    >
-                      <TableData>{permission.title}</TableData>
-                      {this.state.roles.map(({ attributes }) => (
-                        <TableData
-                          key={`role-${attributes.id}-permission-${
-                            permission.id
-                          }`}
-                        >
-                          {attributes.is_admin &&
-                          attributes.id === 'administrator' ? (
-                            <input type="checkbox" checked />
-                          ) : (
-                            <input
-                              type="checkbox"
-                              checked={attributes.permissions.includes(
-                                permission.id,
-                              )}
-                            />
+        <TableBody
+          rows={this.groupPermissions(this.state.permissions)
+            .map(([permissionGroupName, permissions]) => [
+              {
+                key: `permissionGroup-${permissionGroupName}`,
+                colspan: this.state.roles.length + 1,
+                tds: [<b>{permissionGroupName}</b>],
+              },
+              ...permissions.map(permission => ({
+                key: `permissionGroup-${permissionGroupName}-${
+                  permission.title
+                }`,
+                tds: [
+                  permission.title,
+                  ...this.state.roles.map(
+                    ({ attributes }) =>
+                      attributes.is_admin &&
+                      attributes.id === 'administrator' ? (
+                        <input type="checkbox" checked />
+                      ) : (
+                        <input
+                          type="checkbox"
+                          checked={attributes.permissions.includes(
+                            permission.id,
                           )}
-                        </TableData>
-                      ))}
-                    </TableRow>
-                  ))}
-                </Fragment>
-              ),
-          )}
-        </TableBody>
+                        />
+                      ),
+                  ),
+                ],
+              })),
+            ])
+            .reduce((a, b) => a.concat(b), [])}
+        />
       </Table>
     );
   }
