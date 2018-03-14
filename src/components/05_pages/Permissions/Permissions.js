@@ -1,6 +1,6 @@
 import makeCancelable from 'makecancelable';
 
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import Loading from '../../Helpers/Loading';
 
 import { Table, TableBody, TableHeaderSimple } from '../../UI';
@@ -22,7 +22,16 @@ const Permissions = class Permissions extends Component {
         ).then(res => res.json()),
       ])
         .then(([permissions, { data: roles }]) =>
-          this.setState({ permissions, roles, loaded: true }),
+          this.setState({
+            rawPermissions: Object.keys(permissions).map(
+              key => permissions[key],
+            ),
+            renderablePermissions: Object.keys(permissions).map(
+              key => permissions[key],
+            ),
+            roles,
+            loaded: true,
+          }),
         )
         .catch(err => this.setState({ loaded: false, err })),
     );
@@ -32,13 +41,11 @@ const Permissions = class Permissions extends Component {
   }
   groupPermissions = permissions =>
     Object.entries(
-      Object.keys(permissions)
-        .map(key => permissions[key])
-        .reduce((acc, cur) => {
-          acc[cur.provider] = acc[cur.provider] || [];
-          acc[cur.provider].push(cur);
-          return acc;
-        }, {}),
+      permissions.reduce((acc, cur) => {
+        acc[cur.provider] = acc[cur.provider] || [];
+        acc[cur.provider].push(cur);
+        return acc;
+      }, {}),
     );
   createTableRows = (groupedPermissions, roles) =>
     [].concat(
@@ -67,26 +74,42 @@ const Permissions = class Permissions extends Component {
         })),
       ]),
     );
+  handleKeyPress = event => {
+    const input = event.target.value.toLowerCase();
+    this.setState(prevState => ({
+      ...prevState,
+      renderablePermissions: prevState.rawPermissions.filter(({ title }) =>
+        title.includes(input),
+      ),
+    }));
+  };
   render() {
     return !this.state.loaded ? (
       <Loading />
     ) : (
-      <Table zebra>
-        <TableHeaderSimple
-          data={[
-            'PERMISSION',
-            ...this.state.roles.map(({ attributes: { label } }) =>
-              label.toUpperCase(),
-            ),
-          ]}
+      <Fragment>
+        <input
+          type="text"
+          onChange={this.handleKeyPress}
+          onKeyDown={this.handleKeyPress}
         />
-        <TableBody
-          rows={this.createTableRows(
-            this.groupPermissions(this.state.permissions),
-            this.state.roles,
-          )}
-        />
-      </Table>
+        <Table zebra>
+          <TableHeaderSimple
+            data={[
+              'PERMISSION',
+              ...this.state.roles.map(({ attributes: { label } }) =>
+                label.toUpperCase(),
+              ),
+            ]}
+          />
+          <TableBody
+            rows={this.createTableRows(
+              this.groupPermissions(this.state.renderablePermissions),
+              this.state.roles,
+            )}
+          />
+        </Table>
+      </Fragment>
     );
   }
 };
