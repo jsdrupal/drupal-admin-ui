@@ -40,6 +40,33 @@ const Permissions = class Permissions extends Component {
           return acc;
         }, {}),
     );
+  createTableRows = (groupedPermissions, roles) =>
+    [].concat(
+      ...groupedPermissions.map(([permissionGroupName, permissions]) => [
+        {
+          key: `permissionGroup-${permissionGroupName}`,
+          colspan: roles.length + 1,
+          tds: [<b>{permissionGroupName}</b>],
+        },
+        ...permissions.map(permission => ({
+          key: `permissionGroup-${permissionGroupName}-${permission.title}`,
+          tds: [
+            permission.title,
+            ...roles.map(
+              ({ attributes }) =>
+                attributes.is_admin && attributes.id === 'administrator' ? (
+                  <input type="checkbox" checked />
+                ) : (
+                  <input
+                    type="checkbox"
+                    checked={attributes.permissions.includes(permission.id)}
+                  />
+                ),
+            ),
+          ],
+        })),
+      ]),
+    );
   render() {
     return !this.state.loaded ? (
       <Loading />
@@ -54,37 +81,10 @@ const Permissions = class Permissions extends Component {
           ]}
         />
         <TableBody
-          rows={this.groupPermissions(this.state.permissions)
-            .map(([permissionGroupName, permissions]) => [
-              {
-                key: `permissionGroup-${permissionGroupName}`,
-                colspan: this.state.roles.length + 1,
-                tds: [<b>{permissionGroupName}</b>],
-              },
-              ...permissions.map(permission => ({
-                key: `permissionGroup-${permissionGroupName}-${
-                  permission.title
-                }`,
-                tds: [
-                  permission.title,
-                  ...this.state.roles.map(
-                    ({ attributes }) =>
-                      attributes.is_admin &&
-                      attributes.id === 'administrator' ? (
-                        <input type="checkbox" checked />
-                      ) : (
-                        <input
-                          type="checkbox"
-                          checked={attributes.permissions.includes(
-                            permission.id,
-                          )}
-                        />
-                      ),
-                  ),
-                ],
-              })),
-            ])
-            .reduce((a, b) => a.concat(b), [])}
+          rows={this.createTableRows(
+            this.groupPermissions(this.state.permissions),
+            this.state.roles,
+          )}
         />
       </Table>
     );
