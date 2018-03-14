@@ -80,8 +80,8 @@ const Permissions = class Permissions extends Component {
     const input = event.target.value.toLowerCase();
     this.setState(prevState => ({
       ...prevState,
-      renderablePermissions: prevState.rawPermissions.filter(({ title }) =>
-        title.includes(input),
+      renderablePermissions: prevState.rawPermissions.filter(({ title, description, provider, provider_label }) =>
+        `${title}${description}${provider}${provider_label}`.includes(input),
       ),
     }));
   };
@@ -92,6 +92,7 @@ const Permissions = class Permissions extends Component {
       <Fragment>
         <input
           type="text"
+          placeholder="Filter by name, description or module"
           onChange={this.handleKeyPress}
           onKeyDown={this.handleKeyPress}
         />
