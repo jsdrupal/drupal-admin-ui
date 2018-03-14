@@ -14,6 +14,10 @@ yarn build
 cd ../drupal
 ln -s ../drupal-admin-ui/build vfancy
 
+## Link the support module to Drupal
+cd ../drupal
+ln -s ../drupal-admin-ui/admin_ui_support modules
+
 # Install Drupal and start webserver
 composer install
 php -S localhost:8000
