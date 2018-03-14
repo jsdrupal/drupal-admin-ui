@@ -1,6 +1,6 @@
+import React, { Component, Fragment } from 'react';
 import makeCancelable from 'makecancelable';
 
-import React, { Component, Fragment } from 'react';
 import Loading from '../../Helpers/Loading';
 
 import { Table, TableBody, TableHeaderSimple } from '../../UI';
@@ -13,7 +13,9 @@ const Permissions = class Permissions extends Component {
     this.cancelFetch = makeCancelable(
       Promise.all([
         fetch(
-          `${process.env.REACT_APP_DRUPAL_BASE_URL}/permissions?_format=json`,
+          `${
+            process.env.REACT_APP_DRUPAL_BASE_URL
+          }/admin-api/permissions?_format=json`,
         ).then(res => res.json()),
         fetch(
           `${
