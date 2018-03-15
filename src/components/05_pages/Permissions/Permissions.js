@@ -31,6 +31,7 @@ const Permissions = class Permissions extends Component {
             renderablePermissions: Object.keys(permissions).map(
               key => permissions[key],
             ),
+            changedRoles: [],
             roles,
             loaded: true,
           }),
@@ -49,6 +50,31 @@ const Permissions = class Permissions extends Component {
         return acc;
       }, {}),
     );
+
+  togglePermission = (permission, roleName, roles) => {
+    let roleIndex = roles.map(role => role.attributes.id).indexOf(roleName);
+    let role = roles[roleIndex];
+    const index = role.attributes.permissions.indexOf(permission);
+    if (index !== -1) {
+      role.attributes.permissions.splice(index, 1);
+    } else {
+      role.attributes.permissions.push(permission);
+    }
+    roles[roleIndex] = role;
+    return roles;
+  };
+
+  onPermissionCheck = (roleName, permission) => {
+    this.setState((prevState, props) => {
+      return {
+        changedRoles: [
+          ...new Set(prevState.changedRoles).add(roleName).values(),
+        ],
+        roles: this.togglePermission(permission, roleName, prevState.roles),
+      };
+    });
+  };
+
   createTableRows = (groupedPermissions, roles) =>
     [].concat(
       ...groupedPermissions.map(([permissionGroupName, permissions]) => [
@@ -68,6 +94,9 @@ const Permissions = class Permissions extends Component {
                 ) : (
                   <input
                     type="checkbox"
+                    onChange={e =>
+                      this.onPermissionCheck(attributes.id, permission.id)
+                    }
                     checked={attributes.permissions.includes(permission.id)}
                   />
                 ),
