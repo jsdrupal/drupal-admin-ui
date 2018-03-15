@@ -36,16 +36,12 @@ const Permissions = class Permissions extends Component {
             roles: roles.sort((a, b) => {
               if (a.attributes.is_admin && b.attributes.is_admin) {
                 return a.attributes.id - b.attributes.id;
-              }
-              else if (a.attributes.is_admin) {
+              } else if (a.attributes.is_admin) {
                 return 1;
-              }
-              else if (b.attributes.is_admin) {
+              } else if (b.attributes.is_admin) {
                 return -1;
               }
-              else {
-                return a.attributes.id - b.attributes.id;
-              }
+              return a.attributes.id - b.attributes.id;
             }),
             loaded: true,
           }),
@@ -56,18 +52,16 @@ const Permissions = class Permissions extends Component {
   componentWillUnmount() {
     this.cancelFetch();
   }
-  groupPermissions = permissions =>
-    Object.entries(
-      permissions.reduce((acc, cur) => {
-        acc[cur.provider] = acc[cur.provider] || [];
-        acc[cur.provider].push(cur);
-        return acc;
-      }, {}),
-    );
+  onPermissionCheck = (roleName, permission) => {
+    this.setState(prevState => ({
+      changedRoles: [...new Set(prevState.changedRoles).add(roleName).values()],
+      roles: this.togglePermission(permission, roleName, prevState.roles),
+    }));
+  };
 
   togglePermission = (permission, roleName, roles) => {
-    let roleIndex = roles.map(role => role.attributes.id).indexOf(roleName);
-    let role = roles[roleIndex];
+    const roleIndex = roles.map(role => role.attributes.id).indexOf(roleName);
+    const role = roles[roleIndex];
     const index = role.attributes.permissions.indexOf(permission);
     if (index !== -1) {
       role.attributes.permissions.splice(index, 1);
@@ -78,16 +72,14 @@ const Permissions = class Permissions extends Component {
     return roles;
   };
 
-  onPermissionCheck = (roleName, permission) => {
-    this.setState((prevState, props) => {
-      return {
-        changedRoles: [
-          ...new Set(prevState.changedRoles).add(roleName).values(),
-        ],
-        roles: this.togglePermission(permission, roleName, prevState.roles),
-      };
-    });
-  };
+  groupPermissions = permissions =>
+    Object.entries(
+      permissions.reduce((acc, cur) => {
+        acc[cur.provider] = acc[cur.provider] || [];
+        acc[cur.provider].push(cur);
+        return acc;
+      }, {}),
+    );
 
   createTableRows = (groupedPermissions, roles) =>
     [].concat(
@@ -108,7 +100,7 @@ const Permissions = class Permissions extends Component {
                 ) : (
                   <input
                     type="checkbox"
-                    onChange={e =>
+                    onChange={() =>
                       this.onPermissionCheck(attributes.id, permission.id)
                     }
                     checked={attributes.permissions.includes(permission.id)}
@@ -124,8 +116,8 @@ const Permissions = class Permissions extends Component {
     this.setState(prevState => ({
       ...prevState,
       renderablePermissions: prevState.rawPermissions.filter(
-        ({ title, description, provider, provider_label }) =>
-          `${title}${description}${provider}${provider_label}`.includes(input),
+        ({ title, description, provider, provider_label: providerLabel }) =>
+          `${title}${description}${provider}${providerLabel}`.includes(input),
       ),
     }));
   };
