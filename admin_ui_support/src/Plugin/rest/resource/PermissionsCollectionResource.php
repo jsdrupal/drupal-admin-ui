@@ -105,9 +105,6 @@ class PermissionsCollectionResource extends ResourceBase {
       $permissions = $this->permissionHandler->getPermissions();
       foreach ($permissions as $id => $permission) {
         $permissions[$id]['id'] = $id;
-        // @todo Should HTML tags be limited?  https://github.com/jsdrupal/drupal-admin-ui/issues/18
-        $permissions[$id]['title'] = $permission['title'];
-        $permissions[$id]['description'] = $permission['description'];
         $permissions[$id]['provider_label'] = $this->moduleExtensionList->getName($permissions[$id]['provider']);
       };
       return array_values($permissions);
