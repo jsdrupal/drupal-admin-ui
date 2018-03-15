@@ -1,0 +1,7 @@
+name: 'Admin UI support'
+type: module
+description: 'Provides endpoints for the drupal-admin-ui'
+version: VERSION
+core: 8.x
+dependencies:
+  - drupal:rest

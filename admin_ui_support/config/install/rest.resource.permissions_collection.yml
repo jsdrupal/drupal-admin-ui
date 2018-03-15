@@ -1,0 +1,17 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - admin_ui_support
+    - serialization
+    - user
+id: permissions_collection
+plugin_id: permissions_collection
+granularity: resource
+configuration:
+  methods:
+    - GET
+  formats:
+    - json
+  authentication:
+    - cookie
