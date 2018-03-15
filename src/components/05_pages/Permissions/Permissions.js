@@ -32,7 +32,21 @@ const Permissions = class Permissions extends Component {
               key => permissions[key],
             ),
             changedRoles: [],
-            roles,
+            // Move admin roles to the right.
+            roles: roles.sort((a, b) => {
+              if (a.attributes.is_admin && b.attributes.is_admin) {
+                return a.attributes.id - b.attributes.id;
+              }
+              else if (a.attributes.is_admin) {
+                return 1;
+              }
+              else if (b.attributes.is_admin) {
+                return -1;
+              }
+              else {
+                return a.attributes.id - b.attributes.id;
+              }
+            }),
             loaded: true,
           }),
         )
