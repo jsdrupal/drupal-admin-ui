@@ -1,8 +1,8 @@
 import React, { Component, Fragment } from 'react';
 import makeCancelable from 'makecancelable';
+import { Markup } from 'interweave';
 
 import Loading from '../../Helpers/Loading';
-
 import { Table, TableBody, TableHeaderSimple } from '../../UI';
 
 const Permissions = class Permissions extends Component {
@@ -60,7 +60,7 @@ const Permissions = class Permissions extends Component {
         ...permissions.map(permission => ({
           key: `permissionGroup-${permissionGroupName}-${permission.title}`,
           tds: [
-            permission.title,
+            <Markup content={permission.title} />,
             ...roles.map(
               ({ attributes }) =>
                 attributes.is_admin && attributes.id === 'administrator' ? (
