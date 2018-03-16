@@ -3,11 +3,13 @@ import makeCancelable from 'makecancelable';
 import { Markup } from 'interweave';
 
 import Loading from '../../Helpers/Loading';
-import { Table, TableBody, TableHeaderSimple } from '../../UI';
+import { Table, TableBody, TableHeaderSimple } from '../../UI/Table';
 
 const Permissions = class Permissions extends Component {
   state = {
     loaded: false,
+    rawPermissions: [],
+    renderablePermissions: [],
   };
   componentDidMount() {
     this.cancelFetch = makeCancelable(
@@ -21,6 +23,7 @@ const Permissions = class Permissions extends Component {
           `${
             process.env.REACT_APP_DRUPAL_BASE_URL
           }/jsonapi/user_role/user_role`,
+          { headers: { Accept: 'application/vnd.api+json' } },
         ).then(res => res.json()),
       ])
         .then(([permissions, { data: roles }]) =>
@@ -58,7 +61,6 @@ const Permissions = class Permissions extends Component {
       roles: this.togglePermission(permission, roleName, prevState.roles),
     }));
   };
-
   togglePermission = (permission, roleName, roles) => {
     const roleIndex = roles.map(role => role.attributes.id).indexOf(roleName);
     const role = roles[roleIndex];
@@ -71,7 +73,6 @@ const Permissions = class Permissions extends Component {
     roles[roleIndex] = role;
     return roles;
   };
-
   groupPermissions = permissions =>
     Object.entries(
       permissions.reduce((acc, cur) => {
@@ -80,33 +81,35 @@ const Permissions = class Permissions extends Component {
         return acc;
       }, {}),
     );
-
   createTableRows = (groupedPermissions, roles) =>
     [].concat(
       ...groupedPermissions.map(([permissionGroupName, permissions]) => [
         {
           key: `permissionGroup-${permissionGroupName}`,
           colspan: roles.length + 1,
-          tds: [<b>{permissionGroupName}</b>],
+          tds: [[`td-${permissionGroupName}`, <b>{permissionGroupName}</b>]],
         },
         ...permissions.map(permission => ({
           key: `permissionGroup-${permissionGroupName}-${permission.title}`,
           tds: [
-            <Markup content={permission.title} />,
-            ...roles.map(
-              ({ attributes }) =>
-                attributes.is_admin && attributes.id === 'administrator' ? (
-                  <input type="checkbox" checked />
-                ) : (
-                  <input
-                    type="checkbox"
-                    onChange={() =>
-                      this.onPermissionCheck(attributes.id, permission.id)
-                    }
-                    checked={attributes.permissions.includes(permission.id)}
-                  />
-                ),
-            ),
+            [
+              `td-${permissionGroupName}-${permission.title}`,
+              <Markup content={permission.title} />,
+            ],
+            ...roles.map(({ attributes }, index) => [
+              `td-${permissionGroupName}-${permission.title}-${index}-cb`,
+              attributes.is_admin && attributes.id === 'administrator' ? (
+                <input type="checkbox" checked />
+              ) : (
+                <input
+                  type="checkbox"
+                  onChange={() =>
+                    this.onPermissionCheck(attributes.id, permission.id)
+                  }
+                  checked={attributes.permissions.includes(permission.id)}
+                />
+              ),
+            ]),
           ],
         })),
       ]),

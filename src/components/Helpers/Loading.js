@@ -1,5 +1,14 @@
 import React from 'react';
-import { css } from 'emotion';
+import { css, keyframes } from 'emotion';
+
+const rotate = keyframes`
+  from {
+    transform: rotate(-10deg);
+  }
+  to {
+    transform: rotate(10deg);
+  }
+`;
 
 const styles = {
   wrap: css`
@@ -14,15 +23,7 @@ const styles = {
     animation-timing-function: cubic-bezier(0, 0, 1, 1);
     transform-origin: bottom;
     font-size: 50px;
-    animation-name: rotate;
-    @keyframes rotate {
-      from {
-        transform: rotate(-10deg);
-      }
-      to {
-        transform: rotate(10deg);
-      }
-    }
+    animation-name: ${rotate};
   `,
 };
 

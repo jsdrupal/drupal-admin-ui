@@ -10,14 +10,6 @@ import {
   number,
 } from 'prop-types';
 
-const generateIDs = arr =>
-  arr.map(value => ({
-    value,
-    id: Math.random()
-      .toString(36)
-      .substring(2),
-  }));
-
 const TABLE = ({ children, zebra, ...props }) => {
   const styles = css`
     ${zebra ? 'tbody tr:nth-child(odd) {background-color: #e8e8e8;}' : ''};
@@ -59,9 +51,9 @@ const TBODY = ({ rows }) => (
   <tbody>
     {rows.map(({ colspan, tds, key }) => (
       <TR key={key}>
-        {generateIDs(tds).map(({ id, value }) => (
-          <TD key={`td-${key}-${id}`} colSpan={colspan || undefined}>
-            {value}
+        {tds.map(([tdKey, tdValue]) => (
+          <TD key={tdKey} colSpan={colspan || undefined}>
+            {tdValue}
           </TD>
         ))}
       </TR>
@@ -78,4 +70,10 @@ TBODY.propTypes = {
   ).isRequired,
 };
 
-export { TR, TD, TABLE, TBODY, THEAD };
+export {
+  TR as TableRow,
+  TD as TableData,
+  TABLE as Table,
+  TBODY as TableBody,
+  THEAD as TableHeaderSimple,
+};
