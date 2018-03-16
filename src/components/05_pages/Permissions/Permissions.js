@@ -72,43 +72,48 @@ const Permissions = class Permissions extends Component {
   groupPermissions = permissions =>
     Object.entries(
       permissions.reduce((acc, cur) => {
-        acc[cur.provider] = acc[cur.provider] || [];
-        acc[cur.provider].push(cur);
+        acc[cur.provider] = acc[cur.provider] || {
+          providerLabel: cur.provider_label,
+          permissions: [],
+        };
+        acc[cur.provider].permissions.push(cur);
         return acc;
       }, {}),
     );
   createTableRows = (groupedPermissions, roles) =>
     [].concat(
-      ...groupedPermissions.map(([permissionGroupName, permissions]) => [
-        {
-          key: `permissionGroup-${permissionGroupName}`,
-          colspan: roles.length + 1,
-          tds: [[`td-${permissionGroupName}`, <b>{permissionGroupName}</b>]],
-        },
-        ...permissions.map(permission => ({
-          key: `permissionGroup-${permissionGroupName}-${permission.title}`,
-          tds: [
-            [
-              `td-${permissionGroupName}-${permission.title}`,
-              <Markup content={permission.title} />,
+      ...groupedPermissions.map(
+        ([providerMachineName, { providerLabel, permissions }]) => [
+          {
+            key: `permissionGroup-${providerMachineName}`,
+            colspan: roles.length + 1,
+            tds: [[`td-${providerMachineName}`, <b>{providerLabel}</b>]],
+          },
+          ...permissions.map(permission => ({
+            key: `permissionGroup-${providerMachineName}-${permission.title}`,
+            tds: [
+              [
+                `td-${providerMachineName}-${permission.title}`,
+                <Markup content={permission.title} />,
+              ],
+              ...roles.map(({ attributes }, index) => [
+                `td-${providerMachineName}-${permission.title}-${index}-cb`,
+                attributes.is_admin && attributes.id === 'administrator' ? (
+                  <input type="checkbox" checked />
+                ) : (
+                  <input
+                    type="checkbox"
+                    onChange={() =>
+                      this.onPermissionCheck(attributes.id, permission.id)
+                    }
+                    checked={attributes.permissions.includes(permission.id)}
+                  />
+                ),
+              ]),
             ],
-            ...roles.map(({ attributes }, index) => [
-              `td-${permissionGroupName}-${permission.title}-${index}-cb`,
-              attributes.is_admin && attributes.id === 'administrator' ? (
-                <input type="checkbox" checked />
-              ) : (
-                <input
-                  type="checkbox"
-                  onChange={() =>
-                    this.onPermissionCheck(attributes.id, permission.id)
-                  }
-                  checked={attributes.permissions.includes(permission.id)}
-                />
-              ),
-            ]),
-          ],
-        })),
-      ]),
+          })),
+        ],
+      ),
     );
   handleKeyPress = event => {
     const input = event.target.value.toLowerCase();
