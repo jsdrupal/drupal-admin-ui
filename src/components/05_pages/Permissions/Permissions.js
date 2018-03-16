@@ -3,7 +3,7 @@ import makeCancelable from 'makecancelable';
 import { Markup } from 'interweave';
 
 import Loading from '../../Helpers/Loading';
-import { Table, TableBody, TableHeaderSimple } from '../../UI/Table';
+import { Table, TBody, THead } from '../../UI/Table';
 
 const Permissions = class Permissions extends Component {
   state = {
@@ -28,12 +28,8 @@ const Permissions = class Permissions extends Component {
       ])
         .then(([permissions, { data: roles }]) =>
           this.setState({
-            rawPermissions: Object.keys(permissions).map(
-              key => permissions[key],
-            ),
-            renderablePermissions: Object.keys(permissions).map(
-              key => permissions[key],
-            ),
+            rawPermissions: permissions,
+            renderablePermissions: permissions,
             changedRoles: [],
             // Move admin roles to the right.
             roles: roles.sort((a, b) => {
@@ -136,7 +132,7 @@ const Permissions = class Permissions extends Component {
           onKeyDown={this.handleKeyPress}
         />
         <Table zebra>
-          <TableHeaderSimple
+          <THead
             data={[
               'PERMISSION',
               ...this.state.roles.map(({ attributes: { label } }) =>
@@ -144,7 +140,7 @@ const Permissions = class Permissions extends Component {
               ),
             ]}
           />
-          <TableBody
+          <TBody
             rows={this.createTableRows(
               this.groupPermissions(this.state.renderablePermissions),
               this.state.roles,

@@ -70,10 +70,4 @@ TBODY.propTypes = {
   ).isRequired,
 };
 
-export {
-  TR as TableRow,
-  TD as TableData,
-  TABLE as Table,
-  TBODY as TableBody,
-  THEAD as TableHeaderSimple,
-};
+export { TR, TD, TABLE as Table, TBODY as TBody, THEAD as THead };
