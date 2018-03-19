@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import makeCancelable from 'makecancelable';
 import { Markup } from 'interweave';
+import { css } from 'emotion';
 
 import Loading from '../../Helpers/Loading';
 import { Table, TBody, THead } from '../../UI/table';
@@ -95,6 +96,9 @@ const Permissions = class Permissions extends Component {
               [
                 `td-${providerMachineName}-${permission.title}`,
                 <Markup content={permission.title} />,
+                css`
+                  padding: 0 0 0 30px;
+                `,
               ],
               ...roles.map(({ attributes }, index) => [
                 `td-${providerMachineName}-${permission.title}-${index}-cb`,
@@ -136,7 +140,7 @@ const Permissions = class Permissions extends Component {
           onChange={this.handleKeyPress}
           onKeyDown={this.handleKeyPress}
         />
-        <Table zebra>
+        <Table>
           <THead
             data={[
               'PERMISSION',

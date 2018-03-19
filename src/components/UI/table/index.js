@@ -1,31 +1,16 @@
 import React from 'react';
-import { css } from 'emotion';
-import {
-  node,
-  bool,
-  oneOfType,
-  arrayOf,
-  string,
-  shape,
-  number,
-} from 'prop-types';
+import { cx } from 'emotion';
+import { node, oneOfType, arrayOf, string, shape, number } from 'prop-types';
 
-const TABLE = ({ children, zebra, ...props }) => {
-  const styles = css`
-    ${zebra ? 'tbody tr:nth-child(odd) {background-color: #e8e8e8;}' : ''};
-  `;
-  return (
-    <table className={styles} {...props}>
-      {children}
-    </table>
-  );
-};
+import tableStyles from './table.style';
+
+const TABLE = ({ children, ...props }) => (
+  <table className={tableStyles.table} {...props}>
+    {children}
+  </table>
+);
 TABLE.propTypes = {
   children: oneOfType([arrayOf(node), node]).isRequired,
-  zebra: bool,
-};
-TABLE.defaultProps = {
-  zebra: false,
 };
 
 const TR = ({ children, ...props }) => <tr {...props}>{children}</tr>;
@@ -40,7 +25,13 @@ TD.propTypes = {
 
 const THEAD = ({ data }) => (
   <thead>
-    <TR>{data.map(label => <TD key={`column-${label}`}>{label}</TD>)}</TR>
+    <TR className={tableStyles.tr}>
+      {data.map(label => (
+        <TD className={tableStyles.td} key={`column-${label}`}>
+          {label}
+        </TD>
+      ))}
+    </TR>
   </thead>
 );
 THEAD.propTypes = {
@@ -48,11 +39,15 @@ THEAD.propTypes = {
 };
 
 const TBODY = ({ rows }) => (
-  <tbody>
+  <tbody className={tableStyles.tbody}>
     {rows.map(({ colspan, tds, key }) => (
-      <TR key={key}>
-        {tds.map(([tdKey, tdValue]) => (
-          <TD key={tdKey} colSpan={colspan || undefined}>
+      <TR key={key} className={tableStyles.tr}>
+        {tds.map(([tdKey, tdValue, tdClassName]) => (
+          <TD
+            className={cx(tableStyles.td, tdClassName || '')}
+            key={tdKey}
+            colSpan={colspan || undefined}
+          >
             {tdValue}
           </TD>
         ))}
