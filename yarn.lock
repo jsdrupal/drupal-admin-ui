@@ -3700,6 +3700,13 @@ interpret@^1.0.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/interpret/-/interpret-1.1.0.tgz#7ed1b1410c6a0e0f78cf95d3b8440c63f78b8614"
 
+interweave@^8.0.2:
+  version "8.0.2"
+  resolved "https://registry.yarnpkg.com/interweave/-/interweave-8.0.2.tgz#51001199c58d311f8b1d0100c4f6b9d494e97480"
+  dependencies:
+    babel-runtime "^6.26.0"
+    prop-types "^15.6.0"
+
 invariant@^2.2.0, invariant@^2.2.1, invariant@^2.2.2:
   version "2.2.3"
   resolved "https://registry.yarnpkg.com/invariant/-/invariant-2.2.3.tgz#1a827dfde7dcbd7c323f0ca826be8fa7c5e9d688"
@@ -4646,6 +4653,10 @@ make-dir@^1.0.0:
   resolved "https://registry.yarnpkg.com/make-dir/-/make-dir-1.2.0.tgz#6d6a49eead4aae296c53bbf3a1a008bd6c89469b"
   dependencies:
     pify "^3.0.0"
+
+makecancelable@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/makecancelable/-/makecancelable-1.0.0.tgz#c7e2606e59db7a4bf8098ff5b52d7f13173499e5"
 
 makeerror@1.0.x:
   version "1.0.11"
