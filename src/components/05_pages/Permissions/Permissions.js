@@ -3,7 +3,7 @@ import makeCancelable from 'makecancelable';
 import { Markup } from 'interweave';
 
 import Loading from '../../Helpers/Loading';
-import { Table, TBody, THead } from '../../UI/Table';
+import { Table, TBody, THead } from '../../UI/table';
 
 const Permissions = class Permissions extends Component {
   state = {
