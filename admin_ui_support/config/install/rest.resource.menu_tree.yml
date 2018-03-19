@@ -1,0 +1,17 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - admin_ui_support
+    - serialization
+    - user
+id: menu_tree
+plugin_id: menu_tree
+granularity: resource
+configuration:
+  methods:
+    - GET
+  formats:
+    - json
+  authentication:
+    - cookie
