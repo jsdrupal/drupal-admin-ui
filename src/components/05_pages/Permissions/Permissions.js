@@ -4,7 +4,7 @@ import { Markup } from 'interweave';
 import { css } from 'emotion';
 
 import Loading from '../../02_atoms/Loading/Loading';
-import { Table, TBody, THead } from '../../01_electrons/Table/Table';
+import { Table, TBody, THead } from '../../01_subatomics/Table/Table';
 
 const Permissions = class Permissions extends Component {
   state = {
