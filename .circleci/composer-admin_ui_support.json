@@ -1,0 +1,9 @@
+{
+  "name": "justafish/drupal-admin-ui-support",
+  "description": "This is the v fancy support module",
+  "type": "drupal-module",
+  "license": "GPL-2.0+",
+  "require": {
+    "php": "^5.5.9 || ^7.0"
+  }
+}
