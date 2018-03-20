@@ -1,6 +1,23 @@
 import { injectGlobal } from 'emotion';
 
 const base = injectGlobal`
+html {
+  box-sizing: border-box;
+  height: 100%;
+}
+
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+
+body {
+  height: 100%;
+}
+
+#root {
+  height: 100%;
+}
+
 /*! Typebase.less v0.1.0 | MIT License */
 html {
   /* Change default typefaces here */
