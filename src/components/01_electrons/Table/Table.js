@@ -1,11 +1,11 @@
 import React from 'react';
-import { cx } from 'emotion';
+import { css, cx } from 'emotion';
 import { node, oneOfType, arrayOf, string, shape, number } from 'prop-types';
 
-import tableStyles from './table.style';
+let styles;
 
 const TABLE = ({ children, ...props }) => (
-  <table className={tableStyles.table} {...props}>
+  <table className={styles.table} {...props}>
     {children}
   </table>
 );
@@ -25,9 +25,9 @@ TD.propTypes = {
 
 const THEAD = ({ data }) => (
   <thead>
-    <TR className={tableStyles.tr}>
+    <TR className={styles.tr}>
       {data.map(label => (
-        <TD className={tableStyles.td} key={`column-${label}`}>
+        <TD className={styles.td} key={`column-${label}`}>
           {label}
         </TD>
       ))}
@@ -39,12 +39,12 @@ THEAD.propTypes = {
 };
 
 const TBODY = ({ rows }) => (
-  <tbody className={tableStyles.tbody}>
+  <tbody className={styles.tbody}>
     {rows.map(({ colspan, tds, key }) => (
-      <TR key={key} className={tableStyles.tr}>
+      <TR key={key} className={styles.tr}>
         {tds.map(([tdKey, tdValue, tdClassName]) => (
           <TD
-            className={cx(tableStyles.td, tdClassName || '')}
+            className={cx(styles.td, tdClassName || '')}
             key={tdKey}
             colSpan={colspan || undefined}
           >
@@ -63,6 +63,27 @@ TBODY.propTypes = {
       tds: arrayOf(node).isRequired,
     }),
   ).isRequired,
+};
+
+styles = {
+  table: css`
+    font: normal 71.3%/1.538em 'Lucida Grande', 'Lucida Sans Unicode',
+      'DejaVu Sans', 'Lucida Sans', sans-serif;
+  `,
+  thead: css``,
+  tbody: css`
+    tr:hover,
+    tr:focus {
+      background: #f7fcff;
+    }
+  `,
+  tr: css`
+    border-bottom: 1px solid #c7c7c7;
+  `,
+  td: css`
+    padding: 10px 12px;
+    text-align: left;
+  `,
 };
 
 export { TR, TD, TABLE as Table, TBODY as TBody, THEAD as THead };
