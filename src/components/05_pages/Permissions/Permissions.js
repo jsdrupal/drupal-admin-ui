@@ -19,12 +19,20 @@ const Permissions = class Permissions extends Component {
           `${
             process.env.REACT_APP_DRUPAL_BASE_URL
           }/admin-api/permissions?_format=json`,
+          {
+            credentials: 'include',
+          },
         ).then(res => res.json()),
         fetch(
           `${
             process.env.REACT_APP_DRUPAL_BASE_URL
           }/jsonapi/user_role/user_role`,
-          { headers: { Accept: 'application/vnd.api+json' } },
+          {
+            headers: {
+              Accept: 'application/vnd.api+json',
+            },
+            credentials: 'include',
+          },
         ).then(res => res.json()),
       ])
         .then(([permissions, { data: roles }]) =>

@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
-import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
 import routes from './routes';
 
+import Default from './components/06_wrappers/Default/Default';
 import Home from './components/05_pages/Home/Home';
 import NoMatch from './NoMatch';
 
@@ -16,30 +17,15 @@ class App extends Component {
   render() {
     return (
       <Router>
-        <div>
-          <ul>
-            <li>
-              <Link to="/">Home</Link>
-            </li>
-            <li>
-              <Link to="/admin/people/permissions">Permissions</Link>
-            </li>
-            <li>
-              <Link to="/admin/appearance">Appearance</Link>
-            </li>
-            <li>
-              <Link to="/node/add">Content</Link>
-            </li>
-          </ul>
-
-          <hr />
-
-          <Route exact path="/" component={Home} />
-          {Object.keys(routes).map(route => (
-            <Route path={route} component={routes[route]} key={route} />
-          ))}
-          <Route component={NoMatch} />
-        </div>
+        <Default>
+          <Switch>
+            <Route exact path="/" component={Home} />
+            {Object.keys(routes).map(route => (
+              <Route path={route} component={routes[route]} key={route} />
+            ))}
+            <Route component={NoMatch} />
+          </Switch>
+        </Default>
       </Router>
     );
   }
