@@ -91,7 +91,7 @@ class MenuTreeResource extends ResourceBase {
 
     $menu_tree = $this->renderer->executeInRenderContext($context, function () {
       $parameters = new MenuTreeParameters();
-      $parameters->setMinDepth(2)->setMaxDepth(2)->onlyEnabledLinks();
+      $parameters->setMinDepth(2)->setMaxDepth(4)->onlyEnabledLinks();
       $tree = $this->menuLinkTree->load('admin', $parameters);
       $manipulators = [
         ['callable' => 'menu.default_tree_manipulators:checkAccess'],
