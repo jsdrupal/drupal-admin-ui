@@ -1,5 +1,5 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+import { node } from 'prop-types';
 import { css } from 'emotion';
 import { scaleRotate as Menu } from 'react-burger-menu';
 import { Link } from 'react-router-dom';
@@ -72,7 +72,7 @@ const Default = props => (
 );
 
 Default.propTypes = {
-  children: PropTypes.node.isRequired,
+  children: node.isRequired,
 };
 
 styles = {
