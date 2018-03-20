@@ -82,6 +82,7 @@ styles = {
   `,
   main: css`
     padding: 1rem;
+    margin-top: 100px;
     height: 100%;
     background: #ffffff;
   `,
