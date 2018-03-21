@@ -37,5 +37,4 @@ class JsonApiRequestHandler extends RequestHandler {
     return parent::resourceFactory($route);
   }
 
-
 }
