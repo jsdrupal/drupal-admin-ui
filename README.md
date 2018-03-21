@@ -18,7 +18,7 @@ ln -s ../drupal-admin-ui/build vfancy
 cd ../drupal/modules
 ln -s ../../drupal-admin-ui/admin_ui_support .
 
-## Install the jsonapi module
+## Download the jsonapi module
 curl -O https://ftp.drupal.org/files/projects/jsonapi-8.x-1.13.tar.gz
 tar zxf jsonapi-8.x-1.13.tar.gz
 
@@ -26,8 +26,8 @@ tar zxf jsonapi-8.x-1.13.tar.gz
 @todo Use the dev-site command
 composer install
 
-## Install the needed modules
-drush en jsonapi admin_ui_support -y
+## Install the support module
+drush en admin_ui_support -y
 
 # Start the webserver
 php -S localhost:8000
