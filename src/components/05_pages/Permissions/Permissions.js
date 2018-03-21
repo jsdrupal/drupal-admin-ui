@@ -3,8 +3,8 @@ import makeCancelable from 'makecancelable';
 import { Markup } from 'interweave';
 import { css } from 'emotion';
 
-import Loading from '../../Helpers/Loading';
-import { Table, TBody, THead } from '../../UI/table';
+import Loading from '../../02_atoms/Loading/Loading';
+import { Table, TBody, THead } from '../../01_subatomics/Table/Table';
 
 const Permissions = class Permissions extends Component {
   state = {
@@ -19,12 +19,20 @@ const Permissions = class Permissions extends Component {
           `${
             process.env.REACT_APP_DRUPAL_BASE_URL
           }/admin-api/permissions?_format=json`,
+          {
+            credentials: 'include',
+          },
         ).then(res => res.json()),
         fetch(
           `${
             process.env.REACT_APP_DRUPAL_BASE_URL
           }/jsonapi/user_role/user_role`,
-          { headers: { Accept: 'application/vnd.api+json' } },
+          {
+            headers: {
+              Accept: 'application/vnd.api+json',
+            },
+            credentials: 'include',
+          },
         ).then(res => res.json()),
       ])
         .then(([permissions, { data: roles }]) =>

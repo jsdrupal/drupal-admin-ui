@@ -1,0 +1,9 @@
+services:
+  admin_ui_support.normalizer.menu_link:
+    class: \Drupal\admin_ui_support\Normalizer\MenuLinkNormalizer
+    tags:
+      - { name: normalizer }
+  admin_ui_support.normalizer.menu_tree:
+    class: \Drupal\admin_ui_support\Normalizer\MenuTreeNormalizer
+    tags:
+      - { name: normalizer }
