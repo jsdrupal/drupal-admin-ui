@@ -63,7 +63,7 @@ jobs:
           git config --global user.name "⬅️✌️➡️"
           git config --global user.email "no-reply@drupal.org"
           git clone git@github.com:jsdrupal/drupal-admin-ui-dist.git ~/build-repo
-          mv ~/build-repo/.git ~/build
+          mv ~/build-repo/.git ~/build/.git
           cd ~/build
           cp ~/project/.circleci/drupal-admin-ui--composer.json .
           git add .
@@ -84,7 +84,7 @@ jobs:
           git config --global user.email "no-reply@drupal.org"
           git clone git@github.com:jsdrupal/drupal-admin-ui-support-dist.git ~/build-repo
           rm -rf ~/build/.git
-          mv ~/build-repo/.git ~/build/admin_ui_support
+          mv ~/build-repo/.git ~/build/admin_ui_support/.git
           cd ~/build/admin_ui_support
           cp ~/project/.circleci/drupal-admin-ui-support--composer.json .
           git add .
