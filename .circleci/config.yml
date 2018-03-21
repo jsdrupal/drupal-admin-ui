@@ -65,7 +65,28 @@ jobs:
           git clone git@github.com:jsdrupal/drupal-admin-ui-dist.git ~/build-repo
           mv ~/build-repo/.git ~/build
           cd ~/build
-          cp ~/project/.circleci/composer.json .
+          cp ~/project/.circleci/drupal-admin-ui--composer.json .
+          git add .
+          git commit -m "Auto build from master"
+          git push origin master
+
+  dist_support:
+    <<: *defaults
+    steps:
+      - add_ssh_keys:
+          fingerprints:
+            - "${FINGERPRINT_SUPPORT_DIST}"
+      - checkout
+      - *restore-build
+      - run: |
+          mv ~/project/build ~
+          git config --global user.name "⬅️✌️➡️"
+          git config --global user.email "no-reply@drupal.org"
+          git clone git@github.com:jsdrupal/drupal-admin-ui-support-dist.git ~/build-repo
+          rm -rf ~/build/.git
+          mv ~/build-repo/.git ~/build/admin_ui_support
+          cd ~/build/admin_ui_support
+          cp ~/project/.circleci/drupal-admin-ui-support--composer.json .
           git add .
           git commit -m "Auto build from master"
           git push origin master
@@ -82,6 +103,15 @@ workflows:
           requires:
             - build
       - dist:
+          requires:
+            - lint
+            - unit
+            - build
+          filters:
+           branches:
+            only:
+              - master
+      - dist_support:
           requires:
             - lint
             - unit
