@@ -11,9 +11,22 @@ const Permissions = class Permissions extends Component {
     loaded: false,
     rawPermissions: [],
     renderablePermissions: [],
+    working: false,
   };
   componentDidMount() {
-    this.cancelFetch = makeCancelable(
+    this.cancelFetch = this.fetchData();
+  }
+  componentWillUnmount() {
+    this.cancelFetch();
+  }
+  onPermissionCheck = (roleName, permission) => {
+    this.setState(prevState => ({
+      changedRoles: [...new Set(prevState.changedRoles).add(roleName).values()],
+      roles: this.togglePermission(permission, roleName, prevState.roles),
+    }));
+  };
+  fetchData = () =>
+    makeCancelable(
       Promise.all([
         fetch(
           `${
@@ -40,6 +53,7 @@ const Permissions = class Permissions extends Component {
             rawPermissions: permissions,
             renderablePermissions: permissions,
             changedRoles: [],
+            working: false,
             // Move admin roles to the right.
             roles: roles.sort((a, b) => {
               if (a.attributes.is_admin && b.attributes.is_admin) {
@@ -56,16 +70,6 @@ const Permissions = class Permissions extends Component {
         )
         .catch(err => this.setState({ loaded: false, err })),
     );
-  }
-  componentWillUnmount() {
-    this.cancelFetch();
-  }
-  onPermissionCheck = (roleName, permission) => {
-    this.setState(prevState => ({
-      changedRoles: [...new Set(prevState.changedRoles).add(roleName).values()],
-      roles: this.togglePermission(permission, roleName, prevState.roles),
-    }));
-  };
   togglePermission = (permission, roleName, roles) => {
     const roleIndex = roles.map(role => role.attributes.id).indexOf(roleName);
     const role = roles[roleIndex];
@@ -138,27 +142,33 @@ const Permissions = class Permissions extends Component {
     }));
   };
   saveRoles = () => {
-    Promise.all(
-      this.state.roles
-        .filter(role => this.state.changedRoles.includes(role.attributes.id))
-        .map(role =>
-          fetch(
-            `${
-              process.env.REACT_APP_DRUPAL_BASE_URL
-            }/jsonapi/user_role/user_role/${role.id}`,
-            {
-              body: JSON.stringify({ data: role }),
-              credentials: 'include',
-              headers: {
-                'content-type': 'application/json',
-              },
-              method: 'PATCH',
-            },
-          ),
-        ),
-    ).then(() => {
-      // do a thing.
-    });
+    this.setState(
+      prevState => ({ ...prevState, working: true }),
+      () =>
+        Promise.all(
+          this.state.roles
+            .filter(role =>
+              this.state.changedRoles.includes(role.attributes.id),
+            )
+            .map(role =>
+              fetch(
+                `${
+                  process.env.REACT_APP_DRUPAL_BASE_URL
+                }/jsonapi/user_role/user_role/${role.id}`,
+                {
+                  body: JSON.stringify({ data: role }),
+                  credentials: 'include',
+                  headers: {
+                    'content-type': 'application/json',
+                  },
+                  method: 'PATCH',
+                },
+              ),
+            ),
+        ).then(() => {
+          this.cancelFetch = this.fetchData();
+        }),
+    );
   };
   render() {
     return !this.state.loaded ? (
@@ -171,7 +181,16 @@ const Permissions = class Permissions extends Component {
           onChange={this.handleKeyPress}
           onKeyDown={this.handleKeyPress}
         />
-        <button onClick={this.saveRoles}>Save</button>
+        <button
+          key="button-save-roles"
+          onClick={this.saveRoles}
+          disabled={
+            !this.state.changedRoles.length ||
+            (this.state.working && this.state.changedRoles.length)
+          }
+        >
+          Save
+        </button>
         <Table>
           <THead
             data={[
