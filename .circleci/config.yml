@@ -65,7 +65,7 @@ jobs:
           git clone git@github.com:jsdrupal/drupal-admin-ui-dist.git ~/build-repo
           mv ~/build-repo/.git ~/build/.git
           cd ~/build
-          cp ~/project/.circleci/drupal-admin-ui--composer.json .
+          cp ~/project/.circleci/drupal-admin-ui--composer.json composer.json
           git add .
           if ! git diff-index --quiet HEAD --; then
               git commit -m "Auto build from master"
