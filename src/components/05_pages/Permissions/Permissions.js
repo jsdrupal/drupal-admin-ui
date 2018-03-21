@@ -137,6 +137,29 @@ const Permissions = class Permissions extends Component {
       ),
     }));
   };
+  saveRoles = () => {
+    Promise.all(
+      this.state.roles
+        .filter(role => this.state.changedRoles.includes(role.attributes.id))
+        .map(role =>
+          fetch(
+            `${
+              process.env.REACT_APP_DRUPAL_BASE_URL
+            }/jsonapi/user_role/user_role/${role.id}`,
+            {
+              body: JSON.stringify({ data: role }),
+              credentials: 'include',
+              headers: {
+                'content-type': 'application/json',
+              },
+              method: 'PATCH',
+            },
+          ),
+        ),
+    ).then(() => {
+      // do a thing.
+    });
+  };
   render() {
     return !this.state.loaded ? (
       <Loading />
@@ -148,6 +171,7 @@ const Permissions = class Permissions extends Component {
           onChange={this.handleKeyPress}
           onKeyDown={this.handleKeyPress}
         />
+        <button onClick={this.saveRoles}>Save</button>
         <Table>
           <THead
             data={[
