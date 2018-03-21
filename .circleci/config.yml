@@ -67,8 +67,11 @@ jobs:
           cd ~/build
           cp ~/project/.circleci/drupal-admin-ui--composer.json .
           git add .
-          git commit -m "Auto build from master"
-          git push origin master
+          if ! git diff-index --quiet HEAD --; then
+              git commit -m "Auto build from master"
+              git push origin master
+          fi
+
 
   dist_support:
     <<: *defaults
@@ -88,8 +91,10 @@ jobs:
           cd ~/admin_ui_support
           cp ~/project/.circleci/drupal-admin-ui-support--composer.json .
           git add .
-          git commit -m "Auto build from master"
-          git push origin master
+          if ! git diff-index --quiet HEAD --; then
+              git commit -m "Auto build from master"
+              git push origin master
+          fi
 
 workflows:
   version: 2
