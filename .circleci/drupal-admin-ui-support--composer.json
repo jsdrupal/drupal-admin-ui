@@ -1,0 +1,8 @@
+{
+  "name": "justafish/drupal-admin-ui-support",
+  "description": "Drupal support module for the v fancy React admin UI",
+  "license": "MIT",
+  "require": {
+    "php": "^5.5.9 || ^7.0"
+  }
+}
