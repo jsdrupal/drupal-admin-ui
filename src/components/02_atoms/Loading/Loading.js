@@ -1,7 +1,18 @@
 import React from 'react';
 import { css, keyframes } from 'emotion';
 
-const rotate = keyframes`
+let rotate = null;
+let styles;
+
+const Loading = () => (
+  <div className={styles.wrap}>
+    <span className={styles.peace} role="img" aria-label="Peace Sign">
+      ✌
+    </span>
+  </div>
+);
+
+rotate = keyframes`
   from {
     transform: rotate(-10deg);
   }
@@ -10,7 +21,7 @@ const rotate = keyframes`
   }
 `;
 
-const styles = {
+styles = {
   wrap: css`
     margin: 100px auto 0;
   `,
@@ -26,13 +37,5 @@ const styles = {
     animation-name: ${rotate};
   `,
 };
-
-const Loading = () => (
-  <div className={styles.wrap}>
-    <span className={styles.peace} role="img" aria-label="Peace Sign">
-      ✌️
-    </span>
-  </div>
-);
 
 export default Loading;

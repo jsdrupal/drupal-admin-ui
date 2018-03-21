@@ -3,8 +3,8 @@ import makeCancelable from 'makecancelable';
 import { Markup } from 'interweave';
 import { css } from 'emotion';
 
-import Loading from '../../Helpers/Loading';
-import { Table, TBody, THead } from '../../UI/table';
+import Loading from '../../02_atoms/Loading/Loading';
+import { Table, TBody, THead } from '../../01_subatomics/Table/Table';
 
 const Permissions = class Permissions extends Component {
   state = {
