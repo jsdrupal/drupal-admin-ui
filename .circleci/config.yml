@@ -55,7 +55,7 @@ jobs:
     steps:
       - add_ssh_keys:
           fingerprints:
-            - "${FINGERPRINT_DIST}"
+            - "82:b8:cc:fe:02:24:17:b1:31:ba:dc:30:e1:01:7a:df"
       - checkout
       - *restore-build
       - run: |
@@ -78,7 +78,7 @@ jobs:
     steps:
       - add_ssh_keys:
           fingerprints:
-            - "${FINGERPRINT_SUPPORT_DIST}"
+            - "6f:17:e5:59:16:41:04:82:3b:ba:fc:76:a7:b2:c8:6b"
       - checkout
       - *restore-build
       - run: |
