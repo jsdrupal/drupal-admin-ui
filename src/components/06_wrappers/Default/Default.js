@@ -6,13 +6,13 @@ import { Link } from 'react-router-dom';
 import makeCancelable from 'makecancelable';
 
 import Loading from '../../02_atoms/Loading/Loading';
+import Error from '../../02_atoms/Loading/Error';
 
 let styles;
 
 class Default extends React.Component {
   state = {
     loaded: false,
-    working: false,
     menuLinks: [],
   };
 
@@ -24,8 +24,8 @@ class Default extends React.Component {
     this.cancelFetch();
   }
 
-  enhanceMenuLinks = menuLinks => {
-    return Object.entries(menuLinks).reduce((acc, [key, menuLink]) => {
+  enhanceMenuLinks = menuLinks =>
+    Object.entries(menuLinks).reduce((acc, [key, menuLink]) => {
       // Permissions aren't part of the default menu structure, they are just a local tab.
       if (menuLink.link.url.indexOf('admin/people') !== -1) {
         menuLink.subtree.push({
@@ -44,7 +44,6 @@ class Default extends React.Component {
       acc[key] = menuLink;
       return acc;
     }, {});
-  };
 
   fetchData = () =>
     makeCancelable(
@@ -60,8 +59,10 @@ class Default extends React.Component {
         .catch(err => this.setState({ loaded: false, err })),
     );
 
-  render = () => {
-    return !this.state.loaded ? (
+  render = () =>
+    this.state.err ? (
+      <Error />
+    ) : !this.state.loaded ? (
       <Loading />
     ) : (
       <div className={styles.outerWrapper} id={styles.outerWrapper}>
@@ -107,7 +108,6 @@ class Default extends React.Component {
         </main>
       </div>
     );
-  };
 }
 
 Default.propTypes = {
