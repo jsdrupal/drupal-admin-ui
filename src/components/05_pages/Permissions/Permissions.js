@@ -1,4 +1,5 @@
 import React, { Component, Fragment } from 'react';
+import { string, shape } from 'prop-types';
 import makeCancelable from 'makecancelable';
 import { Markup } from 'interweave';
 import { css } from 'emotion';
@@ -7,6 +8,13 @@ import Loading from '../../02_atoms/Loading/Loading';
 import { Table, TBody, THead } from '../../01_subatomics/Table/Table';
 
 const Permissions = class Permissions extends Component {
+  static propTypes = {
+    match: shape({
+      params: shape({
+        role: string,
+      }).isRequired,
+    }).isRequired,
+  };
   state = {
     loaded: false,
     rawPermissions: [],
@@ -55,16 +63,24 @@ const Permissions = class Permissions extends Component {
             changedRoles: [],
             working: false,
             // Move admin roles to the right.
-            roles: roles.sort((a, b) => {
-              if (a.attributes.is_admin && b.attributes.is_admin) {
-                return a.attributes.id - b.attributes.id;
-              } else if (a.attributes.is_admin) {
-                return 1;
-              } else if (b.attributes.is_admin) {
-                return -1;
-              }
-              return a.attributes.id - b.attributes.id;
-            }),
+            roles:
+              this.props.match.params.role &&
+              roles
+                .map(role => role.attributes.id)
+                .includes(this.props.match.params.role)
+                ? roles.filter(
+                    role => role.attributes.id === this.props.match.params.role,
+                  )
+                : roles.sort((a, b) => {
+                    if (a.attributes.is_admin && b.attributes.is_admin) {
+                      return a.attributes.id - b.attributes.id;
+                    } else if (a.attributes.is_admin) {
+                      return 1;
+                    } else if (b.attributes.is_admin) {
+                      return -1;
+                    }
+                    return a.attributes.id - b.attributes.id;
+                  }),
             loaded: true,
           }),
         )
