@@ -106,6 +106,10 @@ class PermissionsCollectionResource extends ResourceBase {
       foreach ($permissions as $id => $permission) {
         $permissions[$id]['id'] = $id;
         $permissions[$id]['provider_label'] = $this->moduleExtensionList->getName($permissions[$id]['provider']);
+        // @todo Make a helper method to automatically render elements.
+        if (is_array($permissions[$id]['description'])) {
+          $permissions[$id]['description'] = $this->renderer->render($permissions[$id]['description']);
+        }
       };
       return array_values($permissions);
     });
