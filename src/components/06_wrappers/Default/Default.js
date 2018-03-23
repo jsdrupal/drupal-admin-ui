@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 import makeCancelable from 'makecancelable';
 
 import Loading from '../../02_atoms/Loading/Loading';
-import Error from '../../02_atoms/Loading/Error';
+import Error from '../../02_atoms/Error/Error';
 
 let styles;
 
