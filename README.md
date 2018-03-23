@@ -15,11 +15,21 @@ cd ../drupal
 ln -s ../drupal-admin-ui/build vfancy
 
 ## Link the support module to Drupal
-cd ../drupal
-ln -s ../drupal-admin-ui/admin_ui_support modules
+cd ../drupal/modules
+ln -s ../../drupal-admin-ui/admin_ui_support .
 
-# Install Drupal and start webserver
+## Download the jsonapi module
+curl -O https://ftp.drupal.org/files/projects/jsonapi-8.x-1.13.tar.gz
+tar zxf jsonapi-8.x-1.13.tar.gz
+
+# Install Drupal
+@todo Use the dev-site command
 composer install
+
+## Install the support module
+drush en admin_ui_support -y
+
+# Start the webserver
 php -S localhost:8000
 ```
 

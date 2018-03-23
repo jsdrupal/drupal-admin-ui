@@ -3,73 +3,114 @@ import { node } from 'prop-types';
 import { css } from 'emotion';
 import { scaleRotate as Menu } from 'react-burger-menu';
 import { Link } from 'react-router-dom';
+import makeCancelable from 'makecancelable';
+
+import Loading from '../../02_atoms/Loading/Loading';
+import Error from '../../02_atoms/Error/Error';
 
 let styles;
 
-const menuLinks = {
-  home: [{ path: '/', text: '🏠 Home' }],
-  permissions: [{ path: '/admin/people/permissions', text: '🔐 Permissions' }],
-  content: [
-    { path: '/admin/content', text: 'Content' },
-    { path: '/admin/content/comment', text: 'Comments' },
-  ],
-  structure: [
-    { path: '/admin/structure', text: 'Structure' },
-    { path: '/admin/structure/block', text: 'Block layout' },
-    { path: '/admin/structure/comments', text: 'Comment types' },
-    { path: '/admin/structure/contact', text: 'Contact forms' },
-    { path: '/admin/structure/types', text: 'Content types' },
-    { path: '/admin/structure/display-modes', text: 'Display modes' },
-    { path: '/admin/structure/menu', text: 'Menus' },
-    { path: '/admin/structure/taxonomy', text: 'Taxonomy' },
-    { path: '/admin/structure/views', text: 'Views' },
-  ],
-  appearance: [{ path: '/admin/appearance', text: 'Appearance' }],
-  extend: [{ path: '/admin/modules', text: 'Extend' }],
-  configuration: [{ path: '/admin/config', text: 'Configuration' }],
-  people: [{ path: '/admin/people', text: 'People' }],
-  reports: [{ path: '/admin/reports', text: 'Reports' }],
-  help: [{ path: '/admin/help', text: 'Help' }],
-};
+class Default extends React.Component {
+  state = {
+    loaded: false,
+    menuLinks: [],
+  };
 
-const Default = props => (
-  <div className={styles.outerWrapper} id={styles.outerWrapper}>
-    <Menu
-      outerContainerId={styles.outerWrapper}
-      pageWrapId={styles.main}
-      burgerButtonClassName={styles.burgerButton}
-      burgerBarClassName={styles.burgerBar}
-      crossButtonClassName={styles.crossButton}
-      crossClassName={styles.cross}
-      menuClassName={styles.menu}
-      morphShapeClassName={styles.morphShape}
-      itemListClassName={styles.itemList}
-      overlayClassName={styles.overlay}
-      isOpen={false}
-    >
-      {Object.keys(menuLinks).map(category => (
-        <ul key={`${category}--${menuLinks[category][0].text}`}>
-          <li>
-            <Link to={menuLinks[category][0].path}>
-              {menuLinks[category][0].text}
-            </Link>
-            <ul>
-              {menuLinks[category].slice(1).map(link => (
-                <li key={`${category}--${link.text}`}>
-                  <Link to={link.path}>{link.text}</Link>
-                </li>
-              ))}
+  componentDidMount() {
+    this.cancelFetch = this.fetchData();
+  }
+
+  componentWillUnmount() {
+    this.cancelFetch();
+  }
+
+  enhanceMenuLinks = menuLinks =>
+    Object.entries(menuLinks).reduce((acc, [key, menuLink]) => {
+      // Permissions aren't part of the default menu structure, they are just a local tab.
+      if (menuLink.link.url.indexOf('admin/people') !== -1) {
+        menuLink.subtree.push({
+          subtree: [],
+          hasChildren: false,
+          inActiveTrail: false,
+          link: {
+            weight: '4',
+            title: '🔐 Permissions',
+            description: 'Manage permissions.',
+            menuName: 'admin',
+            url: '/admin/people/permissions',
+          },
+        });
+      }
+      acc[key] = menuLink;
+      return acc;
+    }, {});
+
+  fetchData = () =>
+    makeCancelable(
+      fetch(
+        `${process.env.REACT_APP_DRUPAL_BASE_URL}/admin-api/menu?_format=json`,
+        {
+          credentials: 'include',
+        },
+      )
+        .then(res => res.json())
+        .then(this.enhanceMenuLinks)
+        .then(menuLinks => this.setState({ loaded: true, menuLinks }))
+        .catch(err => this.setState({ loaded: false, err })),
+    );
+
+  render = () => {
+    if (this.state.err) {
+      return <Error />;
+    } else if (!this.state.loaded) {
+      return <Loading />;
+    }
+    return (
+      <div className={styles.outerWrapper} id={styles.outerWrapper}>
+        <Menu
+          outerContainerId={styles.outerWrapper}
+          pageWrapId={styles.main}
+          burgerButtonClassName={styles.burgerButton}
+          burgerBarClassName={styles.burgerBar}
+          crossButtonClassName={styles.crossButton}
+          crossClassName={styles.cross}
+          menuClassName={styles.menu}
+          morphShapeClassName={styles.morphShape}
+          itemListClassName={styles.itemList}
+          overlayClassName={styles.overlay}
+          isOpen={false}
+        >
+          {Object.keys(this.state.menuLinks).map(category => (
+            <ul
+              key={`${category}--${this.state.menuLinks[category].link.title}`}
+            >
+              <li>
+                <Link to={this.state.menuLinks[category].link.url}>
+                  {this.state.menuLinks[category].link.title}
+                </Link>
+                <ul>
+                  {Object.values(this.state.menuLinks[category].subtree).map(
+                    subMenuLink => (
+                      <li key={`${category}--${subMenuLink.link.title}`}>
+                        <Link to={subMenuLink.link.url}>
+                          {subMenuLink.link.title}
+                        </Link>
+                      </li>
+                    ),
+                  )}
+                </ul>
+              </li>
             </ul>
-          </li>
-        </ul>
-      ))}
-    </Menu>
+          ))}
+        </Menu>
 
-    <main className={styles.main} id={styles.main}>
-      {props.children}
-    </main>
-  </div>
-);
+        <main className={styles.main} id={styles.main}>
+          {this.props.children}
+        </main>
+      </div>
+    );
+  };
+}
 
 Default.propTypes = {
   children: node.isRequired,
