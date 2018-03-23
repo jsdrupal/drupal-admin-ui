@@ -123,7 +123,21 @@ const Permissions = class Permissions extends Component {
             tds: [
               [
                 `td-${providerMachineName}-${permission.title}`,
-                <Markup content={permission.title} />,
+                <Fragment>
+                  <Markup content={permission.title} />
+                  {permission['restrict access'] && (
+                    <span>
+                      <em>
+                        {' '}
+                        Warning: Give to trusted roles only; this permission has
+                        security implications.{' '}
+                      </em>
+                    </span>
+                  )}
+                  {permission.description && (
+                    <Markup content={` ${permission.description}`} />
+                  )}
+                </Fragment>,
                 css`
                   padding: 0 0 0 30px;
                 `,
