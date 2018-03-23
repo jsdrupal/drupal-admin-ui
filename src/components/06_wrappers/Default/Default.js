@@ -59,12 +59,13 @@ class Default extends React.Component {
         .catch(err => this.setState({ loaded: false, err })),
     );
 
-  render = () =>
-    this.state.err ? (
-      <Error />
-    ) : !this.state.loaded ? (
-      <Loading />
-    ) : (
+  render = () => {
+    if (this.state.err) {
+      return <Error />;
+    } else if (!this.state.loaded) {
+      return <Loading />;
+    }
+    return (
       <div className={styles.outerWrapper} id={styles.outerWrapper}>
         <Menu
           outerContainerId={styles.outerWrapper}
@@ -108,6 +109,7 @@ class Default extends React.Component {
         </main>
       </div>
     );
+  };
 }
 
 Default.propTypes = {
