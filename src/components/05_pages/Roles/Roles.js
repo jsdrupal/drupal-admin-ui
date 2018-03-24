@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 
 import Loading from '../../02_atoms/Loading/Loading';
 import { Table, TBody, THead } from '../../01_subatomics/Table/Table';
+import Error from '../../02_atoms/Error/Error';
 
 const Roles = class Roles extends Component {
   state = {
@@ -29,7 +30,8 @@ const Roles = class Roles extends Component {
       .then(res => res.json())
       .then(({ data: roles }) =>
         this.setState(prevState => ({ ...prevState, roles, loaded: true })),
-      );
+      )
+      .catch(err => this.setState({ loaded: true, err }));
   createTableRows = () =>
     this.state.roles.map(({ attributes: { label, id } }) => ({
       key: `row-${label}`,
@@ -42,9 +44,12 @@ const Roles = class Roles extends Component {
       ],
     }));
   render() {
-    return !this.state.loaded ? (
-      <Loading />
-    ) : (
+    if (this.state.err) {
+      return <Error />;
+    } else if (!this.state.loaded) {
+      return <Loading />;
+    }
+    return (
       <Table>
         <THead data={['NAME', 'OPERATIONS']} />
         <TBody rows={this.createTableRows()} />
