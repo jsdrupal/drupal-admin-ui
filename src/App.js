@@ -40,7 +40,9 @@ const withDefault = component => () => (
 
 class App extends Component {
   componentDidMount() {
-    history.replace('/');
+    // Allow Drupal redirects to determine the initial path.
+    const search = history.location.search.replace('?q=', '');
+    history.replace(`/${search}`);
   }
   render() {
     return (

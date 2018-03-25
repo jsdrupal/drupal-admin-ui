@@ -1,0 +1,27 @@
+admin_ui_support.user.permissions:
+  path: '/vfancy/admin/people/permissions'
+  defaults:
+    _controller: '\Drupal\admin_ui_support\Controller\EmptyController::noop'
+  options:
+    _admin_related_route: 'user.admin_permissions'
+  requirements:
+    _permission: 'administer permissions'
+
+admin_ui_support.entity.user_role.edit_permissions_form:
+  path: '/vfancy/admin/people/permissions/{user_role}'
+  defaults:
+    _controller: '\Drupal\admin_ui_support\Controller\EmptyController::noop'
+  options:
+    _admin_related_route: 'entity.user_role.edit_permissions_form'
+  requirements:
+    _entity_access: 'user_role.update'
+
+admin_ui_support.entity.user_role.collection:
+  path: '/vfancy/admin/people/roles'
+  defaults:
+    _controller: '\Drupal\admin_ui_support\Controller\EmptyController::noop'
+  options:
+    _admin_related_route: 'entity.user_role.collection'
+  requirements:
+    _permission: 'administer permissions'
+
