@@ -161,6 +161,18 @@ const configSchemaToUiSchema = configSchema => {
   }
 };
 
+const objectGet = (path, object) => {
+  const paths = Array.isArray(path) ? path : path.split('][').map(str => str.replace(']', ''));
+  if (Array.isArray(path)) {
+  }
+  else {
+  }
+};
+
+const objectSet = (path, object) {
+
+}
+
 const fetchSimpleConfig = name => {
   return fetch(
     `${process.env.REACT_APP_DRUPAL_BASE_URL}/config/${name}?_format=json`,

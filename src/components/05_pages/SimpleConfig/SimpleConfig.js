@@ -1,8 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import configSchema from './../../configSchema.json';
-import * as ConfigSchema from '../../lib/ConfigSchema';
-import { fetchSimpleConfig } from '../../lib/ConfigSchema';
+import configSchema from './../../../configSchema.json';
+import * as ConfigSchema from '../../../lib/ConfigSchema';
 
 // @todo Replace it with react-json-schema-form?
 
