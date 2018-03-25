@@ -6,6 +6,7 @@ import { css } from 'emotion';
 
 import Loading from '../../02_atoms/Loading/Loading';
 import { Table, TBody, THead } from '../../01_subatomics/Table/Table';
+import Error from '../../02_atoms/Error/Error';
 
 const Permissions = class Permissions extends Component {
   static propTypes = {
@@ -201,9 +202,12 @@ const Permissions = class Permissions extends Component {
     );
   };
   render() {
-    return !this.state.loaded ? (
-      <Loading />
-    ) : (
+    if (this.state.err) {
+      return <Error />;
+    } else if (!this.state.loaded) {
+      return <Loading />;
+    }
+    return (
       <Fragment>
         <input
           type="text"
