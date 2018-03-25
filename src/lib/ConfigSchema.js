@@ -1,17 +1,30 @@
-import immutable from "immutable";
+import immutable from 'immutable';
 import React from 'react';
 
 // @todo Support nested values.
 
-const configSchemaToReactComponent = (name, state, configSchema, onChangeField) => {
-  const configSchemaWithWidgets = immutable.fromJS(configSchema).mergeDeep(configSchemaToUiSchema(configSchema)).toJS();
+const configSchemaToReactComponent = (
+  name,
+  state,
+  configSchema,
+  onChangeField,
+) => {
+  const configSchemaWithWidgets = immutable
+    .fromJS(configSchema)
+    .mergeDeep(configSchemaToUiSchema(configSchema))
+    .toJS();
   switch (configSchemaWithWidgets['ui:widget']) {
     case 'textfield':
       return (
         <div key={name}>
           <label>
             {configSchema.label}
-            <input type="textfield" name={name} onChange={onChangeField(name)} value={state[name]}/>
+            <input
+              type="textfield"
+              name={name}
+              onChange={onChangeField(name)}
+              value={state[name]}
+            />
           </label>
         </div>
       );
@@ -20,7 +33,12 @@ const configSchemaToReactComponent = (name, state, configSchema, onChangeField) 
         <div key={name}>
           <label>
             {configSchema.label}
-            <input type="number" name={name} onChange={onChangeField(name)} value={state[name]}/>
+            <input
+              type="number"
+              name={name}
+              onChange={onChangeField(name)}
+              value={state[name]}
+            />
           </label>
         </div>
       );
@@ -29,7 +47,12 @@ const configSchemaToReactComponent = (name, state, configSchema, onChangeField) 
         <div key={name}>
           <label>
             {configSchema.label}
-            <input type="checkbox" name={name} onChange={onChangeField(name)} value={state[name]}/>
+            <input
+              type="checkbox"
+              name={name}
+              onChange={onChangeField(name)}
+              value={state[name]}
+            />
           </label>
         </div>
       );
@@ -37,7 +60,14 @@ const configSchemaToReactComponent = (name, state, configSchema, onChangeField) 
       return (
         <div key={'root'}>
           <fieldset>
-            {Object.entries(configSchema.mapping).map(pair => configSchemaToReactComponent(pair[0], state, pair[1], onChangeField))}
+            {Object.entries(configSchema.mapping).map(pair =>
+              configSchemaToReactComponent(
+                pair[0],
+                state,
+                pair[1],
+                onChangeField,
+              ),
+            )}
           </fieldset>
         </div>
       );
@@ -47,7 +77,14 @@ const configSchemaToReactComponent = (name, state, configSchema, onChangeField) 
           <label>
             {configSchema.label}
             <fieldset>
-              {Object.entries(configSchema.mapping).map(pair => configSchemaToReactComponent(pair[0], state, pair[1], onChangeField))}
+              {Object.entries(configSchema.mapping).map(pair =>
+                configSchemaToReactComponent(
+                  pair[0],
+                  state,
+                  pair[1],
+                  onChangeField,
+                ),
+              )}
             </fieldset>
           </label>
         </div>
@@ -58,7 +95,7 @@ const configSchemaToReactComponent = (name, state, configSchema, onChangeField) 
   }
 };
 
-const configSchemaToJsonSchema = (configSchema) => {
+const configSchemaToJsonSchema = configSchema => {
   switch (configSchema.type) {
     case 'mapping':
     case 'config_object':
@@ -86,12 +123,12 @@ const configSchemaToJsonSchema = (configSchema) => {
   }
 };
 
-const configSchemaToUiSchema = (configSchema) => {
+const configSchemaToUiSchema = configSchema => {
   switch (configSchema.type) {
     case 'mapping':
     case 'config_object':
       const properties = {};
-      Object.entries(configSchema.mapping).forEach(pair=> {
+      Object.entries(configSchema.mapping).forEach(pair => {
         const name = pair[0];
         const schema = pair[1];
         properties[name] = configSchemaToUiSchema(schema);
@@ -124,22 +161,23 @@ const configSchemaToUiSchema = (configSchema) => {
   }
 };
 
-const fetchSimpleConfig = (name) => {
-  return fetch(`${process.env.REACT_APP_DRUPAL_BASE_URL}/config/${name}?_format=json`)
+const fetchSimpleConfig = name => {
+  return fetch(
+    `${process.env.REACT_APP_DRUPAL_BASE_URL}/config/${name}?_format=json`,
+  )
     .then(res => {
       return res.json();
     })
     .catch(console.error);
 };
 
-const convertFormValuesToNormalized = (object) => {
+const convertFormValuesToNormalized = object => {
   return object;
 };
 
-const convertNormalizedToFormValues = (normalized) => {
+const convertNormalizedToFormValues = normalized => {
   return normalized;
 };
-
 
 export {
   configSchemaToReactComponent,

@@ -14,23 +14,22 @@ import { fetchSimpleConfig } from '../../lib/ConfigSchema';
  */
 
 class SimpleConfig extends React.Component {
-
-  constructor (props) {
+  constructor(props) {
     super(props);
 
     this.state = {
       loading: true,
-    }
+    };
   }
 
-  onChangeField = (name) => (event) => {
+  onChangeField = name => event => {
     event.preventDefault();
     this.setState({
       [name]: event.target.value,
     });
   };
 
-  onSubmit = (event) => {
+  onSubmit = event => {
     event.preventDefault();
     this.props.onSubmit(this.state);
   };
@@ -39,28 +38,31 @@ class SimpleConfig extends React.Component {
     this.setState({
       loading: true,
     });
-    fetchSimpleConfig(this.props.name)
-      .then(config => {
-        console.log(config);
-        this.setState({
-          ...config,
-          loading: false,
-        });
+    fetchSimpleConfig(this.props.name).then(config => {
+      console.log(config);
+      this.setState({
+        ...config,
+        loading: false,
       });
+    });
   }
 
   render() {
     if (this.loading) {
-      return (<div>Loading ...</div>);
+      return <div>Loading ...</div>;
     }
     return (
       <form>
-        {ConfigSchema.configSchemaToReactComponent('', this.state, configSchema[this.props.name], this.onChangeField)}
+        {ConfigSchema.configSchemaToReactComponent(
+          '',
+          this.state,
+          configSchema[this.props.name],
+          this.onChangeField,
+        )}
         <button onClick={this.onSubmit}>Save</button>
       </form>
     );
   }
-
 }
 
 SimpleConfig.propTypes = {
