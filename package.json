@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "emotion": "^9.0.2",
+    "history": "^4.7.2",
     "interweave": "^8.0.2",
     "makecancelable": "^1.0.0",
     "prop-types": "^15.6.1",

@@ -1,12 +1,11 @@
-import React, { Component, Fragment } from 'react';
-import { Router, Route, Switch } from 'react-router';
+import React, { Component } from 'react';
+import { Route, Switch, withRouter } from 'react-router-dom';
 import createBrowserHistory from 'history/createBrowserHistory';
 import { createStore, applyMiddleware, combineReducers } from 'redux';
 import {
   ConnectedRouter,
   routerReducer,
   routerMiddleware,
-  push,
 } from 'react-router-redux';
 import { Provider } from 'react-redux';
 import createSagaMiddleware from 'redux-saga';
@@ -22,7 +21,6 @@ import normalize from './styles/normalize'; // eslint-disable-line no-unused-var
 import base from './styles/base'; // eslint-disable-line no-unused-vars
 import actions from './actions/index';
 import reducers from './reducers/index';
-import { withRouter } from 'react-router-dom';
 
 const history = createBrowserHistory();
 const middleware = routerMiddleware(history);
@@ -35,9 +33,9 @@ const store = createStore(
 );
 sagaMiddleware.run(actions);
 
-const withDefault = component => () => {
-  return <Default>{React.createElement(component)}</Default>;
-};
+const withDefault = component => () => (
+  <Default>{React.createElement(component)}</Default>
+);
 
 class App extends Component {
   componentDidMount() {
