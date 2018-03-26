@@ -2,6 +2,8 @@
 
 namespace Drupal\admin_ui_support\Plugin\Deriver;
 
+use Drupal\Core\Config\Config;
+use Drupal\Core\Config\ConfigNameException;
 use Drupal\Core\Config\TypedConfigManagerInterface;
 use Drupal\Core\Plugin\Discovery\ContainerDeriverInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -72,7 +74,10 @@ class SimpleConfigDeriver implements ContainerDeriverInterface {
 
     foreach ($simple_config_schemas as $name => $simple_config_schema) {
       // @todo Should we expose config with names that end in .*
-      if (substr($name, -2) === '.*') {
+      try {
+        Config::validateName($name);
+      }
+      catch (ConfigNameException $exception) {
         continue;
       }
       $this->derivatives[str_replace('.', '_', $name)] = [
