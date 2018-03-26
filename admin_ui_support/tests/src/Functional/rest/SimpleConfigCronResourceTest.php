@@ -38,4 +38,16 @@ class SimpleConfigCronResourceTest extends SimpleConfigTestBase {
     return $data;
   }
 
+  /**
+   * Gets the data to use to patch the simple config.
+   *
+   * @return array
+   *   The data.
+   */
+  protected function getSimpleConfigPatchData() {
+    $data = [
+      'interval' => '10901',
+    ];
+    return $data;
+  }
 }

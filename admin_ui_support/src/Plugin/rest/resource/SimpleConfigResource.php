@@ -134,25 +134,6 @@ class SimpleConfigResource extends ResourceBase implements DependentPluginInterf
   }
 
   /**
-   * Responds to POST requests.
-   *
-   * @param array $data
-   *   The unserialized data.
-   *
-   * @return \Drupal\rest\ModifiedResourceResponse
-   *   The modified resource response.
-   */
-  public function post(array $data) {
-    $config = $this->configFactory->getEditable($this->getPluginDefinition()['config_name']);
-    if (!$config->isNew()) {
-      throw new MethodNotAllowedHttpException(['PATCH', 'GET'], 'The configuration object has already been created.');
-    }
-    $config->setData($data);
-    $config->save();
-    return new ModifiedResourceResponse($config, 201);
-  }
-
-  /**
    * {@inheritdoc}
    */
   public function permissions() {
