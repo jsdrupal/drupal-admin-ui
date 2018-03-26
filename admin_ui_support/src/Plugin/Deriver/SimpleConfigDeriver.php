@@ -78,7 +78,9 @@ class SimpleConfigDeriver implements ContainerDeriverInterface {
       $this->derivatives[str_replace('.', '_', $name)] = [
         'id' => 'config_' . str_replace('.', '_', $name),
         'config_name' => $name,
-        'serialization_class' => '@fixme',
+        // @todo Do we need a serialization class?
+          // \Drupal\rest\RequestHandler::deserialize() might not give use a enough information. The data itself will not have the actual config id.
+        //'serialization_class' => '@fixme',
         'label' => isset($simple_config_schema['label']) ? $simple_config_schema['label'] : 'Config: ' . $name,
         'uri_paths' => [
           'canonical' => "/config/$name",

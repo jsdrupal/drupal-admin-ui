@@ -7,6 +7,7 @@ use Drupal\Component\Plugin\PluginManagerInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
+use Drupal\rest\ModifiedResourceResponse;
 use Drupal\rest\Plugin\ResourceBase;
 use Drupal\rest\ResourceResponse;
 use Psr\Log\LoggerInterface;
@@ -113,6 +114,22 @@ class SimpleConfigResource extends ResourceBase implements DependentPluginInterf
   }
 
   /**
+   * Responds to get request.
+   *
+   * @param array $data
+   *   The unserialized data.
+   *
+   * @return \Drupal\rest\ModifiedResourceResponse
+   *   The modified resource response.
+   */
+  public function patch(array $data) {
+    $config = $this->configFactory->getEditable($this->getPluginDefinition()['config_name']);
+    $config->setData($data);
+    $config->save();
+    return new ModifiedResourceResponse($config);
+  }
+
+  /**
    * {@inheritdoc}
    */
   public function permissions() {
@@ -144,7 +161,7 @@ class SimpleConfigResource extends ResourceBase implements DependentPluginInterf
    * {@inheritdoc}
    */
   public function availableMethods() {
-    return ['GET'];
+    return ['GET', 'PATCH'];
   }
 
   /**
