@@ -4,6 +4,7 @@ namespace Drupal\admin_ui_support\Plugin\rest\resource;
 
 use Drupal\Component\Plugin\DependentPluginInterface;
 use Drupal\Component\Plugin\PluginManagerInterface;
+use Drupal\Core\Config\Config;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
@@ -12,6 +13,8 @@ use Drupal\rest\Plugin\ResourceBase;
 use Drupal\rest\ResourceResponse;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * Represents simple config as resources.
@@ -106,7 +109,7 @@ class SimpleConfigResource extends ResourceBase implements DependentPluginInterf
     // @fixme access checking?
     $name = $this->getPluginDefinition()['config_name'];
     $config = $this->configFactory->get($name);
-
+    $this->handleNewConfig($config);
     $response = new ResourceResponse($config, 200);
     $response->addCacheableDependency($config);
 
@@ -114,7 +117,7 @@ class SimpleConfigResource extends ResourceBase implements DependentPluginInterf
   }
 
   /**
-   * Responds to get request.
+   * Responds to PATCH requests.
    *
    * @param array $data
    *   The unserialized data.
@@ -124,9 +127,29 @@ class SimpleConfigResource extends ResourceBase implements DependentPluginInterf
    */
   public function patch(array $data) {
     $config = $this->configFactory->getEditable($this->getPluginDefinition()['config_name']);
+    $this->handleNewConfig($config);
     $config->setData($data);
     $config->save();
     return new ModifiedResourceResponse($config);
+  }
+
+  /**
+   * Responds to POST requests.
+   *
+   * @param array $data
+   *   The unserialized data.
+   *
+   * @return \Drupal\rest\ModifiedResourceResponse
+   *   The modified resource response.
+   */
+  public function post(array $data) {
+    $config = $this->configFactory->getEditable($this->getPluginDefinition()['config_name']);
+    if (!$config->isNew()) {
+      throw new MethodNotAllowedHttpException(['PATCH', 'GET'], 'The configuration object has already been created.');
+    }
+    $config->setData($data);
+    $config->save();
+    return new ModifiedResourceResponse($config, 201);
   }
 
   /**
@@ -175,6 +198,18 @@ class SimpleConfigResource extends ResourceBase implements DependentPluginInterf
       return ['module' => [$module_name]];
     }
     return [];
+  }
+
+  /**
+   * Handles new config expception for GET and PATCH requests.
+   *
+   * @param \Drupal\Core\Config\Config $config
+   *   The config object.
+   */
+  protected function handleNewConfig(Config $config) {
+    if ($config->isNew()) {
+      throw new NotFoundHttpException('This configuration object has not been created yet.');
+    }
   }
 
 }
