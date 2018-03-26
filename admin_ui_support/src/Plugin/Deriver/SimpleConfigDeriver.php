@@ -72,7 +72,7 @@ class SimpleConfigDeriver implements ContainerDeriverInterface {
 
     foreach ($simple_config_schemas as $name => $simple_config_schema) {
       // @todo Should we expose config with names that end in .*
-      if (substr($name, -2, 2) === '.*') {
+      if (substr($name, -2) === '.*') {
         continue;
       }
       $this->derivatives[str_replace('.', '_', $name)] = [
