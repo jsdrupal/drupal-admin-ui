@@ -6,6 +6,9 @@ use Drupal\Core\Config\TypedConfigManagerInterface;
 use Drupal\Core\Plugin\Discovery\ContainerDeriverInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
+/**
+ * Derives REST resources for all simple config objects.
+ */
 class SimpleConfigDeriver implements ContainerDeriverInterface {
 
   /**
@@ -41,7 +44,6 @@ class SimpleConfigDeriver implements ContainerDeriverInterface {
     );
   }
 
-
   /**
    * {@inheritdoc}
    */
@@ -69,17 +71,35 @@ class SimpleConfigDeriver implements ContainerDeriverInterface {
     });
 
     foreach ($simple_config_schemas as $name => $simple_config_schema) {
+      // @todo Should we expose config with names that end in .*
+      if (substr($name, -2, 2) === '.*') {
+        continue;
+      }
       $this->derivatives[str_replace('.', '_', $name)] = [
         'id' => 'config_' . str_replace('.', '_', $name),
         'config_name' => $name,
         'serialization_class' => '@fixme',
         'label' => isset($simple_config_schema['label']) ? $simple_config_schema['label'] : 'Config: ' . $name,
+        'uri_paths' => [
+          'canonical' => "/config/$name",
+          'create' => "/config/$name",
+        ],
       ] + $base_plugin_definition;
     }
-
     return $this->derivatives;
   }
 
+  /**
+   * Determines if the schmema is a config schema.
+   *
+   * @param array $schema
+   *   The schema to check.
+   * @param array $all_schemas
+   *   All schemas.
+   *
+   * @return bool
+   *   True if the schema is a config schema otherwise false.
+   */
   protected function isConfigSchema(array $schema, array $all_schemas) {
     if (empty($schema['type'])) {
       return FALSE;

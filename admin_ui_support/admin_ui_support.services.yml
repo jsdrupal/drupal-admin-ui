@@ -7,11 +7,6 @@ services:
     class: \Drupal\admin_ui_support\Normalizer\MenuTreeNormalizer
     tags:
       - { name: normalizer }
-  paramconverter.simple_config:
-    class: Drupal\admin_ui_support\ParamConverter\SimpleConfigConverter
-    tags:
-      - { name: paramconverter }
-    arguments: ['@config.factory']
   admin_ui_support.normalizer.simple_config:
     class: Drupal\admin_ui_support\Normalizer\SimpleConfigNormalizer
     tags:

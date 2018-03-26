@@ -4,13 +4,13 @@ namespace Drupal\admin_ui_support\Plugin\rest\resource;
 
 use Drupal\Component\Plugin\DependentPluginInterface;
 use Drupal\Component\Plugin\PluginManagerInterface;
-use Drupal\Core\Config\StorableConfigBase;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\rest\Plugin\ResourceBase;
 use Drupal\rest\ResourceResponse;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+
 /**
  * Represents simple config as resources.
  *
@@ -21,7 +21,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *   label = @Translation("Simple config"),
  *   deriver = "\Drupal\admin_ui_support\Plugin\Deriver\SimpleConfigDeriver",
  *   uri_paths = {
- *     "canonical" = "/config/{simple_config}",
+ *     "canonical" = "/config/{config_name}/{simple_config}",
  *   }
  * )
  */
@@ -51,7 +51,7 @@ class SimpleConfigResource extends ResourceBase implements DependentPluginInterf
    * @param mixed $plugin_definition
    *   The plugin implementation definition.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
-   *   The entity type manager
+   *   The entity type manager.
    * @param array $serializer_formats
    *   The available serialization formats.
    * @param \Psr\Log\LoggerInterface $logger
@@ -61,7 +61,7 @@ class SimpleConfigResource extends ResourceBase implements DependentPluginInterf
    * @param \Drupal\Component\Plugin\PluginManagerInterface $link_relation_type_manager
    *   The link relation type manager.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, EntityTypeManagerInterface $entity_type_manager, $serializer_formats, LoggerInterface $logger, ConfigFactoryInterface $config_factory, PluginManagerInterface $link_relation_type_manager) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, EntityTypeManagerInterface $entity_type_manager, array $serializer_formats, LoggerInterface $logger, ConfigFactoryInterface $config_factory, PluginManagerInterface $link_relation_type_manager) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $serializer_formats, $logger);
     $this->configFactory = $config_factory;
     $this->linkRelationTypeManager = $link_relation_type_manager;
@@ -86,12 +86,13 @@ class SimpleConfigResource extends ResourceBase implements DependentPluginInterf
   /**
    * Responds to entity GET requests.
    *
-   * @param \Drupal\Core\Config\StorableConfigBase $config
    * @return \Drupal\rest\ResourceResponse
    *   The response containing the entity with its accessible fields.
    */
-  public function get(StorableConfigBase $config) {
+  public function get() {
     // @fixme access checking?
+    $name = $this->getPluginDefinition()['config_name'];
+    $config = $this->configFactory->get($name);
 
     $response = new ResourceResponse($config, 200);
     $response->addCacheableDependency($config);
