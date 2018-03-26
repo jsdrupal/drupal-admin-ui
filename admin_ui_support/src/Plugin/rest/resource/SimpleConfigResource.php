@@ -6,6 +6,7 @@ use Drupal\Component\Plugin\DependentPluginInterface;
 use Drupal\Component\Plugin\PluginManagerInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\rest\Plugin\ResourceBase;
 use Drupal\rest\ResourceResponse;
 use Psr\Log\LoggerInterface;
@@ -42,6 +43,13 @@ class SimpleConfigResource extends ResourceBase implements DependentPluginInterf
   protected $linkRelationTypeManager;
 
   /**
+   * The module handler.
+   *
+   * @var \Drupal\Core\Extension\ModuleHandlerInterface
+   */
+  protected $moduleHandler;
+
+  /**
    * Constructs a Drupal\rest\Plugin\rest\resource\EntityResource object.
    *
    * @param array $configuration
@@ -60,11 +68,14 @@ class SimpleConfigResource extends ResourceBase implements DependentPluginInterf
    *   The config factory.
    * @param \Drupal\Component\Plugin\PluginManagerInterface $link_relation_type_manager
    *   The link relation type manager.
+   * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
+   *   The module handler.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, EntityTypeManagerInterface $entity_type_manager, array $serializer_formats, LoggerInterface $logger, ConfigFactoryInterface $config_factory, PluginManagerInterface $link_relation_type_manager) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, EntityTypeManagerInterface $entity_type_manager, array $serializer_formats, LoggerInterface $logger, ConfigFactoryInterface $config_factory, PluginManagerInterface $link_relation_type_manager, ModuleHandlerInterface $module_handler) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $serializer_formats, $logger);
     $this->configFactory = $config_factory;
     $this->linkRelationTypeManager = $link_relation_type_manager;
+    $this->moduleHandler = $module_handler;
   }
 
   /**
@@ -79,7 +90,8 @@ class SimpleConfigResource extends ResourceBase implements DependentPluginInterf
       $container->getParameter('serializer.formats'),
       $container->get('logger.factory')->get('rest'),
       $container->get('config.factory'),
-      $container->get('plugin.manager.link_relation_type')
+      $container->get('plugin.manager.link_relation_type'),
+      $container->get('module_handler')
     );
   }
 
@@ -139,6 +151,12 @@ class SimpleConfigResource extends ResourceBase implements DependentPluginInterf
    * {@inheritdoc}
    */
   public function calculateDependencies() {
+    // @todo Is there a better way to determine the module that provides the
+    // config?
+    $module_name = explode('.', $this->getPluginDefinition()['config_name'])[0];
+    if ($this->moduleHandler->moduleExists($module_name)) {
+      return ['module' => [$module_name]];
+    }
     return [];
   }
 
