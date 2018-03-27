@@ -1,5 +1,5 @@
 import React from 'react';
-import { func, node, objectOf, shape, string } from 'prop-types';
+import { func, node, arrayOf, shape, string } from 'prop-types';
 import { connect } from 'react-redux';
 import LoadingBar from 'react-redux-loading-bar';
 import { css } from 'emotion';
@@ -29,22 +29,22 @@ class Default extends React.Component {
         overlayClassName={styles.overlay}
         isOpen={false}
       >
-        {Object.keys(this.props.menuLinks).map(category => (
-          <ul key={`${category}--${this.props.menuLinks[category].link.title}`}>
+        {this.props.menuLinks.map(({ link: menuLink, subtree }) => (
+          <ul key={`${menuLink.menuName}--${menuLink.url}--${menuLink.title}`}>
             <li>
-              <Link to={this.props.menuLinks[category].link.url}>
-                {this.props.menuLinks[category].link.title}
-              </Link>
+              <Link to={menuLink.url}>{menuLink.title}</Link>
               <ul>
-                {Object.values(this.props.menuLinks[category].subtree).map(
-                  subMenuLink => (
-                    <li key={`${category}--${subMenuLink.link.title}`}>
-                      <Link to={subMenuLink.link.url}>
-                        {subMenuLink.link.title}
-                      </Link>
-                    </li>
-                  ),
-                )}
+                {subtree.map(({ link: subMenuLink }) => (
+                  <li
+                    key={`
+                      ${subMenuLink.menuName}--
+                      ${subMenuLink.url}--
+                      ${subMenuLink.title}
+                    `}
+                  >
+                    <Link to={subMenuLink.url}>{subMenuLink.title}</Link>
+                  </li>
+                ))}
               </ul>
             </li>
           </ul>
@@ -115,14 +115,16 @@ styles = {
 Default.propTypes = {
   children: node.isRequired,
   error: string,
-  menuLinks: objectOf(
+  menuLinks: arrayOf(
     shape({
-      subtree: objectOf({
-        link: shape({
-          url: string,
-          title: string,
+      subtree: arrayOf(
+        shape({
+          link: shape({
+            url: string,
+            title: string,
+          }),
         }),
-      }),
+      ),
       link: shape({
         url: string,
         title: string,

@@ -98,7 +98,7 @@ class MenuTreeResource extends ResourceBase {
         ['callable' => 'menu.default_tree_manipulators:generateIndexAndSort'],
         ['callable' => 'toolbar_menu_navigation_links'],
       ];
-      $tree = $this->menuLinkTree->transform($tree, $manipulators);
+      $tree = array_values($this->menuLinkTree->transform($tree, $manipulators));
       return $tree;
     });
 
