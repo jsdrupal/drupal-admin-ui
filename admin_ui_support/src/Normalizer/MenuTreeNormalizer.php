@@ -19,7 +19,7 @@ class MenuTreeNormalizer extends NormalizerBase {
     // Use proper accessiblity metadata.
     if ($object instanceof MenuLinkTreeElement && $object->access->isAllowed()) {
       $tree_element = [
-        'subtree' => array_map([$this, 'normalize'], $object->subtree),
+        'subtree' => array_values(array_map([$this, 'normalize'], $object->subtree)),
         'hasChildren' => $object->hasChildren,
         'inActiveTrail' => $object->inActiveTrail,
         'options' => $object->options,
