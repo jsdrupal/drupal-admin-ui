@@ -35,7 +35,13 @@ class Default extends React.Component {
               <Link to={menuLink.url}>{menuLink.title}</Link>
               <ul>
                 {subtree.map(({ link: subMenuLink }) => (
-                  <li key={`${subMenuLink.menuName}--${subMenuLink.url}--${subMenuLink.title}`}>
+                  <li
+                    key={`
+                      ${subMenuLink.menuName}--
+                      ${subMenuLink.url}--
+                      ${subMenuLink.title}
+                    `}
+                  >
                     <Link to={subMenuLink.url}>{subMenuLink.title}</Link>
                   </li>
                 ))}
