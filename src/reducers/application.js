@@ -2,7 +2,7 @@ import { SET_ERROR, MENU_LOADED } from '../actions/application';
 
 const initialState = {
   error: null,
-  menuLinks: {},
+  menuLinks: [],
 };
 
 export default (state = initialState, action) => {
@@ -14,28 +14,24 @@ export default (state = initialState, action) => {
       };
     }
     case MENU_LOADED: {
-      const menuLinks = Object.entries(action.payload.menuLinks).reduce(
-        (acc, [key, menuLink]) => {
-          // Explicitly add the Permissions in as a top level item, as it's usually just a local tab.
-          if (menuLink.link.url.indexOf('admin/people') !== -1) {
-            menuLink.subtree.push({
-              subtree: [],
-              hasChildren: false,
-              inActiveTrail: false,
-              link: {
-                weight: '4',
-                title: '🔐 Permissions',
-                description: 'Manage permissions.',
-                menuName: 'admin',
-                url: '/admin/people/permissions',
-              },
-            });
-          }
-          acc[key] = menuLink;
-          return acc;
-        },
-        {},
-      );
+      const menuLinks = action.payload.menuLinks.map(menuLink => {
+        // Explicitly add the Permissions in as a top level item, as it's usually just a local tab.
+        if (menuLink.link.url.indexOf('admin/people') !== -1) {
+          menuLink.subtree.push({
+            subtree: [],
+            hasChildren: false,
+            inActiveTrail: false,
+            link: {
+              weight: '4',
+              title: '🔐 Permissions',
+              description: 'Manage permissions.',
+              menuName: 'admin',
+              url: '/admin/people/permissions',
+            },
+          });
+        }
+        return menuLink;
+      });
       return {
         ...state,
         menuLinks,
