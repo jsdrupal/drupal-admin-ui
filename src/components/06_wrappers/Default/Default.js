@@ -1,5 +1,5 @@
 import React from 'react';
-import { func, node, objectOf, shape, string } from 'prop-types';
+import { func, node, objectOf, arrayOf, shape, string } from 'prop-types';
 import { connect } from 'react-redux';
 import LoadingBar from 'react-redux-loading-bar';
 import { css } from 'emotion';
@@ -117,12 +117,14 @@ Default.propTypes = {
   error: string,
   menuLinks: objectOf(
     shape({
-      subtree: objectOf({
-        link: shape({
-          url: string,
-          title: string,
+      subtree: arrayOf(
+        shape({
+          link: shape({
+            url: string,
+            title: string,
+          }),
         }),
-      }),
+      ),
       link: shape({
         url: string,
         title: string,
