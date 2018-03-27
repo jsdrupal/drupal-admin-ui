@@ -5,6 +5,9 @@ async function api(endpoint, init = {}) {
     case 'menu':
       url = '/admin-api/menu?_format=json';
       break;
+    case 'roles':
+      url = '/jsonapi/user_role/user_role';
+      break;
     default:
       break;
   }

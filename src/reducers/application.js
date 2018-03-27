@@ -1,4 +1,4 @@
-import { SET_ERROR, MENU_LOADED } from '../actions/application';
+import { SET_ERROR, MENU_LOADED, ROLES_LOADED } from '../actions/application';
 
 const initialState = {
   error: null,
@@ -35,6 +35,13 @@ export default (state = initialState, action) => {
       return {
         ...state,
         menuLinks,
+      };
+    }
+    case ROLES_LOADED: {
+      const roles = action.payload.roles.data;
+      return {
+        ...state,
+        roles,
       };
     }
     default: {
