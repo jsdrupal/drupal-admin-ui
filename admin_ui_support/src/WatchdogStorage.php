@@ -24,4 +24,14 @@ class WatchdogStorage extends SqlContentEntityStorage {
   public function onEntityTypeDelete(EntityTypeInterface $entity_type) {
   }
 
+  /**
+   * {@inheritdoc}
+   *
+   * The watchdog entity type does not control its own data.
+   * This prevents the module from not being able to be deleted.
+   */
+  public function hasData() {
+    return FALSE;
+  }
+
 }
