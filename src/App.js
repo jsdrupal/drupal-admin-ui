@@ -1,5 +1,15 @@
 import React, { Component } from 'react';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { Route, Switch, withRouter } from 'react-router-dom';
+import createBrowserHistory from 'history/createBrowserHistory';
+import { createStore, applyMiddleware, combineReducers } from 'redux';
+import {
+  ConnectedRouter,
+  routerReducer,
+  routerMiddleware,
+} from 'react-router-redux';
+import { Provider } from 'react-redux';
+import createSagaMiddleware from 'redux-saga';
+import { composeWithDevTools } from 'redux-devtools-extension/developmentOnly';
 
 import routes from './routes';
 
@@ -9,24 +19,45 @@ import NoMatch from './NoMatch';
 
 import normalize from './styles/normalize'; // eslint-disable-line no-unused-vars
 import base from './styles/base'; // eslint-disable-line no-unused-vars
+import actions from './actions/index';
+import reducers from './reducers/index';
+
+const history = createBrowserHistory();
+const middleware = routerMiddleware(history);
+
+const sagaMiddleware = createSagaMiddleware();
+
+const store = createStore(
+  combineReducers({ ...reducers, router: routerReducer }),
+  composeWithDevTools(applyMiddleware(sagaMiddleware, middleware)),
+);
+sagaMiddleware.run(actions);
+
+const withDefault = component => () => (
+  <Default>{React.createElement(component)}</Default>
+);
 
 class App extends Component {
   componentDidMount() {
-    window.history.replaceState(null, null, '/');
+    history.replace('/');
   }
   render() {
     return (
-      <Router>
-        <Default>
+      <Provider store={store}>
+        <ConnectedRouter history={history}>
           <Switch>
-            <Route exact path="/" component={Home} />
+            <Route exact path="/" component={withDefault(withRouter(Home))} />
             {Object.keys(routes).map(route => (
-              <Route path={route} component={routes[route]} key={route} />
+              <Route
+                path={route}
+                component={withDefault(withRouter(routes[route]))}
+                key={route}
+              />
             ))}
             <Route component={NoMatch} />
           </Switch>
-        </Default>
-      </Router>
+        </ConnectedRouter>
+      </Provider>
     );
   }
 }
