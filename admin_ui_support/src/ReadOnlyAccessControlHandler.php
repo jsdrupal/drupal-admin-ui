@@ -12,7 +12,7 @@ use Drupal\Core\Session\AccountInterface;
  *
  * @see \Drupal\admin_ui_support\Entity\WatchdogEntity.
  */
-class WatchdogAccessControlHandler extends EntityAccessControlHandler {
+class ReadOnlyAccessControlHandler extends EntityAccessControlHandler {
 
   /**
    * {@inheritdoc}
