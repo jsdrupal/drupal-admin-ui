@@ -4,6 +4,11 @@ namespace Drupal\admin_ui_support\Normalizer;
 
 use Drupal\serialization\Normalizer\NormalizerBase;
 
+/**
+ * Normalizes simple configuration.
+ *
+ * @see \Drupal\Core\Config\Config
+ */
 class SimpleConfigNormalizer extends NormalizerBase {
 
   /**

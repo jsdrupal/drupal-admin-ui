@@ -106,7 +106,7 @@ class SimpleConfigResource extends ResourceBase implements DependentPluginInterf
    *   The response containing the entity with its accessible fields.
    */
   public function get() {
-    // @fixme access checking?
+    // @todo Access checking as part of https://www.drupal.org/project/drupal/issues/2949888
     $name = $this->getPluginDefinition()['config_name'];
     $config = $this->configFactory->get($name);
     $this->handleNewConfig($config);
