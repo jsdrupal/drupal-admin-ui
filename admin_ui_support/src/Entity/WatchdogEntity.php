@@ -29,6 +29,7 @@ use Drupal\Core\Field\BaseFieldDefinition;
  *     "canonical" = "/{admin/reports/dblog/{watchdog_entity}",
  *     "collection" = "/admin/reports/dblog",
  *   },
+ *   admin_permission = "access site reports",
  * )
  *
  */
