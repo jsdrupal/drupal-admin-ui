@@ -1,4 +1,5 @@
-import { SET_ERROR, MENU_LOADED, ROLES_LOADED } from '../actions/application';
+import { SET_ERROR, MENU_LOADED } from '../actions/application';
+import { ROLES_LOADED } from '../actions/roles';
 
 const initialState = {
   error: null,

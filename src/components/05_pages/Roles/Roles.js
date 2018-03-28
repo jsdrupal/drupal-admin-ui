@@ -3,7 +3,7 @@ import { func, arrayOf, object } from 'prop-types';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import LoadingBar from 'react-redux-loading-bar';
-import { requestRoles } from '../../../actions/application';
+import { requestRoles } from '../../../actions/roles';
 
 import { Table, TBody, THead } from '../../01_subatomics/Table/Table';
 

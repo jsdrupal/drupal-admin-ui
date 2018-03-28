@@ -39,37 +39,6 @@ function* loadMenu() {
   }
 }
 
-export const ROLES_REQUESTED = 'ROLES_REQUESTED';
-export const requestRoles = () => ({
-  type: ROLES_REQUESTED,
-  payload: {},
-});
-
-export const ROLES_LOADED = 'ROLES_LOADED';
-function* loadRoles() {
-  try {
-    yield put(resetLoading());
-    yield put(showLoading());
-    const roles = yield call(api, 'roles');
-    yield put({
-      type: ROLES_LOADED,
-      payload: {
-        roles,
-      },
-    });
-  } catch (error) {
-    yield put(setError(error));
-  } finally {
-    yield put(hideLoading());
-  }
-}
-
-const watchRequestedRoles = function* watchRequestedRoles() {
-  yield takeLatest(ROLES_REQUESTED, loadRoles);
-};
-
-const watchRequestedMenu = function* watchRequestedMenu() {
+export default function* watchRequestedMenu() {
   yield takeLatest(MENU_REQUESTED, loadMenu);
-};
-
-export { watchRequestedRoles, watchRequestedMenu };
+}
