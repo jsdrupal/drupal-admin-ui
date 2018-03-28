@@ -7,7 +7,6 @@ use Drupal\Core\Access\AccessResultForbidden;
 use Drupal\Core\Entity\EntityAccessControlHandler;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Session\AccountInterface;
-use Drupal\Tests\Core\Access\AccessResultForbiddenTest;
 
 /**
  * Access controller for the Read only entity types.
@@ -37,7 +36,7 @@ class ReadOnlyAccessControlHandler extends EntityAccessControlHandler {
    * Gets the forbidden access result with a reason.
    *
    * @return \Drupal\Core\Access\AccessResultForbidden
-   *   The forbidden acess result.
+   *   The forbidden access result.
    */
   protected function getForbiddenAccessResult() {
     return AccessResultForbidden::forbidden('Read only entity type: ' . $this->entityTypeId);

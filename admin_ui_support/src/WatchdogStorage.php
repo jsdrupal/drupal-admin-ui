@@ -2,11 +2,14 @@
 
 namespace Drupal\admin_ui_support;
 
-use Drupal\Core\Entity\EntityTypeInterface;
-use Drupal\Core\Entity\Sql\SqlContentEntityStorage;
+/**
+ * The watchdog entity storage class.
+ */
+class WatchdogStorage extends ReadOnlyTableEntityStorage {
 
-class WatchdogStorage extends SqlContentEntityStorage {
-
+  /**
+   * {@inheritdoc}
+   */
   public function loadByProperties(array $values = []) {
     // @todo Can we add uuid to watchdog to remove this hack?
     if (isset($values['uuid'])) {
@@ -14,24 +17,6 @@ class WatchdogStorage extends SqlContentEntityStorage {
       unset($values['uuid']);
     }
     return parent::loadByProperties($values);
-  }
-
-  /**
-   * {@inheritdoc}
-   *
-   * Don't trigger deletion of watchdog table.
-   */
-  public function onEntityTypeDelete(EntityTypeInterface $entity_type) {
-  }
-
-  /**
-   * {@inheritdoc}
-   *
-   * The watchdog entity type does not control its own data.
-   * This prevents the module from not being able to be deleted.
-   */
-  public function hasData() {
-    return FALSE;
   }
 
 }
