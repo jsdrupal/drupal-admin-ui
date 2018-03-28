@@ -1,4 +1,4 @@
-import { put, call, takeLatest } from 'redux-saga/effects';
+import { put, call, takeLatest, race, take } from 'redux-saga/effects';
 import {
   showLoading,
   hideLoading,
@@ -33,6 +33,9 @@ function* loadRoles() {
   }
 }
 
-export default function* watchRequestedRoles() {
-  yield takeLatest(ROLES_REQUESTED, loadRoles);
-}
+export const watchRequestedRolesWithCancel = function* watchRequestedRoles() {
+  yield race({
+    task: takeLatest(ROLES_REQUESTED, loadRoles),
+    cancel: take('CANCEL_TASK'),
+  });
+};
