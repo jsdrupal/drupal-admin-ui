@@ -1,12 +1,14 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import { func, arrayOf, object } from 'prop-types';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import LoadingBar from 'react-redux-loading-bar';
+
+import { MESSAGE_ERROR } from '../../../actions/application';
 import { requestRoles } from '../../../actions/roles';
 import { cancelTask } from '../../../actions/helpers';
-
 import { Table, TBody, THead } from '../../01_subatomics/Table/Table';
+import Message from '../../02_atoms/Message/Message';
 
 const Roles = class Roles extends Component {
   componentWillMount() {
@@ -26,17 +28,20 @@ const Roles = class Roles extends Component {
         ],
       ],
     }));
-  render = () =>
-    !this.props.roles ? (
-      <LoadingBar />
-    ) : (
-      <Fragment>
-        <Table>
-          <THead data={['NAME', 'OPERATIONS']} />
-          <TBody rows={this.createTableRows(this.props.roles)} />
-        </Table>
-      </Fragment>
+  render = () => {
+    if (this.state.err) {
+      return <Message message="Error loading roles" type={MESSAGE_ERROR} />;
+    }
+    if (!this.props.roles) {
+      return <LoadingBar />;
+    }
+    return (
+      <Table>
+        <THead data={['NAME', 'OPERATIONS']} />
+        <TBody rows={this.createTableRows(this.props.roles)} />
+      </Table>
     );
+  };
 };
 
 Roles.propTypes = {

@@ -6,12 +6,21 @@ import {
 } from 'react-redux-loading-bar';
 import api from '../utils/api/api';
 
-export const SET_ERROR = 'SET_ERROR';
-export const setError = error => ({
-  type: SET_ERROR,
+export const SET_MESSAGE = 'SET_MESSAGE';
+export const MESSAGE_ERROR = 'MESSAGE_ERROR';
+export const MESSAGE_SUCCESS = 'MESSAGE_SUCCESS';
+
+export const setMessage = (message, type = MESSAGE_ERROR) => ({
+  type: SET_MESSAGE,
   payload: {
-    error,
+    message,
+    type,
   },
+});
+
+export const CLEAR_MESSAGE = 'CLEAR_MESSAGE';
+export const clearMessage = () => ({
+  type: CLEAR_MESSAGE,
 });
 
 export const MENU_REQUESTED = 'MENU_REQUESTED';
@@ -33,7 +42,7 @@ function* loadMenu() {
       },
     });
   } catch (error) {
-    yield put(setError(error));
+    yield put(setMessage(error.toString()));
   } finally {
     yield put(hideLoading());
   }

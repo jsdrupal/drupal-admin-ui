@@ -13,7 +13,7 @@ import {
 } from 'react-redux-loading-bar';
 import api from '../utils/api/api';
 
-import { setError } from './application';
+import { setMessage } from './application';
 
 export const ROLES_REQUESTED = 'ROLES_REQUESTED';
 export const requestRoles = () => ({
@@ -34,7 +34,7 @@ function* loadRoles() {
       },
     });
   } catch (error) {
-    yield put(setError(error));
+    yield put(setMessage(error.toString()));
   } finally {
     yield put(hideLoading());
     if (yield cancelled()) {
