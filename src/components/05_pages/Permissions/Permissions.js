@@ -215,7 +215,6 @@ const Permissions = class Permissions extends Component {
     );
   };
   render() {
-    throw new Error('moi');
     if (this.state.err) {
       throw new Error('Error while loading page');
     } else if (!this.state.loaded) {

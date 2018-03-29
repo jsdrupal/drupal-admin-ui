@@ -5,6 +5,7 @@ import { string, oneOf } from 'prop-types';
 import { MESSAGE_ERROR, MESSAGE_SUCCESS } from '../../../actions/application';
 
 let styles;
+let modifierClassMap;
 
 const Message = ({ message, type }) => (
   <div className={`${styles.message} ${modifierClassMap[type]}`}>{message}</div>
@@ -28,7 +29,7 @@ styles = {
   `,
 };
 
-const modifierClassMap = {
+modifierClassMap = {
   [MESSAGE_ERROR]: styles.error,
   [MESSAGE_SUCCESS]: styles.success,
 };

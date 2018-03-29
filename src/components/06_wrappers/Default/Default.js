@@ -9,7 +9,6 @@ import { requestMenu } from '../../../actions/application';
 import Message from '../../02_atoms/Message/Message';
 import ErrorBoundary from '../ErrorBoundary/ErrorBoundary';
 
-
 let styles;
 
 class Default extends React.Component {
