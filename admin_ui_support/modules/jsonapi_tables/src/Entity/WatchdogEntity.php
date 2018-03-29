@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\admin_ui_support\Entity;
+namespace Drupal\jsonapi_tables\Entity;
 
 use Drupal\Component\Serialization\Json;
 use Drupal\Core\Entity\EntityStorageInterface;
@@ -17,8 +17,8 @@ use Drupal\Core\Field\BaseFieldDefinition;
  *   label = @Translation("Watchdog Entity"),
  *   table_provider = "dblog",
  *   handlers = {
- *     "storage" = "Drupal\admin_ui_support\WatchdogStorage",
- *     "access" = "Drupal\admin_ui_support\ReadOnlyAccessControlHandler",
+ *     "storage" = "Drupal\jsonapi_tables\WatchdogStorage",
+ *     "access" = "Drupal\jsonapi_tables\ReadOnlyAccessControlHandler",
  *   },
  *   base_table = "watchdog",
  *   entity_keys = {
@@ -47,6 +47,9 @@ class WatchdogEntity extends ReadOnlyTableEntityBase {
       // Set no default value.
       ->setComputed(TRUE);
 
+    // @todo Move the list of entity reference fields to annotation to be
+    //   handled by base class.
+    // @see \Drupal\jsonapi_tables\Entity\ReadOnlyTableEntityBase::baseFieldDefinitions
     $fields['uid'] = BaseFieldDefinition::create('entity_reference')
       ->setLabel(t('User Name'))
       ->setDescription(t('The Name of the associated user.'))
@@ -63,23 +66,14 @@ class WatchdogEntity extends ReadOnlyTableEntityBase {
     parent::postLoad($storage, $entities);
     foreach ($entities as &$entity) {
       if (isset($entity->variables)) {
-        $value = $entity->variables[0]->getValue()['value'];
-        $variables = unserialize($value);
-        $serialized = Json::encode($variables);
-        $entity->set('variables', $serialized);
-        $message =  $entity->message[0]->getValue()['value'];
+        // Format the message of a watchdog entry.
+        $variables = $entity->variables[0]->getValue()['value'];
+        $variables = Json::decode($variables);
+        $message = $entity->message[0]->getValue()['value'];
         $entity->set('message_formatted', t($message, $variables));
       }
     }
     return $entities;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function uuid() {
-    // @todo Can we add uuid to watchdog to remove this hack?
-    return $this->id();
   }
 
 }

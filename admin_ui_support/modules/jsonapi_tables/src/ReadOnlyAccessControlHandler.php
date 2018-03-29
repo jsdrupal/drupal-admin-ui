@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\admin_ui_support;
+namespace Drupal\jsonapi_tables;
 
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultForbidden;
@@ -11,7 +11,7 @@ use Drupal\Core\Session\AccountInterface;
 /**
  * Access controller for the Read only entity types.
  *
- * @see \Drupal\admin_ui_support\Entity\WatchdogEntity.
+ * @see \Drupal\jsonapi_tables\Entity\WatchdogEntity.
  */
 class ReadOnlyAccessControlHandler extends EntityAccessControlHandler {
 

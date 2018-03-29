@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\admin_ui_support;
+namespace Drupal\jsonapi_tables;
 
 /**
  * The watchdog entity storage class.

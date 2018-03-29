@@ -1,7 +1,8 @@
 <?php
 
-namespace Drupal\admin_ui_support;
+namespace Drupal\jsonapi_tables;
 
+use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Entity\Sql\SqlContentEntityStorage;
 
@@ -27,4 +28,12 @@ class ReadOnlyTableEntityStorage extends SqlContentEntityStorage {
   public function hasData() {
     return FALSE;
   }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function save(EntityInterface $entity) {
+    throw new \LogicException('Saving not allow on read-only entity type: ' . $entity->getEntityTypeId());
+  }
+
 }
