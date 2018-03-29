@@ -1,4 +1,5 @@
 import { SET_ERROR, MENU_LOADED } from '../actions/application';
+import { DBLOG_COLLECTION_LOADED } from '../actions/reports';
 
 const initialState = {
   error: null,
@@ -36,6 +37,12 @@ export default (state = initialState, action) => {
         ...state,
         menuLinks,
       };
+    }
+    case DBLOG_COLLECTION_LOADED: {
+      return {
+        ...state,
+        dbLogEntries: action.payload,
+      }
     }
     default: {
       return { ...state };
