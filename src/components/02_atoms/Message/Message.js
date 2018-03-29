@@ -8,9 +8,7 @@ const typeMap = {
 };
 
 const Message = ({ message, type }) => (
-  <div className={`message message--${typeMap[type]}`}>
-    {message}
-  </div>
+  <div className={`message message--${typeMap[type]}`}>{message}</div>
 );
 
 Message.propTypes = {

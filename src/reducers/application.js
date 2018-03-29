@@ -1,5 +1,9 @@
-import { SET_MESSAGE, CLEAR_MESSAGE, MENU_LOADED } from '../actions/application';
 import { LOCATION_CHANGE } from 'react-router-redux';
+import {
+  SET_MESSAGE,
+  CLEAR_MESSAGE,
+  MENU_LOADED,
+} from '../actions/application';
 
 const initialState = {
   message: null,
