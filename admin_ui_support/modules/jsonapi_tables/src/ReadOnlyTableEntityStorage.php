@@ -11,6 +11,24 @@ use Drupal\Core\Entity\Sql\SqlContentEntityStorage;
  */
 class ReadOnlyTableEntityStorage extends SqlContentEntityStorage {
 
+  use EntityTypeTableSchemaTrait;
+  /**
+   * {@inheritdoc}
+   */
+  public function loadByProperties(array $values = []) {
+    // @todo Can we add uuid to tabls to remove this hack?
+    if (isset($values['uuid'])) {
+      if ($field_name = static::getEntityTypeSchemaPrimaryIndexField($this->entityType)) {
+        $values[$field_name] = $values['uuid'];
+        unset($values['uuid']);
+      }
+      else {
+        throw new \Exception('Unable to determine primary index field for entity type: ' . $this->entityTypeId);
+      }
+    }
+    return parent::loadByProperties($values);
+  }
+
   /**
    * {@inheritdoc}
    *

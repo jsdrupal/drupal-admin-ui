@@ -17,7 +17,7 @@ use Drupal\Core\Field\BaseFieldDefinition;
  *   label = @Translation("Watchdog Entity"),
  *   table_provider = "dblog",
  *   handlers = {
- *     "storage" = "Drupal\jsonapi_tables\WatchdogStorage",
+ *     "storage" = "Drupal\jsonapi_tables\ReadOnlyTableEntityStorage",
  *     "access" = "Drupal\jsonapi_tables\ReadOnlyAccessControlHandler",
  *   },
  *   base_table = "watchdog",

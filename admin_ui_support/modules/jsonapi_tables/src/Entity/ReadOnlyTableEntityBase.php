@@ -8,6 +8,7 @@ use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Field\BaseFieldDefinition;
+use Drupal\jsonapi_tables\EntityTypeTableSchemaTrait;
 
 /**
  * Base entity type class for read-only table entity types.
@@ -16,6 +17,8 @@ use Drupal\Core\Field\BaseFieldDefinition;
  * handling is needed then class will only need the annotation.
  */
 abstract class ReadOnlyTableEntityBase extends ContentEntityBase {
+
+  use EntityTypeTableSchemaTrait;
 
   /**
    * {@inheritdoc}
@@ -81,20 +84,6 @@ abstract class ReadOnlyTableEntityBase extends ContentEntityBase {
       }
     }
     return $entities;
-  }
-
-  /**
-   * Gets the schema fields for the table of entity type.
-   *
-   * @param \Drupal\Core\Entity\EntityTypeInterface $entity_type
-   *   The entity type.
-   *
-   * @return array
-   *   The array of schema fields.
-   */
-  protected static function getEntityTypeSchemaFields(EntityTypeInterface $entity_type) {
-    $schema = drupal_get_module_schema($entity_type->get('table_provider'), $entity_type->getBaseTable());
-    return $schema['fields'];
   }
 
   /**
