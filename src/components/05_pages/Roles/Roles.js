@@ -2,10 +2,8 @@ import React, { Component } from 'react';
 import makeCancelable from 'makecancelable';
 import { Link } from 'react-router-dom';
 
-import { MESSAGE_ERROR } from '../../../actions/application';
 import Loading from '../../02_atoms/Loading/Loading';
 import { Table, TBody, THead } from '../../01_subatomics/Table/Table';
-import Message from '../../02_atoms/Message/Message';
 
 const Roles = class Roles extends Component {
   state = {
@@ -46,7 +44,7 @@ const Roles = class Roles extends Component {
     }));
   render() {
     if (this.state.err) {
-      return <Message message="Error loading roles" type={MESSAGE_ERROR} />;
+      throw new Error('Error while loading page');
     } else if (!this.state.loaded) {
       return <Loading />;
     }
