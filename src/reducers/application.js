@@ -1,16 +1,33 @@
-import { SET_ERROR, MENU_LOADED } from '../actions/application';
+import { SET_MESSAGE, CLEAR_MESSAGE, MENU_LOADED } from '../actions/application';
+import { LOCATION_CHANGE } from 'react-router-redux';
 
 const initialState = {
-  error: null,
+  message: null,
   menuLinks: [],
 };
 
 export default (state = initialState, action) => {
   switch (action.type) {
-    case SET_ERROR: {
+    case SET_MESSAGE: {
       return {
         ...state,
-        error: action.payload.error,
+        message: {
+          message: action.payload.message,
+          type: action.payload.type,
+        },
+      };
+    }
+    case CLEAR_MESSAGE: {
+      return {
+        ...state,
+        message: null,
+      };
+    }
+    case LOCATION_CHANGE: {
+      // Clear messages on every location change.
+      return {
+        ...state,
+        message: null,
       };
     }
     case MENU_LOADED: {
