@@ -9,11 +9,9 @@ import {
   setMessage,
   clearMessage,
   MESSAGE_SUCCESS,
-  MESSAGE_ERROR,
 } from '../../../actions/application';
 import Loading from '../../02_atoms/Loading/Loading';
 import { Table, TBody, THead } from '../../01_subatomics/Table/Table';
-import Message from '../../02_atoms/Message/Message';
 
 const Permissions = class Permissions extends Component {
   static propTypes = {
@@ -218,10 +216,7 @@ const Permissions = class Permissions extends Component {
   };
   render() {
     if (this.state.err) {
-      // @todo should we use React error boundaries?
-      return (
-        <Message type={MESSAGE_ERROR} message="Error while loading page." />
-      );
+      throw new Error('Error while loading page');
     } else if (!this.state.loaded) {
       return <Loading />;
     }

@@ -21,6 +21,7 @@ import normalize from './styles/normalize'; // eslint-disable-line no-unused-var
 import base from './styles/base'; // eslint-disable-line no-unused-vars
 import actions from './actions/index';
 import reducers from './reducers/index';
+import ErrorBoundary from './components/06_wrappers/ErrorBoundary/ErrorBoundary';
 
 const history = createBrowserHistory();
 const middleware = routerMiddleware(history);
@@ -43,21 +44,23 @@ class App extends Component {
   }
   render() {
     return (
-      <Provider store={store}>
-        <ConnectedRouter history={history}>
-          <Switch>
-            <Route exact path="/" component={withDefault(withRouter(Home))} />
-            {Object.keys(routes).map(route => (
-              <Route
-                path={route}
-                component={withDefault(withRouter(routes[route]))}
-                key={route}
-              />
-            ))}
-            <Route component={NoMatch} />
-          </Switch>
-        </ConnectedRouter>
-      </Provider>
+      <ErrorBoundary>
+        <Provider store={store}>
+          <ConnectedRouter history={history}>
+            <Switch>
+              <Route exact path="/" component={withDefault(withRouter(Home))} />
+              {Object.keys(routes).map(route => (
+                <Route
+                  path={route}
+                  component={withDefault(withRouter(routes[route]))}
+                  key={route}
+                />
+              ))}
+              <Route component={NoMatch} />
+            </Switch>
+          </ConnectedRouter>
+        </Provider>
+      </ErrorBoundary>
     );
   }
 }
