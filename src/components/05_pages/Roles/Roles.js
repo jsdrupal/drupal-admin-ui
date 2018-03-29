@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { func, arrayOf, object } from 'prop-types';
+import { func, arrayOf, object, string } from 'prop-types';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import LoadingBar from 'react-redux-loading-bar';
@@ -11,7 +11,7 @@ import { Table, TBody, THead } from '../../01_subatomics/Table/Table';
 import Message from '../../02_atoms/Message/Message';
 
 const Roles = class Roles extends Component {
-  componentWillMount() {
+  componentDidMount() {
     this.props.requestRoles();
   }
   componentWillUnmount() {
@@ -29,7 +29,7 @@ const Roles = class Roles extends Component {
       ],
     }));
   render = () => {
-    if (this.state.err) {
+    if (this.props.error) {
       return <Message message="Error loading roles" type={MESSAGE_ERROR} />;
     }
     if (!this.props.roles) {
@@ -48,10 +48,12 @@ Roles.propTypes = {
   requestRoles: func.isRequired,
   cancelTask: func.isRequired,
   roles: arrayOf(object),
+  error: string,
 };
 
 Roles.defaultProps = {
   roles: [],
+  error: null,
 };
 
 const mapStateToProps = ({ application: { roles, error } }) => ({
