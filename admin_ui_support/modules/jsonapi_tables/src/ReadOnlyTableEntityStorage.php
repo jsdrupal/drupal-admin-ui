@@ -54,4 +54,11 @@ class ReadOnlyTableEntityStorage extends SqlContentEntityStorage {
     throw new \LogicException('Saving not allow on read-only entity type: ' . $entity->getEntityTypeId());
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  public function delete(array $entities) {
+    throw new \LogicException('Deleting not allow on read-only entity type');
+  }
+
 }
