@@ -8,6 +8,9 @@ async function api(endpoint, init = {}) {
     case 'dblog':
       url = '/jsonapi/watchdog_entity/watchdog_entity';
       break;
+    case 'roles':
+      url = '/jsonapi/user_role/user_role';
+      break;
     default:
       break;
   }

@@ -6,7 +6,8 @@ import { css } from 'emotion';
 import { scaleRotate as Menu } from 'react-burger-menu';
 import { Link } from 'react-router-dom';
 import { requestMenu } from '../../../actions/application';
-import Error from '../../02_atoms/Error/Error';
+import Message from '../../02_atoms/Message/Message';
+import ErrorBoundary from '../ErrorBoundary/ErrorBoundary';
 
 let styles;
 
@@ -52,9 +53,11 @@ class Default extends React.Component {
       </Menu>
 
       <main className={styles.main} id={styles.main}>
-        <LoadingBar />
-        {this.props.error && <Error />}
-        {!this.props.error && this.props.children}
+        <ErrorBoundary>
+          <LoadingBar />
+          {this.props.message && <Message {...this.props.message} />}
+          {this.props.children}
+        </ErrorBoundary>
       </main>
     </div>
   );
@@ -114,7 +117,10 @@ styles = {
 
 Default.propTypes = {
   children: node.isRequired,
-  error: string,
+  message: shape({
+    message: string,
+    type: string,
+  }),
   menuLinks: arrayOf(
     shape({
       subtree: arrayOf(
@@ -135,11 +141,11 @@ Default.propTypes = {
 };
 
 Default.defaultProps = {
-  error: null,
+  message: null,
 };
 
 const mapStateToProps = state => ({
-  error: state.application.error || null,
+  message: state.application.message || null,
   menuLinks: state.application.menuLinks || {},
 });
 

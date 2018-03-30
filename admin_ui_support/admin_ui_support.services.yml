@@ -7,3 +7,8 @@ services:
     class: \Drupal\admin_ui_support\Normalizer\MenuTreeNormalizer
     tags:
       - { name: normalizer }
+  admin_ui_support.normalizer.simple_config:
+    class: Drupal\admin_ui_support\Normalizer\SimpleConfigNormalizer
+    tags:
+      - { name: normalizer }
+    arguments: ['@entity.manager']

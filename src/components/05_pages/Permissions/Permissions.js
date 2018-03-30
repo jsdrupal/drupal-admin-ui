@@ -1,15 +1,22 @@
 import React, { Component, Fragment } from 'react';
-import { string, shape } from 'prop-types';
+import { connect } from 'react-redux';
+import { string, shape, func } from 'prop-types';
 import makeCancelable from 'makecancelable';
 import { Markup } from 'interweave';
 import { css } from 'emotion';
 
+import {
+  setMessage,
+  clearMessage,
+  MESSAGE_SUCCESS,
+} from '../../../actions/application';
 import Loading from '../../02_atoms/Loading/Loading';
 import { Table, TBody, THead } from '../../01_subatomics/Table/Table';
-import Error from '../../02_atoms/Error/Error';
 
 const Permissions = class Permissions extends Component {
   static propTypes = {
+    setMessage: func.isRequired,
+    clearMessage: func.isRequired,
     match: shape({
       params: shape({
         role: string,
@@ -33,6 +40,7 @@ const Permissions = class Permissions extends Component {
       changedRoles: [...new Set(prevState.changedRoles).add(roleName).values()],
       roles: this.togglePermission(permission, roleName, prevState.roles),
     }));
+    this.props.clearMessage();
   };
   fetchData = () =>
     makeCancelable(
@@ -194,7 +202,12 @@ const Permissions = class Permissions extends Component {
                   },
                   method: 'PATCH',
                 },
-              ),
+              ).then(() => {
+                this.props.setMessage(
+                  'Changes have been saved',
+                  MESSAGE_SUCCESS,
+                );
+              }),
             ),
         ).then(() => {
           this.cancelFetch = this.fetchData();
@@ -203,7 +216,7 @@ const Permissions = class Permissions extends Component {
   };
   render() {
     if (this.state.err) {
-      return <Error />;
+      throw new Error('Error while loading page');
     } else if (!this.state.loaded) {
       return <Loading />;
     }
@@ -246,4 +259,4 @@ const Permissions = class Permissions extends Component {
   }
 };
 
-export default Permissions;
+export default connect(null, { setMessage, clearMessage })(Permissions);
