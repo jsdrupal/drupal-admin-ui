@@ -1,38 +1,22 @@
 import React, { Component } from 'react';
-import makeCancelable from 'makecancelable';
+import { func, arrayOf, object } from 'prop-types';
+import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
+import LoadingBar from 'react-redux-loading-bar';
 
-import Loading from '../../02_atoms/Loading/Loading';
+import { requestRoles } from '../../../actions/roles';
+import { cancelTask } from '../../../actions/helpers';
 import { Table, TBody, THead } from '../../01_subatomics/Table/Table';
 
 const Roles = class Roles extends Component {
-  state = {
-    roles: {},
-    loaded: false,
-  };
   componentDidMount() {
-    this.cancelFetch = makeCancelable(this.fetchData());
+    this.props.requestRoles();
   }
   componentWillUnmount() {
-    this.cancelFetch();
+    this.props.cancelTask();
   }
-  fetchData = () =>
-    fetch(
-      `${process.env.REACT_APP_DRUPAL_BASE_URL}/jsonapi/user_role/user_role`,
-      {
-        headers: {
-          Accept: 'application/vnd.api+json',
-        },
-        credentials: 'include',
-      },
-    )
-      .then(res => res.json())
-      .then(({ data: roles }) =>
-        this.setState(prevState => ({ ...prevState, roles, loaded: true })),
-      )
-      .catch(err => this.setState({ loaded: true, err }));
-  createTableRows = () =>
-    this.state.roles.map(({ attributes: { label, id } }) => ({
+  createTableRows = roles =>
+    roles.map(({ attributes: { label, id } }) => ({
       key: `row-${label}`,
       tds: [
         [`td-${label}`, label],
@@ -42,19 +26,31 @@ const Roles = class Roles extends Component {
         ],
       ],
     }));
-  render() {
-    if (this.state.err) {
-      throw new Error('Error while loading page');
-    } else if (!this.state.loaded) {
-      return <Loading />;
+  render = () => {
+    if (!this.props.roles) {
+      return <LoadingBar />;
     }
     return (
       <Table>
         <THead data={['NAME', 'OPERATIONS']} />
-        <TBody rows={this.createTableRows()} />
+        <TBody rows={this.createTableRows(this.props.roles)} />
       </Table>
     );
-  }
+  };
 };
 
-export default Roles;
+Roles.propTypes = {
+  requestRoles: func.isRequired,
+  cancelTask: func.isRequired,
+  roles: arrayOf(object),
+};
+
+Roles.defaultProps = {
+  roles: [],
+};
+
+const mapStateToProps = ({ application: { roles } }) => ({
+  roles,
+});
+
+export default connect(mapStateToProps, { requestRoles, cancelTask })(Roles);

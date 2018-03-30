@@ -1,4 +1,5 @@
 import { LOCATION_CHANGE } from 'react-router-redux';
+import { ROLES_LOADED } from '../actions/roles';
 import {
   SET_MESSAGE,
   CLEAR_MESSAGE,
@@ -36,7 +37,8 @@ export default (state = initialState, action) => {
     }
     case MENU_LOADED: {
       const menuLinks = action.payload.menuLinks.map(menuLink => {
-        // Explicitly add the Permissions in as a top level item, as it's usually just a local tab.
+        // Explicitly add the Permissions and Roles as top level menu items, as
+        // those are usually local tasks which are not supported at the moment.
         if (menuLink.link.url.indexOf('admin/people') !== -1) {
           menuLink.subtree.push({
             subtree: [],
@@ -50,12 +52,31 @@ export default (state = initialState, action) => {
               url: '/admin/people/permissions',
             },
           });
+          menuLink.subtree.push({
+            subtree: [],
+            hasChildren: false,
+            inActiveTrail: false,
+            link: {
+              weight: '5',
+              title: '📇 Roles',
+              description: 'Manage roles.',
+              menuName: 'admin',
+              url: '/admin/people/roles',
+            },
+          });
         }
         return menuLink;
       });
       return {
         ...state,
         menuLinks,
+      };
+    }
+    case ROLES_LOADED: {
+      const roles = action.payload.roles.data;
+      return {
+        ...state,
+        roles,
       };
     }
     default: {
