@@ -41,8 +41,8 @@ export default (state = initialState, action) => {
     case DBLOG_COLLECTION_LOADED: {
       return {
         ...state,
-        dbLogEntries: action.payload,
-      }
+        dbLogEntries: action.payload.dbLogEntries.data,
+      };
     }
     default: {
       return { ...state };

@@ -34,4 +34,4 @@ function* loadDblog() {
 
 export const watchDblogRequests = function* watchDblogRequests() {
   yield takeLatest(DBLOG_COLLECTION_REQUEST, loadDblog);
-}
+};
