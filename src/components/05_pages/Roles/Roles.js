@@ -8,7 +8,6 @@ import { MESSAGE_ERROR } from '../../../actions/application';
 import { requestRoles } from '../../../actions/roles';
 import { cancelTask } from '../../../actions/helpers';
 import { Table, TBody, THead } from '../../01_subatomics/Table/Table';
-import Message from '../../02_atoms/Message/Message';
 
 const Roles = class Roles extends Component {
   componentDidMount() {
@@ -29,10 +28,9 @@ const Roles = class Roles extends Component {
       ],
     }));
   render = () => {
-    if (this.props.error) {
-      return <Message message="Error loading roles" type={MESSAGE_ERROR} />;
-    }
-    if (!this.props.roles) {
+    if (this.state.err) {
+      throw new Error('Error while loading page');
+    } else if (!this.state.loaded) {
       return <LoadingBar />;
     }
     return (

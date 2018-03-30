@@ -7,6 +7,7 @@ import { scaleRotate as Menu } from 'react-burger-menu';
 import { Link } from 'react-router-dom';
 import { requestMenu } from '../../../actions/application';
 import Message from '../../02_atoms/Message/Message';
+import ErrorBoundary from '../ErrorBoundary/ErrorBoundary';
 
 let styles;
 
@@ -52,9 +53,11 @@ class Default extends React.Component {
       </Menu>
 
       <main className={styles.main} id={styles.main}>
-        <LoadingBar />
-        {this.props.message && <Message {...this.props.message} />}
-        {this.props.children}
+        <ErrorBoundary>
+          <LoadingBar />
+          {this.props.message && <Message {...this.props.message} />}
+          {this.props.children}
+        </ErrorBoundary>
       </main>
     </div>
   );
