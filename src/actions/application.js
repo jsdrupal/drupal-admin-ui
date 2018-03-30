@@ -48,6 +48,6 @@ function* loadMenu() {
   }
 }
 
-export default function* rootSaga() {
+export default function* watchRequestedMenu() {
   yield takeLatest(MENU_REQUESTED, loadMenu);
 }

@@ -40,7 +40,7 @@ const withDefault = component => () => (
 
 class App extends Component {
   componentDidMount() {
-    history.replace('/');
+    // history.replace('/');
   }
   render() {
     return (
