@@ -27,9 +27,7 @@ const Roles = class Roles extends Component {
       ],
     }));
   render = () => {
-    if (this.state.err) {
-      throw new Error('Error while loading page');
-    } else if (!this.state.loaded) {
+    if (!this.props.roles) {
       return <LoadingBar />;
     }
     return (
