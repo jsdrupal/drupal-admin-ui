@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
-import { func, arrayOf, object, string } from 'prop-types';
+import { func, arrayOf, object } from 'prop-types';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import LoadingBar from 'react-redux-loading-bar';
 
-import { MESSAGE_ERROR } from '../../../actions/application';
 import { requestRoles } from '../../../actions/roles';
 import { cancelTask } from '../../../actions/helpers';
 import { Table, TBody, THead } from '../../01_subatomics/Table/Table';
@@ -46,17 +45,14 @@ Roles.propTypes = {
   requestRoles: func.isRequired,
   cancelTask: func.isRequired,
   roles: arrayOf(object),
-  error: string,
 };
 
 Roles.defaultProps = {
   roles: [],
-  error: null,
 };
 
-const mapStateToProps = ({ application: { roles, error } }) => ({
+const mapStateToProps = ({ application: { roles } }) => ({
   roles,
-  error,
 });
 
 export default connect(mapStateToProps, { requestRoles, cancelTask })(Roles);
