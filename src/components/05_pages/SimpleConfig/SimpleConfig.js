@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import configSchema from './../../../configSchema.json';
 import * as ConfigSchema from '../../../lib/ConfigSchema';
-import { fetchSimpleConfig } from '../../../lib/ConfigSchema';
+import api from '../../../utils/api/api';
 
 // @todo Replace it with react-json-schema-form?
 
@@ -19,32 +19,53 @@ class SimpleConfig extends React.Component {
 
     this.state = {
       loading: true,
+      config: {},
     };
   }
 
-  onChangeField = name => event => {
+  onChangeField = path => event => {
     event.preventDefault();
-    this.setState({
-      [name]: event.target.value,
+    const { target: { value } } = event;
+    this.setState(prevState => {
+      ConfigSchema.objectSet(path.filter(id => id), prevState.config, value);
+      return prevState;
     });
   };
 
   onSubmit = event => {
     event.preventDefault();
-    this.props.onSubmit(this.state);
+    this.saveSimpleConfig(this.props.name, this.state.config);
+  };
+
+  saveSimpleConfig = (name, config) => {
+    return api(
+      'simple_config',
+      { $name: name },
+      {
+        body: JSON.stringify({ data: config }),
+        credentials: 'include',
+        headers: {
+          'content-type': 'application/json',
+        },
+        method: 'PATCH',
+      },
+    );
   };
 
   componentDidMount() {
-    this.setState({
-      loading: true,
-    });
-    fetchSimpleConfig(this.props.name).then(config => {
-      console.log(config);
-      this.setState({
-        ...config,
-        loading: false,
-      });
-    });
+    this.setState(
+      {
+        loading: true,
+      },
+      () => {
+        api('simple_config', { $name: this.props.name }).then(config => {
+          this.setState({
+            config,
+            loading: false,
+          });
+        });
+      },
+    );
   }
 
   render() {
@@ -55,7 +76,7 @@ class SimpleConfig extends React.Component {
       <form>
         {ConfigSchema.configSchemaToReactComponent(
           '',
-          this.state,
+          this.state.config,
           configSchema[this.props.name],
           this.onChangeField,
         )}
@@ -67,11 +88,6 @@ class SimpleConfig extends React.Component {
 
 SimpleConfig.propTypes = {
   name: PropTypes.string.isRequired,
-  onSubmit: PropTypes.func.isRequired,
-};
-
-SimpleConfig.defaultProps = {
-  onSubmit: () => {},
 };
 
 export default SimpleConfig;

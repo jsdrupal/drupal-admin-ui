@@ -8,7 +8,7 @@ const routes = {
   '/admin/people/permissions/:role?': Permissions,
   '/admin/people/roles/': Roles,
   '/admin/config/system/site-information': () => (
-    <SimpleConfig name="system.site" onSubmit={console.log} />
+    <SimpleConfig name="system.site" />
   ),
 };
 

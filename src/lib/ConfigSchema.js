@@ -1,9 +1,8 @@
-import immutable from 'immutable';
 import React from 'react';
 
 // @todo Support nested values.
 
-const generateFormName = paths => paths.join('][');
+const generateFormName = paths => paths.join('__');
 
 const isObject = item =>
   item && typeof item === 'object' && !Array.isArray(item);
@@ -29,6 +28,9 @@ function mergeDeep(target, ...sources) {
   return mergeDeep(target, ...sources);
 }
 
+/**
+ * @todo Add sequence support
+ */
 const configSchemaToReactComponent = (
   name,
   state,
@@ -50,8 +52,8 @@ const configSchemaToReactComponent = (
             {configSchema.label}
             <input
               type="textfield"
-              onChange={onChangeField(pathName)}
-              value={state[pathName]}
+              onChange={onChangeField([...parents, name])}
+              value={objectGet([...parents, name].filter(x => x), state)}
             />
           </label>
         </div>
@@ -63,8 +65,8 @@ const configSchemaToReactComponent = (
             {configSchema.label}
             <input
               type="number"
-              onChange={onChangeField(pathName)}
-              value={state[pathName]}
+              onChange={onChangeField([...parents, name])}
+              value={objectGet([...parents, name].filter(x => x), state)}
             />
           </label>
         </div>
@@ -76,8 +78,8 @@ const configSchemaToReactComponent = (
             {configSchema.label}
             <input
               type="checkbox"
-              onChange={onChangeField(pathName)}
-              value={state[pathName]}
+              onChange={onChangeField([...parents, name])}
+              value={objectGet([...parents, name].filter(x => x), state)}
             />
           </label>
         </div>
@@ -92,7 +94,7 @@ const configSchemaToReactComponent = (
                 state,
                 pair[1],
                 onChangeField,
-                [...parents, pair[0]],
+                [...parents, name].filter(x => x),
               ),
             )}
           </fieldset>
@@ -110,7 +112,7 @@ const configSchemaToReactComponent = (
                   state,
                   pair[1],
                   onChangeField,
-                  [...parents, pair[0]],
+                  [...parents, name].filter(x => x),
                 ),
               )}
             </fieldset>
@@ -134,7 +136,7 @@ const configSchemaToJsonSchema = (configSchema, parents = []) => {
 
       return {
         type: 'object',
-        properties: properties,
+        properties,
       };
     case 'string':
       return {
@@ -148,6 +150,8 @@ const configSchemaToJsonSchema = (configSchema, parents = []) => {
       return {
         type: 'integer',
       };
+    default:
+      return {};
   }
 };
 
@@ -189,53 +193,36 @@ const configSchemaToUiSchema = configSchema => {
   }
 };
 
-const objectGet = (path, object) => {
-  const paths = Array.isArray(path)
-    ? path
-    : path.split('][').map(str => str.replace(']', ''));
-  if (Array.isArray(path)) {
-  } else {
-  }
-};
-
-const objectSet = (path, object, value) => {
-  const paths = Array.isArray(path)
-    ? path
-    : path.split('][').map(str => str.replace(']', ''));
-
-  if (typeof object[paths[0]] === 'undefined') {
+export const objectGet = (path, object) => {
+  if (typeof object[path[0]] === 'undefined') {
     return;
   }
 
-  if (paths.length > 1) {
-    return objectSet(paths.slice(1), object[paths[0]]);
+  if (path.length > 1) {
+    return objectGet(path.slice(1), object[path[0]]);
   }
 
-  object[paths[0]] = value;
-  return;
+  return object[path[0]];
 };
 
-const fetchSimpleConfig = name => {
-  return fetch(
-    `${process.env.REACT_APP_DRUPAL_BASE_URL}/config/${name}?_format=json`,
-  )
-    .then(res => {
-      return res.json();
-    })
-    .catch(console.error);
-};
-
-const convertFormValuesToNormalized = object => {
-  return object;
-};
-
-const convertNormalizedToFormValues = normalized => {
-  return normalized;
+export const objectSet = (path, object, value) => {
+  if (path.length === 1) {
+    object[path[0]] = value;
+    return;
+  } else if (path.length > 1) {
+    if (typeof object[path[0]] === 'undefined') {
+      if (Number.isInteger(path[0])) {
+        object[path[0]] = [];
+      } else {
+        object[path[0]] = {};
+      }
+    }
+    return objectSet(path.slice(1), object[path[0]], value);
+  }
 };
 
 export {
   configSchemaToReactComponent,
   configSchemaToJsonSchema,
   configSchemaToUiSchema,
-  fetchSimpleConfig,
 };
