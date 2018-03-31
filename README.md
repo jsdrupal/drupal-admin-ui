@@ -55,7 +55,7 @@ php -S localhost:8000
 
 - [Fork this repo](https://help.github.com/articles/fork-a-repo/) to your own user and make your proposed changes
 - [Make a pull request](https://help.github.com/articles/about-pull-requests/)!
-- Our [issue queue](https://github.com/jsdrupal/drupal-admin-ui/issues) is public and you already have the required permissions to participate. However in order to perform administrative tasks such as assign issues to yourself and others, or edit labels, make a request in #javascript in [Drupal Slack](https://www.drupal.org/slack) to be added as a member of the [Contribtors Team](https://github.com/orgs/jsdrupal/teams/contributors)
+- Our [issue queue](https://github.com/jsdrupal/drupal-admin-ui/issues) is public and you already have the required permissions to participate. However in order to perform administrative tasks, such as assigning issues or editing labels, make a request in #javascript in [Drupal Slack](https://www.drupal.org/slack) to be added as a member of the [Contributors Team](https://github.com/orgs/jsdrupal/teams/contributors)
 
 If someone has made a pull request and you would like to add code to their branch, there are a number of ways to move forward. It will be very helpful to get familiar with [managing remotes](https://help.github.com/categories/managing-remotes/) in Git.
 
