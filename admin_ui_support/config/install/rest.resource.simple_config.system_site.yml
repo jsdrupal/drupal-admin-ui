@@ -1,0 +1,23 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - admin_ui_support
+    - serialization
+    - system
+    - user
+id: simple_config.system_site
+plugin_id: 'simple_config:system_site'
+granularity: method
+configuration:
+  GET:
+    supported_formats:
+      - json
+    supported_auth:
+      - cookie
+  PATCH:
+    supported_formats:
+      - json
+    supported_auth:
+      - cookie
+
