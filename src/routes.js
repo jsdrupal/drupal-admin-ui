@@ -1,6 +1,7 @@
 import Permissions from './components/05_pages/Permissions/Permissions';
 import Roles from './components/05_pages/Roles/Roles';
 import SimpleConfig from './components/05_pages/SimpleConfig/SimpleConfig';
+import React from 'react';
 
 // @todo Share this with Drupal
 const routes = {

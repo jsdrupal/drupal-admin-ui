@@ -3,55 +3,81 @@ import React from 'react';
 
 // @todo Support nested values.
 
+const generateFormName = paths => paths.join('][');
+
+const isObject = item =>
+  item && typeof item === 'object' && !Array.isArray(item);
+
+/**
+ * Deep merge two objects.
+ */
+function mergeDeep(target, ...sources) {
+  if (!sources.length) return target;
+  const source = sources.shift();
+
+  if (isObject(target) && isObject(source)) {
+    for (const key in source) {
+      if (isObject(source[key])) {
+        if (!target[key]) Object.assign(target, { [key]: {} });
+        mergeDeep(target[key], source[key]);
+      } else {
+        Object.assign(target, { [key]: source[key] });
+      }
+    }
+  }
+
+  return mergeDeep(target, ...sources);
+}
+
 const configSchemaToReactComponent = (
   name,
   state,
   configSchema,
   onChangeField,
+  parents = [],
 ) => {
-  const configSchemaWithWidgets = immutable
-    .fromJS(configSchema)
-    .mergeDeep(configSchemaToUiSchema(configSchema))
-    .toJS();
+  const configSchemaWithWidgets = mergeDeep(
+    {},
+    configSchema,
+    configSchemaToUiSchema(configSchema),
+  );
+  const pathName = generateFormName([...parents, name]);
   switch (configSchemaWithWidgets['ui:widget']) {
     case 'textfield':
       return (
-        <div key={name}>
+        <div key={pathName}>
           <label>
             {configSchema.label}
             <input
               type="textfield"
-              name={name}
-              onChange={onChangeField(name)}
-              value={state[name]}
+              onChange={onChangeField(pathName)}
+              value={state[pathName]}
             />
           </label>
         </div>
       );
     case 'integer':
       return (
-        <div key={name}>
+        <div key={pathName}>
           <label>
             {configSchema.label}
             <input
               type="number"
-              name={name}
-              onChange={onChangeField(name)}
-              value={state[name]}
+              onChange={onChangeField(pathName)}
+              value={state[pathName]}
             />
           </label>
         </div>
       );
     case 'checkbox':
       return (
-        <div key={name}>
+        <div key={pathName}>
           <label>
             {configSchema.label}
             <input
               type="checkbox"
-              name={name}
-              onChange={onChangeField(name)}
-              value={state[name]}
+              onChange={onChangeField(pathName)}
+              value={state[pathName]}
             />
           </label>
         </div>
@@ -66,6 +92,7 @@ const configSchemaToReactComponent = (
                 state,
                 pair[1],
                 onChangeField,
+                [...parents, pair[0]],
               ),
             )}
           </fieldset>
@@ -73,7 +100,7 @@ const configSchemaToReactComponent = (
       );
     case 'mapping':
       return (
-        <div key={name}>
+        <div key={pathName}>
           <label>
             {configSchema.label}
             <fieldset>
@@ -83,6 +110,7 @@ const configSchemaToReactComponent = (
                   state,
                   pair[1],
                   onChangeField,
+                  [...parents, pair[0]],
                 ),
               )}
             </fieldset>
@@ -95,13 +123,13 @@ const configSchemaToReactComponent = (
   }
 };
 
-const configSchemaToJsonSchema = configSchema => {
+const configSchemaToJsonSchema = (configSchema, parents = []) => {
   switch (configSchema.type) {
     case 'mapping':
     case 'config_object':
       const properties = {};
       configSchema.mapping.forEach((schema, name) => {
-        properties[name] = configSchemaToJsonSchema(schema);
+        properties[name] = configSchemaToJsonSchema(schema, [...parents, name]);
       });
 
       return {
@@ -162,16 +190,30 @@ const configSchemaToUiSchema = configSchema => {
 };
 
 const objectGet = (path, object) => {
-  const paths = Array.isArray(path) ? path : path.split('][').map(str => str.replace(']', ''));
+  const paths = Array.isArray(path)
+    ? path
+    : path.split('][').map(str => str.replace(']', ''));
   if (Array.isArray(path)) {
-  }
-  else {
+  } else {
   }
 };
 
-const objectSet = (path, object) {
+const objectSet = (path, object, value) => {
+  const paths = Array.isArray(path)
+    ? path
+    : path.split('][').map(str => str.replace(']', ''));
 
-}
+  if (typeof object[paths[0]] === 'undefined') {
+    return;
+  }
+
+  if (paths.length > 1) {
+    return objectSet(paths.slice(1), object[paths[0]]);
+  }
+
+  object[paths[0]] = value;
+  return;
+};
 
 const fetchSimpleConfig = name => {
   return fetch(
