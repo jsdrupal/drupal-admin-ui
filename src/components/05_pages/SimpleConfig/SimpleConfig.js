@@ -4,13 +4,11 @@ import { LoadingBar } from 'react-redux-loading-bar';
 import { string, func, object } from 'prop-types';
 import configSchema from './../../../configSchema.json';
 import * as ConfigSchema from '../../../lib/ConfigSchema';
-import api from '../../../utils/api/api';
+import { clearMessage } from '../../../actions/application';
 import {
-  clearMessage,
-  MESSAGE_SUCCESS,
-  setMessage,
-} from '../../../actions/application';
-import { requestSimpleConfig } from '../../../actions/simple_config';
+  requestSimpleConfig,
+  requestSimpleConfigPost,
+} from '../../../actions/simpleConfig';
 import { cancelTask } from '../../../actions/helpers';
 
 // @todo Replace it with react-json-schema-form?
@@ -24,8 +22,8 @@ class SimpleConfig extends React.Component {
   static propTypes = {
     name: string.isRequired,
     requestSimpleConfig: func.isRequired,
+    requestSimpleConfigPost: func.isRequired,
     cancelTask: func.isRequired,
-    setMessage: func.isRequired,
     clearMessage: func.isRequired,
     // @todo: We cannot know the shape of the config further as it is generic?
     config: object, // eslint-disable-line react/forbid-prop-types
@@ -74,22 +72,7 @@ class SimpleConfig extends React.Component {
   };
 
   saveSimpleConfig = async (name, config) => {
-    const csrfToken = await api('csrf_token');
-
-    return api(
-      'simple_config',
-      { $name: name },
-      {
-        body: JSON.stringify(config),
-        headers: {
-          'content-type': 'application/json',
-          'X-CSRF-Token': csrfToken,
-        },
-        method: 'PATCH',
-      },
-    ).then(() => {
-      this.props.setMessage('Changes have been saved', MESSAGE_SUCCESS);
-    });
+    this.props.requestSimpleConfigPost(name, config);
   };
 
   render() {
@@ -121,7 +104,7 @@ const mapStateToProps = (state, props) => {
 
 export default connect(mapStateToProps, {
   requestSimpleConfig,
+  requestSimpleConfigPost,
   cancelTask,
-  setMessage,
   clearMessage,
 })(SimpleConfig);
