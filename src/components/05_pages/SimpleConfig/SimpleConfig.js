@@ -1,35 +1,71 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { LoadingBar } from 'react-redux-loading-bar';
+import { string, func, object } from 'prop-types';
 import configSchema from './../../../configSchema.json';
 import * as ConfigSchema from '../../../lib/ConfigSchema';
 import api from '../../../utils/api/api';
+import {
+  clearMessage,
+  MESSAGE_SUCCESS,
+  setMessage,
+} from '../../../actions/application';
+import { requestSimpleConfig } from '../../../actions/simple_config';
+import { cancelTask } from '../../../actions/helpers';
 
 // @todo Replace it with react-json-schema-form?
 
 /**
- * There are some major functions:
- *  - configSchemaToReactComponent: takes a config schema and output a react form for that
- *  - configSchemaToJsonSchema : Takes a config schema and converts it to a schema for the data stored in the config
- *  - configSchemaToUiSchema: Takes a config schema and enhances it with information like the widget.
+ * Wraps the ConfigSchema lib into a working statefull react component.
+ *
+ * @see src/lib/ConfigSchema.js
  */
-
 class SimpleConfig extends React.Component {
-  constructor(props) {
-    super(props);
+  static propTypes = {
+    name: string.isRequired,
+    requestSimpleConfig: func.isRequired,
+    cancelTask: func.isRequired,
+    setMessage: func.isRequired,
+    clearMessage: func.isRequired,
+    // @todo: We cannot know the shape of the config further as it is generic?
+    config: object, // eslint-disable-line react/forbid-prop-types
+  };
 
-    this.state = {
-      loading: true,
-      config: {},
-    };
+  static defaultProps = {
+    config: null,
+  };
+
+  state = {
+    config: null,
+  };
+
+  componentDidMount() {
+    this.props.requestSimpleConfig(this.props.name);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    // @todo I tried to use getDerivedStateFromProps but that didn't get executed.
+    this.setState({
+      config: nextProps.config,
+    });
+  }
+
+  componentWillUnmount() {
+    this.props.cancelTask();
   }
 
   onChangeField = path => event => {
     event.preventDefault();
     const { target: { value } } = event;
-    this.setState(prevState => {
-      ConfigSchema.objectSet(path.filter(id => id), prevState.config, value);
-      return prevState;
-    });
+    this.setState(
+      prevState => {
+        ConfigSchema.objectSet(path.filter(id => id), prevState.config, value);
+        return prevState;
+      },
+      () => {
+        this.props.clearMessage();
+      },
+    );
   };
 
   onSubmit = event => {
@@ -37,40 +73,28 @@ class SimpleConfig extends React.Component {
     this.saveSimpleConfig(this.props.name, this.state.config);
   };
 
-  saveSimpleConfig = (name, config) => {
+  saveSimpleConfig = async (name, config) => {
+    const csrfToken = await api('csrf_token');
+
     return api(
       'simple_config',
       { $name: name },
       {
-        body: JSON.stringify({ data: config }),
-        credentials: 'include',
+        body: JSON.stringify(config),
         headers: {
           'content-type': 'application/json',
+          'X-CSRF-Token': csrfToken,
         },
         method: 'PATCH',
       },
-    );
+    ).then(() => {
+      this.props.setMessage('Changes have been saved', MESSAGE_SUCCESS);
+    });
   };
 
-  componentDidMount() {
-    this.setState(
-      {
-        loading: true,
-      },
-      () => {
-        api('simple_config', { $name: this.props.name }).then(config => {
-          this.setState({
-            config,
-            loading: false,
-          });
-        });
-      },
-    );
-  }
-
   render() {
-    if (this.loading) {
-      return <div>Loading ...</div>;
+    if (!this.state.config) {
+      return <LoadingBar />;
     }
     return (
       <form>
@@ -86,8 +110,18 @@ class SimpleConfig extends React.Component {
   }
 }
 
-SimpleConfig.propTypes = {
-  name: PropTypes.string.isRequired,
+const mapStateToProps = (state, props) => {
+  if (typeof state.application.config[props.name] !== 'undefined') {
+    return { config: state.application.config[props.name] };
+  }
+  return {
+    config: null,
+  };
 };
 
-export default SimpleConfig;
+export default connect(mapStateToProps, {
+  requestSimpleConfig,
+  cancelTask,
+  setMessage,
+  clearMessage,
+})(SimpleConfig);

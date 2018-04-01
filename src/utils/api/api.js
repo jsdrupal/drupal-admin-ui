@@ -9,6 +9,7 @@ const replaceArray = (replaces, string) => {
 async function api(endpoint, parameters = {}, init = {}) {
   let url;
   init.credentials = 'include';
+  let format = 'json';
   switch (endpoint) {
     case 'menu':
       url = '/admin-api/menu?_format=json';
@@ -19,6 +20,10 @@ async function api(endpoint, parameters = {}, init = {}) {
     case 'simple_config':
       url = '/config/$name?_format=json';
       break;
+    case 'csrf_token':
+      url = '/rest/session/token';
+      format = 'text';
+      break;
     default:
       throw new Error('Undefined endpoint');
   }
@@ -27,7 +32,12 @@ async function api(endpoint, parameters = {}, init = {}) {
   const data = await fetch(
     process.env.REACT_APP_DRUPAL_BASE_URL + url,
     init,
-  ).then(res => res.json());
+  ).then(res => {
+    if (format === 'json') {
+      return res.json();
+    }
+    return res.text();
+  });
   return data;
 }
 
