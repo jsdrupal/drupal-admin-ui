@@ -12,6 +12,7 @@ import {
 import { cancelTask } from '../../../actions/helpers';
 
 // @todo Replace it with react-json-schema-form?
+// @todo Add serverside validation support
 
 /**
  * Wraps the ConfigSchema lib into a working statefull react component.
@@ -41,10 +42,10 @@ class SimpleConfig extends React.Component {
     this.props.requestSimpleConfig(this.props.name);
   }
 
-  componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps({ config }) {
     // @todo I tried to use getDerivedStateFromProps but that didn't get executed.
     this.setState({
-      config: nextProps.config,
+      config,
     });
   }
 
@@ -68,11 +69,7 @@ class SimpleConfig extends React.Component {
 
   onSubmit = event => {
     event.preventDefault();
-    this.saveSimpleConfig(this.props.name, this.state.config);
-  };
-
-  saveSimpleConfig = async (name, config) => {
-    this.props.requestSimpleConfigPost(name, config);
+    this.props.requestSimpleConfigPost(this.props.name, this.state.config);
   };
 
   render() {

@@ -105,4 +105,4 @@ export const watchPostedSimpleConfigWithCancel = function* watchPostedSimpleConf
   if (cancel) {
     // do a thing.
   }
-}
+};

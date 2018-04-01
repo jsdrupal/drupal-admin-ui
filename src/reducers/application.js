@@ -5,7 +5,7 @@ import {
   CLEAR_MESSAGE,
   MENU_LOADED,
 } from '../actions/application';
-import { SIMPLE_CONFIG_LOADED } from '../actions/simple_config';
+import { SIMPLE_CONFIG_LOADED } from '../actions/simpleConfig';
 
 const initialState = {
   message: null,
