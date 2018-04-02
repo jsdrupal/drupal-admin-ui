@@ -45,4 +45,32 @@ trait EntityTypeTableSchemaTrait {
       return $schema['primary key'][0];
     }
   }
+
+  /**
+   * Determines if a field is serialized.
+   *
+   * @param \Drupal\Core\Entity\EntityTypeInterface $entity_type
+   *   The entity type.
+   * @param string $field_name
+   *   The field name.
+   *
+   * @return bool
+   *   TRUE if it is a serialzied field.
+   */
+  protected static function isSerializedField(EntityTypeInterface $entity_type, $field_name) {
+    $fields = static::getEntityTypeSchemaFields($entity_type);
+    if (!isset($fields[$field_name])) {
+      return FALSE;
+    }
+    $field = $fields[$field_name];
+    if (isset($field['serialize'])) {
+      return $field['serialize'];
+    }
+    // If field is a 'blob' and 'serialize' is NOT set assume it is serialized.
+    // @todo Is this assumption correct? user_schema() follows this.
+    if ($field['type'] === 'blob') {
+      return TRUE;
+    }
+    return FALSE;
+  }
 }

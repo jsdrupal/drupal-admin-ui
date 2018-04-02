@@ -31,7 +31,8 @@ abstract class ReadOnlyTableEntityBase extends ContentEntityBase {
           $fields[$field_name] = BaseFieldDefinition::create($base_field_type)
             ->setLabel($field_name)
             ->setDescription($field['description'])
-            ->setReadOnly(TRUE);
+            ->setReadOnly(TRUE)
+            ->ser
         }
       }
     }
@@ -75,10 +76,8 @@ abstract class ReadOnlyTableEntityBase extends ContentEntityBase {
       }
       foreach ($entity as $field_name => $field) {
         if (isset($schema_fields[$field_name])) {
-          if ($schema_fields[$field_name]['type'] === 'blob') {
-            // @todo Are blobs always serialized?
+          if (self::isSerializedField($entity->getEntityType(), $field_name)) {
             self::jsonSerializeBlogField($entity, $field_name);
-
           }
         }
       }
