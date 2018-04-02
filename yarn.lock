@@ -6122,9 +6122,9 @@ rc@^1.0.1, rc@^1.1.6, rc@^1.1.7:
     minimist "^1.2.0"
     strip-json-comments "~2.0.1"
 
-react-burger-menu@^2.3.0:
-  version "2.3.0"
-  resolved "https://registry.yarnpkg.com/react-burger-menu/-/react-burger-menu-2.3.0.tgz#a5849d085115457e8b46516bb4dd9432e09fc805"
+react-burger-menu@^2.4.0:
+  version "2.4.0"
+  resolved "https://registry.npmjs.org/react-burger-menu/-/react-burger-menu-2.4.0.tgz#64c1f1b38b0065c1fbd3aa14b0ceca87c50e7e56"
   dependencies:
     browserify-optional "^1.0.0"
     classnames "^2.1.1"
@@ -6377,6 +6377,10 @@ reduce-function-call@^1.0.1:
   resolved "https://registry.yarnpkg.com/reduce-function-call/-/reduce-function-call-1.0.2.tgz#5a200bf92e0e37751752fe45b0ab330fd4b6be99"
   dependencies:
     balanced-match "^0.4.2"
+
+redux-burger-menu@^0.2.4:
+  version "0.2.4"
+  resolved "https://registry.npmjs.org/redux-burger-menu/-/redux-burger-menu-0.2.4.tgz#89c1da0b20b44c0b2e359689a0fe0af098c0a123"
 
 redux-devtools-extension@^2.13.2:
   version "2.13.2"

@@ -15,22 +15,25 @@ export const initialState = {
 };
 
 const filterMenuLinks = (string, menuLinks) => {
-  return menuLinks.map(menuLink => {
-    const subtree =
-      menuLink.subtree && filterMenuLinks(string, menuLink.subtree);
-    if (
-      (menuLink.link &&
-        (menuLink.link.title.indexOf(string) !== -1 ||
-          menuLink.link.description.indexOf(string) !== -1)) ||
-      subtree.length > 0
-    ) {
-      return {
-        ...menuLink,
-        subtree,
-      };
-    }
-    return [];
-  });
+  return menuLinks
+    .map(menuLink => {
+      const subtree =
+        menuLink.subtree && filterMenuLinks(string, menuLink.subtree);
+      if (
+        (menuLink.link &&
+          `${menuLink.link.title}${menuLink.link.description}`
+            .toLowerCase()
+            .indexOf(string.toLowerCase()) !== -1) ||
+        (Array.isArray(subtree) && subtree.length > 0)
+      ) {
+        return {
+          ...menuLink,
+          subtree,
+        };
+      }
+      return null;
+    })
+    .filter(id => id);
 };
 
 export default (state = initialState, action) => {

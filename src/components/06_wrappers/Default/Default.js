@@ -5,19 +5,23 @@ import LoadingBar from 'react-redux-loading-bar';
 import { css } from 'emotion';
 import { scaleRotate as Menu } from 'react-burger-menu';
 import { Link } from 'react-router-dom';
+import { decorator as reduxBurgerMenu } from 'redux-burger-menu';
 import { filterMenu, requestMenu } from '../../../actions/application';
 import Message from '../../02_atoms/Message/Message';
 import ErrorBoundary from '../ErrorBoundary/ErrorBoundary';
 
 let styles;
 
+const ConnectedMenu = reduxBurgerMenu(Menu, 'admin');
+
 class Default extends React.Component {
   componentWillMount() {
     this.props.requestMenu();
   }
+
   render = () => (
     <div className={styles.outerWrapper} id={styles.outerWrapper}>
-      <Menu
+      <ConnectedMenu
         outerContainerId={styles.outerWrapper}
         pageWrapId={styles.main}
         burgerButtonClassName={styles.burgerButton}
@@ -28,9 +32,9 @@ class Default extends React.Component {
         morphShapeClassName={styles.morphShape}
         itemListClassName={styles.itemList}
         overlayClassName={styles.overlay}
-        isOpen={false}
       >
         <input
+          className={styles.filterMenu}
           type="textfield"
           placeholder="Search"
           onChange={e => this.props.filterMenu(e.target.value)}
@@ -56,7 +60,7 @@ class Default extends React.Component {
             </li>
           </ul>
         ))}
-      </Menu>
+      </ConnectedMenu>
 
       <main className={styles.main} id={styles.main}>
         <ErrorBoundary>
@@ -79,6 +83,11 @@ styles = {
     margin-top: 100px;
     height: 100%;
     background: #ffffff;
+  `,
+  filterMenu: css`
+    position: relative;
+    margin: 8px;
+    top: 36px;
   `,
   burgerButton: css`
     position: fixed;
@@ -152,13 +161,18 @@ Default.defaultProps = {
   message: null,
 };
 
-const mapStateToProps = state => ({
-  message: state.application.message || null,
-  menuLinks:
-    state.application.filteredMenuLinks.length > 0
-      ? state.application.filteredMenuLinks.length
-      : state.application.menuLinks || {},
-  filterString: state.application.filterString,
-});
+const mapStateToProps = state => {
+  return {
+    message: state.application.message || null,
+    menuLinks:
+      state.application.filteredMenuLinks.length > 0
+        ? state.application.filteredMenuLinks
+        : state.application.menuLinks || {},
+    filterString: state.application.filterString,
+  };
+};
 
-export default connect(mapStateToProps, { requestMenu, filterMenu })(Default);
+export default connect(mapStateToProps, {
+  requestMenu,
+  filterMenu,
+})(Default);
