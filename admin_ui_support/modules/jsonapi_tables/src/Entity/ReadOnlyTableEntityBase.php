@@ -31,8 +31,7 @@ abstract class ReadOnlyTableEntityBase extends ContentEntityBase {
           $fields[$field_name] = BaseFieldDefinition::create($base_field_type)
             ->setLabel($field_name)
             ->setDescription($field['description'])
-            ->setReadOnly(TRUE)
-            ->ser
+            ->setReadOnly(TRUE);
         }
       }
     }
