@@ -2,6 +2,7 @@
 
 namespace Drupal\jsonapi_tables\Entity;
 
+use Drupal\Component\Render\PlainTextOutput;
 use Drupal\Component\Serialization\Json;
 use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
@@ -42,9 +43,13 @@ class WatchdogEntity extends ReadOnlyTableEntityBase {
     $fields = parent::baseFieldDefinitions($entity_type);
 
     $fields['message_formatted'] = BaseFieldDefinition::create('string')
-      ->setLabel(t('Referer'))
-      ->setDescription(t('message_formatted.'))
-      // Set no default value.
+      ->setLabel(t('Formatted message'))
+      ->setDescription(t('The formatted message.'))
+      ->setComputed(TRUE);
+
+    $fields['message_formatted_plain'] = BaseFieldDefinition::create('string')
+      ->setLabel(t('Formatted message plain'))
+      ->setDescription(t('The formatted message stripped of HTML.'))
       ->setComputed(TRUE);
 
     // @todo Move the list of entity reference fields to annotation to be
@@ -69,8 +74,9 @@ class WatchdogEntity extends ReadOnlyTableEntityBase {
         // Format the message of a watchdog entry.
         $variables = $entity->variables[0]->getValue()['value'];
         $variables = Json::decode($variables);
-        $message = $entity->message[0]->getValue()['value'];
-        $entity->set('message_formatted', t($message, $variables));
+        $message = t($entity->message[0]->getValue()['value'], $variables);
+        $entity->set('message_formatted', $message);
+        $entity->set('message_formatted_plain', PlainTextOutput::renderFromHtml($message));
       }
     }
     return $entities;
