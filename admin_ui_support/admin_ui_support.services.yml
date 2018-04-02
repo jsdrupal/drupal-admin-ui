@@ -12,3 +12,7 @@ services:
     tags:
       - { name: normalizer }
     arguments: ['@entity.manager']
+  admin_ui_support.route_subscriber:
+    class: Drupal\admin_ui_support\Routing\RouteSubscriber
+    tags:
+      - { name: event_subscriber }
