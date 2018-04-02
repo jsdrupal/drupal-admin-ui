@@ -1,5 +1,6 @@
 import { LOCATION_CHANGE } from 'react-router-redux';
 import { ROLES_LOADED } from '../actions/roles';
+import { DBLOG_COLLECTION_LOADED } from '../actions/reports';
 import {
   SET_MESSAGE,
   CLEAR_MESSAGE,
@@ -70,6 +71,12 @@ export default (state = initialState, action) => {
       return {
         ...state,
         menuLinks,
+      };
+    }
+    case DBLOG_COLLECTION_LOADED: {
+      return {
+        ...state,
+        dbLogEntries: action.payload.dbLogEntries.data,
       };
     }
     case ROLES_LOADED: {
