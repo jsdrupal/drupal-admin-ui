@@ -4,11 +4,33 @@ import {
   SET_MESSAGE,
   CLEAR_MESSAGE,
   MENU_LOADED,
+  MENU_FILTERED,
 } from '../actions/application';
 
-const initialState = {
+export const initialState = {
   message: null,
   menuLinks: [],
+  filteredMenuLinks: [],
+  filterString: '',
+};
+
+const filterMenuLinks = (string, menuLinks) => {
+  return menuLinks.map(menuLink => {
+    const subtree =
+      menuLink.subtree && filterMenuLinks(string, menuLink.subtree);
+    if (
+      (menuLink.link &&
+        (menuLink.link.title.indexOf(string) !== -1 ||
+          menuLink.link.description.indexOf(string) !== -1)) ||
+      subtree.length > 0
+    ) {
+      return {
+        ...menuLink,
+        subtree,
+      };
+    }
+    return [];
+  });
 };
 
 export default (state = initialState, action) => {
@@ -72,6 +94,21 @@ export default (state = initialState, action) => {
         menuLinks,
       };
     }
+    case MENU_FILTERED:
+      if (action.payload.string) {
+        return {
+          ...state,
+          filterString: action.payload.string,
+          filteredMenuLinks: filterMenuLinks(
+            action.payload.string,
+            state.menuLinks,
+          ),
+        };
+      }
+      return {
+        ...state,
+        filterString: action.payload.string,
+      };
     case ROLES_LOADED: {
       const roles = action.payload.roles.data;
       return {

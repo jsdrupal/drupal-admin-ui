@@ -5,7 +5,7 @@ import LoadingBar from 'react-redux-loading-bar';
 import { css } from 'emotion';
 import { scaleRotate as Menu } from 'react-burger-menu';
 import { Link } from 'react-router-dom';
-import { requestMenu } from '../../../actions/application';
+import { filterMenu, requestMenu } from '../../../actions/application';
 import Message from '../../02_atoms/Message/Message';
 import ErrorBoundary from '../ErrorBoundary/ErrorBoundary';
 
@@ -30,6 +30,12 @@ class Default extends React.Component {
         overlayClassName={styles.overlay}
         isOpen={false}
       >
+        <input
+          type="textfield"
+          placeholder="Search"
+          onChange={e => this.props.filterMenu(e.target.value)}
+          value={this.props.filterString}
+        />
         {this.props.menuLinks.map(({ link: menuLink, subtree }) => (
           <ul key={`${menuLink.menuName}--${menuLink.url}--${menuLink.title}`}>
             <li>
@@ -138,6 +144,8 @@ Default.propTypes = {
     }),
   ).isRequired,
   requestMenu: func.isRequired,
+  filterMenu: func.isRequired,
+  filterString: string.isRequired,
 };
 
 Default.defaultProps = {
@@ -146,7 +154,11 @@ Default.defaultProps = {
 
 const mapStateToProps = state => ({
   message: state.application.message || null,
-  menuLinks: state.application.menuLinks || {},
+  menuLinks:
+    state.application.filteredMenuLinks.length > 0
+      ? state.application.filteredMenuLinks.length
+      : state.application.menuLinks || {},
+  filterString: state.application.filterString,
 });
 
-export default connect(mapStateToProps, { requestMenu })(Default);
+export default connect(mapStateToProps, { requestMenu, filterMenu })(Default);
