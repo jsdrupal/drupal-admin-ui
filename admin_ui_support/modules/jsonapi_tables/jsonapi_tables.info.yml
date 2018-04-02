@@ -1,0 +1,7 @@
+name: 'JSONAPI Table'
+type: module
+description: 'Exposes database tables as read-only entities for JSON API'
+version: VERSION
+core: 8.x
+dependencies:
+  - jsonapi:jsonapi
