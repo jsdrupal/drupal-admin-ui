@@ -1,0 +1,17 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - admin_ui_support
+    - serialization
+    - user
+id: config_schema
+plugin_id: config_schema
+granularity: resource
+configuration:
+  methods:
+    - GET
+  formats:
+    - json
+  authentication:
+    - cookie
