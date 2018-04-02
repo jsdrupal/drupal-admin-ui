@@ -26,7 +26,7 @@ use Drupal\Core\Field\BaseFieldDefinition;
  *     "label" = "message",
  *   },
  *   links = {
- *     "canonical" = "/{admin/reports/dblog/{watchdog_entity}",
+ *     "canonical" = "/admin/reports/dblog/{watchdog_entity}",
  *     "collection" = "/admin/reports/dblog",
  *   },
  *   admin_permission = "access site reports",
