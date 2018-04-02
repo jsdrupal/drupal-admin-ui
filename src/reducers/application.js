@@ -5,10 +5,12 @@ import {
   CLEAR_MESSAGE,
   MENU_LOADED,
 } from '../actions/application';
+import { SIMPLE_CONFIG_LOADED } from '../actions/simpleConfig';
 
 const initialState = {
   message: null,
   menuLinks: [],
+  config: {},
 };
 
 export default (state = initialState, action) => {
@@ -79,6 +81,18 @@ export default (state = initialState, action) => {
         roles,
       };
     }
+    case SIMPLE_CONFIG_LOADED: {
+      const { config, name } = action.payload;
+      const configState = {
+        ...state.config,
+        [name]: config,
+      };
+      return {
+        ...state,
+        config: configState,
+      };
+    }
+
     default: {
       return { ...state };
     }
