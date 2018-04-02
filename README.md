@@ -51,6 +51,19 @@ php -S localhost:8000
 - Start the Webpack dev server with `yarn start`
 - Visit `http://localhost:3000/`
 
+## Commands
+
+|`yarn run <script>`|Description|
+|------------------|-----------|
+|`start`|Serves your app at `localhost:3000`.|
+|`build`|Compiles the application to disk in folder `./build`.|
+|`test`|Runs all available tests.|
+|`test:unit`|Starts an interactive test runner for running unit tests with Jest.|
+|`test:unit:ci`|Runs unit tests with Jest and outputs results with JUnit.|
+|`test:lint`|Lints all files.|
+|`test:lint:fix`|Fixes linter errors that can be solved automatically.|
+|`test:lint:ci`|Lints all files and outputs results with JUnit.|
+
 ## Contributing to This Repository
 
 - [Fork this repo](https://help.github.com/articles/fork-a-repo/) to your own user and make your proposed changes
