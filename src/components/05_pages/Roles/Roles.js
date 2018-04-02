@@ -8,7 +8,7 @@ import { requestRoles } from '../../../actions/roles';
 import { cancelTask } from '../../../actions/helpers';
 import { Table, TBody, THead } from '../../01_subatomics/Table/Table';
 
-const Roles = class Roles extends Component {
+export const Roles = class Roles extends Component {
   componentDidMount() {
     this.props.requestRoles();
   }

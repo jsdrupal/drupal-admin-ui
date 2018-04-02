@@ -1,5 +1,5 @@
 import Permissions from './components/05_pages/Permissions/Permissions';
-import Roles from './components/05_pages/Roles/Roles';
+import Roles from './components/05_pages/Roles';
 
 // @todo Share this with Drupal
 const routes = {
