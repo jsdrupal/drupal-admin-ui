@@ -68,6 +68,7 @@ trait EntityTypeTableSchemaTrait {
     }
     // If field is a 'blob' and 'serialize' is NOT set assume it is serialized.
     // @todo Is this assumption correct? user_schema() follows this.
+    // @see https://www.drupal.org/project/drupal/issues/2232427
     if ($field['type'] === 'blob') {
       return TRUE;
     }
