@@ -161,16 +161,37 @@ Default.defaultProps = {
   message: null,
 };
 
-const mapStateToProps = state => {
-  return {
-    message: state.application.message || null,
-    menuLinks:
-      state.application.filteredMenuLinks.length > 0
-        ? state.application.filteredMenuLinks
-        : state.application.menuLinks || {},
-    filterString: state.application.filterString,
-  };
-};
+export const filterMenuLinks = (searchString, menuLinks) =>
+  menuLinks
+    .map(menuLink => {
+      const subtree =
+        menuLink.subtree && filterMenuLinks(searchString, menuLink.subtree);
+      if (
+        (menuLink.link &&
+          `${menuLink.link.title}${menuLink.link.description}`
+            .toLowerCase()
+            .indexOf(searchString.toLowerCase()) !== -1) ||
+        (Array.isArray(subtree) && subtree.length > 0)
+      ) {
+        return {
+          ...menuLink,
+          subtree,
+        };
+      }
+      return null;
+    })
+    .filter(id => id);
+
+const mapStateToProps = state => ({
+  message: state.application.message || null,
+  menuLinks: state.application.filterString
+    ? filterMenuLinks(
+        state.application.filterString,
+        state.application.menuLinks,
+      )
+    : state.application.menuLinks,
+  filterString: state.application.filterString,
+});
 
 export default connect(mapStateToProps, {
   requestMenu,
