@@ -76,7 +76,23 @@ export default (state = initialState, action) => {
     case DBLOG_COLLECTION_LOADED: {
       return {
         ...state,
-        dbLogEntries: action.payload.dbLogEntries.data,
+        dbLogEntries: action.payload.dbLogEntries.data.map(
+          ({
+            attributes: {
+              wid,
+              message_formatted_plain: messageFormattedPlain,
+              timestamp,
+              type,
+            },
+          }) => ({ wid, messageFormattedPlain, timestamp, type }),
+        ),
+        dbLogEntriesTypes: Array.from(
+          new Set(
+            action.payload.dbLogEntries.data.map(
+              ({ attributes: { type } }) => type,
+            ),
+          ),
+        ),
       };
     }
     case ROLES_LOADED: {

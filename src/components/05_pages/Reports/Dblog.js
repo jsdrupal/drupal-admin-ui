@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import { func, arrayOf, shape, string, number, oneOfType } from 'prop-types';
+import React, { Component, Fragment } from 'react';
+import { func, arrayOf, shape, string, number } from 'prop-types';
 import { connect } from 'react-redux';
 import LoadingBar from 'react-redux-loading-bar';
 import { Markup } from 'interweave';
@@ -12,84 +12,60 @@ const Dblog = class Dblog extends Component {
     requestDblogCollection: func.isRequired,
     dbLogEntries: arrayOf(
       shape({
-        attributes: shape({
-          hostname: string,
-          link: oneOfType([() => null, string]),
-          location: string,
-          message: string,
-          message_formatted: string,
-          message_formatted_plain: string,
-          referer: oneOfType([() => null, string]),
-          severity: number,
-          timestamp: number,
-          type: string,
-          variables: string,
-          wid: number,
-        }),
-        id: string,
-        links: shape({
-          self: string,
-        }),
-        relationships: shape({
-          uid: shape({
-            data: shape({
-              id: string,
-              type: string,
-            }),
-            links: shape({
-              related: string,
-              self: string,
-            }),
-          }),
-        }),
+        wid: number,
+        messageFormattedPlain: string,
+        timestamp: number,
         type: string,
       }),
     ),
+    dbLogEntriesTypes: arrayOf(string),
   };
   static defaultProps = {
     dbLogEntries: null,
+    dbLogEntriesTypes: null,
   };
   componentDidMount() {
     this.props.requestDblogCollection();
   }
   generateTableRows = entries =>
-    entries.map(
-      ({
-        attributes: {
-          wid,
-          type,
-          message_formatted_plain: messageFormattedPlain,
-          timestamp,
-        },
-      }) => ({
-        key: String(wid),
-        tds: [
-          [`type-${wid}`, type],
-          [`timestamp-${wid}`, timestamp],
-          [
-            `markup-${wid}`,
-            <Markup content={`${messageFormattedPlain.substring(0, 48)}…`} />,
-          ],
-          [`user-${wid}`, ''],
+    entries.map(({ wid, type, messageFormattedPlain, timestamp }) => ({
+      key: String(wid),
+      tds: [
+        [`type-${wid}`, type],
+        [`timestamp-${wid}`, timestamp],
+        [
+          `markup-${wid}`,
+          <Markup content={`${messageFormattedPlain.substring(0, 48)}…`} />,
         ],
-      }),
-    );
+        [`user-${wid}`, ''],
+      ],
+    }));
 
   render() {
     if (!this.props.dbLogEntries) {
       return <LoadingBar />;
     }
     return (
-      <Table>
-        <THead data={['Type', 'Date', 'Message', 'User']} />
-        <TBody rows={this.generateTableRows(this.props.dbLogEntries)} />
-      </Table>
+      <Fragment>
+        <select>
+          {this.props.dbLogEntriesTypes.map(type => (
+            <option value={type}>{type}</option>
+          ))}
+        </select>
+        <Table>
+          <THead data={['Type', 'Date', 'Message', 'User']} />
+          <TBody rows={this.generateTableRows(this.props.dbLogEntries)} />
+        </Table>
+      </Fragment>
     );
   }
 };
 
-const mapStateToProps = ({ application: { dbLogEntries } }) => ({
+const mapStateToProps = ({
+  application: { dbLogEntries, dbLogEntriesTypes },
+}) => ({
   dbLogEntries,
+  dbLogEntriesTypes,
 });
 
 export default connect(mapStateToProps, { requestDblogCollection })(Dblog);
