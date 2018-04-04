@@ -7,15 +7,15 @@ import { Markup } from 'interweave';
 import { requestDblogCollection } from '../../../actions/reports';
 import { Table, TBody, THead } from '../../01_subatomics/Table/Table';
 
-const Dblog = class Dblog extends Component {
+class Dblog extends Component {
   static propTypes = {
     requestDblogCollection: func.isRequired,
     dbLogEntries: arrayOf(
       shape({
-        wid: number,
-        messageFormattedPlain: string,
-        timestamp: number,
-        type: string,
+        wid: number.isRequired,
+        messageFormattedPlain: string.isRequired,
+        timestamp: number.isRequired,
+        type: string.isRequired,
       }),
     ),
     dbLogEntriesTypes: arrayOf(string),
@@ -35,7 +35,13 @@ const Dblog = class Dblog extends Component {
         [`timestamp-${wid}`, timestamp],
         [
           `markup-${wid}`,
-          <Markup content={`${messageFormattedPlain.substring(0, 48)}…`} />,
+          <Markup
+            content={`${
+              messageFormattedPlain.length > 48
+                ? `${messageFormattedPlain.substring(0, 48)}…`
+                : messageFormattedPlain
+            }`}
+          />,
         ],
         [`user-${wid}`, ''],
       ],
@@ -59,7 +65,7 @@ const Dblog = class Dblog extends Component {
       </Fragment>
     );
   }
-};
+}
 
 const mapStateToProps = ({
   application: { dbLogEntries, dbLogEntriesTypes },
