@@ -4,24 +4,27 @@ import {
   hideLoading,
   resetLoading,
 } from 'react-redux-loading-bar';
+import qs from 'qs';
 import api from '../utils/api/api';
 import { setMessage } from './application';
 
 export const DBLOG_COLLECTION_REQUEST = 'DBLOG_COLLECTION_REQUEST';
-export const requestDblogCollection = () => ({
+export const requestDblogCollection = options => ({
   type: DBLOG_COLLECTION_REQUEST,
-  payload: {},
+  payload: { options },
 });
 
 export const DBLOG_COLLECTION_LOADED = 'DBLOG_COLLECTION_LOADED';
-function* loadDblog() {
+function* loadDblog({ payload: { options } }) {
   try {
+    const queryString = qs.stringify(options, { arrayFormat: 'brackets' });
     yield put(resetLoading());
     yield put(showLoading());
-    const dbLogEntries = yield call(api, 'dblog');
+    const dbLogEntries = yield call(api, 'dblog', { queryString });
     yield put({
       type: DBLOG_COLLECTION_LOADED,
       payload: {
+        options,
         dbLogEntries,
       },
     });

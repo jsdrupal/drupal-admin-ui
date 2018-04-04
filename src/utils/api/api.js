@@ -1,6 +1,8 @@
-async function api(endpoint, init = {}) {
+async function api(endpoint, options = {}) {
   let url;
-  init.credentials = 'include';
+  const { queryString, ...fetchOptions } = options;
+
+  fetchOptions.credentials = 'include';
   switch (endpoint) {
     case 'menu':
       url = '/admin-api/menu?_format=json';
@@ -16,8 +18,10 @@ async function api(endpoint, init = {}) {
   }
 
   const data = await fetch(
-    process.env.REACT_APP_DRUPAL_BASE_URL + url,
-    init,
+    `${process.env.REACT_APP_DRUPAL_BASE_URL}${url}${
+      queryString ? `?${queryString}` : ''
+    }`,
+    fetchOptions,
   ).then(res => res.json());
   return data;
 }

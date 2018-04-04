@@ -7,10 +7,21 @@ import { Markup } from 'interweave';
 import { requestDblogCollection } from '../../../actions/reports';
 import { Table, TBody, THead } from '../../01_subatomics/Table/Table';
 
+const severity = [
+  { value: '0', item: 'Emergency' },
+  { value: '1', item: 'Alert' },
+  { value: '2', item: 'Critical' },
+  { value: '3', item: 'Error' },
+  { value: '4', item: 'Warning' },
+  { value: '5', item: 'Notice' },
+  { value: '6', item: 'Info' },
+  { value: '7', item: 'Debug' },
+];
+
 class Dblog extends Component {
   static propTypes = {
     requestDblogCollection: func.isRequired,
-    dbLogEntries: arrayOf(
+    entries: arrayOf(
       shape({
         wid: number.isRequired,
         messageFormattedPlain: string.isRequired,
@@ -18,14 +29,19 @@ class Dblog extends Component {
         type: string.isRequired,
       }),
     ),
-    dbLogEntriesTypes: arrayOf(string),
+    types: arrayOf(string),
+    selectedSeverity: number,
   };
   static defaultProps = {
-    dbLogEntries: null,
-    dbLogEntriesTypes: null,
+    entries: null,
+    types: null,
+    selectedSeverity: null,
   };
   componentDidMount() {
-    this.props.requestDblogCollection();
+    this.props.requestDblogCollection({
+      ...this.props.filterOptions,
+      sort: '-timestamp',
+    });
   }
   generateTableRows = entries =>
     entries.map(({ wid, type, messageFormattedPlain, timestamp }) => ({
@@ -46,32 +62,61 @@ class Dblog extends Component {
         [`user-${wid}`, ''],
       ],
     }));
-
+  severityFilterHandler = e => {
+    const value = Array.from(e.target.options)
+      .filter(option => option.selected)
+      .map(option => option.value);
+    const { filter = {}, ...filterOptions } = this.props.filterOptions;
+    this.props.requestDblogCollection({
+      filter: {
+        ...filter,
+        severityFilter: {
+          condition: {
+            value,
+            path: 'severity',
+          },
+        },
+      },
+      ...filterOptions,
+    });
+  };
   render() {
-    if (!this.props.dbLogEntries) {
+    if (!this.props.entries) {
       return <LoadingBar />;
     }
     return (
       <Fragment>
-        <select>
-          {this.props.dbLogEntriesTypes.map(type => (
-            <option value={type}>{type}</option>
+        <select key="select-type" label="Type">
+          {this.props.types.map(type => (
+            <option value={type} key={type}>
+              {type}
+            </option>
+          ))}
+        </select>
+        <select
+          key="select-severity"
+          label="Severity"
+          onChange={this.severityFilterHandler}
+          selected={this.props.selectedSeverity}
+        >
+          {severity.map(({ value, item }) => (
+            <option value={value} key={value}>
+              {item}
+            </option>
           ))}
         </select>
         <Table>
           <THead data={['Type', 'Date', 'Message', 'User']} />
-          <TBody rows={this.generateTableRows(this.props.dbLogEntries)} />
+          <TBody rows={this.generateTableRows(this.props.entries)} />
         </Table>
       </Fragment>
     );
   }
 }
 
-const mapStateToProps = ({
-  application: { dbLogEntries, dbLogEntriesTypes },
-}) => ({
-  dbLogEntries,
-  dbLogEntriesTypes,
+const mapStateToProps = ({ application: { dblog } }) => ({
+  filterOptions: {},
+  ...dblog,
 });
 
 export default connect(mapStateToProps, { requestDblogCollection })(Dblog);
