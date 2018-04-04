@@ -4,7 +4,6 @@ import {
   SET_MESSAGE,
   CLEAR_MESSAGE,
   MENU_LOADED,
-  MENU_FILTERED,
 } from '../actions/application';
 
 export const initialState = {
@@ -73,17 +72,6 @@ export default (state = initialState, action) => {
         menuLinks,
       };
     }
-    case MENU_FILTERED:
-      if (action.payload.string) {
-        return {
-          ...state,
-          filterString: action.payload.string,
-        };
-      }
-      return {
-        ...state,
-        filterString: action.payload.string,
-      };
     case ROLES_LOADED: {
       const roles = action.payload.roles.data;
       return {

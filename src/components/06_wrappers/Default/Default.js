@@ -6,7 +6,7 @@ import { css } from 'emotion';
 import { scaleRotate as Menu } from 'react-burger-menu';
 import { Link } from 'react-router-dom';
 import { decorator as reduxBurgerMenu } from 'redux-burger-menu';
-import { filterMenu, requestMenu } from '../../../actions/application';
+import { requestMenu } from '../../../actions/application';
 import Message from '../../02_atoms/Message/Message';
 import ErrorBoundary from '../ErrorBoundary/ErrorBoundary';
 
@@ -15,9 +15,23 @@ let styles;
 const ConnectedMenu = reduxBurgerMenu(Menu, 'admin');
 
 class Default extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      filterString: '',
+    };
+  }
+
   componentWillMount() {
     this.props.requestMenu();
   }
+
+  filterMenu = e => {
+    this.setState({
+      filterString: e.target.value,
+    });
+  };
 
   render = () => (
     <div className={styles.outerWrapper} id={styles.outerWrapper}>
@@ -37,8 +51,8 @@ class Default extends React.Component {
           className={styles.filterMenu}
           type="textfield"
           placeholder="Search"
-          onChange={e => this.props.filterMenu(e.target.value)}
-          value={this.props.filterString}
+          onChange={this.filterMenu}
+          value={this.state.filterString}
         />
         {this.props.menuLinks.map(({ link: menuLink, subtree }) => (
           <ul key={`${menuLink.menuName}--${menuLink.url}--${menuLink.title}`}>
@@ -153,16 +167,17 @@ Default.propTypes = {
     }),
   ).isRequired,
   requestMenu: func.isRequired,
-  filterMenu: func.isRequired,
-  filterString: string.isRequired,
 };
 
 Default.defaultProps = {
   message: null,
 };
 
-export const filterMenuLinks = (searchString, menuLinks) =>
-  menuLinks
+export const filterMenuLinks = (searchString, menuLinks) => {
+  if (!searchString) {
+    return menuLinks;
+  }
+  return menuLinks
     .map(menuLink => {
       const subtree =
         menuLink.subtree && filterMenuLinks(searchString, menuLink.subtree);
@@ -181,19 +196,13 @@ export const filterMenuLinks = (searchString, menuLinks) =>
       return null;
     })
     .filter(id => id);
+};
 
 const mapStateToProps = state => ({
   message: state.application.message || null,
-  menuLinks: state.application.filterString
-    ? filterMenuLinks(
-        state.application.filterString,
-        state.application.menuLinks,
-      )
-    : state.application.menuLinks,
-  filterString: state.application.filterString,
+  menuLinks: state.application.menuLinks,
 });
 
 export default connect(mapStateToProps, {
   requestMenu,
-  filterMenu,
 })(Default);

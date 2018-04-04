@@ -48,14 +48,6 @@ function* loadMenu() {
   }
 }
 
-export const MENU_FILTERED = 'MENU_FILTERED';
-export const filterMenu = string => ({
-  type: MENU_FILTERED,
-  payload: {
-    string,
-  },
-});
-
 export default function* watchRequestedMenu() {
   yield takeLatest(MENU_REQUESTED, loadMenu);
 }
