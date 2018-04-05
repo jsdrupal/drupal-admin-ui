@@ -14,6 +14,31 @@ let styles;
 
 const ConnectedMenu = reduxBurgerMenu(Menu, 'admin');
 
+export const filterMenuLinks = (searchString, menuLinks) => {
+  if (!searchString) {
+    return menuLinks;
+  }
+  return menuLinks
+    .map(menuLink => {
+      const subtree =
+        menuLink.subtree && filterMenuLinks(searchString, menuLink.subtree);
+      if (
+        (menuLink.link &&
+          `${menuLink.link.title}${menuLink.link.description}`
+            .toLowerCase()
+            .indexOf(searchString.toLowerCase()) !== -1) ||
+        (Array.isArray(subtree) && subtree.length > 0)
+      ) {
+        return {
+          ...menuLink,
+          subtree,
+        };
+      }
+      return null;
+    })
+    .filter(id => id);
+};
+
 class Default extends React.Component {
   constructor(props) {
     super(props);
@@ -54,26 +79,30 @@ class Default extends React.Component {
           onChange={this.filterMenu}
           value={this.state.filterString}
         />
-        {this.props.menuLinks.map(({ link: menuLink, subtree }) => (
-          <ul key={`${menuLink.menuName}--${menuLink.url}--${menuLink.title}`}>
-            <li>
-              <Link to={menuLink.url}>{menuLink.title}</Link>
-              <ul>
-                {subtree.map(({ link: subMenuLink }) => (
-                  <li
-                    key={`
+        {filterMenuLinks(this.state.filterString, this.props.menuLinks).map(
+          ({ link: menuLink, subtree }) => (
+            <ul
+              key={`${menuLink.menuName}--${menuLink.url}--${menuLink.title}`}
+            >
+              <li>
+                <Link to={menuLink.url}>{menuLink.title}</Link>
+                <ul>
+                  {subtree.map(({ link: subMenuLink }) => (
+                    <li
+                      key={`
                       ${subMenuLink.menuName}--
                       ${subMenuLink.url}--
                       ${subMenuLink.title}
                     `}
-                  >
-                    <Link to={subMenuLink.url}>{subMenuLink.title}</Link>
-                  </li>
-                ))}
-              </ul>
-            </li>
-          </ul>
-        ))}
+                    >
+                      <Link to={subMenuLink.url}>{subMenuLink.title}</Link>
+                    </li>
+                  ))}
+                </ul>
+              </li>
+            </ul>
+          ),
+        )}
       </ConnectedMenu>
 
       <main className={styles.main} id={styles.main}>
@@ -171,31 +200,6 @@ Default.propTypes = {
 
 Default.defaultProps = {
   message: null,
-};
-
-export const filterMenuLinks = (searchString, menuLinks) => {
-  if (!searchString) {
-    return menuLinks;
-  }
-  return menuLinks
-    .map(menuLink => {
-      const subtree =
-        menuLink.subtree && filterMenuLinks(searchString, menuLink.subtree);
-      if (
-        (menuLink.link &&
-          `${menuLink.link.title}${menuLink.link.description}`
-            .toLowerCase()
-            .indexOf(searchString.toLowerCase()) !== -1) ||
-        (Array.isArray(subtree) && subtree.length > 0)
-      ) {
-        return {
-          ...menuLink,
-          subtree,
-        };
-      }
-      return null;
-    })
-    .filter(id => id);
 };
 
 const mapStateToProps = state => ({
