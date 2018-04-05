@@ -1,6 +1,9 @@
 import { LOCATION_CHANGE } from 'react-router-redux';
 import { ROLES_LOADED } from '../actions/roles';
-import { DBLOG_COLLECTION_LOADED } from '../actions/reports';
+import {
+  DBLOG_COLLECTION_LOADED,
+  DBLOG_FILTER_UPDATED,
+} from '../actions/reports';
 import {
   SET_MESSAGE,
   CLEAR_MESSAGE,
@@ -74,10 +77,11 @@ export default (state = initialState, action) => {
       };
     }
     case DBLOG_COLLECTION_LOADED: {
+      const { dblog, ...rest } = state;
       return {
-        ...state,
+        ...rest,
         dblog: {
-          filterOptions: action.payload.options,
+          ...dblog,
           entries: action.payload.dbLogEntries.data.map(
             ({
               attributes: {
@@ -95,6 +99,16 @@ export default (state = initialState, action) => {
               ),
             ),
           ),
+        },
+      };
+    }
+    case DBLOG_FILTER_UPDATED: {
+      const { dblog, ...rest } = state;
+      return {
+        ...rest,
+        dblog: {
+          ...dblog,
+          filterOptions: action.payload.options,
         },
       };
     }

@@ -63,21 +63,13 @@ class Dblog extends Component {
       ],
     }));
   severityFilterHandler = e => {
-    const value = Array.from(e.target.options)
+    const severities = Array.from(e.target.options)
       .filter(option => option.selected)
       .map(option => option.value);
-    const { filter = {}, ...filterOptions } = this.props.filterOptions;
+    const { sort } = this.props.filterOptions;
     this.props.requestDblogCollection({
-      filter: {
-        ...filter,
-        severityFilter: {
-          condition: {
-            value,
-            path: 'severity',
-          },
-        },
-      },
-      ...filterOptions,
+      severities,
+      sort,
     });
   };
   render() {
@@ -96,8 +88,10 @@ class Dblog extends Component {
         <select
           key="select-severity"
           label="Severity"
+          multiple
+          size={8}
           onChange={this.severityFilterHandler}
-          selected={this.props.selectedSeverity}
+          selected={this.props.filterOptions.severities}
         >
           {severity.map(({ value, item }) => (
             <option value={value} key={value}>

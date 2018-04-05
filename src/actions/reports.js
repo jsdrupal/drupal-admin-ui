@@ -4,7 +4,6 @@ import {
   hideLoading,
   resetLoading,
 } from 'react-redux-loading-bar';
-import qs from 'qs';
 import api from '../utils/api/api';
 import { setMessage } from './application';
 
@@ -14,17 +13,49 @@ export const requestDblogCollection = options => ({
   payload: { options },
 });
 
+export const DBLOG_FILTER_UPDATED = 'DBLOG_FILTER_UPDATED';
+
 export const DBLOG_COLLECTION_LOADED = 'DBLOG_COLLECTION_LOADED';
 function* loadDblog({ payload: { options } }) {
   try {
-    const queryString = qs.stringify(options, { arrayFormat: 'brackets' });
+    const queryString = {
+      sort: options.sort,
+      filter: {
+        ...(options.severities
+          ? options.severities.reduce(
+              (acc, cur) => ({
+                ...acc,
+                [`severity${cur}`]: {
+                  condition: {
+                    value: cur,
+                    path: 'severity',
+                    memberOf: 'severityGroup',
+                  },
+                },
+              }),
+              {
+                severityGroup: {
+                  group: {
+                    conjunction: 'OR',
+                  },
+                },
+              },
+            )
+          : {}),
+      },
+    };
     yield put(resetLoading());
     yield put(showLoading());
+    yield put({
+      type: DBLOG_FILTER_UPDATED,
+      payload: {
+        options,
+      },
+    });
     const dbLogEntries = yield call(api, 'dblog', { queryString });
     yield put({
       type: DBLOG_COLLECTION_LOADED,
       payload: {
-        options,
         dbLogEntries,
       },
     });

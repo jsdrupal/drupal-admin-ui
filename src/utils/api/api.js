@@ -1,7 +1,8 @@
+import qs from 'qs';
+
 async function api(endpoint, options = {}) {
   let url;
   const { queryString, ...fetchOptions } = options;
-
   fetchOptions.credentials = 'include';
   switch (endpoint) {
     case 'menu':
@@ -19,7 +20,9 @@ async function api(endpoint, options = {}) {
 
   const data = await fetch(
     `${process.env.REACT_APP_DRUPAL_BASE_URL}${url}${
-      queryString ? `?${queryString}` : ''
+      queryString
+        ? `?${qs.stringify(queryString, { arrayFormat: 'brackets' })}`
+        : ''
     }`,
     fetchOptions,
   ).then(res => res.json());
