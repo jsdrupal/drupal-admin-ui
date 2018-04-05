@@ -198,7 +198,8 @@ const Permissions = class Permissions extends Component {
                   body: JSON.stringify({ data: role }),
                   credentials: 'include',
                   headers: {
-                    'content-type': 'application/json',
+                    Accept: 'application/vnd.api+json',
+                    'Content-Type': 'application/vnd.api+json',
                   },
                   method: 'PATCH',
                 },
