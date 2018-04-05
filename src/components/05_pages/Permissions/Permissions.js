@@ -13,6 +13,14 @@ import {
 import Loading from '../../02_atoms/Loading/Loading';
 import { Table, TBody, THead } from '../../01_subatomics/Table/Table';
 
+export const filterPermissions = (input, permissions) =>
+  permissions.filter(
+    ({ title, description, provider, provider_label: providerLabel }) =>
+      `${title}${description}${provider}${providerLabel}`
+        .toLowerCase()
+        .includes(input.toLowerCase()),
+  );
+
 const Permissions = class Permissions extends Component {
   static propTypes = {
     setMessage: func.isRequired,
@@ -171,13 +179,10 @@ const Permissions = class Permissions extends Component {
       ),
     );
   handleKeyPress = event => {
-    const input = event.target.value.toLowerCase();
+    const input = event.target.value;
     this.setState(prevState => ({
       ...prevState,
-      renderablePermissions: prevState.rawPermissions.filter(
-        ({ title, description, provider, provider_label: providerLabel }) =>
-          `${title}${description}${provider}${providerLabel}`.includes(input),
-      ),
+      renderablePermissions: filterPermissions(input, prevState.rawPermissions),
     }));
   };
   saveRoles = () => {
