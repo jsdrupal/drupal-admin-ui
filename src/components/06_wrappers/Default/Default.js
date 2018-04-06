@@ -82,7 +82,7 @@ styles = {
     background: #ffffff;
   `,
   burgerButton: css`
-    position fixed;
+    position: absolute;
     width: 36px;
     height: 30px;
     left: 36px;
