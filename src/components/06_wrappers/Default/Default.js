@@ -79,34 +79,39 @@ class Default extends React.Component {
           onChange={this.filterMenu}
           value={this.state.filterString}
         />
-        {filterMenuLinks(this.state.filterString, this.props.menuLinks).map(({ link: menuLink, subtree }) => (
-          <ul
-            key={`${menuLink.menuName}--${menuLink.url}--${menuLink.title}`}
-            className={styles.menuList}
-          >
-            <li>
-              <Link to={menuLink.url} className={styles.topLevelLink}>
-                {menuLink.title}
-              </Link>
-              <ul className={styles.menuListChildren}>
-                {subtree.map(({ link: subMenuLink }) => (
-                  <li
-                    key={`
+        {filterMenuLinks(this.state.filterString, this.props.menuLinks).map(
+          ({ link: menuLink, subtree }) => (
+            <ul
+              key={`${menuLink.menuName}--${menuLink.url}--${menuLink.title}`}
+              className={styles.menuList}
+            >
+              <li>
+                <Link to={menuLink.url} className={styles.topLevelLink}>
+                  {menuLink.title}
+                </Link>
+                <ul className={styles.menuListChildren}>
+                  {subtree.map(({ link: subMenuLink }) => (
+                    <li
+                      key={`
                       ${subMenuLink.menuName}--
                       ${subMenuLink.url}--
                       ${subMenuLink.title}
                     `}
-                    className={styles.menuListItem}
-                  >
-                    <Link to={subMenuLink.url} className={styles.childrenLink}>
-                      {subMenuLink.title}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </li>
-          </ul>
-        ))}
+                      className={styles.menuListItem}
+                    >
+                      <Link
+                        to={subMenuLink.url}
+                        className={styles.childrenLink}
+                      >
+                        {subMenuLink.title}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </li>
+            </ul>
+          ),
+        )}
       </ConnectedMenu>
 
       <main className={styles.main} id={styles.main}>
