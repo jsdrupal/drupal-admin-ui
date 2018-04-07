@@ -45,7 +45,9 @@ class App extends Component {
       .replace('?q=', '')
       // trim slashes on the left.
       .replace(/^\//, '');
-    history.replace(`/${search}`);
+    if (search) {
+      history.replace(`/${search}`);
+    }
   }
   render() {
     return (

@@ -3,7 +3,7 @@ import { func, node, arrayOf, shape, string } from 'prop-types';
 import { connect } from 'react-redux';
 import LoadingBar from 'react-redux-loading-bar';
 import { css } from 'emotion';
-import { scaleRotate as Menu } from 'react-burger-menu';
+import { reveal as Menu } from 'react-burger-menu';
 import { Link } from 'react-router-dom';
 import { decorator as reduxBurgerMenu } from 'redux-burger-menu';
 import { requestMenu } from '../../../actions/application';
@@ -79,30 +79,34 @@ class Default extends React.Component {
           onChange={this.filterMenu}
           value={this.state.filterString}
         />
-        {filterMenuLinks(this.state.filterString, this.props.menuLinks).map(
-          ({ link: menuLink, subtree }) => (
-            <ul
-              key={`${menuLink.menuName}--${menuLink.url}--${menuLink.title}`}
-            >
-              <li>
-                <Link to={menuLink.url}>{menuLink.title}</Link>
-                <ul>
-                  {subtree.map(({ link: subMenuLink }) => (
-                    <li
-                      key={`
+        {filterMenuLinks(this.state.filterString, this.props.menuLinks).map(({ link: menuLink, subtree }) => (
+          <ul
+            key={`${menuLink.menuName}--${menuLink.url}--${menuLink.title}`}
+            className={styles.menuList}
+          >
+            <li>
+              <Link to={menuLink.url} className={styles.topLevelLink}>
+                {menuLink.title}
+              </Link>
+              <ul className={styles.menuListChildren}>
+                {subtree.map(({ link: subMenuLink }) => (
+                  <li
+                    key={`
                       ${subMenuLink.menuName}--
                       ${subMenuLink.url}--
                       ${subMenuLink.title}
                     `}
-                    >
-                      <Link to={subMenuLink.url}>{subMenuLink.title}</Link>
-                    </li>
-                  ))}
-                </ul>
-              </li>
-            </ul>
-          ),
-        )}
+                    className={styles.menuListItem}
+                  >
+                    <Link to={subMenuLink.url} className={styles.childrenLink}>
+                      {subMenuLink.title}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </li>
+          </ul>
+        ))}
       </ConnectedMenu>
 
       <main className={styles.main} id={styles.main}>
@@ -122,8 +126,7 @@ styles = {
     background: #444444;
   `,
   main: css`
-    padding: 1rem;
-    margin-top: 100px;
+    padding: 7rem 2rem 3rem;
     height: 100%;
     background: #ffffff;
   `,
@@ -133,7 +136,7 @@ styles = {
     top: 36px;
   `,
   burgerButton: css`
-    position: fixed;
+    position: absolute;
     width: 36px;
     height: 30px;
     left: 36px;
@@ -150,16 +153,33 @@ styles = {
     background: #bdc3c7;
   `,
   menu: css`
-    background: #373a47;
-    font-size: 1.15rem;
-    a {
-      color: #fff;
-      text-decoration: none;
+    background: #fafafa;
+    font-size: 1.05rem;
+  `,
+  menuList: css`
+    list-style: none;
+    margin: 10px 0;
+    padding-left: 1.5rem;
+  `,
+  menuListChildren: css`
+    list-style: none;
+    padding: 10px 0 0 1.5rem;
+  `,
+  menuListItem: css`
+    padding-bottom: 10px;
+  `,
+  topLevelLink: css`
+    color: #272756;
+    font-weight: bold;
+    text-decoration: none;
+    font-size: 0.95rem;
+  `,
+  childrenLink: css`
+    color: #252629;
+    text-decoration: none;
 
-      &:hover {
-        color: #f00;
-        transition: color 0.5s ease;
-      }
+    &:hover {
+      color: #000000;
     }
   `,
   morphShape: css`
