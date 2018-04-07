@@ -5,19 +5,62 @@ import LoadingBar from 'react-redux-loading-bar';
 import { css } from 'emotion';
 import { reveal as Menu } from 'react-burger-menu';
 import { Link } from 'react-router-dom';
+import { decorator as reduxBurgerMenu } from 'redux-burger-menu';
 import { requestMenu } from '../../../actions/application';
 import Message from '../../02_atoms/Message/Message';
 import ErrorBoundary from '../ErrorBoundary/ErrorBoundary';
 
 let styles;
 
+const ConnectedMenu = reduxBurgerMenu(Menu, 'admin');
+
+export const filterMenuLinks = (searchString, menuLinks) => {
+  if (!searchString) {
+    return menuLinks;
+  }
+  return menuLinks
+    .map(menuLink => {
+      const subtree =
+        menuLink.subtree && filterMenuLinks(searchString, menuLink.subtree);
+      if (
+        (menuLink.link &&
+          `${menuLink.link.title}${menuLink.link.description}`
+            .toLowerCase()
+            .indexOf(searchString.toLowerCase()) !== -1) ||
+        (Array.isArray(subtree) && subtree.length > 0)
+      ) {
+        return {
+          ...menuLink,
+          subtree,
+        };
+      }
+      return null;
+    })
+    .filter(id => id);
+};
+
 class Default extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      filterString: '',
+    };
+  }
+
   componentWillMount() {
     this.props.requestMenu();
   }
+
+  filterMenu = e => {
+    this.setState({
+      filterString: e.target.value,
+    });
+  };
+
   render = () => (
     <div className={styles.outerWrapper} id={styles.outerWrapper}>
-      <Menu
+      <ConnectedMenu
         outerContainerId={styles.outerWrapper}
         pageWrapId={styles.main}
         burgerButtonClassName={styles.burgerButton}
@@ -28,37 +71,48 @@ class Default extends React.Component {
         morphShapeClassName={styles.morphShape}
         itemListClassName={styles.itemList}
         overlayClassName={styles.overlay}
-        isOpen={false}
       >
-        {this.props.menuLinks.map(({ link: menuLink, subtree }) => (
-          <ul
-            key={`${menuLink.menuName}--${menuLink.url}--${menuLink.title}`}
-            className={styles.menuList}
-          >
-            <li>
-              <Link to={menuLink.url} className={styles.topLevelLink}>
-                {menuLink.title}
-              </Link>
-              <ul className={styles.menuListChildren}>
-                {subtree.map(({ link: subMenuLink }) => (
-                  <li
-                    key={`
+        <input
+          className={styles.filterMenu}
+          type="textfield"
+          placeholder="Search"
+          onChange={this.filterMenu}
+          value={this.state.filterString}
+        />
+        {filterMenuLinks(this.state.filterString, this.props.menuLinks).map(
+          ({ link: menuLink, subtree }) => (
+            <ul
+              key={`${menuLink.menuName}--${menuLink.url}--${menuLink.title}`}
+              className={styles.menuList}
+            >
+              <li>
+                <Link to={menuLink.url} className={styles.topLevelLink}>
+                  {menuLink.title}
+                </Link>
+                <ul className={styles.menuListChildren}>
+                  {subtree.map(({ link: subMenuLink }) => (
+                    <li
+                      key={`
                       ${subMenuLink.menuName}--
                       ${subMenuLink.url}--
                       ${subMenuLink.title}
                     `}
-                    className={styles.menuListItem}
-                  >
-                    <Link to={subMenuLink.url} className={styles.childrenLink}>
-                      {subMenuLink.title}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </li>
-          </ul>
-        ))}
-      </Menu>
+                      className={styles.menuListItem}
+                    >
+                      <Link
+                        to={subMenuLink.url}
+                        className={styles.childrenLink}
+                      >
+                        {subMenuLink.title}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </li>
+            </ul>
+          ),
+        )}
+      </ConnectedMenu>
 
       <main className={styles.main} id={styles.main}>
         <ErrorBoundary>
@@ -80,6 +134,11 @@ styles = {
     padding: 7rem 2rem 3rem;
     height: 100%;
     background: #ffffff;
+  `,
+  filterMenu: css`
+    position: relative;
+    margin: 8px;
+    top: 36px;
   `,
   burgerButton: css`
     position: absolute;
@@ -170,7 +229,9 @@ Default.defaultProps = {
 
 const mapStateToProps = state => ({
   message: state.application.message || null,
-  menuLinks: state.application.menuLinks || {},
+  menuLinks: state.application.menuLinks,
 });
 
-export default connect(mapStateToProps, { requestMenu })(Default);
+export default connect(mapStateToProps, {
+  requestMenu,
+})(Default);
