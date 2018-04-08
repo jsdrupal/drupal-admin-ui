@@ -13,6 +13,8 @@ import {
 } from '../../../actions/application';
 import Loading from '../../02_atoms/Loading/Loading';
 import { Table, TBody, THead } from '../../01_subatomics/Table/Table';
+import api from '../../../utils/api/api';
+import { watchRequestedPermissionsWithCancel } from '../../../actions/permissions';
 
 export const filterPermissions = (input, permissions) =>
   permissions.filter(
@@ -33,49 +35,33 @@ const Permissions = class Permissions extends Component {
         role: string,
       }).isRequired,
     }).isRequired,
+    permissions: null,
+    requestPermission: func.isRequired,
   };
   state = {
     loaded: false,
-    rawPermissions: [],
-    renderablePermissions: [],
+    changedRoles: [],
     working: false,
   };
   componentDidMount() {
-    this.cancelFetch = this.fetchData();
+    this.requestPermission();
   }
   componentWillUnmount() {
     this.cancelFetch();
   }
   onPermissionCheck = (roleName, permission) => {
     this.setState(prevState => ({
-      changedRoles: [...new Set(prevState.changedRoles).add(roleName).values()],
+      ...prevState,
+      changedRoles: Array.from(
+        new Set(prevState.changedRoles).add(roleName).values(),
+      ),
       roles: this.togglePermission(permission, roleName, prevState.roles),
     }));
     this.props.clearMessage();
   };
   fetchData = () =>
     makeCancelable(
-      Promise.all([
-        fetch(
-          `${
-            process.env.REACT_APP_DRUPAL_BASE_URL
-          }/admin-api/permissions?_format=json`,
-          {
-            credentials: 'include',
-          },
-        ).then(res => res.json()),
-        fetch(
-          `${
-            process.env.REACT_APP_DRUPAL_BASE_URL
-          }/jsonapi/user_role/user_role`,
-          {
-            headers: {
-              Accept: 'application/vnd.api+json',
-            },
-            credentials: 'include',
-          },
-        ).then(res => res.json()),
-      ])
+      Promise.all([api('permissions'), api('roles')])
         .then(([permissions, { data: roles }]) =>
           this.setState({
             rawPermissions: permissions,
@@ -198,20 +184,7 @@ const Permissions = class Permissions extends Component {
               this.state.changedRoles.includes(role.attributes.id),
             )
             .map(role =>
-              fetch(
-                `${
-                  process.env.REACT_APP_DRUPAL_BASE_URL
-                }/jsonapi/user_role/user_role/${role.id}`,
-                {
-                  body: JSON.stringify({ data: role }),
-                  credentials: 'include',
-                  headers: {
-                    Accept: 'application/vnd.api+json',
-                    'Content-Type': 'application/vnd.api+json',
-                  },
-                  method: 'PATCH',
-                },
-              ).then(() => {
+              api('role:post', {}, { role }).then(() => {
                 this.props.setMessage(
                   'Changes have been saved',
                   MESSAGE_SUCCESS,
@@ -304,4 +277,6 @@ styles = {
   `,
 };
 
-export default connect(null, { setMessage, clearMessage })(Permissions);
+export default connect(null, { setMessage, clearMessage, requestPermission })(
+  Permissions,
+);
