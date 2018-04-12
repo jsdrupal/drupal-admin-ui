@@ -30,12 +30,18 @@ class Dblog extends Component {
       }),
     ),
     types: arrayOf(string),
-    selectedSeverity: number,
+    filterOptions: shape({
+      sort: string,
+      severities: arrayOf(number),
+    }),
   };
   static defaultProps = {
     entries: null,
     types: null,
-    selectedSeverity: null,
+    filterOptions: {
+      sort: '',
+      severities: [],
+    },
   };
   componentDidMount() {
     this.props.requestDblogCollection({
