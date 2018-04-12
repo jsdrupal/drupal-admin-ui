@@ -9,9 +9,10 @@ const NoMatch = class NoMatch extends Component {
       pathname: string.isRequired,
     }).isRequired,
   };
-  componentWillReceiveProps(nextProps) {
-    if (!Object.keys(routes).includes(nextProps.location.pathname)) {
-      window.location = window.location.href;
+  componentDidMount() {
+    if (!Object.keys(routes).includes(this.props.location.pathname)) {
+      window.location =
+        process.env.REACT_APP_DRUPAL_BASE_URL + this.props.location.pathname;
     }
   }
   render() {
