@@ -137,8 +137,7 @@ styles = {
   `,
   filterMenu: css`
     position: relative;
-    margin: 8px;
-    top: 36px;
+    margin: 36px 8px 8px;
   `,
   burgerButton: css`
     position: absolute;
