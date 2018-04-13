@@ -6,11 +6,11 @@ import {
   MENU_LOADED,
 } from '../actions/application';
 
-const initialState = {
+export const initialState = {
   message: null,
   menuLinks: [],
+  filterString: '',
 };
-
 export default (state = initialState, action) => {
   switch (action.type) {
     case SET_MESSAGE: {
