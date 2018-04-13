@@ -39,7 +39,7 @@ class DbLogTypes implements ContainerInjectionInterface {
      * routes for modules that aren't enabled.
      */
     if ($this->moduleHandler->moduleExists('dblog')) {
-      $levels = _dblog_get_message_types();
+      $levels = array_values(_dblog_get_message_types());
     }
     return new JsonResponse($levels);
   }
