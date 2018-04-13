@@ -22,7 +22,7 @@ body {
 html {
   /* Change default typefaces here */
   font-family: serif;
-  font-size: 137.5%;
+  font-size: 100%;
   -webkit-font-smoothing: antialiased;
   font-family: 'Open Sans', sans-serif;
 }

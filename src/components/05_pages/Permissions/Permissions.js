@@ -4,6 +4,7 @@ import { string, shape, func } from 'prop-types';
 import makeCancelable from 'makecancelable';
 import { Markup } from 'interweave';
 import { css } from 'emotion';
+import { StickyContainer, Sticky } from 'react-sticky';
 
 import {
   setMessage,
@@ -12,6 +13,16 @@ import {
 } from '../../../actions/application';
 import Loading from '../../02_atoms/Loading/Loading';
 import { Table, TBody, THead } from '../../01_subatomics/Table/Table';
+
+export const filterPermissions = (input, permissions) =>
+  permissions.filter(
+    ({ title, description, provider, provider_label: providerLabel }) =>
+      `${title}${description}${provider}${providerLabel}`
+        .toLowerCase()
+        .includes(input.toLowerCase()),
+  );
+
+let styles;
 
 const Permissions = class Permissions extends Component {
   static propTypes = {
@@ -171,13 +182,10 @@ const Permissions = class Permissions extends Component {
       ),
     );
   handleKeyPress = event => {
-    const input = event.target.value.toLowerCase();
+    const input = event.target.value;
     this.setState(prevState => ({
       ...prevState,
-      renderablePermissions: prevState.rawPermissions.filter(
-        ({ title, description, provider, provider_label: providerLabel }) =>
-          `${title}${description}${provider}${providerLabel}`.includes(input),
-      ),
+      renderablePermissions: filterPermissions(input, prevState.rawPermissions),
     }));
   };
   saveRoles = () => {
@@ -198,7 +206,8 @@ const Permissions = class Permissions extends Component {
                   body: JSON.stringify({ data: role }),
                   credentials: 'include',
                   headers: {
-                    'content-type': 'application/json',
+                    Accept: 'application/vnd.api+json',
+                    'Content-Type': 'application/vnd.api+json',
                   },
                   method: 'PATCH',
                 },
@@ -221,30 +230,36 @@ const Permissions = class Permissions extends Component {
       return <Loading />;
     }
     return (
-      <Fragment>
-        <input
-          type="text"
-          placeholder="Filter by name, description or module"
-          onChange={this.handleKeyPress}
-          onKeyDown={this.handleKeyPress}
-        />
-        <button
-          key="button-save-roles"
-          onClick={this.saveRoles}
-          disabled={
-            !this.state.changedRoles.length ||
-            (this.state.working && this.state.changedRoles.length)
-          }
-        >
-          Save
-        </button>
+      <StickyContainer>
+        <Sticky>
+          {({ style }) => (
+            <div style={style} className={styles.stickyBar}>
+              <input
+                type="text"
+                className={styles.searchInput}
+                placeholder="Filter by name, description or module"
+                onChange={this.handleKeyPress}
+                onKeyDown={this.handleKeyPress}
+              />
+              <button
+                key="button-save-roles"
+                onClick={this.saveRoles}
+                className={styles.saveButton}
+                disabled={
+                  !this.state.changedRoles.length ||
+                  (this.state.working && this.state.changedRoles.length)
+                }
+              >
+                Save
+              </button>
+            </div>
+          )}
+        </Sticky>
         <Table>
           <THead
             data={[
-              'PERMISSION',
-              ...this.state.roles.map(({ attributes: { label } }) =>
-                label.toUpperCase(),
-              ),
+              'Permission',
+              ...this.state.roles.map(({ attributes: { label } }) => label),
             ]}
           />
           <TBody
@@ -254,9 +269,39 @@ const Permissions = class Permissions extends Component {
             )}
           />
         </Table>
-      </Fragment>
+      </StickyContainer>
     );
   }
+};
+
+styles = {
+  stickyBar: css`
+    padding: 1.5rem 0;
+    background: #fff;
+    border-bottom: 1px solid #e6e6e6;
+  `,
+  saveButton: css`
+    float: right;
+    color: #333;
+    background-color: #fff;
+    display: inline-block;
+    padding: 6px 12px;
+    margin-bottom: 0;
+    text-align: center;
+    vertical-align: middle;
+    touch-action: manipulation;
+    cursor: pointer;
+    user-select: none;
+    background-image: none;
+    border: 1px solid #ccc;
+  `,
+  searchInput: css`
+    color: #555;
+    width: 400px;
+    padding: 6px 12px;
+    border: 1px solid #ccc;
+    background-color: #fff;
+  `,
 };
 
 export default connect(null, { setMessage, clearMessage })(Permissions);
