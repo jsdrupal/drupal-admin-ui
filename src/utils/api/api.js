@@ -10,6 +10,7 @@ async function api(endpoint, init = {}) {
       break;
     case 'content':
       url = '/jsonapi/node/article';
+      break;
     default:
       break;
   }
