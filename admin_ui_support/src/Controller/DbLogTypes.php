@@ -34,6 +34,10 @@ class DbLogTypes implements ContainerInjectionInterface {
   public function get() {
     $levels = [];
 
+    /* @todo Should the route to this controller be created dynamically or
+     * should this module be dependent on dblog? How does the React app handle
+     * routes for modules that aren't enabled.
+     */
     if ($this->moduleHandler->moduleExists('dblog')) {
       $levels = _dblog_get_message_types();
     }
