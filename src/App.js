@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Route, Switch, withRouter } from 'react-router-dom';
+import { Redirect, Route, Switch, withRouter } from 'react-router-dom';
 import createBrowserHistory from 'history/createBrowserHistory';
 import { createStore, applyMiddleware, combineReducers } from 'redux';
 import {
@@ -22,6 +22,7 @@ import base from './styles/base'; // eslint-disable-line no-unused-vars
 import actions from './actions/index';
 import reducers from './reducers/index';
 import ErrorBoundary from './components/06_wrappers/ErrorBoundary/ErrorBoundary';
+import InitialRedirect from './InitialRedirect';
 
 const history = createBrowserHistory();
 const middleware = routerMiddleware(history);
@@ -39,16 +40,6 @@ const withDefault = component => () => (
 );
 
 class App extends Component {
-  componentDidMount() {
-    // Allow Drupal redirects to determine the initial path.
-    const search = history.location.search
-      .replace('?q=', '')
-      // trim slashes on the left.
-      .replace(/^\//, '');
-    if (search) {
-      history.replace(`/${search}`);
-    }
-  }
   render() {
     return (
       <ErrorBoundary>
@@ -63,6 +54,8 @@ class App extends Component {
                   key={route}
                 />
               ))}
+              <Route path="/vfancy" component={withRouter(InitialRedirect)} />
+              <Route path="/vfancy/" component={withRouter(InitialRedirect)} />
               <Route component={NoMatch} />
             </Switch>
           </ConnectedRouter>
