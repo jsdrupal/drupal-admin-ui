@@ -36,19 +36,24 @@ Try visiting one of the converted pages, e.g. the user permissions or roles page
 
 - Ensure you have [Node 8](https://nodejs.org/en/) and [Yarn](https://yarnpkg.com/) installed.
 - Make sure the webserver is started with `composer run-script start`
-- Run `composer run-script devify`. You will now have a checkout of this repo in `docroot/vfancy`
-- Edit `docroot/vfancy/.env.local` and add in the URL for your currently running Drupal installation
+- Run `composer run-script devify`. You will now have a checkout of this repo in `drupal-admin-ui`
+- Edit `drupal-admin-ui/.env.local` and add in the URL for your currently running Drupal installation
 that was output from the start command. e.g. for `Starting webserver on http://localhost:56859`, set
 `REACT_APP_DRUPAL_BASE_URL=http://localhost:56859`
-- Enter the repo with `cd docroot/vfancy` and start the Webpack dev server with `yarn start`. This
+- Enter the repo with `cd drupal-admin-ui` and start the Webpack dev server with `yarn start`. This
 will open a new window at `http://localhost:3000/`
+
+The webpack dev server has hot reloading, however you won't be able to seamlessly switch between
+Drupal and the React app. If you want to test out your changes in this context, enter the
+`drupal-admin-ui` directory and run `yarn build`. You can then visit the URL that
+`composer run-script start` generated.
 
 ## Commands
 
 |`yarn run <script>`|Description|
 |------------------|-----------|
 |`start`|Serves your app at `localhost:3000`.|
-|`build`|Compiles the application to disk in folder `./build`.|
+|`build`|Compiles the application for production into folder `./build`.|
 |`test`|Runs all available tests.|
 |`test:unit`|Starts an interactive test runner for running unit tests with Jest.|
 |`test:unit:ci`|Runs unit tests with Jest and outputs results with JUnit.|
