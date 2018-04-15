@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import { Redirect, Route, Switch, withRouter } from 'react-router-dom';
+import React from 'react';
+import { Route, Switch, withRouter } from 'react-router-dom';
 import createBrowserHistory from 'history/createBrowserHistory';
 import { createStore, applyMiddleware, combineReducers } from 'redux';
 import {
@@ -39,30 +39,25 @@ const withDefault = component => () => (
   <Default>{React.createElement(component)}</Default>
 );
 
-class App extends Component {
-  render() {
-    return (
-      <ErrorBoundary>
-        <Provider store={store}>
-          <ConnectedRouter history={history}>
-            <Switch>
-              <Route exact path="/" component={withDefault(withRouter(Home))} />
-              {Object.keys(routes).map(route => (
-                <Route
-                  path={route}
-                  component={withDefault(withRouter(routes[route]))}
-                  key={route}
-                />
-              ))}
-              <Route path="/vfancy" component={withRouter(InitialRedirect)} />
-              <Route path="/vfancy/" component={withRouter(InitialRedirect)} />
-              <Route component={NoMatch} />
-            </Switch>
-          </ConnectedRouter>
-        </Provider>
-      </ErrorBoundary>
-    );
-  }
-}
+const App = () => (
+  <ErrorBoundary>
+    <Provider store={store}>
+      <ConnectedRouter history={history}>
+        <Switch>
+          <Route exact path="/" component={withDefault(withRouter(Home))} />
+          {Object.keys(routes).map(route => (
+            <Route
+              path={route}
+              component={withDefault(withRouter(routes[route]))}
+              key={route}
+            />
+          ))}
+          <Route path="/(vfancy/?)" component={withRouter(InitialRedirect)} />
+          <Route component={NoMatch} />
+        </Switch>
+      </ConnectedRouter>
+    </Provider>
+  </ErrorBoundary>
+);
 
 export default App;
