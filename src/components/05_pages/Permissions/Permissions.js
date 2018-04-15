@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
-import { string, shape, func } from 'prop-types';
+import { string, shape, func, arrayOf } from 'prop-types';
 import makeCancelable from 'makecancelable';
 import { Markup } from 'interweave';
 import { css } from 'emotion';
@@ -14,7 +14,7 @@ import {
 import Loading from '../../02_atoms/Loading/Loading';
 import { Table, TBody, THead } from '../../01_subatomics/Table/Table';
 import api from '../../../utils/api/api';
-import { watchRequestedPermissionsWithCancel } from '../../../actions/permissions';
+import { requestPermissions } from '../../../actions/permissions';
 
 export const filterPermissions = (input, permissions) =>
   permissions.filter(
@@ -35,16 +35,27 @@ const Permissions = class Permissions extends Component {
         role: string,
       }).isRequired,
     }).isRequired,
-    permissions: null,
-    requestPermission: func.isRequired,
+    roles: arrayOf(
+      shape({
+      }),
+    ),
+    permissions: arrayOf(
+      shape({
+        provider: string.isRequired,
+        title: string.isRequired,
+        description: string,
+      }),
+    ).isRequired,
+    requestPermissions: func.isRequired,
   };
   state = {
     loaded: false,
+    permissions: [],
     changedRoles: [],
     working: false,
   };
   componentDidMount() {
-    this.requestPermission();
+    this.props.requestPermissions();
   }
   componentWillUnmount() {
     this.cancelFetch();
@@ -59,39 +70,42 @@ const Permissions = class Permissions extends Component {
     }));
     this.props.clearMessage();
   };
-  fetchData = () =>
-    makeCancelable(
-      Promise.all([api('permissions'), api('roles')])
-        .then(([permissions, { data: roles }]) =>
-          this.setState({
-            rawPermissions: permissions,
-            renderablePermissions: permissions,
-            changedRoles: [],
-            working: false,
-            // Move admin roles to the right.
-            roles:
-              this.props.match.params.role &&
-              roles
-                .map(role => role.attributes.id)
-                .includes(this.props.match.params.role)
-                ? roles.filter(
-                    role => role.attributes.id === this.props.match.params.role,
-                  )
-                : roles.sort((a, b) => {
-                    if (a.attributes.is_admin && b.attributes.is_admin) {
-                      return a.attributes.id - b.attributes.id;
-                    } else if (a.attributes.is_admin) {
-                      return 1;
-                    } else if (b.attributes.is_admin) {
-                      return -1;
-                    }
-                    return a.attributes.id - b.attributes.id;
-                  }),
-            loaded: true,
-          }),
-        )
-        .catch(err => this.setState({ loaded: false, err })),
-    );
+
+  sortAdminRoles = (roles, matchedRole) =>
+    matchedRole &&
+    roles
+      .map(role => role.attributes.id)
+      .includes(this.props.match.params.role)
+      ? roles.filter(
+      role => role.attributes.id === this.props.match.params.role,
+      )
+      : roles.sort((a, b) => {
+        if (a.attributes.is_admin && b.attributes.is_admin) {
+          return a.attributes.id - b.attributes.id;
+        } else if (a.attributes.is_admin) {
+          return 1;
+        } else if (b.attributes.is_admin) {
+          return -1;
+        }
+        return a.attributes.id - b.attributes.id;
+      });
+
+  // fetchData = () =>
+  //   makeCancelable(
+  //     Promise.all([api('permissions'), api('roles')])
+  //       .then(([permissions, { data: roles }]) =>
+  //         this.setState({
+  //           rawPermissions: permissions,
+  //           renderablePermissions: permissions,
+  //           changedRoles: [],
+  //           working: false,
+  //           // Move admin roles to the right.
+  //           roles:
+  //           loaded: true,
+  //         }),
+  //       )
+  //       .catch(err => this.setState({ loaded: false, err })),
+  //   );
   togglePermission = (permission, roleName, roles) => {
     const roleIndex = roles.map(role => role.attributes.id).indexOf(roleName);
     const role = roles[roleIndex];
@@ -232,13 +246,13 @@ const Permissions = class Permissions extends Component {
           <THead
             data={[
               'Permission',
-              ...this.state.roles.map(({ attributes: { label } }) => label),
+              ...this.props.roles.map(({ attributes: { label } }) => label),
             ]}
           />
           <TBody
             rows={this.createTableRows(
               this.groupPermissions(this.state.renderablePermissions),
-              this.state.roles,
+              this.props.roles,
             )}
           />
         </Table>
@@ -277,6 +291,13 @@ styles = {
   `,
 };
 
-export default connect(null, { setMessage, clearMessage, requestPermission })(
-  Permissions,
-);
+const mapStateToProps = state => ({
+  roles: state.application.roles || null,
+  permissions: state.application.permissions,
+});
+
+export default connect(mapStateToProps, {
+  setMessage,
+  clearMessage,
+  requestPermissions,
+})(Permissions);
