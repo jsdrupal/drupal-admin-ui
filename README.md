@@ -36,7 +36,9 @@ Try visiting one of the converted pages, e.g. the user permissions or roles page
 
 - Ensure you have [Node 8](https://nodejs.org/en/) and [Yarn](https://yarnpkg.com/) installed.
 - Make sure the webserver is started with `composer run-script start`
-- Run `composer run-script devify`. You will now have a checkout of this repo in `drupal-admin-ui`
+- Run `composer run-script devify`. You will now have a checkout of this repo in `drupal-admin-ui`.
+It will also symlink the bundled production app to `docroot/vfancy`, and the support module to
+`docroot/modules/contrib`.
 - Edit `drupal-admin-ui/.env.local` and add in the URL for your currently running Drupal installation
 that was output from the start command. e.g. for `Starting webserver on http://localhost:56859`, set
 `REACT_APP_DRUPAL_BASE_URL=http://localhost:56859`
