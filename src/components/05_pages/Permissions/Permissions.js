@@ -13,6 +13,7 @@ import {
 } from '../../../actions/application';
 import Loading from '../../02_atoms/Loading/Loading';
 import { Table, TBody, THead } from '../../01_subatomics/Table/Table';
+import api from '../../../utils/api/api';
 
 export const filterPermissions = (input, permissions) =>
   permissions.filter(
@@ -55,27 +56,7 @@ const Permissions = class Permissions extends Component {
   };
   fetchData = () =>
     makeCancelable(
-      Promise.all([
-        fetch(
-          `${
-            process.env.REACT_APP_DRUPAL_BASE_URL
-          }/admin-api/permissions?_format=json`,
-          {
-            credentials: 'include',
-          },
-        ).then(res => res.json()),
-        fetch(
-          `${
-            process.env.REACT_APP_DRUPAL_BASE_URL
-          }/jsonapi/user_role/user_role`,
-          {
-            headers: {
-              Accept: 'application/vnd.api+json',
-            },
-            credentials: 'include',
-          },
-        ).then(res => res.json()),
-      ])
+      Promise.all([api('permissions'), api('roles')])
         .then(([permissions, { data: roles }]) =>
           this.setState({
             rawPermissions: permissions,
@@ -198,20 +179,11 @@ const Permissions = class Permissions extends Component {
               this.state.changedRoles.includes(role.attributes.id),
             )
             .map(role =>
-              fetch(
-                `${
-                  process.env.REACT_APP_DRUPAL_BASE_URL
-                }/jsonapi/user_role/user_role/${role.id}`,
-                {
-                  body: JSON.stringify({ data: role }),
-                  credentials: 'include',
-                  headers: {
-                    Accept: 'application/vnd.api+json',
-                    'Content-Type': 'application/vnd.api+json',
-                  },
-                  method: 'PATCH',
+              api('role:patch', {
+                parameters: {
+                  role,
                 },
-              ).then(() => {
+              }).then(() => {
                 this.props.setMessage(
                   'Changes have been saved',
                   MESSAGE_SUCCESS,

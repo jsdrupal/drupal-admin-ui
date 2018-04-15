@@ -3,7 +3,9 @@
 namespace Drupal\admin_ui_support\Controller;
 
 use Drupal\Core\Config\Entity\ConfigEntityInterface;
+use Drupal\jsonapi\Controller\EntityResource;
 use Drupal\jsonapi\Controller\RequestHandler;
+use Drupal\jsonapi\ResourceType\ResourceType;
 use Symfony\Component\Routing\Route;
 
 /**
@@ -19,22 +21,19 @@ class JsonApiRequestHandler extends RequestHandler {
   /**
    * {@inheritdoc}
    */
-  protected function resourceFactory(Route $route) {
-    $entity_type_id = $route->getRequirement('_entity_type');
-    $entity_type = $this->entityTypeManager->getDefinition($entity_type_id);
+  protected function resourceFactory(ResourceType $resource_type) {
+    $entity_type = $this->entityTypeManager->getDefinition($resource_type->getEntityTypeId());
     if ($entity_type->entityClassImplements(ConfigEntityInterface::class)) {
       return new ConfigEntityResource(
-        $this->resourceTypeRepository->get($route->getRequirement('_entity_type'), $route->getRequirement('_bundle')),
+        $resource_type,
         $this->entityTypeManager,
         $this->fieldManager,
-        $this->currentContext,
         $this->fieldTypeManager,
         $this->linkManager,
         $this->resourceTypeRepository
       );
     }
-    // If the entity is not a config entity default to the parent.
-    return parent::resourceFactory($route);
+    return parent::resourceFactory($resource_type);
   }
 
 }
