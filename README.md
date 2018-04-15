@@ -12,52 +12,52 @@ This is an admin UI for Drupal, built with JavaScript and based on [create-react
 
 ## Installation
 
+### Requirements
+
+- PHP 5.5.9 or greater
+- PHP's pdo_sqlite extension installed. You can use `php -m` to check.
+
+### Steps
+
 ```
-git clone https://github.com/drupal/drupal
-git clone https://github.com/jsdrupal/drupal-admin-ui
-
-cd drupal-admin-ui
-yarn install
-yarn build
-
-# Link vfancy to Drupal
-cd ../drupal
-ln -s ../drupal-admin-ui/build vfancy
-
-## Link the support module to Drupal
-cd ../drupal/modules
-ln -s ../../drupal-admin-ui/admin_ui_support .
-
-## Download the jsonapi module
-curl -O https://ftp.drupal.org/files/projects/jsonapi-8.x-1.13.tar.gz
-tar zxf jsonapi-8.x-1.13.tar.gz
-
-# Install Drupal
-@todo Use the dev-site command
-composer install
-
-## Install the support module
-drush en admin_ui_support -y
-
-# Start the webserver
-php -S localhost:8000
+composer create-project jsdrupal/drupal-admin-ui-demo -s dev --prefer-dist
+cd drupal-admin-ui-demo
+composer run-script install
 ```
 
-- Open `http://localhost:8000` and install with SQLite
-- Visit `http://localhost:8000/vfancy`
+## Running
+```
+composer run-script start
+```
 
-### For Local Development
+Try visiting one of the converted pages, e.g. the user permissions or roles page.
 
-- Copy `.env` to `.env.local` and comment out `PUBLIC_URL`
-- Start the Webpack dev server with `yarn start`
-- Visit `http://localhost:3000/`
+## Developing
+
+- Ensure you have [Node 8](https://nodejs.org/en/) and [Yarn](https://yarnpkg.com/) installed.
+- Make sure the webserver is started with `composer run-script start`
+- As we run the development environment as anonymous user right now, you need to grant them permissions.
+- Please do that in the "production" environment, like ```http://localhost:56859/admin/people/permissions```. The permissions you want to grant at least are "administer users" and "Administer site configuration".
+- Run `composer run-script devify`. You will now have a checkout of this repo in `drupal-admin-ui`.
+It will also symlink the bundled production app to `docroot/vfancy`, and the support module to
+`docroot/modules/contrib`.
+- Edit `drupal-admin-ui/.env.local` and add in the URL for your currently running Drupal installation
+that was output from the start command. e.g. for `Starting webserver on http://localhost:56859`, set
+`REACT_APP_DRUPAL_BASE_URL=http://localhost:56859`
+- Enter the repo with `cd drupal-admin-ui` and start the Webpack dev server with `yarn start`. This
+will open a new window at `http://localhost:3000/`
+
+The webpack dev server has hot reloading, however you won't be able to seamlessly switch between
+Drupal and the React app. If you want to test out your changes in this context, enter the
+`drupal-admin-ui` directory and run `yarn build`. You can then visit the URL that
+`composer run-script start` generated.
 
 ## Commands
 
 |`yarn run <script>`|Description|
 |------------------|-----------|
 |`start`|Serves your app at `localhost:3000`.|
-|`build`|Compiles the application to disk in folder `./build`.|
+|`build`|Compiles the application for production into folder `./build`.|
 |`test`|Runs all available tests.|
 |`test:unit`|Starts an interactive test runner for running unit tests with Jest.|
 |`test:unit:ci`|Runs unit tests with Jest and outputs results with JUnit.|
