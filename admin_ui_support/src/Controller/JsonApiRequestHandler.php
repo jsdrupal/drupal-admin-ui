@@ -22,15 +22,18 @@ class JsonApiRequestHandler extends RequestHandler {
    * {@inheritdoc}
    */
   protected function resourceFactory(ResourceType $resource_type) {
-    $resource = new ConfigEntityResource(
-      $resource_type,
-      $this->entityTypeManager,
-      $this->fieldManager,
-      $this->fieldTypeManager,
-      $this->linkManager,
-      $this->resourceTypeRepository
-    );
-    return $resource;
+    $entity_type = $this->entityTypeManager->getDefinition($resource_type->getEntityTypeId());
+    if ($entity_type->entityClassImplements(ConfigEntityInterface::class)) {
+      return new ConfigEntityResource(
+        $resource_type,
+        $this->entityTypeManager,
+        $this->fieldManager,
+        $this->fieldTypeManager,
+        $this->linkManager,
+        $this->resourceTypeRepository
+      );
+    }
+    return parent::resourceFactory($resource_type);
   }
 
 }
