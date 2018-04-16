@@ -82,6 +82,11 @@ export default (state = initialState, action) => {
         ...rest,
         dblog: {
           ...dblog,
+          next:
+            Object.prototype.hasOwnProperty.call(
+              action.payload.dbLogEntries.links,
+              'next',
+            ) || false,
           entries: action.payload.dbLogEntries.data.map(
             ({
               attributes: {

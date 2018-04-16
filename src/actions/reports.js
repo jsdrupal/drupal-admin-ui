@@ -20,8 +20,16 @@ function* loadDblog({ payload: { options } }) {
   try {
     const queryString = {
       sort: options.sort,
+      page: {
+        limit: 50,
+        ...(options.offset
+          ? {
+              offset: options.offset,
+            }
+          : {}),
+      },
       filter: {
-        ...(options.severities
+        ...(options.severities && Object.keys(options.severities).length
           ? options.severities.reduce(
               (acc, cur) => ({
                 ...acc,

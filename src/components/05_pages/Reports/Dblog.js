@@ -1,22 +1,11 @@
 import React, { Component, Fragment } from 'react';
-import { func, arrayOf, shape, string, number } from 'prop-types';
+import { func, arrayOf, shape, string, number, bool } from 'prop-types';
 import { connect } from 'react-redux';
 import LoadingBar from 'react-redux-loading-bar';
 import { Markup } from 'interweave';
 
 import { requestDblogCollection } from '../../../actions/reports';
 import { Table, TBody, THead } from '../../01_subatomics/Table/Table';
-
-const severity = [
-  { value: '0', item: 'Emergency' },
-  { value: '1', item: 'Alert' },
-  { value: '2', item: 'Critical' },
-  { value: '3', item: 'Error' },
-  { value: '4', item: 'Warning' },
-  { value: '5', item: 'Notice' },
-  { value: '6', item: 'Info' },
-  { value: '7', item: 'Debug' },
-];
 
 class Dblog extends Component {
   static propTypes = {
@@ -32,8 +21,9 @@ class Dblog extends Component {
     types: arrayOf(string),
     filterOptions: shape({
       sort: string,
-      severities: arrayOf(number),
+      severities: arrayOf(string),
     }),
+    next: bool,
   };
   static defaultProps = {
     entries: null,
@@ -42,6 +32,7 @@ class Dblog extends Component {
       sort: '',
       severities: [],
     },
+    next: true,
   };
   componentDidMount() {
     this.props.requestDblogCollection({
@@ -72,10 +63,27 @@ class Dblog extends Component {
     const severities = Array.from(e.target.options)
       .filter(option => option.selected)
       .map(option => option.value);
-    const { sort } = this.props.filterOptions;
+    const { sort, offset = 0 } = this.props.filterOptions;
     this.props.requestDblogCollection({
       severities,
       sort,
+      offset,
+    });
+  };
+  nextPage = () => {
+    const { sort, severities = null, offset = 0 } = this.props.filterOptions;
+    this.props.requestDblogCollection({
+      severities,
+      sort,
+      offset: offset + 50,
+    });
+  };
+  previousPage = () => {
+    const { sort, severities = null, offset = 0 } = this.props.filterOptions;
+    this.props.requestDblogCollection({
+      severities,
+      sort,
+      offset: offset - 50,
     });
   };
   render() {
@@ -99,12 +107,30 @@ class Dblog extends Component {
           onChange={this.severityFilterHandler}
           selected={this.props.filterOptions.severities}
         >
-          {severity.map(({ value, item }) => (
-            <option value={value} key={value}>
-              {item}
+          {[
+            'Emergency',
+            'Alert',
+            'Critical',
+            'Error',
+            'Warning',
+            'Notice',
+            'Info',
+            'Debug',
+          ].map((value, index) => (
+            <option value={index} key={value}>
+              {value}
             </option>
           ))}
         </select>
+        <button
+          onClick={this.previousPage}
+          disabled={this.props.filterOptions.offset <= 0}
+        >
+          prev
+        </button>
+        <button onClick={this.nextPage} disabled={!this.props.next}>
+          next
+        </button>
         <Table>
           <THead data={['Type', 'Date', 'Message', 'User']} />
           <TBody rows={this.generateTableRows(this.props.entries)} />
@@ -115,7 +141,9 @@ class Dblog extends Component {
 }
 
 const mapStateToProps = ({ application: { dblog } }) => ({
-  filterOptions: {},
+  filterOptions: {
+    offset: 0,
+  },
   ...dblog,
 });
 
