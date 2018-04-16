@@ -67,8 +67,23 @@ Drupal and the React app. If you want to test out your changes in this context, 
 
 ## Contributing to This Repository
 
-- [Fork this repo](https://help.github.com/articles/fork-a-repo/) to your own user and make your proposed changes
+- [Fork this repo](https://help.github.com/articles/fork-a-repo/) to your own user
+- Set your fork as origin, and this repo as upstream. From inside the `drupal-admin-ui` folder:
+  ```
+  git remote rm origin
+  git remote add origin git@github.com:<your-username>/drupal-admin-ui.git
+  git remote add upstream git@github.com:jsdrupal/drupal-admin-ui.git
+  ```
+- Make your proposed changes on a [branch](https://guides.github.com/activities/hello-world/#branch) and then push them to your fork
+  ```
+  git push origin <your-branch>
+  ```
 - [Make a pull request](https://help.github.com/articles/about-pull-requests/)!
+- Switch back to master and pull in the latest changes
+  ```
+  git checkout master
+  git pull upstream master
+  ```
 - Our [issue queue](https://github.com/jsdrupal/drupal-admin-ui/issues) is public and you already have the required permissions to participate. However in order to perform administrative tasks, such as assigning issues or editing labels, make a request in #javascript in [Drupal Slack](https://www.drupal.org/slack) to be added as a member of the [Contributors Team](https://github.com/orgs/jsdrupal/teams/contributors)
 
 If someone has made a pull request and you would like to add code to their branch, there are a number of ways to move forward. It will be very helpful to get familiar with [managing remotes](https://help.github.com/categories/managing-remotes/) in Git.
@@ -78,13 +93,12 @@ If someone has made a pull request and you would like to add code to their branc
 - Alternatively, they could give you access to modify their branch directly at https://github.com/<username>/drupal-admin-ui/settings/collaboration (although bear in mind this will give access to their entire repository fork)
 - If you're unable to agree, or unable to get in touch with the author, you could create a new pull request that incorporates the work from their branch
 
-	```
-	git remote add <their-username> git@github.com:<their-username>/drupal-admin-ui.git
-	git fetch <their-username>
-	git checkout -b <branch-name> <their-username>/<branch-name>
-	.
-	. work, commit things, etc
-	.
-	git push <your-fork> <branch-name>
-	```
-
+  ```
+  git remote add <their-username> git@github.com:<their-username>/drupal-admin-ui.git
+  git fetch <their-username>
+  git checkout -b <branch-name> <their-username>/<branch-name>
+  .
+  . work, commit things, etc
+  .
+  git push <your-fork> <branch-name>
+  ```
