@@ -1,0 +1,7 @@
+admin_ui_support.admin_ui_support_settings:
+  title: 'JS Drupal App'
+  route_name: admin_ui_support.admin_ui_support_settings
+  description: 'JS Drupal App integration settings'
+  parent: system.admin_config_system
+  weight: 99
+
