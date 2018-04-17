@@ -10,10 +10,8 @@ const NoMatch = class NoMatch extends Component {
     }).isRequired,
   };
   componentDidMount() {
-    if (
-      this.props.location.pathname !== '/vfancy/' &&
-      !Object.keys(routes).includes(this.props.location.pathname)
-    ) {
+    // We want to redirect everything without a match back to Drupal.
+    if (!Object.keys(routes).includes(this.props.location.pathname)) {
       window.location =
         process.env.REACT_APP_DRUPAL_BASE_URL + this.props.location.pathname;
     }
