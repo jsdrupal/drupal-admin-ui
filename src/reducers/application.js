@@ -1,5 +1,6 @@
 import { LOCATION_CHANGE } from 'react-router-redux';
 import { ROLES_LOADED } from '../actions/roles';
+import { CONTENT_LOADED } from '../actions/content';
 import {
   SET_MESSAGE,
   CLEAR_MESSAGE,
@@ -78,6 +79,13 @@ export default (state = initialState, action) => {
         ...state,
         roles,
       };
+    }
+    case CONTENT_LOADED: {
+      const nodes = action.payload.nodes.data;
+      return {
+        ...state,
+        nodes,
+      }
     }
     default: {
       return { ...state };
