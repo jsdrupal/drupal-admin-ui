@@ -15,6 +15,9 @@ async function api(
     case 'dblog':
       url = '/jsonapi/watchdog_entity/watchdog_entity';
       break;
+    case 'dblog:types':
+      url = '/admin-ui-support/dblog-types?_format=json';
+      break;
     case 'roles':
       url = '/jsonapi/user_role/user_role';
       options.headers.Accept = 'application/vnd.api+json';

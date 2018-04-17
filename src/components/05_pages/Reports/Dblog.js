@@ -18,7 +18,7 @@ class Dblog extends Component {
         type: string.isRequired,
       }),
     ),
-    types: arrayOf(string),
+    availableTypes: arrayOf(string),
     filterOptions: shape({
       sort: string,
       severities: arrayOf(string),
@@ -27,7 +27,7 @@ class Dblog extends Component {
   };
   static defaultProps = {
     entries: null,
-    types: null,
+    availableTypes: null,
     filterOptions: {
       sort: '',
       severities: [],
@@ -63,11 +63,24 @@ class Dblog extends Component {
     const severities = Array.from(e.target.options)
       .filter(option => option.selected)
       .map(option => option.value);
-    const { sort, offset = 0 } = this.props.filterOptions;
+    const { sort, offset = 0, types = null } = this.props.filterOptions;
     this.props.requestDblogCollection({
       severities,
       sort,
       offset,
+      types,
+    });
+  };
+  typeFilterHandler = e => {
+    const types = Array.from(e.target.options)
+      .filter(option => option.selected)
+      .map(option => option.value);
+    const { sort, offset = 0, severities = null } = this.props.filterOptions;
+    this.props.requestDblogCollection({
+      severities,
+      sort,
+      offset,
+      types,
     });
   };
   nextPage = () => {
@@ -92,8 +105,15 @@ class Dblog extends Component {
     }
     return (
       <Fragment>
-        <select key="select-type" label="Type">
-          {this.props.types.map(type => (
+        <select
+          key="select-type"
+          label="Type"
+          multiple
+          size={this.props.availableTypes.length}
+          onChange={this.typeFilterHandler}
+          selected={this.props.filterOptions.types}
+        >
+          {this.props.availableTypes.map(type => (
             <option value={type} key={type}>
               {type}
             </option>

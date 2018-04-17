@@ -97,13 +97,7 @@ export default (state = initialState, action) => {
               },
             }) => ({ wid, messageFormattedPlain, timestamp, type }),
           ),
-          types: Array.from(
-            new Set(
-              action.payload.dbLogEntries.data.map(
-                ({ attributes: { type } }) => type,
-              ),
-            ),
-          ),
+          availableTypes: action.payload.dbLogEntriesTypes,
         },
       };
     }

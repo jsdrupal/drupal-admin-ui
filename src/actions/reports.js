@@ -29,6 +29,21 @@ function* loadDblog({ payload: { options } }) {
           : {}),
       },
       filter: {
+        ...(options.types && Object.keys(options.types).length
+          ? options.types.reduce(
+              (acc, cur) => ({
+                ...acc,
+                [`type${cur}`]: {
+                  condition: {
+                    value: cur,
+                    path: 'type',
+                    memberOf: 'typeGroup',
+                  },
+                },
+              }),
+              { typeGroup: { group: { conjunction: 'OR' } } },
+            )
+          : {}),
         ...(options.severities && Object.keys(options.severities).length
           ? options.severities.reduce(
               (acc, cur) => ({
@@ -60,11 +75,13 @@ function* loadDblog({ payload: { options } }) {
         options,
       },
     });
+    const dbLogEntriesTypes = yield call(api, 'dblog:types');
     const dbLogEntries = yield call(api, 'dblog', { queryString });
     yield put({
       type: DBLOG_COLLECTION_LOADED,
       payload: {
         dbLogEntries,
+        dbLogEntriesTypes,
       },
     });
   } catch (error) {
