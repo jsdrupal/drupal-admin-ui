@@ -59,46 +59,36 @@ class Dblog extends Component {
         [`user-${wid}`, ''],
       ],
     }));
-  severityFilterHandler = e => {
-    const severities = Array.from(e.target.options)
-      .filter(option => option.selected)
-      .map(option => option.value);
-    const { sort, offset = 0, types = null } = this.props.filterOptions;
+  severityFilterHandler = e =>
     this.props.requestDblogCollection({
-      severities,
-      sort,
-      offset,
-      types,
+      types: null,
+      offset: 0,
+      ...this.props.filterOptions,
+      severities: Array.from(e.target.options)
+        .filter(option => option.selected)
+        .map(option => option.value),
     });
-  };
-  typeFilterHandler = e => {
-    const types = Array.from(e.target.options)
-      .filter(option => option.selected)
-      .map(option => option.value);
-    const { sort, offset = 0, severities = null } = this.props.filterOptions;
+  typeFilterHandler = e =>
     this.props.requestDblogCollection({
-      severities,
-      sort,
-      offset,
-      types,
+      severities: null,
+      offset: 0,
+      ...this.props.filterOptions,
+      types: Array.from(e.target.options)
+        .filter(option => option.selected)
+        .map(option => option.value),
     });
-  };
-  nextPage = () => {
-    const { sort, severities = null, offset = 0 } = this.props.filterOptions;
+  nextPage = () =>
     this.props.requestDblogCollection({
-      severities,
-      sort,
-      offset: offset + 50,
+      severities: null,
+      ...this.props.filterOptions,
+      offset: (this.props.filterOptions.offset || 0) + 50,
     });
-  };
-  previousPage = () => {
-    const { sort, severities = null, offset = 0 } = this.props.filterOptions;
+  previousPage = () =>
     this.props.requestDblogCollection({
-      severities,
-      sort,
-      offset: offset - 50,
+      severities: null,
+      ...this.props.filterOptions,
+      offset: (this.props.filterOptions.offset || 0) - 50,
     });
-  };
   render() {
     if (!this.props.entries) {
       return <LoadingBar />;
