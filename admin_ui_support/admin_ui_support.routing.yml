@@ -25,3 +25,10 @@ admin_ui_support.entity.user_role.collection:
   requirements:
     _permission: 'administer permissions'
 
+admin_ui_support.dblog_types:
+  path: '/admin-ui-support/dblog-types'
+  defaults:
+    _controller: '\Drupal\admin_ui_support\Controller\DbLogTypes::get'
+  requirements:
+      _permission: 'access site reports'
+      _format: 'json'
