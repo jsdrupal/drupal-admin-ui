@@ -7,3 +7,4 @@ dependencies:
   - drupal:rest
   - jsonapi:jsonapi
   - jsonapi_tables:jsonapi_tables
+  - jsonapi_support:jsonapi_support
