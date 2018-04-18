@@ -1,0 +1,5 @@
+services:
+  serializer.normalizer.schema.admin_ui_support_schemata.json:
+    class: Drupal\admin_ui_support_schemata\Normalizer\json\SimpleConfigSchemaNormalizer
+    tags:
+      - { name: normalizer, priority: 10 }

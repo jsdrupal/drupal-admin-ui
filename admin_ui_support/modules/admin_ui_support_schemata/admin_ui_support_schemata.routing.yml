@@ -1,0 +1,2 @@
+route_callbacks:
+  - '\Drupal\admin_ui_support_schemata\Routing\Routes::routes'
