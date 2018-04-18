@@ -16,10 +16,10 @@ export const requestDblogCollection = options => ({
 export const DBLOG_FILTER_UPDATED = 'DBLOG_FILTER_UPDATED';
 
 export const DBLOG_COLLECTION_LOADED = 'DBLOG_COLLECTION_LOADED';
-function* loadDblog({ payload: { options } }) {
+export function* loadDblog({ payload: { options } }) {
   try {
     const queryString = {
-      sort: options.sort,
+      sort: options.sort || '',
       page: {
         limit: 50,
         ...(options.offset
