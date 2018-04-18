@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\admin_ui_support\Controller;
+namespace Drupal\jsonapi_support\Controller;
 
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\jsonapi\Controller\EntityResource;
