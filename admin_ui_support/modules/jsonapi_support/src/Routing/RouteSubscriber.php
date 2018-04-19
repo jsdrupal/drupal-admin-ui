@@ -25,9 +25,17 @@ class RouteSubscriber extends RouteSubscriberBase {
         $name_parts = explode('.', $route_name);
         $resource_key = $name_parts[1];
         $resource = $type_repository->getByTypeName($resource_key);
+        if (!isset($name_parts[2])) {
+          continue;
+        }
         $route_method = $name_parts[2];
-        if ($resource instanceof CrossBundlesResourceType && $route_method !== 'collection') {
-          $remove_routes[] = $route_name;
+        if ($resource instanceof CrossBundlesResourceType) {
+          if ($route_method !== 'collection') {
+            $remove_routes[] = $route_name;
+          }
+          else {
+            $route->setMethods(['GET']);
+          }
         }
       }
     }
