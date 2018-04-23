@@ -36,7 +36,7 @@ admin_ui_support.dblog_types:
 
 # Routes for configuration.
 admin_ui_support.admin_ui_support_settings:
-  path: '/admin/config/admin_ui_support/settings'
+  path: '/admin/config/system/admin-ui-support'
   defaults:
     _form: '\Drupal\admin_ui_support\Form\SettingsForm'
     _title: 'Decoupled Administration Interface'
