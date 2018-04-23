@@ -1,13 +1,7 @@
-import React from 'react';
-import { shallow } from 'enzyme';
-import { call, take, fork, takeLatest } from 'redux-saga/effects';
-import { testSaga, expectSaga } from 'redux-saga-test-plan';
-
-import {
-  watchDblogRequests, requestDblogCollection, DBLOG_COLLECTION_REQUEST, loadDblog,
-  DBLOG_FILTER_UPDATED
-} from './reports';
+import { testSaga } from 'redux-saga-test-plan';
 import { resetLoading, showLoading } from 'react-redux-loading-bar';
+
+import { loadDblog, DBLOG_FILTER_UPDATED } from './reports';
 import api from '../utils/api/api';
 import { setMessage } from './application';
 
@@ -67,7 +61,9 @@ it('test with pager', () => {
 });
 
 it('test with sort and severity filter', () => {
-  testSaga(loadDblog, { payload: { options: { sort: 'type', severities: ['Emergency', 'Alert'] } } })
+  testSaga(loadDblog, {
+    payload: { options: { sort: 'type', severities: ['Emergency', 'Alert'] } },
+  })
     .next()
     .next()
     .next()
@@ -104,4 +100,3 @@ it('test with sort and severity filter', () => {
     })
     .finish();
 });
-
