@@ -85,7 +85,7 @@ class SettingsForm extends ConfigFormBase {
       $this->config('admin_ui_support.settings')
         ->set('redirect_related_routes', $redirect_related_routes)
         ->save();
-      $this->routerRebuilder->rebuild();
+      $this->routerRebuilder->setRebuildNeeded();
     }
 
   }

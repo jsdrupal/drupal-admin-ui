@@ -18,7 +18,10 @@ class RedirectRoutesTest extends BrowserTestBase {
    */
   protected function setUp() {
     parent::setUp();
-    $this->drupalLogin($this->createUser(['administer permissions']));
+    $this->drupalLogin($this->createUser([
+      'administer permissions',
+      'administer site configuration',
+    ]));
   }
 
   /**
@@ -28,6 +31,7 @@ class RedirectRoutesTest extends BrowserTestBase {
    * @see \Drupal\admin_ui_support\Controller\DefaultController::getAppRoute()
    *
    * @throws \Behat\Mink\Exception\ResponseTextException
+   * @throws \Behat\Mink\Exception\ExpectationException
    */
   public function testRouteRedirect() {
     $paths = [
@@ -42,11 +46,11 @@ class RedirectRoutesTest extends BrowserTestBase {
       $this->assertSession()->pageTextNotContains($text);
     }
 
+    $this->drupalGet('admin/config/admin_ui_support/settings');
+    $this->assertSession()->checkboxChecked('redirect_related_routes');
+    $this->drupalPostForm('admin/config/admin_ui_support/settings', ['redirect_related_routes' => 0], 'Save configuration');
 
-    \Drupal::configFactory()->getEditable('admin_ui_support.settings')->set('redirect_related_routes', FALSE)->save();
-    \Drupal::service('router.builder')->rebuild();
-
-    // After the config is updated the paths should go to the default page.
+    // After the setting is updated the paths should go to the default page.
     foreach ($paths as $path => $text) {
       $this->drupalGet($path);
       $this->assertSession()->pageTextContains($text);
