@@ -90,22 +90,6 @@ const Permissions = class Permissions extends Component {
         return a.attributes.id - b.attributes.id;
       });
 
-  // fetchData = () =>
-  //   makeCancelable(
-  //     Promise.all([api('permissions'), api('roles')])
-  //       .then(([permissions, { data: roles }]) =>
-  //         this.setState({
-  //           rawPermissions: permissions,
-  //           renderablePermissions: permissions,
-  //           changedRoles: [],
-  //           working: false,
-  //           // Move admin roles to the right.
-  //           roles:
-  //           loaded: true,
-  //         }),
-  //       )
-  //       .catch(err => this.setState({ loaded: false, err })),
-  //   );
   togglePermission = (permission, roleName, roles) => {
     const roleIndex = roles.map(role => role.attributes.id).indexOf(roleName);
     const role = roles[roleIndex];
@@ -198,7 +182,11 @@ const Permissions = class Permissions extends Component {
               this.state.changedRoles.includes(role.attributes.id),
             )
             .map(role =>
-              api('role:post', {}, { role }).then(() => {
+              api('role:patch', {
+                parameters: {
+                  role,
+                },
+              }).then(() => {
                 this.props.setMessage(
                   'Changes have been saved',
                   MESSAGE_SUCCESS,

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { Route, Switch, withRouter } from 'react-router-dom';
 import createBrowserHistory from 'history/createBrowserHistory';
 import { createStore, applyMiddleware, combineReducers } from 'redux';
@@ -22,6 +22,7 @@ import base from './styles/base'; // eslint-disable-line no-unused-vars
 import actions from './actions/index';
 import reducers from './reducers/index';
 import ErrorBoundary from './components/06_wrappers/ErrorBoundary/ErrorBoundary';
+import InitialRedirect from './InitialRedirect';
 
 const history = createBrowserHistory();
 const middleware = routerMiddleware(history);
@@ -38,38 +39,25 @@ const withDefault = component => () => (
   <Default>{React.createElement(component)}</Default>
 );
 
-class App extends Component {
-  componentDidMount() {
-    // Allow Drupal redirects to determine the initial path.
-    const search = history.location.search
-      .replace('?q=', '')
-      // trim slashes on the left.
-      .replace(/^\//, '');
-    if (search) {
-      history.replace(`/${search}`);
-    }
-  }
-  render() {
-    return (
-      <ErrorBoundary>
-        <Provider store={store}>
-          <ConnectedRouter history={history}>
-            <Switch>
-              <Route exact path="/" component={withDefault(withRouter(Home))} />
-              {Object.keys(routes).map(route => (
-                <Route
-                  path={route}
-                  component={withDefault(withRouter(routes[route]))}
-                  key={route}
-                />
-              ))}
-              <Route component={NoMatch} />
-            </Switch>
-          </ConnectedRouter>
-        </Provider>
-      </ErrorBoundary>
-    );
-  }
-}
+const App = () => (
+  <ErrorBoundary>
+    <Provider store={store}>
+      <ConnectedRouter history={history}>
+        <Switch>
+          <Route exact path="/" component={withDefault(withRouter(Home))} />
+          {Object.keys(routes).map(route => (
+            <Route
+              path={route}
+              component={withDefault(withRouter(routes[route]))}
+              key={route}
+            />
+          ))}
+          <Route path="/(vfancy/?)" component={withRouter(InitialRedirect)} />
+          <Route component={NoMatch} />
+        </Switch>
+      </ConnectedRouter>
+    </Provider>
+  </ErrorBoundary>
+);
 
 export default App;
