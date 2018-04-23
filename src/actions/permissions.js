@@ -13,7 +13,6 @@ import {
 } from 'react-redux-loading-bar';
 import api from '../utils/api/api';
 import { setMessage } from './application';
-import { ROLES_LOADED } from './roles';
 
 export const PERMISSIONS_REQUESTED = 'PERMISSIONS_REQUESTED';
 export const requestPermissions = () => ({
@@ -31,13 +30,6 @@ function* loadPermissions() {
       type: PERMISSIONS_LOADED,
       payload: {
         permissions,
-      },
-    });
-    const roles = yield call(api, 'roles');
-    yield put({
-      type: ROLES_LOADED,
-      payload: {
-        roles,
       },
     });
   } catch (error) {

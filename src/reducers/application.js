@@ -83,7 +83,7 @@ export default (state = initialState, action) => {
       };
     }
     case PERMISSIONS_LOADED: {
-      const { payload: permissions } = action;
+      const { payload: { permissions } } = action;
       return {
         ...state,
         permissions,
