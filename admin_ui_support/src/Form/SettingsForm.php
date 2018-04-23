@@ -67,8 +67,8 @@ class SettingsForm extends ConfigFormBase {
     $config = $this->config('admin_ui_support.settings');
     $form['redirect_related_routes'] = [
       '#type' => 'checkbox',
-      '#title' => $this->t('Redirect related routes'),
-      '#description' => $this->t('If checked routes that overridden by the App will yada yada'),
+      '#title' => $this->t('Use new administrative UI when available'),
+      '#description' => $this->t('When checked, routes that have new administrative UI available will be rendered using the new decoupled JavaScript client.'),
       '#default_value' => $config->get('redirect_related_routes'),
     ];
     return parent::buildForm($form, $form_state);
