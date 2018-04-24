@@ -37,7 +37,8 @@ async function api(
       url = '/admin-api/permissions?_format=json';
       break;
     case 'content':
-      url = '/jsonapi/node/article';
+      url = '/jsonapi/node';
+      options.headers.Accept = 'application/vnd.api+json';
       break;
     default:
       break;

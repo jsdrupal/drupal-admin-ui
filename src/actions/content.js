@@ -16,17 +16,20 @@ import api from '../utils/api/api';
 import { setMessage } from './application';
 
 export const CONTENT_REQUESTED = 'CONTENT_REQUESTED';
-export const requestContent = () => ({
+export const requestContent = options => ({
   type: CONTENT_REQUESTED,
-  payload: {},
+  payload: { options },
 });
 
 export const CONTENT_LOADED = 'CONTENT_LOADED';
-function* loadContent() {
+function* loadContent({ payload: { options } }) {
   try {
+    const queryString = {
+      sort: options.sort || '',
+    };
     yield put(resetLoading());
     yield put(showLoading());
-    const nodes = yield call(api, 'content');
+    const nodes = yield call(api, 'content', { queryString });
     yield put({
       type: CONTENT_LOADED,
       payload: {

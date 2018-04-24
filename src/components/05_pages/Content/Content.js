@@ -10,20 +10,21 @@ import { Table, TBody, THead } from '../../01_subatomics/Table/Table';
 
 export const Content = class Content extends Component {
   componentDidMount() {
-    this.props.requestContent();
+    this.props.requestContent({ sort: 'nid' });
   }
   componentWillUnmount() {
     this.props.cancelTask();
   }
   createTableRows = nodes =>
-    nodes.map(({ attributes: { title, nid } }) => ({
+    nodes.map(({ changed, nid, status, title, type }) => ({
       key: `row-${nid}`,
       tds: [
-        [`td-${nid}`, title],
-        [
-          `td-${nid}-actions`,
-          <Link to={`/node/${nid}/edit`}>Edit</Link>,
-        ],
+        [`td-${nid}-title`, title],
+        [`td-${nid}-content-type`, type],
+        [`td-${nid}-author`, ''],
+        [`td-${nid}-status`, (status && 'Published') || 'Unpublished'],
+        [`td-${nid}-updated`, changed],
+        [`td-${nid}-actions`, <Link to={`/node/${nid}/edit`}>Edit</Link>],
       ],
     }));
   render = () => {
@@ -32,7 +33,16 @@ export const Content = class Content extends Component {
     }
     return (
       <Table>
-        <THead data={['Title', 'Edit']} />
+        <THead
+          data={[
+            'Title',
+            'Content Type',
+            'Author',
+            'Status',
+            'Updated',
+            'Edit',
+          ]}
+        />
         <TBody rows={this.createTableRows(this.props.nodes)} />
       </Table>
     );
@@ -53,4 +63,6 @@ const mapStateToProps = ({ application: { nodes } }) => ({
   nodes,
 });
 
-export default connect(mapStateToProps, { requestContent, cancelTask })(Content);
+export default connect(mapStateToProps, { requestContent, cancelTask })(
+  Content,
+);

@@ -123,8 +123,16 @@ export default (state = initialState, action) => {
       const nodes = action.payload.nodes.data;
       return {
         ...state,
-        nodes,
-      }
+        nodes: nodes.map(
+          ({ type, attributes: { nid, title, changed, status } }) => ({
+            type,
+            nid,
+            title,
+            changed,
+            status,
+          }),
+        ),
+      };
     }
     default: {
       return { ...state };
