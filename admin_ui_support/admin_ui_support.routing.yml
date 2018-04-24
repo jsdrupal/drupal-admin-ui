@@ -1,3 +1,4 @@
+# Routes controlled by the React App.
 admin_ui_support.user.permissions:
   path: '/vfancy/admin/people/permissions'
   defaults:
@@ -41,3 +42,13 @@ admin_ui_support.dblog.overview:
     _admin_related_route: 'dblog.overview'
   requirements:
     _permission: 'access site reports'
+
+admin_ui_support.admin_ui_support_settings:
+  path: '/admin/config/system/admin-ui-support'
+  defaults:
+    _form: '\Drupal\admin_ui_support\Form\SettingsForm'
+    _title: 'Decoupled Administration Interface'
+  requirements:
+    _permission: 'administer site configuration'
+  options:
+    _admin_route: TRUE

@@ -1,0 +1,7 @@
+admin_ui_support.admin_ui_support_settings:
+  title: 'Decoupled Administration Interface'
+  route_name: admin_ui_support.admin_ui_support_settings
+  description: 'Decoupled administration interface integration settings'
+  parent: system.admin_config_system
+  weight: 99
+
