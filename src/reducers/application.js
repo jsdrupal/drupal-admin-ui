@@ -1,5 +1,6 @@
 import { LOCATION_CHANGE } from 'react-router-redux';
 import { ROLES_LOADED } from '../actions/roles';
+import { CONTENT_LOADED } from '../actions/content';
 import {
   DBLOG_COLLECTION_LOADED,
   DBLOG_FILTER_UPDATED,
@@ -117,6 +118,13 @@ export default (state = initialState, action) => {
         ...state,
         roles,
       };
+    }
+    case CONTENT_LOADED: {
+      const nodes = action.payload.nodes.data;
+      return {
+        ...state,
+        nodes,
+      }
     }
     default: {
       return { ...state };
