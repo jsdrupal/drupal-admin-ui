@@ -1,12 +1,22 @@
-async function api(endpoint, init = {}) {
+import qs from 'qs';
+
+async function api(
+  endpoint,
+  { queryString = null, parameters = {}, options = {} } = {},
+) {
   let url;
-  const { parameters, ...options } = init;
-  options.headers = options.headers || {};
   options.credentials = 'include';
+  options.headers = options.headers || {};
 
   switch (endpoint) {
     case 'menu':
       url = '/admin-api/menu?_format=json';
+      break;
+    case 'dblog':
+      url = '/jsonapi/watchdog_entity/watchdog_entity';
+      break;
+    case 'dblog:types':
+      url = '/admin-ui-support/dblog-types?_format=json';
       break;
     case 'roles':
       url = '/jsonapi/user_role/user_role';
@@ -31,7 +41,11 @@ async function api(endpoint, init = {}) {
   }
 
   const data = await fetch(
-    process.env.REACT_APP_DRUPAL_BASE_URL + url,
+    `${process.env.REACT_APP_DRUPAL_BASE_URL}${url}${
+      queryString
+        ? `?${qs.stringify(queryString, { arrayFormat: 'brackets' })}`
+        : ''
+    }`,
     options,
   ).then(res => res.json());
   return data;
