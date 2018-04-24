@@ -1,0 +1,7 @@
+admin_ui_support.settings:
+  type: config_object
+  label: 'Admin UI Support Settings'
+  mapping:
+    redirect_related_routes:
+      type: boolean
+      label: 'Redirect routes'
