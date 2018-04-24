@@ -8,7 +8,9 @@ use Drupal\jsonapi_support\ResourceType\CrossBundlesResourceType;
 use Symfony\Component\Routing\RouteCollection;
 
 /**
- * Listens to the dynamic route events.
+ * Ensures that the /entity_type resource just supports collection GET requests.
+ *
+ * @internal
  */
 class RouteSubscriber extends RouteSubscriberBase {
 
