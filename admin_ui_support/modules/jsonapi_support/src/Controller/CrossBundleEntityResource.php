@@ -8,7 +8,7 @@ use Drupal\jsonapi\Query\OffsetPage;
 use Drupal\jsonapi\Query\Sort;
 
 /**
- * Croos Bundle entity resource.
+ * Cross Bundle entity resource.
  */
 class CrossBundleEntityResource extends EntityResource {
 
@@ -16,7 +16,6 @@ class CrossBundleEntityResource extends EntityResource {
    * {@inheritdoc}
    */
   protected function getCollectionQuery($entity_type_id, array $params) {
-    $entity_type = $this->entityTypeManager->getDefinition($entity_type_id);
     $entity_storage = $this->entityTypeManager->getStorage($entity_type_id);
 
     $query = $entity_storage->getQuery();

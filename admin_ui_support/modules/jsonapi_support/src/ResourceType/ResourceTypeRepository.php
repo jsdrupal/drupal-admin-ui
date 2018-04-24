@@ -28,9 +28,8 @@ class ResourceTypeRepository extends JsonApiResourceTypeRepository {
   public function all() {
     if (!$this->all) {
       $this->all = parent::all();
-      $entity_type_ids = array_keys($this->entityTypeManager->getDefinitions());
-      foreach ($entity_type_ids as $entity_type_id) {
-        $entity_type = $this->entityTypeManager->getDefinition($entity_type_id);
+      $entity_types = $this->entityTypeManager->getDefinitions();
+      foreach ($entity_types as $entity_type_id => $entity_type) {
         $this->all[] = new CrossBundlesResourceType(
           $entity_type_id,
           $entity_type_id,
