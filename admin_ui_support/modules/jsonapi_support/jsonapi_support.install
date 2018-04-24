@@ -1,0 +1,23 @@
+<?php
+
+/**
+ * @file
+ * Install, update and uninstall functions for the jsonapi_support module.
+ */
+
+/**
+ * Implements hook_requirements().
+ */
+function jsonapi_support_requirements($phase) {
+  $requirements = [];
+  if ($phase === 'runtime' || $phase === 'install') {
+    if (\Drupal::moduleHandler()->moduleExists('jsonapi_extras')) {
+      $requirements['jsonapi_support__jsonapi_extras'] = [
+        'title' => t('JSONAPI Support compatibility'),
+        'value' => t('JSONAPI Support module is not yet compatible with JSONAPI extras module.'),
+        'severity' => REQUIREMENT_ERROR,
+      ];
+    }
+  }
+  return $requirements;
+}
