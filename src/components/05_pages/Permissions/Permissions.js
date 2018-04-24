@@ -48,7 +48,11 @@ const Permissions = class Permissions extends Component {
       changedRoles: Array.from(
         new Set(prevState.changedRoles).add(roleName).values(),
       ),
-      roles: this.togglePermission(permission, roleName, prevState.roles),
+      roles: this.togglePermission(
+        permission,
+        roleName,
+        prevState.roles || this.props.roles,
+      ),
     }));
     this.props.clearMessage();
   };
@@ -173,9 +177,7 @@ const Permissions = class Permissions extends Component {
                 );
               }),
             ),
-        ).then(() => {
-          this.cancelFetch = this.fetchData();
-        }),
+        ),
     );
   };
   render() {
