@@ -186,6 +186,10 @@ const Permissions = class Permissions extends Component {
     } else if (!this.props.roles || !this.props.permissions) {
       return <Loading />;
     }
+    const sortedRoles = this.sortAdminRoles(
+      this.props.roles,
+      this.props.match.params.role,
+    );
     return (
       <StickyContainer>
         <Sticky>
@@ -216,7 +220,7 @@ const Permissions = class Permissions extends Component {
           <THead
             data={[
               'Permission',
-              ...this.props.roles.map(({ attributes: { label } }) => label),
+              ...sortedRoles.map(({ attributes: { label } }) => label),
             ]}
           />
           <TBody
@@ -224,7 +228,7 @@ const Permissions = class Permissions extends Component {
               this.groupPermissions(
                 filterPermissions(this.state.filter, this.props.permissions),
               ),
-              this.props.roles,
+              sortedRoles,
             )}
           />
         </Table>
