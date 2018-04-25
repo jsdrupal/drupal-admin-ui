@@ -13,21 +13,21 @@ async function api(
       url = '/admin-api/menu?_format=json';
       break;
     case 'dblog':
-      url = '/jsonapi/watchdog_entity/watchdog_entity';
+      url = '/jsonapi/watchdog_entity';
       break;
     case 'dblog:types':
       url = '/admin-ui-support/dblog-types?_format=json';
       break;
     case 'roles':
-      url = '/jsonapi/user_role/user_role';
+      url = '/jsonapi/user_role';
       options.headers.Accept = 'application/vnd.api+json';
       break;
     case 'role':
-      url = `/jsonapi/user_role/user_role/${parameters.role.id}`;
+      url = `/jsonapi/user_role/${parameters.role.id}`;
       options.headers.Accept = 'application/vnd.api+json';
       break;
     case 'role:patch':
-      url = `/jsonapi/user_role/user_role/${parameters.role.id}`;
+      url = `/jsonapi/user_role/${parameters.role.id}`;
       options.headers.Accept = 'application/vnd.api+json';
       options.method = 'PATCH';
       options.body = JSON.stringify({ data: parameters.role });
