@@ -130,6 +130,10 @@ class CrossBundleCollectionTest extends BrowserTestBase {
       $response = $this->httpClient->request($method, 'jsonapi/node/' . Node::load(1)->uuid(), $request_options);
       $this->assertEquals('404', $response->getStatusCode());
     }
+
+    // A new route should not be created for entity types that don't support bundles.
+    $response = $this->httpClient->request('POST', 'jsonapi/node_type', $request_options);
+    $this->assertEquals('404', $response->getStatusCode());
   }
 
   /**
