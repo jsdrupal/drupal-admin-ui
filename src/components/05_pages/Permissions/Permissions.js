@@ -44,7 +44,6 @@ const Permissions = class Permissions extends Component {
   }
   onPermissionCheck = (roleName, permission) => {
     this.setState(prevState => ({
-      ...prevState,
       changedRoles: Array.from(
         new Set(prevState.changedRoles).add(roleName).values(),
       ),
