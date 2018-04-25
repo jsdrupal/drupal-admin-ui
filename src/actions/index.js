@@ -9,7 +9,6 @@ export default function* rootSaga() {
     applicationSaga(),
     watchDblogRequests(),
     watchRequestedRolesWithCancel(),
-    watchRequestedMenu(),
     watchRequestedPermissionsWithCancel(),
   ]);
 }
