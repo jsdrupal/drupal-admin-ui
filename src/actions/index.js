@@ -7,7 +7,6 @@ import { watchRequestedPermissionsWithCancel } from './permissions';
 export default function* rootSaga() {
   yield all([
     watchRequestedRolesWithCancel(),
-    watchRequestedMenu(),
     watchRequestedPermissionsWithCancel(),
     watchDblogRequests(),
   ]);
