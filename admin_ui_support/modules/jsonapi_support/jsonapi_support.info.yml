@@ -1,0 +1,7 @@
+name: 'jsonapi_support'
+type: module
+description: 'Admin UI support for JSONAPI'
+core: 8.x
+package: 'API Support'
+dependencies:
+  - jsonapi:jsonapi
