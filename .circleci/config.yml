@@ -33,7 +33,11 @@ jobs:
       - run:
           working_directory: /var/www/html
           command: |
-            ./update-dependencies.sh drupal-admin-ui admin_ui_support
+            ./update-dependencies.sh $CIRCLE_PROJECT_REPONAME
+      # Add JSON API
+      - run:
+            working_directory: /var/www/html
+            command: /usr/local/bin/composer require drupal/jsonapi:^1.16
       # Save Composer Cache
       - save_cache:
           paths:
