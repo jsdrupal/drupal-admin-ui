@@ -59,8 +59,7 @@ class RedirectRoutesTest extends BrowserTestBase {
     if (\Drupal::configFactory()->get('admin_ui_support.settings')->get('redirect_related_routes')) {
       $this->fail('redirect_related_routes should be disable after form submitted');
     }
-    // Make a request to trigger route rebuild.
-    $this->drupalGet('user');
+    \Drupal::service('router.builder')->rebuildIfNeeded();
     // After the setting is updated the paths should go to the default page.
     /** @var \Drupal\Core\Routing\RouteProvider $route_provider */
     $route_provider = \Drupal::service('router.route_provider');
