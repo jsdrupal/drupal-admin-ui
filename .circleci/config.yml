@@ -55,11 +55,10 @@ jobs:
       - checkout
       - run:
           working_directory: /var/www/html
-          command: export SYMFONY_DEPRECATIONS_HELPER="disabled"
-      - run:
-          working_directory: /var/www/html
           command: |
             ./test.sh admin_ui_support
+          environment:
+            SYMFONY_DEPRECATIONS_HELPER: disabled
       - store_test_results:
           path: /var/www/html/artifacts/phpunit
       - store_artifacts:
