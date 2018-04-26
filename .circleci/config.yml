@@ -6,7 +6,7 @@ aliases:
       - image: mariadb:10.3
         environment:
           MYSQL_ALLOW_EMPTY_PASSWORD: 1
-    working_directory: /var/www/html/modules/admin_ui_support
+    working_directory: /var/www/html/modules/custom
   - &defaults
     docker:
       - image: circleci/node:8-browsers
@@ -28,7 +28,7 @@ jobs:
       # Restore Composer Cache
       - restore_cache:
           keys:
-            - v4-dependencies-{{ checksum "admin_ui_support/composer.json" }}
+            - v4-dependencies-{{ checksum "custom/composer.json" }}
             - v4-dependencies-
       - run:
           working_directory: /var/www/html
@@ -42,7 +42,7 @@ jobs:
       - save_cache:
           paths:
             - /root/.composer/cache/files
-          key: v4-dependencies-{{ checksum "admin_ui_support/composer.json" }}
+          key: v4-dependencies-{{ checksum "custom/composer.json" }}
       - persist_to_workspace:
           root: /var/www/html
           paths:
@@ -53,6 +53,9 @@ jobs:
       - attach_workspace:
           at: /var/www/html
       - checkout
+      - run:
+          working_directory: /var/www/html
+          command: export SYMFONY_DEPRECATIONS_HELPER="disabled"
       - run:
           working_directory: /var/www/html
           command: |
