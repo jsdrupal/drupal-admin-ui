@@ -42,11 +42,11 @@ class PermissionsCollectionResource extends ResourceBase {
   protected $renderer;
 
   /**
-   * The module extension list.
+   * The module handler.
    *
-   * @var \Drupal\Core\Extension\ExtensionList
+   * @var \Drupal\Core\Extension\ModuleHandlerInterface
    */
-  protected $moduleExtensionList;
+  protected $moduleHandler;
 
   /**
    * Constructs a PermissionResource object.
@@ -62,18 +62,18 @@ class PermissionsCollectionResource extends ResourceBase {
    * @param \Psr\Log\LoggerInterface $logger
    *   A logger instance.
    * @param \Drupal\user\PermissionHandlerInterface $permission_handler
-   *   The permission handler
+   *   The permission handler.
    * @param \Drupal\Core\Render\RendererInterface $renderer
    *   The renderer.
-   * @param \Drupal\Core\Extension\ExtensionList $module_extension_list
-   *   The module extension list.
+   * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
+   *   The module handler.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, array $serializer_formats, LoggerInterface $logger, PermissionHandlerInterface $permission_handler, RendererInterface $renderer, ExtensionList $module_extension_list) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, array $serializer_formats, LoggerInterface $logger, PermissionHandlerInterface $permission_handler, RendererInterface $renderer, ModuleHandlerInterface $module_handler) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $serializer_formats, $logger);
 
     $this->permissionHandler = $permission_handler;
     $this->renderer = $renderer;
-    $this->moduleExtensionList = $module_extension_list;
+    $this->moduleHandler = $module_handler;
   }
 
   /**
@@ -88,7 +88,7 @@ class PermissionsCollectionResource extends ResourceBase {
       $container->get('logger.factory')->get('rest'),
       $container->get('user.permissions'),
       $container->get('renderer'),
-      $container->get('extension.list.module')
+      $container->get('module_handler')
     );
   }
 
@@ -105,7 +105,7 @@ class PermissionsCollectionResource extends ResourceBase {
       $permissions = $this->permissionHandler->getPermissions();
       foreach ($permissions as $id => $permission) {
         $permissions[$id]['id'] = $id;
-        $permissions[$id]['provider_label'] = $this->moduleExtensionList->getName($permissions[$id]['provider']);
+        $permissions[$id]['provider_label'] = $this->moduleHandler->getName($permissions[$id]['provider']);
         // @todo Make a helper method to automatically render elements.
         if (is_array($permissions[$id]['description'])) {
           $permissions[$id]['description'] = $this->renderer->render($permissions[$id]['description']);

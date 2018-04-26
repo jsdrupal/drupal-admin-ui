@@ -46,9 +46,9 @@ class RedirectRoutesTest extends BrowserTestBase {
       $this->assertSession()->pageTextNotContains($text);
     }
 
-    $this->drupalGet('admin/config/admin_ui_support/settings');
+    $this->drupalGet('/admin/config/system/admin-ui-support');
     $this->assertSession()->checkboxChecked('redirect_related_routes');
-    $this->drupalPostForm('admin/config/admin_ui_support/settings', ['redirect_related_routes' => 0], 'Save configuration');
+    $this->drupalPostForm('/admin/config/system/admin-ui-support', ['redirect_related_routes' => 0], 'Save configuration');
 
     // After the setting is updated the paths should go to the default page.
     foreach ($paths as $path => $text) {

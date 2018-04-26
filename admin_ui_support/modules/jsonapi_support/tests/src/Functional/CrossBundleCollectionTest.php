@@ -9,6 +9,8 @@ use GuzzleHttp\RequestOptions;
 
 /**
  * Test for entity level collection-only entity level resources.
+ *
+ * @group jsonapi_support
  */
 class CrossBundleCollectionTest extends BrowserTestBase {
 
