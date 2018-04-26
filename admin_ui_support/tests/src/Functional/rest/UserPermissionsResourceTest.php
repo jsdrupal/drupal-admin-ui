@@ -11,7 +11,7 @@ use Drupal\Tests\rest\Functional\ResourceTestBase;
 /**
  * Tests the user permissions resource.
  *
- * @group user
+ * @group admin_ui_support
  */
 class UserPermissionsResourceTest extends ResourceTestBase {
 
