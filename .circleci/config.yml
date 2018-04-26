@@ -33,7 +33,7 @@ jobs:
       - run:
           working_directory: /var/www/html
           command: |
-            ./update-dependencies.sh $CIRCLE_PROJECT_REPONAME
+            ./update-dependencies.sh drupal-admin-ui admin_ui_support
       # Save Composer Cache
       - save_cache:
           paths:
