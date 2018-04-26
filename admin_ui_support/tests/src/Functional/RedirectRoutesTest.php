@@ -34,6 +34,9 @@ class RedirectRoutesTest extends BrowserTestBase {
    * @throws \Behat\Mink\Exception\ExpectationException
    */
   public function testRouteRedirect() {
+    if (!\Drupal::configFactory()->get('admin_ui_support.settings')->get('redirect_related_routes')) {
+      $this->fail('redirect_related_routes should be enabled when is first enabled');
+    }
     $paths = [
       'admin/people/permissions' => 'Permissions',
       'admin/people/roles' => 'Roles',
