@@ -28,21 +28,17 @@ jobs:
       # Restore Composer Cache
       - restore_cache:
           keys:
-            - v4-dependencies-{{ checksum "custom/admin_ui_support/composer.json" }}
+            - v4-dependencies-{{ checksum "admin_ui_support/composer.json" }}
             - v4-dependencies-
       - run:
           working_directory: /var/www/html
           command: |
             ./update-dependencies.sh $CIRCLE_PROJECT_REPONAME
-      # Add JSON API
-      - run:
-            working_directory: /var/www/html
-            command: /usr/local/bin/composer require drupal/jsonapi:^1.16
       # Save Composer Cache
       - save_cache:
           paths:
             - /root/.composer/cache/files
-          key: v4-dependencies-{{ checksum "custom/admin_ui_support/composer.json" }}
+          key: v4-dependencies-{{ checksum "admin_ui_support/composer.json" }}
       - persist_to_workspace:
           root: /var/www/html
           paths:
