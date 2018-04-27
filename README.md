@@ -6,7 +6,10 @@ This is an admin UI for Drupal, built with JavaScript and based on [create-react
 
 - [Drupal Admin UI](#drupal-admin-ui)
   * [Installation](#installation)
-    + [For Local Development](#For-local-development)
+    + [Requirements](#requirements)
+    + [Steps](#steps) 
+  * [Running](#running)
+  * [Developing](#developing)
   * [Commands](#commands)
   * [Contributing to This Repository](#contributing-to-this-repository)     
 
