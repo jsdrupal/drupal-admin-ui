@@ -1,0 +1,8 @@
+name: admin_ui_support_schemata
+type: module
+description: 'Exposes schemata'
+version: VERSION
+core: 8.x
+dependencies:
+  - admin_ui_support:admin_ui_support
+  - schemata_json_schema:schemata_json_schema
