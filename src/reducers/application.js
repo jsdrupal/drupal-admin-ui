@@ -1,6 +1,6 @@
 import { LOCATION_CHANGE } from 'react-router-redux';
 import { ROLES_LOADED } from '../actions/roles';
-import { CONTENT_LOADED } from '../actions/content';
+import { CONTENT_LOADED, CONTENT_FILTER_UPDATED } from '../actions/content';
 import {
   DBLOG_COLLECTION_LOADED,
   DBLOG_FILTER_UPDATED,
@@ -119,19 +119,38 @@ export default (state = initialState, action) => {
         roles,
       };
     }
-    case CONTENT_LOADED: {
-      const nodes = action.payload.nodes.data;
+    case CONTENT_FILTER_UPDATED: {
+      const { content, ...rest } = state;
       return {
-        ...state,
-        nodes: nodes.map(
-          ({ type, attributes: { nid, title, changed, status } }) => ({
+        ...rest,
+        content: {
+          ...content,
+          filterOptions: action.payload.options,
+        },
+      };
+    }
+    case CONTENT_LOADED: {
+      const { content, ...rest } = state;
+      const nodes = action.payload.nodes.data;
+      const nodeTypes = action.payload.nodeTypes.data;
+      return {
+        ...rest,
+        content: {
+          ...content,
+          nodeTypes: nodeTypes.map(({ attributes: { name, type } }) => ({
+            name,
             type,
-            nid,
-            title,
-            changed,
-            status,
-          }),
-        ),
+          })),
+          nodes: nodes.map(
+            ({ type, attributes: { nid, title, changed, status } }) => ({
+              type,
+              nid,
+              title,
+              changed,
+              status,
+            }),
+          ),
+        },
       };
     }
     default: {

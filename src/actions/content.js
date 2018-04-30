@@ -21,19 +21,63 @@ export const requestContent = options => ({
   payload: { options },
 });
 
+export const CONTENT_FILTER_UPDATED = 'CONTENT_FILTER_UPDATED';
 export const CONTENT_LOADED = 'CONTENT_LOADED';
 function* loadContent({ payload: { options } }) {
   try {
     const queryString = {
       sort: options.sort || '',
+      filter: {
+        ...(options.types && Object.keys(options.types).length
+          ? options.types.reduce(
+              (acc, cur) => ({
+                ...acc,
+                [`type${cur}`]: {
+                  condition: {
+                    value: cur,
+                    path: 'type',
+                    memberOf: 'typeGroup',
+                  },
+                },
+              }),
+              { typeGroup: { group: { conjunction: 'OR' } } },
+            )
+          : {}),
+        ...(options.published && Object.keys(options.published).length
+          ? options.published.reduce(
+              (acc, cur) => ({
+                ...acc,
+                [`type${cur}`]: {
+                  condition: {
+                    value: cur,
+                    path: 'status',
+                    memberOf: 'publishedGroup',
+                  },
+                },
+              }),
+              { publishedGroup: { group: { conjunction: 'OR' } } },
+            )
+          : {}),
+      },
     };
     yield put(resetLoading());
     yield put(showLoading());
+
+    yield put({
+      type: CONTENT_FILTER_UPDATED,
+      payload: {
+        options,
+      },
+    });
+
+    const nodeTypes = yield call(api, 'nodeType');
     const nodes = yield call(api, 'content', { queryString });
+
     yield put({
       type: CONTENT_LOADED,
       payload: {
         nodes,
+        nodeTypes,
       },
     });
   } catch (error) {
