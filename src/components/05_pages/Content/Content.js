@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import { func, arrayOf, object, string, shape } from 'prop-types';
+import { func, arrayOf, object, string, shape, number } from 'prop-types';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import LoadingBar from 'react-redux-loading-bar';
@@ -22,6 +22,12 @@ export const Content = class Content extends Component {
     filterOptions: shape({
       sort: string,
     }),
+    publishedStates: arrayOf(
+      shape({
+        key: number,
+        value: string,
+      }),
+    ).isRequired,
   };
   static defaultProps = {
     nodes: [],
@@ -31,6 +37,7 @@ export const Content = class Content extends Component {
       severities: [],
     },
   };
+
   componentDidMount() {
     this.props.requestContent({
       ...this.props.filterOptions,
@@ -74,38 +81,42 @@ export const Content = class Content extends Component {
     }
     return (
       <Fragment>
-        <label>Content type</label>
-        <select
-          key="select-type"
-          label="Type"
-          multiple
-          size={this.props.nodeTypes.length}
-          onChange={this.typeFilterHandler}
-          selected={this.props.filterOptions.types}
-        >
-          {this.props.nodeTypes.map(({ name, type }) => (
-            <option value={type} key={type}>
-              {name}
-            </option>
-          ))}
-        </select>
-        <label>Published status</label>
-        <select
-          key="select-published"
-          label="Published"
-          size={2}
-          onChange={this.publishedFilterHandler}
-          selected={this.props.filterOptions.published}
-        >
-          {[
-            { value: 'Published', key: true },
-            { value: 'Unpublished', key: false },
-          ].map(({ key, value }) => (
-            <option value={key} key={key}>
-              {value}
-            </option>
-          ))}
-        </select>
+        <label htmlFor="select-type">
+          Content type
+          <select
+            id="select-type"
+            key="select-type"
+            label="Type"
+            multiple
+            size={this.props.nodeTypes.length}
+            onChange={this.typeFilterHandler}
+            selected={this.props.filterOptions.types}
+          >
+            {this.props.nodeTypes.map(({ name, type }) => (
+              <option value={type} key={type}>
+                {name}
+              </option>
+            ))}
+          </select>
+        </label>
+        <label htmlFor="select-published">
+          Published status
+          <select
+            id="select-published"
+            key="select-published"
+            label="Published"
+            multiple
+            size={2}
+            onChange={this.publishedFilterHandler}
+            selected={this.props.filterOptions.published}
+          >
+            {this.props.publishedStates.map(({ key, value }) => (
+              <option value={key} key={key}>
+                {value}
+              </option>
+            ))}
+          </select>
+        </label>
         <Table>
           <THead
             data={[
@@ -124,24 +135,11 @@ export const Content = class Content extends Component {
   };
 };
 
-Content.propTypes = {
-  requestContent: func.isRequired,
-  cancelTask: func.isRequired,
-  nodes: arrayOf(object),
-  nodeTypes: arrayOf(
-    shape({
-      name: string,
-      type: string,
-    }),
-  ),
-};
-
-Content.defaultProps = {
-  nodes: [],
-  nodeTypes: [],
-};
-
 const mapStateToProps = ({ application: { content } }) => ({
+  publishedStates: [
+    { value: 'Published', key: 1 },
+    { value: 'Unpublished', key: 0 },
+  ],
   filterOptions: {
     offset: 0,
   },
