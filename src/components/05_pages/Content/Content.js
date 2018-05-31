@@ -4,9 +4,20 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import LoadingBar from 'react-redux-loading-bar';
 
+import MenuItem from '@material-ui/core/MenuItem';
+import InputLabel from '@material-ui/core/InputLabel';
+import FormHelperText from '@material-ui/core/FormHelperText';
+import FormControl from '@material-ui/core/FormControl';
+import Select from '@material-ui/core/Select';
+
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
+
 import { requestContent } from '../../../actions/content';
 import { cancelTask } from '../../../actions/helpers';
-import { Table, TBody, THead } from '../../01_subatomics/Table/Table';
 
 export const Content = class Content extends Component {
   static propTypes = {
@@ -48,17 +59,18 @@ export const Content = class Content extends Component {
     this.props.cancelTask();
   }
   createTableRows = nodes =>
-    nodes.map(({ changed, nid, status, title, type }) => ({
-      key: `row-${nid}`,
-      tds: [
-        [`td-${nid}-title`, title],
-        [`td-${nid}-content-type`, type],
-        [`td-${nid}-author`, ''],
-        [`td-${nid}-status`, (status && 'Published') || 'Unpublished'],
-        [`td-${nid}-updated`, changed],
-        [`td-${nid}-actions`, <Link to={`/node/${nid}/edit`}>Edit</Link>],
-      ],
-    }));
+    nodes.map(({ changed, nid, status, title, type }) => (
+      <TableRow>
+        <TableCell>{title}</TableCell>
+        <TableCell>{type}</TableCell>
+        <TableCell />
+        <TableCell>{(status && 'Published') || 'Unpublished'}</TableCell>
+        <TableCell>{changed}</TableCell>
+        <TableCell>
+          <Link to={`/node/${nid}/edit`}>Edit</Link>
+        </TableCell>
+      </TableRow>
+    ));
   typeFilterHandler = e =>
     this.props.requestContent({
       published: null,
@@ -81,24 +93,27 @@ export const Content = class Content extends Component {
     }
     return (
       <Fragment>
-        <label htmlFor="select-type">
-          Content type
-          <select
-            id="select-type"
-            key="select-type"
-            label="Type"
+        <FormControl>
+          <InputLabel htmlFor="type-filter">Type</InputLabel>
+          <Select
             multiple
-            size={this.props.nodeTypes.length}
+            value={this.props.filterOptions.types || ['']}
             onChange={this.typeFilterHandler}
-            selected={this.props.filterOptions.types}
+            inputProps={{
+              id: 'type-filter',
+            }}
           >
-            {this.props.nodeTypes.map(({ name, type }) => (
-              <option value={type} key={type}>
-                {name}
-              </option>
-            ))}
-          </select>
-        </label>
+            {[
+              <MenuItem value="" />,
+              ...this.props.nodeTypes.map(({ name, type }) => (
+                <MenuItem key={type} value={type}>
+                  {name}
+                </MenuItem>
+              )),
+            ]}
+          </Select>
+          <FormHelperText>Select a type.</FormHelperText>
+        </FormControl>
         <label htmlFor="select-published">
           Published status
           <select
@@ -118,17 +133,19 @@ export const Content = class Content extends Component {
           </select>
         </label>
         <Table>
-          <THead
-            data={[
-              'Title',
-              'Content Type',
-              'Author',
-              'Status',
-              'Updated',
-              'Edit',
-            ]}
-          />
-          <TBody rows={this.createTableRows(this.props.nodes)} />
+          <TableHead>
+            <TableRow>
+              {[
+                'Title',
+                'Content Type',
+                'Author',
+                'Status',
+                'Updated',
+                'Edit',
+              ].map(item => <TableCell>{item}</TableCell>)}
+            </TableRow>
+          </TableHead>
+          <TableBody>{this.createTableRows(this.props.nodes)}</TableBody>
         </Table>
       </Fragment>
     );

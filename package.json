@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@material-ui/core": "^1.1.0",
     "emotion": "^9.0.2",
     "history": "^4.7.2",
     "interweave": "^8.0.2",
