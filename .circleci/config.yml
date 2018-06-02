@@ -1,7 +1,7 @@
 aliases:
   - &drupal_defaults
     docker:
-      - image: andrewberry/drupal_tests:0.3.4
+      - image: drpal/drupal-8.6.x-dev-test
       - image: selenium/standalone-chrome-debug:3.7.1-beryllium
       - image: mariadb:10.3
         environment:
