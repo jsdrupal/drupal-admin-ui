@@ -43,13 +43,13 @@ Try visiting one of the converted pages, e.g. the user permissions or roles page
 - Ensure you have [Node 8](https://nodejs.org/en/) and [Yarn](https://yarnpkg.com/) installed.
 - Make sure the webserver is started, see [section running](#Running).
 - As we run the development environment as anonymous user right now, you need to grant them permissions.
-- Please do that in the "production" environment, like ```http://localhost:56859/admin/people/permissions```. The permissions you want to grant at least are "administer users" and "Administer site configuration".
+- Please do that in the "production" environment, like ```http://localhost:8888/admin/people/permissions```. The permissions you want to grant at least are "administer users" and "Administer site configuration".
 - Run `composer run-script devify`. You will now have a checkout of this repo in `drupal-admin-ui`.
 It will also symlink the bundled production app to `docroot/vfancy`, and the support module to
 `docroot/modules/contrib`.
 - Edit `drupal-admin-ui/.env.local` and add in the URL for your currently running Drupal installation
-that was output from the start command. e.g. for `Starting webserver on http://localhost:56859`, set
-`REACT_APP_DRUPAL_BASE_URL=http://localhost:56859`
+that was output from the start command. e.g. for `Starting webserver on http://localhost:8888`, set
+`REACT_APP_DRUPAL_BASE_URL=http://localhost:8888`
 - Enter the repo with `cd drupal-admin-ui` and start the Webpack dev server with `yarn start`. This
 will open a new window at `http://localhost:3000/`
 
