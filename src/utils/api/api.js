@@ -33,6 +33,21 @@ async function api(
       options.body = JSON.stringify({ data: parameters.role });
       options.headers['Content-Type'] = 'application/vnd.api+json';
       break;
+    case 'rest.csrf':
+      url = '/rest/session/token';
+      options.plain = true;
+      break;
+    case 'file:upload':
+      url = `/file/upload/${parameters.entity_type_id}/${parameters.bundle}/${
+        parameters.field_name
+      }`;
+      options.method = 'POST';
+      options.headers['Content-Type'] = 'application/octet-stream';
+      options.headers['Content-Disposition'] = `file; filename="${
+        parameters.file_name
+      }"`;
+      options.body = parameters.body;
+      break;
     case 'permissions':
       url = '/admin-api/permissions?_format=json';
       break;
@@ -47,7 +62,7 @@ async function api(
         : ''
     }`,
     options,
-  ).then(res => res.json());
+  ).then(res => (options.plain ? res.text() : res.json()));
   return data;
 }
 

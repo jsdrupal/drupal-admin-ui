@@ -86,6 +86,24 @@
     lodash "^4.2.0"
     to-fast-properties "^2.0.0"
 
+"@emotion/hash@^0.6.2":
+  version "0.6.3"
+  resolved "https://registry.npmjs.org/@emotion/hash/-/hash-0.6.3.tgz#0e7a5604626fc6c6d4ac4061a2f5ac80d50262a4"
+
+"@emotion/is-prop-valid@^0.6.1":
+  version "0.6.2"
+  resolved "https://registry.npmjs.org/@emotion/is-prop-valid/-/is-prop-valid-0.6.2.tgz#a76a16b174ff03f8e3a27faf6259bacd21a02adc"
+  dependencies:
+    "@emotion/memoize" "^0.6.2"
+
+"@emotion/memoize@^0.6.1", "@emotion/memoize@^0.6.2":
+  version "0.6.2"
+  resolved "https://registry.npmjs.org/@emotion/memoize/-/memoize-0.6.2.tgz#138e00b332d519b4e307bded6159e5ba48aba3ae"
+
+"@emotion/stylis@^0.6.5":
+  version "0.6.8"
+  resolved "https://registry.npmjs.org/@emotion/stylis/-/stylis-0.6.8.tgz#6ad4e8d32b19b440efa4481bbbcb98a8c12765bb"
+
 "@types/node@*":
   version "9.6.1"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-9.6.1.tgz#e2d374ef15b315b48e7efc308fa1a7cd51faa06c"
@@ -678,6 +696,22 @@ babel-plugin-emotion@^9.0.1:
     convert-source-map "^1.5.0"
     emotion-utils "^9.0.1"
     find-root "^1.1.0"
+    source-map "^0.5.7"
+    touch "^1.0.0"
+
+babel-plugin-emotion@^9.1.2:
+  version "9.1.2"
+  resolved "https://registry.npmjs.org/babel-plugin-emotion/-/babel-plugin-emotion-9.1.2.tgz#e26b313fa0fecd0f2cc07b1e4ef05da167e4f740"
+  dependencies:
+    "@babel/helper-module-imports" "7.0.0-beta.32"
+    "@emotion/hash" "^0.6.2"
+    "@emotion/memoize" "^0.6.1"
+    "@emotion/stylis" "^0.6.5"
+    babel-plugin-macros "^2.0.0"
+    babel-plugin-syntax-jsx "^6.18.0"
+    convert-source-map "^1.5.0"
+    find-root "^1.1.0"
+    mkdirp "^0.5.1"
     source-map "^0.5.7"
     touch "^1.0.0"
 
@@ -1846,6 +1880,12 @@ create-ecdh@^4.0.0:
   dependencies:
     bn.js "^4.1.0"
     elliptic "^6.0.0"
+
+create-emotion-styled@^9.1.2:
+  version "9.1.2"
+  resolved "https://registry.npmjs.org/create-emotion-styled/-/create-emotion-styled-9.1.2.tgz#1528d9ff5ecc7e3abdf9986510a85ad2a9d73648"
+  dependencies:
+    "@emotion/is-prop-valid" "^0.6.1"
 
 create-emotion@^9.0.2:
   version "9.0.2"
@@ -6191,6 +6231,13 @@ react-dom@^16.2.0:
     loose-envify "^1.1.0"
     object-assign "^4.1.1"
     prop-types "^15.6.0"
+
+react-emotion@^9.1.3:
+  version "9.1.3"
+  resolved "https://registry.npmjs.org/react-emotion/-/react-emotion-9.1.3.tgz#299c29731d12d6236e33277845f5692ec8ba92d6"
+  dependencies:
+    babel-plugin-emotion "^9.1.2"
+    create-emotion-styled "^9.1.2"
 
 react-error-overlay@^4.0.0:
   version "4.0.0"
