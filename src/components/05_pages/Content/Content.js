@@ -1,14 +1,20 @@
 import React, { Component, Fragment } from 'react';
-import { func, arrayOf, object, string, shape, number } from 'prop-types';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import LoadingBar from 'react-redux-loading-bar';
+import { css } from 'emotion';
 
-import MenuItem from '@material-ui/core/MenuItem';
+import Paper from '@material-ui/core/Paper';
+
+import Input from '@material-ui/core/Input';
 import InputLabel from '@material-ui/core/InputLabel';
-import FormHelperText from '@material-ui/core/FormHelperText';
+import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
+import ListItemText from '@material-ui/core/ListItemText';
 import Select from '@material-ui/core/Select';
+import Checkbox from '@material-ui/core/Checkbox';
+import Chip from '@material-ui/core/Chip';
+import TextField from '@material-ui/core/TextField';
 
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -16,122 +22,135 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 
-import { requestContent } from '../../../actions/content';
-import { cancelTask } from '../../../actions/helpers';
+import Button from '@material-ui/core/Button';
+import EditIcon from '@material-ui/icons/Edit';
+import DeleteIcon from '@material-ui/icons/Delete';
 
-export const Content = class Content extends Component {
+import { requestContentTypes } from '../../../actions/application';
+import { requestContent } from '../../../actions/content';
+
+const styles = {
+  root: css`
+    display: flex;
+    flex-wrap: wrap;
+  `,
+  formControl: css`
+    margin: 0.5rem;
+    min-width: 8rem;
+    max-width: 19rem;
+  `,
+  chips: css`
+    display: flex;
+    flex-wrap: wrap;
+  `,
+  chip: css`
+    margin: 0.5rem;
+  `,
+  selectEmpty: css`
+    margin-top: 0.5rem;
+  `,
+  button: css`
+    margin: 0.5rem;
+  `,
+  filters: css`
+    min-height: 7rem;
+  `,
+};
+
+class Content extends Component {
   static propTypes = {
-    requestContent: func.isRequired,
-    cancelTask: func.isRequired,
-    nodes: arrayOf(object),
-    nodeTypes: arrayOf(
-      shape({
-        name: string,
-        type: string,
-      }),
-    ),
-    filterOptions: shape({
-      sort: string,
-    }),
-    publishedStates: arrayOf(
-      shape({
-        key: number,
-        value: string,
+    contentTypes: PropTypes.objectOf(
+      PropTypes.shape({
+        name: PropTypes.string.isRequired,
+        description: PropTypes.string.isRequired,
       }),
     ).isRequired,
+    requestContent: PropTypes.func.isRequired,
+    requestContentTypes: PropTypes.func.isRequired,
+    nodes: PropTypes.arrayOf(PropTypes.object),
   };
   static defaultProps = {
     nodes: [],
-    nodeTypes: [],
-    filterOptions: {
-      sort: '',
-      severities: [],
-    },
   };
-
+  state = {
+    contentTypes: [],
+    status: null,
+  };
   componentDidMount() {
-    this.props.requestContent({
-      ...this.props.filterOptions,
-      sort: 'nid',
-    });
+    this.props.requestContentTypes();
+    this.props.requestContent();
   }
-  componentWillUnmount() {
-    this.props.cancelTask();
-  }
-  createTableRows = nodes =>
-    nodes.map(({ changed, nid, status, title, type }) => (
-      <TableRow>
-        <TableCell>{title}</TableCell>
-        <TableCell>{type}</TableCell>
-        <TableCell />
-        <TableCell>{(status && 'Published') || 'Unpublished'}</TableCell>
-        <TableCell>{changed}</TableCell>
-        <TableCell>
-          <Link to={`/node/${nid}/edit`}>Edit</Link>
-        </TableCell>
-      </TableRow>
-    ));
-  typeFilterHandler = e =>
-    this.props.requestContent({
-      published: null,
-      ...this.props.filterOptions,
-      types: Array.from(e.target.options)
-        .filter(option => option.selected)
-        .map(option => option.value),
-    });
-  publishedFilterHandler = e =>
-    this.props.requestContent({
-      types: null,
-      ...this.props.filterOptions,
-      published: Array.from(e.target.options)
-        .filter(option => option.selected)
-        .map(option => option.value),
-    });
-  render = () => {
-    if (!this.props.nodes) {
-      return <LoadingBar />;
-    }
-    return (
-      <Fragment>
-        <FormControl>
-          <InputLabel htmlFor="type-filter">Type</InputLabel>
+  render = () => (
+    <Fragment>
+      <div className={styles.filters}>
+        <TextField
+          label="Title"
+          placeholder="Title"
+          onChange={e => {
+            this.setState({ title: e.target.value }, () => {
+              this.props.requestContent(this.state);
+            });
+          }}
+          margin="normal"
+        />
+
+        <FormControl className={styles.formControl}>
+          <InputLabel htmlFor="select-multiple-checkbox">
+            Content Type
+          </InputLabel>
           <Select
             multiple
-            value={this.props.filterOptions.types || ['']}
-            onChange={this.typeFilterHandler}
-            inputProps={{
-              id: 'type-filter',
+            value={this.state.contentTypes}
+            onChange={e => {
+              this.setState({ contentTypes: e.target.value }, () => {
+                this.props.requestContent(this.state);
+              });
             }}
+            input={<Input id="select-multiple-checkbox" />}
+            renderValue={selected => (
+              <div className={styles.chips}>
+                {selected.map(value => (
+                  <Chip
+                    key={value}
+                    label={this.props.contentTypes[value].name}
+                    className={styles.chip}
+                  />
+                ))}
+              </div>
+            )}
           >
-            {[
-              <MenuItem value="" />,
-              ...this.props.nodeTypes.map(({ name, type }) => (
-                <MenuItem key={type} value={type}>
-                  {name}
-                </MenuItem>
-              )),
-            ]}
-          </Select>
-          <FormHelperText>Select a type.</FormHelperText>
-        </FormControl>
-        <label htmlFor="select-published">
-          Published status
-          <select
-            id="select-published"
-            key="select-published"
-            label="Published"
-            multiple
-            size={2}
-            onChange={this.publishedFilterHandler}
-            selected={this.props.filterOptions.published}
-          >
-            {this.props.publishedStates.map(({ key, value }) => (
-              <option value={key} key={key}>
-                {value}
-              </option>
+            {Object.keys(this.props.contentTypes).map(type => (
+              <MenuItem key={type} value={type}>
+                <Checkbox
+                  checked={this.state.contentTypes.indexOf(type) > -1}
+                />
+                <ListItemText primary={this.props.contentTypes[type].name} />
+              </MenuItem>
             ))}
-          </select>
-        </label>
+          </Select>
+        </FormControl>
+
+        <FormControl className={styles.formControl}>
+          <InputLabel htmlFor="status">Status</InputLabel>
+          <Select
+            value={this.state.status || ''}
+            onChange={e => {
+              this.setState({ status: e.target.value }, () => {
+                this.props.requestContent(this.state);
+              });
+            }}
+            input={<Input name="status" id="status" />}
+            autoWidth
+          >
+            <MenuItem value="">
+              <em>Any</em>
+            </MenuItem>
+            <MenuItem value="published">Published</MenuItem>
+            <MenuItem value="unpublished">Unpublished</MenuItem>
+          </Select>
+        </FormControl>
+      </div>
+      <Paper>
         <Table>
           <TableHead>
             <TableRow>
@@ -141,28 +160,59 @@ export const Content = class Content extends Component {
                 'Author',
                 'Status',
                 'Updated',
-                'Edit',
-              ].map(item => <TableCell>{item}</TableCell>)}
+                'Actions',
+              ].map(item => <TableCell key={item}>{item}</TableCell>)}
             </TableRow>
           </TableHead>
-          <TableBody>{this.createTableRows(this.props.nodes)}</TableBody>
+          <TableBody>
+            {this.props.nodes.map(
+              ({ type, attributes: { changed, nid, status, title } }) => (
+                <TableRow key={nid}>
+                  <TableCell>{title}</TableCell>
+                  <TableCell>{this.props.contentTypes[type].name}</TableCell>
+                  <TableCell />
+                  <TableCell>
+                    {(status && 'Published') || 'Unpublished'}
+                  </TableCell>
+                  <TableCell>{changed}</TableCell>
+                  <TableCell>
+                    <Button
+                      variant="fab"
+                      color="secondary"
+                      aria-label="edit"
+                      className={styles.button}
+                      component={Link}
+                      to={`/node/${nid}/edit`}
+                    >
+                      <EditIcon />
+                    </Button>
+                    <Button
+                      variant="fab"
+                      disabled
+                      aria-label="delete"
+                      className={styles.button}
+                      component={Link}
+                      to={`/node/${nid}/delete`}
+                    >
+                      <DeleteIcon />
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              ),
+            )}
+          </TableBody>
         </Table>
-      </Fragment>
-    );
-  };
-};
+      </Paper>
+    </Fragment>
+  );
+}
 
-const mapStateToProps = ({ application: { content } }) => ({
-  publishedStates: [
-    { value: 'Published', key: 1 },
-    { value: 'Unpublished', key: 0 },
-  ],
-  filterOptions: {
-    offset: 0,
-  },
-  ...content,
+const mapStateToProps = state => ({
+  contentTypes: state.application.contentTypes,
+  nodes: state.content.nodes,
 });
 
-export default connect(mapStateToProps, { requestContent, cancelTask })(
-  Content,
-);
+export default connect(mapStateToProps, {
+  requestContentTypes,
+  requestContent,
+})(Content);

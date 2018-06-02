@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { func, node, arrayOf, shape, string } from 'prop-types';
 import { connect } from 'react-redux';
-import LoadingBar from 'react-redux-loading-bar';
+import CssBaseline from '@material-ui/core/CssBaseline';
 import { css } from 'emotion';
 import { reveal as Menu } from 'react-burger-menu';
 import { Link } from 'react-router-dom';
@@ -47,81 +47,80 @@ class Default extends React.Component {
       filterString: '',
     };
   }
-
   componentWillMount() {
     this.props.requestMenu();
   }
-
   filterMenu = e => {
     this.setState({
       filterString: e.target.value,
     });
   };
-
   render = () => (
-    <div className={styles.outerWrapper} id={styles.outerWrapper}>
-      <ConnectedMenu
-        outerContainerId={styles.outerWrapper}
-        pageWrapId={styles.main}
-        burgerButtonClassName={styles.burgerButton}
-        burgerBarClassName={styles.burgerBar}
-        crossButtonClassName={styles.crossButton}
-        crossClassName={styles.cross}
-        menuClassName={styles.menu}
-        morphShapeClassName={styles.morphShape}
-        itemListClassName={styles.itemList}
-        overlayClassName={styles.overlay}
-      >
-        <input
-          className={styles.filterMenu}
-          type="textfield"
-          placeholder="Search"
-          onChange={this.filterMenu}
-          value={this.state.filterString}
-        />
-        {filterMenuLinks(this.state.filterString, this.props.menuLinks).map(
-          ({ link: menuLink, subtree }) => (
-            <ul
-              key={`${menuLink.menuName}--${menuLink.url}--${menuLink.title}`}
-              className={styles.menuList}
-            >
-              <li>
-                <Link to={menuLink.url} className={styles.topLevelLink}>
-                  {menuLink.title}
-                </Link>
-                <ul className={styles.menuListChildren}>
-                  {subtree.map(({ link: subMenuLink }) => (
-                    <li
-                      key={`
-                      ${subMenuLink.menuName}--
-                      ${subMenuLink.url}--
-                      ${subMenuLink.title}
-                    `}
-                      className={styles.menuListItem}
-                    >
-                      <Link
-                        to={subMenuLink.url}
-                        className={styles.childrenLink}
+    <Fragment>
+      <CssBaseline />
+      <div className={styles.outerWrapper} id={styles.outerWrapper}>
+        <ConnectedMenu
+          outerContainerId={styles.outerWrapper}
+          pageWrapId={styles.main}
+          burgerButtonClassName={styles.burgerButton}
+          burgerBarClassName={styles.burgerBar}
+          crossButtonClassName={styles.crossButton}
+          crossClassName={styles.cross}
+          menuClassName={styles.menu}
+          morphShapeClassName={styles.morphShape}
+          itemListClassName={styles.itemList}
+          overlayClassName={styles.overlay}
+        >
+          <input
+            className={styles.filterMenu}
+            type="textfield"
+            placeholder="Search"
+            onChange={this.filterMenu}
+            value={this.state.filterString}
+          />
+          {filterMenuLinks(this.state.filterString, this.props.menuLinks).map(
+            ({ link: menuLink, subtree }) => (
+              <ul
+                key={`${menuLink.menuName}--${menuLink.url}--${menuLink.title}`}
+                className={styles.menuList}
+              >
+                <li>
+                  <Link to={menuLink.url} className={styles.topLevelLink}>
+                    {menuLink.title}
+                  </Link>
+                  <ul className={styles.menuListChildren}>
+                    {subtree.map(({ link: subMenuLink }) => (
+                      <li
+                        key={`
+                        ${subMenuLink.menuName}--
+                        ${subMenuLink.url}--
+                        ${subMenuLink.title}
+                      `}
+                        className={styles.menuListItem}
                       >
-                        {subMenuLink.title}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </li>
-            </ul>
-          ),
-        )}
-      </ConnectedMenu>
+                        <Link
+                          to={subMenuLink.url}
+                          className={styles.childrenLink}
+                        >
+                          {subMenuLink.title}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </li>
+              </ul>
+            ),
+          )}
+        </ConnectedMenu>
 
-      <main className={styles.main} id={styles.main}>
-        <ErrorBoundary>
-          <LoadingBar />
-          {this.props.message && <Message {...this.props.message} />}
-          {this.props.children}
-        </ErrorBoundary>
-      </main>
-    </div>
+        <main className={styles.main} id={styles.main}>
+          <ErrorBoundary>
+            {this.props.message && <Message {...this.props.message} />}
+            {this.props.children}
+          </ErrorBoundary>
+        </main>
+      </div>
+    </Fragment>
   );
 }
 

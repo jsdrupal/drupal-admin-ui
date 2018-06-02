@@ -1,6 +1,5 @@
 import { LOCATION_CHANGE } from 'react-router-redux';
 import { ROLES_LOADED } from '../actions/roles';
-import { CONTENT_LOADED, CONTENT_FILTER_UPDATED } from '../actions/content';
 import {
   DBLOG_COLLECTION_LOADED,
   DBLOG_FILTER_UPDATED,
@@ -9,12 +8,14 @@ import {
   SET_MESSAGE,
   CLEAR_MESSAGE,
   MENU_LOADED,
+  CONTENT_TYPES_LOADED,
 } from '../actions/application';
 
 export const initialState = {
   message: null,
   menuLinks: [],
   filterString: '',
+  contentTypes: {},
 };
 export default (state = initialState, action) => {
   switch (action.type) {
@@ -119,38 +120,19 @@ export default (state = initialState, action) => {
         roles,
       };
     }
-    case CONTENT_FILTER_UPDATED: {
-      const { content, ...rest } = state;
+    case CONTENT_TYPES_LOADED: {
       return {
-        ...rest,
-        content: {
-          ...content,
-          filterOptions: action.payload.options,
-        },
-      };
-    }
-    case CONTENT_LOADED: {
-      const { content, ...rest } = state;
-      const nodes = action.payload.nodes.data;
-      const nodeTypes = action.payload.nodeTypes.data;
-      return {
-        ...rest,
-        content: {
-          ...content,
-          nodeTypes: nodeTypes.map(({ attributes: { name, type } }) => ({
-            name,
-            type,
-          })),
-          nodes: nodes.map(
-            ({ type, attributes: { nid, title, changed, status } }) => ({
-              type,
-              nid,
-              title,
-              changed,
-              status,
-            }),
-          ),
-        },
+        ...state,
+        contentTypes: action.payload.contentTypes.data.reduce(
+          (accumulator, contentType) => ({
+            ...accumulator,
+            [contentType.attributes.type]: {
+              name: contentType.attributes.name,
+              description: contentType.attributes.description,
+            },
+          }),
+          {},
+        ),
       };
     }
     default: {

@@ -1,4 +1,4 @@
-import { put, call, takeLatest } from 'redux-saga/effects';
+import { call, put, select, takeLatest } from 'redux-saga/effects';
 import {
   showLoading,
   hideLoading,
@@ -48,6 +48,37 @@ function* loadMenu() {
   }
 }
 
+/**
+ * Gets all available content types.
+ */
+export const CONTENT_TYPES_REQUESTED = 'CONTENT_TYPES_REQUESTED';
+export const requestContentTypes = () => ({
+  type: CONTENT_TYPES_REQUESTED,
+  payload: {},
+});
+
+export const getContentTypeCache = state => state.application.contentTypes;
+export const CONTENT_TYPES_LOADED = 'CONTENT_TYPES_LOADED';
+function* loadContentTypes() {
+  try {
+    let contentTypes = yield select(getContentTypeCache);
+    if (!Object.keys(contentTypes).length) {
+      contentTypes = yield call(api, 'nodeType');
+    }
+    yield put({
+      type: CONTENT_TYPES_LOADED,
+      payload: {
+        contentTypes,
+      },
+    });
+  } catch (error) {
+    yield put(setMessage(error.toString()));
+  } finally {
+    yield put(hideLoading());
+  }
+}
+
 export default function* watchRequestedMenu() {
   yield takeLatest(MENU_REQUESTED, loadMenu);
+  yield takeLatest(CONTENT_TYPES_REQUESTED, loadContentTypes);
 }
