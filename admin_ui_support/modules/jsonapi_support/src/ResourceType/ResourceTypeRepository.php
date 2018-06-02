@@ -30,12 +30,14 @@ class ResourceTypeRepository extends JsonApiResourceTypeRepository {
       $this->all = parent::all();
       $entity_types = $this->entityTypeManager->getDefinitions();
       foreach ($entity_types as $entity_type_id => $entity_type) {
-        $this->all[] = new CrossBundlesResourceType(
-          $entity_type_id,
-          $entity_type_id,
-          $entity_type->getClass(),
-          static::shouldBeInternalResourceType($entity_type)
-        );
+        if ($entity_type->getBundleEntityType()) {
+          $this->all[] = new CrossBundlesResourceType(
+            $entity_type_id,
+            '__all',
+            $entity_type->getClass(),
+            static::shouldBeInternalResourceType($entity_type)
+          );
+        }
       }
     }
     return $this->all;
