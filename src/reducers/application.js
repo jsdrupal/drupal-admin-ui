@@ -9,11 +9,14 @@ import {
   CLEAR_MESSAGE,
   MENU_LOADED,
 } from '../actions/application';
+import { PERMISSIONS_LOADED } from '../actions/permissions';
 
 export const initialState = {
   message: null,
   menuLinks: [],
   filterString: '',
+  roles: null,
+  permissions: null,
 };
 export default (state = initialState, action) => {
   switch (action.type) {
@@ -116,6 +119,13 @@ export default (state = initialState, action) => {
       return {
         ...state,
         roles,
+      };
+    }
+    case PERMISSIONS_LOADED: {
+      const { payload: { permissions } } = action;
+      return {
+        ...state,
+        permissions,
       };
     }
     default: {

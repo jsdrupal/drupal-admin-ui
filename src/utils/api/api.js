@@ -13,7 +13,7 @@ async function api(
       url = '/admin-api/menu?_format=json';
       break;
     case 'dblog':
-      url = '/jsonapi/watchdog_entity/watchdog_entity';
+      url = '/jsonapi/watchdog_entity';
       break;
     case 'dblog:types':
       url = '/admin-ui-support/dblog-types?_format=json';

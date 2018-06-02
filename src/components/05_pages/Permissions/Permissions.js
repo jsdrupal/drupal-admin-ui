@@ -1,7 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
-import { string, shape, func } from 'prop-types';
-import makeCancelable from 'makecancelable';
+import { string, shape, func, arrayOf } from 'prop-types';
 import { Markup } from 'interweave';
 import { css } from 'emotion';
 import { StickyContainer, Sticky } from 'react-sticky';
@@ -14,6 +13,9 @@ import {
 import Loading from '../../02_atoms/Loading/Loading';
 import { Table, TBody, THead } from '../../01_subatomics/Table/Table';
 import api from '../../../utils/api/api';
+import { requestPermissions } from '../../../actions/permissions';
+import { requestRoles } from '../../../actions/roles';
+import { cancelTask } from '../../../actions/helpers';
 
 export const filterPermissions = (input, permissions) =>
   permissions.filter(
@@ -26,67 +28,51 @@ export const filterPermissions = (input, permissions) =>
 let styles;
 
 const Permissions = class Permissions extends Component {
-  static propTypes = {
-    setMessage: func.isRequired,
-    clearMessage: func.isRequired,
-    match: shape({
-      params: shape({
-        role: string,
-      }).isRequired,
-    }).isRequired,
-  };
   state = {
     loaded: false,
-    rawPermissions: [],
-    renderablePermissions: [],
+    permissions: [],
+    changedRoles: [],
+    filter: '',
     working: false,
   };
   componentDidMount() {
-    this.cancelFetch = this.fetchData();
+    this.props.requestPermissions();
+    this.props.requestRoles();
   }
   componentWillUnmount() {
-    this.cancelFetch();
+    this.props.cancelTask();
   }
   onPermissionCheck = (roleName, permission) => {
     this.setState(prevState => ({
-      changedRoles: [...new Set(prevState.changedRoles).add(roleName).values()],
-      roles: this.togglePermission(permission, roleName, prevState.roles),
+      changedRoles: Array.from(
+        new Set(prevState.changedRoles).add(roleName).values(),
+      ),
+      roles: this.togglePermission(
+        permission,
+        roleName,
+        prevState.roles || this.props.roles,
+      ),
     }));
     this.props.clearMessage();
   };
-  fetchData = () =>
-    makeCancelable(
-      Promise.all([api('permissions'), api('roles')])
-        .then(([permissions, { data: roles }]) =>
-          this.setState({
-            rawPermissions: permissions,
-            renderablePermissions: permissions,
-            changedRoles: [],
-            working: false,
-            // Move admin roles to the right.
-            roles:
-              this.props.match.params.role &&
-              roles
-                .map(role => role.attributes.id)
-                .includes(this.props.match.params.role)
-                ? roles.filter(
-                    role => role.attributes.id === this.props.match.params.role,
-                  )
-                : roles.sort((a, b) => {
-                    if (a.attributes.is_admin && b.attributes.is_admin) {
-                      return a.attributes.id - b.attributes.id;
-                    } else if (a.attributes.is_admin) {
-                      return 1;
-                    } else if (b.attributes.is_admin) {
-                      return -1;
-                    }
-                    return a.attributes.id - b.attributes.id;
-                  }),
-            loaded: true,
-          }),
+
+  sortAdminRoles = (roles, matchedRole) =>
+    matchedRole &&
+    roles.map(role => role.attributes.id).includes(this.props.match.params.role)
+      ? roles.filter(
+          role => role.attributes.id === this.props.match.params.role,
         )
-        .catch(err => this.setState({ loaded: false, err })),
-    );
+      : roles.sort((a, b) => {
+          if (a.attributes.is_admin && b.attributes.is_admin) {
+            return a.attributes.id - b.attributes.id;
+          } else if (a.attributes.is_admin) {
+            return 1;
+          } else if (b.attributes.is_admin) {
+            return -1;
+          }
+          return a.attributes.id - b.attributes.id;
+        });
+
   togglePermission = (permission, roleName, roles) => {
     const roleIndex = roles.map(role => role.attributes.id).indexOf(roleName);
     const role = roles[roleIndex];
@@ -163,10 +149,10 @@ const Permissions = class Permissions extends Component {
       ),
     );
   handleKeyPress = event => {
-    const input = event.target.value;
+    const filter = event.target.value;
     this.setState(prevState => ({
       ...prevState,
-      renderablePermissions: filterPermissions(input, prevState.rawPermissions),
+      filter,
     }));
   };
   saveRoles = () => {
@@ -190,17 +176,19 @@ const Permissions = class Permissions extends Component {
                 );
               }),
             ),
-        ).then(() => {
-          this.cancelFetch = this.fetchData();
-        }),
+        ),
     );
   };
   render() {
     if (this.state.err) {
       throw new Error('Error while loading page');
-    } else if (!this.state.loaded) {
+    } else if (!this.props.roles || !this.props.permissions) {
       return <Loading />;
     }
+    const sortedRoles = this.sortAdminRoles(
+      this.props.roles,
+      this.props.match.params.role,
+    );
     return (
       <StickyContainer>
         <Sticky>
@@ -231,19 +219,47 @@ const Permissions = class Permissions extends Component {
           <THead
             data={[
               'Permission',
-              ...this.state.roles.map(({ attributes: { label } }) => label),
+              ...sortedRoles.map(({ attributes: { label } }) => label),
             ]}
           />
           <TBody
             rows={this.createTableRows(
-              this.groupPermissions(this.state.renderablePermissions),
-              this.state.roles,
+              this.groupPermissions(
+                filterPermissions(this.state.filter, this.props.permissions),
+              ),
+              sortedRoles,
             )}
           />
         </Table>
       </StickyContainer>
     );
   }
+};
+
+Permissions.propTypes = {
+  setMessage: func.isRequired,
+  cancelTask: func.isRequired,
+  clearMessage: func.isRequired,
+  match: shape({
+    params: shape({
+      role: string,
+    }).isRequired,
+  }).isRequired,
+  roles: arrayOf(shape({})),
+  permissions: arrayOf(
+    shape({
+      provider: string.isRequired,
+      title: string.isRequired,
+      description: string,
+    }),
+  ),
+  requestPermissions: func.isRequired,
+  requestRoles: func.isRequired,
+};
+
+Permissions.defaultProps = {
+  roles: null,
+  permissions: null,
 };
 
 styles = {
@@ -276,4 +292,15 @@ styles = {
   `,
 };
 
-export default connect(null, { setMessage, clearMessage })(Permissions);
+const mapStateToProps = state => ({
+  roles: state.application.roles,
+  permissions: state.application.permissions,
+});
+
+export default connect(mapStateToProps, {
+  setMessage,
+  cancelTask,
+  clearMessage,
+  requestPermissions,
+  requestRoles,
+})(Permissions);
