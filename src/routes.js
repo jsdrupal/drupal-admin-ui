@@ -5,7 +5,7 @@ import Dblog from './components/05_pages/Reports/Dblog';
 
 // @todo Share this with Drupal
 const routes = {
-  '/admin/content/': Content,
+  '/admin/content': Content,
   '/admin/people/permissions/:role?': Permissions,
   '/admin/people/roles/': Roles,
   '/admin/reports/dblog/': Dblog,

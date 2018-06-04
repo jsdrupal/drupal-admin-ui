@@ -40,7 +40,7 @@ async function api(
       url = '/jsonapi/node';
       options.headers.Accept = 'application/vnd.api+json';
       break;
-    case 'nodeType':
+    case 'contentTypes':
       url = '/jsonapi/node_type';
       options.headers.Accept = 'application/vnd.api+json';
       break;

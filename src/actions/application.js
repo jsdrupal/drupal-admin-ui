@@ -63,7 +63,7 @@ function* loadContentTypes() {
   try {
     let contentTypes = yield select(getContentTypeCache);
     if (!Object.keys(contentTypes).length) {
-      contentTypes = yield call(api, 'nodeType');
+      contentTypes = yield call(api, 'contentTypes');
     }
     yield put({
       type: CONTENT_TYPES_LOADED,

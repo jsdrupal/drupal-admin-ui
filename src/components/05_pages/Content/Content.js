@@ -157,7 +157,6 @@ class Content extends Component {
               {[
                 'Title',
                 'Content Type',
-                'Author',
                 'Status',
                 'Updated',
                 'Actions',
@@ -170,7 +169,6 @@ class Content extends Component {
                 <TableRow key={nid}>
                   <TableCell>{title}</TableCell>
                   <TableCell>{this.props.contentTypes[type].name}</TableCell>
-                  <TableCell />
                   <TableCell>
                     {(status && 'Published') || 'Unpublished'}
                   </TableCell>
@@ -188,7 +186,6 @@ class Content extends Component {
                     </Button>
                     <Button
                       variant="fab"
-                      disabled
                       aria-label="delete"
                       className={styles.button}
                       component={Link}
