@@ -32,7 +32,8 @@ composer run-script install
 
 ## Running
 ```
-composer run-script start
+cd docroot
+php core/scripts/drupal server
 ```
 
 Try visiting one of the converted pages, e.g. the user permissions or roles page.
