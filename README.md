@@ -41,7 +41,7 @@ Try visiting one of the converted pages, e.g. the user permissions or roles page
 ## Developing
 
 - Ensure you have [Node 8](https://nodejs.org/en/) and [Yarn](https://yarnpkg.com/) installed.
-- Make sure the webserver is started, see [section running](#Running).
+- Make sure the webserver is started with `composer run-script start`
 - As we run the development environment as anonymous user right now, you need to grant them permissions.
 - Please do that in the "production" environment, like ```http://localhost:8888/admin/people/permissions```. The permissions you want to grant at least are "administer users" and "Administer site configuration".
 - Run `composer run-script devify`. You will now have a checkout of this repo in `drupal-admin-ui`.
