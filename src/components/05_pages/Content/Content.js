@@ -154,13 +154,9 @@ class Content extends Component {
         <Table>
           <TableHead>
             <TableRow>
-              {[
-                'Title',
-                'Content Type',
-                'Status',
-                'Updated',
-                'Actions',
-              ].map(item => <TableCell key={item}>{item}</TableCell>)}
+              {['Title', 'Content Type', 'Status', 'Updated', 'Actions'].map(
+                item => <TableCell key={item}>{item}</TableCell>,
+              )}
             </TableRow>
           </TableHead>
           <TableBody>
