@@ -127,16 +127,11 @@ class CrossBundleCollectionTest extends BrowserTestBase {
     // Confirm that all of the other methods/routes have been removed from the resource.
     $request_options[RequestOptions::HTTP_ERRORS] = FALSE;
     $response = $this->httpClient->request('POST', 'jsonapi/node', $request_options);
-    $this->assertEquals('400', $response->getStatusCode());
-
-    $response = $this->httpClient->request('POST', 'jsonapi/node' . Node::load(1)->uuid(), $request_options);
-    $this->assertEquals('404', $response->getStatusCode());
-
-    $response = $this->httpClient->request('PATCH', 'jsonapi/node' . Node::load(1)->uuid(), $request_options);
-    $this->assertEquals('404', $response->getStatusCode());
-
-    $response = $this->httpClient->request('DELETE', 'jsonapi/node' . Node::load(1)->uuid(), $request_options);
-    $this->assertEquals('404', $response->getStatusCode());
+    $this->assertEquals('405', $response->getStatusCode());
+    foreach (['POST', 'PATCH', 'DELETE'] as $method) {
+      $response = $this->httpClient->request($method, 'jsonapi/node/' . Node::load(1)->uuid(), $request_options);
+      $this->assertEquals('404', $response->getStatusCode());
+    }
   }
 
   /**
