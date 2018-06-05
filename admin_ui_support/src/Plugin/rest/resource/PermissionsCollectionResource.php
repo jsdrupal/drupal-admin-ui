@@ -2,10 +2,7 @@
 
 namespace Drupal\admin_ui_support\Plugin\rest\resource;
 
-use Drupal\Component\Render\PlainTextOutput;
 use Drupal\Core\Extension\ExtensionList;
-use Drupal\Core\Extension\ModuleExtensionList;
-use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Render\RenderContext;
 use Drupal\Core\Render\RendererInterface;
 use Drupal\rest\Plugin\ResourceBase;
@@ -42,11 +39,11 @@ class PermissionsCollectionResource extends ResourceBase {
   protected $renderer;
 
   /**
-   * The module handler.
+   * The module extension list.
    *
-   * @var \Drupal\Core\Extension\ModuleHandlerInterface
+   * @var \Drupal\Core\Extension\ExtensionList
    */
-  protected $moduleHandler;
+  protected $moduleExtensionList;
 
   /**
    * Constructs a PermissionResource object.
@@ -65,15 +62,15 @@ class PermissionsCollectionResource extends ResourceBase {
    *   The permission handler.
    * @param \Drupal\Core\Render\RendererInterface $renderer
    *   The renderer.
-   * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
-   *   The module handler.
+   * @param \Drupal\Core\Extension\ExtensionList $module_extension_list
+   *   The module extension list.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, array $serializer_formats, LoggerInterface $logger, PermissionHandlerInterface $permission_handler, RendererInterface $renderer, ModuleHandlerInterface $module_handler) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, array $serializer_formats, LoggerInterface $logger, PermissionHandlerInterface $permission_handler, RendererInterface $renderer, ExtensionList $module_extension_list) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $serializer_formats, $logger);
 
     $this->permissionHandler = $permission_handler;
     $this->renderer = $renderer;
-    $this->moduleHandler = $module_handler;
+    $this->moduleExtensionList = $module_extension_list;
   }
 
   /**
@@ -88,7 +85,7 @@ class PermissionsCollectionResource extends ResourceBase {
       $container->get('logger.factory')->get('rest'),
       $container->get('user.permissions'),
       $container->get('renderer'),
-      $container->get('module_handler')
+      $container->get('extension.list.module')
     );
   }
 
@@ -100,12 +97,12 @@ class PermissionsCollectionResource extends ResourceBase {
    */
   public function get() {
     $context = new RenderContext();
-    
+
     $permissions = $this->renderer->executeInRenderContext($context, function () {
       $permissions = $this->permissionHandler->getPermissions();
       foreach ($permissions as $id => $permission) {
         $permissions[$id]['id'] = $id;
-        $permissions[$id]['provider_label'] = $this->moduleHandler->getName($permissions[$id]['provider']);
+        $permissions[$id]['provider_label'] = $this->moduleExtensionList->getName($permissions[$id]['provider']);
         // @todo Make a helper method to automatically render elements.
         if (is_array($permissions[$id]['description'])) {
           $permissions[$id]['description'] = $this->renderer->render($permissions[$id]['description']);
