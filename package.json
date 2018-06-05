@@ -13,7 +13,6 @@
     "prop-types": "^15.6.1",
     "qs": "^6.5.1",
     "react": "^16.4.0",
-    "react-burger-menu": "^2.4.0",
     "react-dom": "^16.4.0",
     "react-jss": "^8.4.0",
     "react-redux": "^5.0.7",
@@ -22,7 +21,6 @@
     "react-router-redux": "^5.0.0-alpha.9",
     "react-sticky": "^6.0.2",
     "redux": "^3.7.2",
-    "redux-burger-menu": "^0.2.4",
     "redux-devtools-extension": "^2.13.2",
     "redux-saga": "^0.16.0"
   },

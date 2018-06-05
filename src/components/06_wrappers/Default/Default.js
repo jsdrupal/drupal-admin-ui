@@ -1,198 +1,89 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import { func, node, arrayOf, shape, string } from 'prop-types';
 import { connect } from 'react-redux';
-import CssBaseline from '@material-ui/core/CssBaseline';
 import { css } from 'emotion';
-import { reveal as Menu } from 'react-burger-menu';
 import { Link } from 'react-router-dom';
-import { decorator as reduxBurgerMenu } from 'redux-burger-menu';
+
+import CssBaseline from '@material-ui/core/CssBaseline';
+import Drawer from '@material-ui/core/Drawer';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
+import Divider from '@material-ui/core/Divider';
+import ViewListIcon from '@material-ui/icons/ViewList';
+import BuildIcon from '@material-ui/icons/Build';
+import ColorLensIcon from '@material-ui/icons/ColorLens';
+import ExtensionIcon from '@material-ui/icons/Extension';
+import SettingsIcon from '@material-ui/icons/Settings';
+import PeopleIcon from '@material-ui/icons/People';
+import AssesmentIcon from '@material-ui/icons/Assessment';
+import HelpIcon from '@material-ui/icons/Help';
+
 import { requestMenu } from '../../../actions/application';
 import Message from '../../02_atoms/Message/Message';
 import ErrorBoundary from '../ErrorBoundary/ErrorBoundary';
 
 let styles;
 
-const ConnectedMenu = reduxBurgerMenu(Menu, 'admin');
-
-export const filterMenuLinks = (searchString, menuLinks) => {
-  if (!searchString) {
-    return menuLinks;
-  }
-  return menuLinks
-    .map(menuLink => {
-      const subtree =
-        menuLink.subtree && filterMenuLinks(searchString, menuLink.subtree);
-      if (
-        (menuLink.link &&
-          `${menuLink.link.title}${menuLink.link.description}`
-            .toLowerCase()
-            .indexOf(searchString.toLowerCase()) !== -1) ||
-        (Array.isArray(subtree) && subtree.length > 0)
-      ) {
-        return {
-          ...menuLink,
-          subtree,
-        };
-      }
-      return null;
-    })
-    .filter(id => id);
+const iconMap = {
+  '/admin/content': <ViewListIcon />,
+  '/admin/structure': <BuildIcon />,
+  '/admin/appearance': <ColorLensIcon />,
+  '/admin/modules': <ExtensionIcon />,
+  '/admin/config': <SettingsIcon />,
+  '/admin/people': <PeopleIcon />,
+  '/admin/reports': <AssesmentIcon />,
+  '/admin/help': <HelpIcon />,
 };
 
 class Default extends React.Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      filterString: '',
-    };
-  }
   componentWillMount() {
     this.props.requestMenu();
   }
-  filterMenu = e => {
-    this.setState({
-      filterString: e.target.value,
-    });
-  };
-  render = () => (
-    <Fragment>
-      <CssBaseline />
-      <div className={styles.outerWrapper} id={styles.outerWrapper}>
-        <ConnectedMenu
-          outerContainerId={styles.outerWrapper}
-          pageWrapId={styles.main}
-          burgerButtonClassName={styles.burgerButton}
-          burgerBarClassName={styles.burgerBar}
-          crossButtonClassName={styles.crossButton}
-          crossClassName={styles.cross}
-          menuClassName={styles.menu}
-          morphShapeClassName={styles.morphShape}
-          itemListClassName={styles.itemList}
-          overlayClassName={styles.overlay}
-        >
-          <input
-            className={styles.filterMenu}
-            type="textfield"
-            placeholder="Search"
-            onChange={this.filterMenu}
-            value={this.state.filterString}
-          />
-          {filterMenuLinks(this.state.filterString, this.props.menuLinks).map(
-            ({ link: menuLink, subtree }) => (
-              <ul
-                key={`${menuLink.menuName}--${menuLink.url}--${menuLink.title}`}
-                className={styles.menuList}
-              >
-                <li>
-                  <Link to={menuLink.url} className={styles.topLevelLink}>
-                    {menuLink.title}
-                  </Link>
-                  <ul className={styles.menuListChildren}>
-                    {subtree.map(({ link: subMenuLink }) => (
-                      <li
-                        key={`
-                        ${subMenuLink.menuName}--
-                        ${subMenuLink.url}--
-                        ${subMenuLink.title}
-                      `}
-                        className={styles.menuListItem}
-                      >
-                        <Link
-                          to={subMenuLink.url}
-                          className={styles.childrenLink}
-                        >
-                          {subMenuLink.title}
-                        </Link>
-                      </li>
-                    ))}
-                  </ul>
-                </li>
-              </ul>
-            ),
-          )}
-        </ConnectedMenu>
 
-        <main className={styles.main} id={styles.main}>
-          <ErrorBoundary>
-            {this.props.message && <Message {...this.props.message} />}
-            {this.props.children}
-          </ErrorBoundary>
-        </main>
-      </div>
-    </Fragment>
+  render = () => (
+    <div className={styles.outerWrapper}>
+      <CssBaseline />
+      <Drawer variant="permanent" classes={{ paper: styles.drawerPaper }}>
+        <List>
+          {this.props.menuLinks.map(({ link: menuLink }) => (
+            <ListItem button component={Link} to={menuLink.url}>
+              {iconMap[menuLink.url] ? (
+                <ListItemIcon>{iconMap[menuLink.url]}</ListItemIcon>
+              ) : (
+                ''
+              )}
+              <ListItemText primary={menuLink.title} />
+            </ListItem>
+          ))}
+        </List>
+        <Divider />
+      </Drawer>
+
+      <main className={styles.main} id={styles.main}>
+        <ErrorBoundary>
+          {this.props.message && <Message {...this.props.message} />}
+          {this.props.children}
+        </ErrorBoundary>
+      </main>
+    </div>
   );
 }
 
 styles = {
   outerWrapper: css`
     height: 100%;
-    background: #444444;
+    display: flex;
   `,
   main: css`
-    padding: 7rem 2rem 3rem;
+    flex-grow: 1;
+    padding: 2rem;
     height: 100%;
-    background: #ffffff;
   `,
-  filterMenu: css`
+  drawerPaper: css`
     position: relative;
-    margin: 36px 8px 8px;
-  `,
-  burgerButton: css`
-    position: absolute;
-    width: 36px;
-    height: 30px;
-    left: 36px;
-    top: 36px;
-  `,
-  burgerBar: css`
-    background: #373a47;
-  `,
-  crossButton: css`
-    height: 24px;
-    width: 24px;
-  `,
-  cross: css`
-    background: #bdc3c7;
-  `,
-  menu: css`
-    background: #fafafa;
-    font-size: 1.05rem;
-  `,
-  menuList: css`
-    list-style: none;
-    margin: 10px 0;
-    padding-left: 1.5rem;
-  `,
-  menuListChildren: css`
-    list-style: none;
-    padding: 10px 0 0 1.5rem;
-  `,
-  menuListItem: css`
-    padding-bottom: 10px;
-  `,
-  topLevelLink: css`
-    color: #272756;
-    font-weight: bold;
-    text-decoration: none;
-    font-size: 0.95rem;
-  `,
-  childrenLink: css`
-    color: #252629;
-    text-decoration: none;
-
-    &:hover {
-      color: #000000;
-    }
-  `,
-  morphShape: css`
-    fill: #373a47;
-  `,
-  itemList: css`
-    color: #b8b7ad;
-  `,
-  overlay: css`
-    background: rgba(0, 0, 0, 0.3);
+    width: 250px;
   `,
 };
 
@@ -204,14 +95,6 @@ Default.propTypes = {
   }),
   menuLinks: arrayOf(
     shape({
-      subtree: arrayOf(
-        shape({
-          link: shape({
-            url: string,
-            title: string,
-          }),
-        }),
-      ),
       link: shape({
         url: string,
         title: string,
