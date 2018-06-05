@@ -53,7 +53,7 @@ const styles = {
     margin: 0.5rem;
   `,
   filters: css`
-    min-height: 7rem;
+    padding: 0 1.5rem;
   `,
 };
 
@@ -82,75 +82,76 @@ class Content extends Component {
   }
   render = () => (
     <Fragment>
-      <div className={styles.filters}>
-        <TextField
-          label="Title"
-          placeholder="Title"
-          onChange={e => {
-            this.setState({ title: e.target.value }, () => {
-              this.props.requestContent(this.state);
-            });
-          }}
-          margin="normal"
-        />
-
-        <FormControl className={styles.formControl}>
-          <InputLabel htmlFor="select-multiple-checkbox">
-            Content Type
-          </InputLabel>
-          <Select
-            multiple
-            value={this.state.contentTypes}
-            onChange={e => {
-              this.setState({ contentTypes: e.target.value }, () => {
-                this.props.requestContent(this.state);
-              });
-            }}
-            input={<Input id="select-multiple-checkbox" />}
-            renderValue={selected => (
-              <div className={styles.chips}>
-                {selected.map(value => (
-                  <Chip
-                    key={value}
-                    label={this.props.contentTypes[value].name}
-                    className={styles.chip}
-                  />
-                ))}
-              </div>
-            )}
-          >
-            {Object.keys(this.props.contentTypes).map(type => (
-              <MenuItem key={type} value={type}>
-                <Checkbox
-                  checked={this.state.contentTypes.indexOf(type) > -1}
-                />
-                <ListItemText primary={this.props.contentTypes[type].name} />
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-
-        <FormControl className={styles.formControl}>
-          <InputLabel htmlFor="status">Status</InputLabel>
-          <Select
-            value={this.state.status || ''}
-            onChange={e => {
-              this.setState({ status: e.target.value }, () => {
-                this.props.requestContent(this.state);
-              });
-            }}
-            input={<Input name="status" id="status" />}
-            autoWidth
-          >
-            <MenuItem value="">
-              <em>Any</em>
-            </MenuItem>
-            <MenuItem value="published">Published</MenuItem>
-            <MenuItem value="unpublished">Unpublished</MenuItem>
-          </Select>
-        </FormControl>
-      </div>
       <Paper>
+        <div className={styles.filters}>
+          <TextField
+            label="Title"
+            placeholder="Title"
+            onChange={e => {
+              this.setState({ title: e.target.value }, () => {
+                this.props.requestContent(this.state);
+              });
+            }}
+            margin="normal"
+          />
+
+          <FormControl className={styles.formControl}>
+            <InputLabel htmlFor="select-multiple-checkbox">
+              Content Type
+            </InputLabel>
+            <Select
+              multiple
+              value={this.state.contentTypes}
+              onChange={e => {
+                this.setState({ contentTypes: e.target.value }, () => {
+                  this.props.requestContent(this.state);
+                });
+              }}
+              input={<Input id="select-multiple-checkbox" />}
+              renderValue={selected => (
+                <div className={styles.chips}>
+                  {selected.map(value => (
+                    <Chip
+                      key={value}
+                      label={this.props.contentTypes[value].name}
+                      className={styles.chip}
+                    />
+                  ))}
+                </div>
+              )}
+            >
+              {Object.keys(this.props.contentTypes).map(type => (
+                <MenuItem key={type} value={type}>
+                  <Checkbox
+                    checked={this.state.contentTypes.indexOf(type) > -1}
+                  />
+                  <ListItemText primary={this.props.contentTypes[type].name} />
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+
+          <FormControl className={styles.formControl}>
+            <InputLabel htmlFor="status">Status</InputLabel>
+            <Select
+              value={this.state.status || ''}
+              onChange={e => {
+                this.setState({ status: e.target.value }, () => {
+                  this.props.requestContent(this.state);
+                });
+              }}
+              input={<Input name="status" id="status" />}
+              autoWidth
+            >
+              <MenuItem value="">
+                <em>Any</em>
+              </MenuItem>
+              <MenuItem value="published">Published</MenuItem>
+              <MenuItem value="unpublished">Unpublished</MenuItem>
+            </Select>
+          </FormControl>
+        </div>
+
         <Table>
           <TableHead>
             <TableRow>

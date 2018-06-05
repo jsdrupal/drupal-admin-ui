@@ -42,40 +42,9 @@ export default (state = initialState, action) => {
       };
     }
     case MENU_LOADED: {
-      const menuLinks = action.payload.menuLinks.map(menuLink => {
-        // Explicitly add the Permissions and Roles as top level menu items, as
-        // those are usually local tasks which are not supported at the moment.
-        if (menuLink.link.url.indexOf('admin/people') !== -1) {
-          menuLink.subtree.push({
-            subtree: [],
-            hasChildren: false,
-            inActiveTrail: false,
-            link: {
-              weight: '4',
-              title: '🔐 Permissions',
-              description: 'Manage permissions.',
-              menuName: 'admin',
-              url: '/admin/people/permissions',
-            },
-          });
-          menuLink.subtree.push({
-            subtree: [],
-            hasChildren: false,
-            inActiveTrail: false,
-            link: {
-              weight: '5',
-              title: '📇 Roles',
-              description: 'Manage roles.',
-              menuName: 'admin',
-              url: '/admin/people/roles',
-            },
-          });
-        }
-        return menuLink;
-      });
       return {
         ...state,
-        menuLinks,
+        menuLinks: action.payload.menuLinks,
       };
     }
     case DBLOG_COLLECTION_LOADED: {
