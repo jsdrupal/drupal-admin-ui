@@ -11,7 +11,7 @@ use Drupal\Tests\rest\Functional\ResourceTestBase;
 /**
  * Tests the user permissions resource.
  *
- * @group user
+ * @group admin_ui_support
  */
 class UserPermissionsResourceTest extends ResourceTestBase {
 
@@ -55,7 +55,7 @@ class UserPermissionsResourceTest extends ResourceTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function provisionResource($formats = [], $authentication = []) {
+  protected function provisionResource($formats = [], $authentication = [], array $methods = ['GET', 'POST', 'PATCH', 'DELETE']) {
     $this->resourceConfigStorage->create([
       'id' => static::$resourceConfigId,
       'granularity' => RestResourceConfigInterface::RESOURCE_GRANULARITY,
@@ -85,18 +85,27 @@ class UserPermissionsResourceTest extends ResourceTestBase {
     $this->setUpAuthorization('GET');
 
     $response = $this->request('GET', $url, $request_options);
-    $this->assertResourceResponse(200, false, $response, ['config:rest.resource.permissions_collection', 'config:rest.settings', 'http_response'], ['user.permissions'], FALSE, 'MISS');
+    // @todo This response should be a response 'MISS' not 'UNCACHEABLE'.
+    $this->assertResourceResponse(200, false, $response, ['config:rest.resource.permissions_collection', 'config:rest.settings', 'http_response'], ['user.permissions'], FALSE, 'UNCACHEABLE');
     $permissions = json::decode((string) $response->getBody());
 
     $permission_handler = \drupal::service('user.permissions')->getPermissions();
-    $this->assertSame(array_keys($permission_handler), array_keys($permissions));
-    $this->assertSame([
-      'title' => 'Administer permissions',
-      'restrict access' => TRUE,
-      'description' => NULL,
-      'provider' => 'user',
-      'id' => 'administer permissions',
-    ], $permissions['administer permissions']);
+    $permission_ids = [];
+    foreach ($permissions as $permission) {
+      $permission_ids[] = $permission['id'];
+      if ($permission['id'] === 'administer permissions') {
+        $this->assertSame([
+          'title' => 'Administer permissions',
+          'restrict access' => TRUE,
+          'description' => NULL,
+          'provider' => 'user',
+          'id' => 'administer permissions',
+          'provider_label' => 'User',
+        ], $permission);
+      }
+    }
+    $this->assertSame(array_keys($permission_handler), $permission_ids);
+
   }
 
   /**

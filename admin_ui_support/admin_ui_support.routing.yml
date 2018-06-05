@@ -31,8 +31,8 @@ admin_ui_support.dblog_types:
   defaults:
     _controller: '\Drupal\admin_ui_support\Controller\DbLogTypes::get'
   requirements:
-      _permission: 'access site reports'
-      _format: 'json'
+    _permission: 'access site reports'
+    _format: 'json'
 
 admin_ui_support.dblog.overview:
   path: '/vfancy/admin/reports/dblog'

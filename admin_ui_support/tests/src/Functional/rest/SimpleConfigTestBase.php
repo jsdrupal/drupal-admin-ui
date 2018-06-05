@@ -56,7 +56,7 @@ abstract class SimpleConfigTestBase extends ResourceTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function provisionResource($formats = [], $authentication = []) {
+  protected function provisionResource($formats = [], $authentication = [], array $methods = ['GET', 'POST', 'PATCH', 'DELETE']) {
     $this->resourceConfigStorage->create([
       'id' => static::$resourceConfigId,
       'granularity' => RestResourceConfigInterface::RESOURCE_GRANULARITY,
