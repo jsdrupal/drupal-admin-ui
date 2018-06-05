@@ -8,12 +8,14 @@ import {
   SET_MESSAGE,
   CLEAR_MESSAGE,
   MENU_LOADED,
+  CONTENT_TYPES_LOADED,
 } from '../actions/application';
 
 export const initialState = {
   message: null,
   menuLinks: [],
   filterString: '',
+  contentTypes: {},
 };
 export default (state = initialState, action) => {
   switch (action.type) {
@@ -116,6 +118,21 @@ export default (state = initialState, action) => {
       return {
         ...state,
         roles,
+      };
+    }
+    case CONTENT_TYPES_LOADED: {
+      return {
+        ...state,
+        contentTypes: action.payload.contentTypes.data.reduce(
+          (accumulator, contentType) => ({
+            ...accumulator,
+            [contentType.attributes.type]: {
+              name: contentType.attributes.name,
+              description: contentType.attributes.description,
+            },
+          }),
+          {},
+        ),
       };
     }
     default: {

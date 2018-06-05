@@ -36,6 +36,14 @@ async function api(
     case 'permissions':
       url = '/admin-api/permissions?_format=json';
       break;
+    case 'content':
+      url = '/jsonapi/node';
+      options.headers.Accept = 'application/vnd.api+json';
+      break;
+    case 'contentTypes':
+      url = '/jsonapi/node_type';
+      options.headers.Accept = 'application/vnd.api+json';
+      break;
     default:
       break;
   }
