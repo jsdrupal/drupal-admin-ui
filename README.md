@@ -10,6 +10,7 @@ This is an admin UI for Drupal, built with JavaScript and based on [create-react
     + [Steps](#steps) 
   * [Running](#running)
   * [Developing](#developing)
+    + [tl;dr](#tldr)
   * [Commands](#commands)
   * [Contributing to This Repository](#contributing-to-this-repository)     
 
@@ -32,8 +33,7 @@ composer run-script install
 
 ## Running
 ```
-cd docroot
-php core/scripts/drupal server
+composer run-script start
 ```
 
 Try visiting one of the converted pages, e.g. the user permissions or roles page.
@@ -41,15 +41,13 @@ Try visiting one of the converted pages, e.g. the user permissions or roles page
 ## Developing
 
 - Ensure you have [Node 8](https://nodejs.org/en/) and [Yarn](https://yarnpkg.com/) installed.
-- Make sure the webserver is started with `composer run-script start`
-- As we run the development environment as anonymous user right now, you need to grant them permissions.
-- Please do that in the "production" environment, like ```http://localhost:8888/admin/people/permissions```. The permissions you want to grant at least are "administer users" and "Administer site configuration".
+- Make sure the webserver for Drupal is started with `composer run-script start`
 - Run `composer run-script devify`. You will now have a checkout of this repo in `drupal-admin-ui`.
 It will also symlink the bundled production app to `docroot/vfancy`, and the support module to
 `docroot/modules/contrib`.
 - Edit `drupal-admin-ui/.env.local` and add in the URL for your currently running Drupal installation
-that was output from the start command. e.g. for `Starting webserver on http://localhost:8888`, set
-`REACT_APP_DRUPAL_BASE_URL=http://localhost:8888`
+that was output from the start command. e.g. for `Starting webserver on http://127.0.0.1:8888`, set
+`REACT_APP_DRUPAL_BASE_URL=http://127.0.0.1:8888`
 - Enter the repo with `cd drupal-admin-ui` and start the Webpack dev server with `yarn start`. This
 will open a new window at `http://localhost:3000/`
 
@@ -57,6 +55,19 @@ The webpack dev server has hot reloading, however you won't be able to seamlessl
 Drupal and the React app. If you want to test out your changes in this context, enter the
 `drupal-admin-ui` directory and run `yarn build`. You can then visit the URL that
 `composer run-script start` generated.
+
+### tl;dr
+```
+composer run-script start
+
+# New terminal window:
+composer run-script devify
+# Add the URL generated from the start command:
+vim drupal-admin-ui/.env.local
+cd drupal-admin-ui
+yarn start
+```
+
 
 ## Commands
 
