@@ -1,4 +1,12 @@
 aliases:
+  - &drupal_defaults
+    docker:
+      - image: drpal/drupal-8.6.x-dev-test
+      - image: selenium/standalone-chrome-debug:3.7.1-beryllium
+      - image: mariadb:10.3
+        environment:
+          MYSQL_ALLOW_EMPTY_PASSWORD: 1
+    working_directory: /var/www/html/modules/custom
   - &defaults
     docker:
       - image: circleci/node:8-browsers
@@ -13,6 +21,54 @@ aliases:
 
 version: 2
 jobs:
+  drupal_update_dependencies: &update_dependencies
+    <<: *drupal_defaults
+    steps:
+      - checkout
+      # Restore Composer Cache
+      - restore_cache:
+          keys:
+            - v4-dependencies-{{ checksum "admin_ui_support/composer.json" }}
+            - v4-dependencies-
+      - run:
+          working_directory: /var/www/html
+          command: |
+            ./update-dependencies.sh $CIRCLE_PROJECT_REPONAME
+      # Add JSON API
+      - run:
+            working_directory: /var/www/html
+            command: /usr/local/bin/composer require drupal/jsonapi:^1.16
+      # Save Composer Cache
+      - save_cache:
+          paths:
+            - /root/.composer/cache/files
+          key: v4-dependencies-{{ checksum "admin_ui_support/composer.json" }}
+      - persist_to_workspace:
+          root: /var/www/html
+          paths:
+            - .
+  drupal_unit_kernel_tests: &unit_kernel_tests
+    <<: *drupal_defaults
+    steps:
+      - attach_workspace:
+          at: /var/www/html
+      - checkout
+      - run:
+          working_directory: /var/www/html
+          command: |
+            ./test.sh admin_ui_support
+          environment:
+            SYMFONY_DEPRECATIONS_HELPER: disabled
+      - run:
+          working_directory: /var/www/html
+          command: |
+            ./test.sh jsonapi_support
+          environment:
+            SYMFONY_DEPRECATIONS_HELPER: disabled
+      - store_test_results:
+          path: /var/www/html/artifacts/phpunit
+      - store_artifacts:
+          path: /var/www/html/artifacts
   build:
     <<: *defaults
     steps:
@@ -98,6 +154,12 @@ jobs:
 
 workflows:
   version: 2
+  drupal_test_and_lint:
+    jobs:
+      - drupal_update_dependencies
+      - drupal_unit_kernel_tests:
+          requires:
+            - drupal_update_dependencies
   package:
     jobs:
       - build
