@@ -145,7 +145,24 @@ class CrossBundleCollectionTest extends BrowserTestBase {
     $included_uuid = $json_response['included'][0]['attributes']['uuid'];
     $this->assertEquals($node_uid_uuid, $included_uuid);
 
-    // Confirm that all of the other methods/routes have been removed from the resource.
+    // Ensure that "sort" works in query.
+    $query = [
+      'sort[sort-title][path]' => 'title',
+      'sort[sort-title][direction]' => 'DESC',
+    ];
+    $json_response = $this->getDecodedGet('jsonapi/node', $query);
+    $data = $json_response['data'];
+    $this->assertEquals(
+      [
+        'The page title',
+        'The article2 title',
+        'The article title',
+      ],
+      $this->getDataTitles($data)
+    );
+
+    // Confirm that all of the other methods/routes have been removed from the
+    // resource.
     $request_options[RequestOptions::HTTP_ERRORS] = FALSE;
     $response = $this->httpClient->request('POST', 'jsonapi/node', $request_options);
     $this->assertEquals('405', $response->getStatusCode());
