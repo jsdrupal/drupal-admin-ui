@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { css } from 'emotion';
+import { format } from 'date-fns';
 
 import Paper from '@material-ui/core/Paper';
 
@@ -169,7 +170,9 @@ class Content extends Component {
                   <TableCell>
                     {(status && 'Published') || 'Unpublished'}
                   </TableCell>
-                  <TableCell>{changed}</TableCell>
+                  <TableCell>
+                    {format(new Date(changed * 1000), 'MM/DD/YYYY - HH:mm')}
+                  </TableCell>
                   <TableCell>
                     <Button
                       variant="fab"
