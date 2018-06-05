@@ -46,8 +46,8 @@ Try visiting one of the converted pages, e.g. the user permissions or roles page
 It will also symlink the bundled production app to `docroot/vfancy`, and the support module to
 `docroot/modules/contrib`.
 - Edit `drupal-admin-ui/.env.local` and add in the URL for your currently running Drupal installation
-that was output from the start command. e.g. for `Starting webserver on http://localhost:8888`, set
-`REACT_APP_DRUPAL_BASE_URL=http://localhost:8888`
+that was output from the start command. e.g. for `Starting webserver on http://127.0.0.1:8888`, set
+`REACT_APP_DRUPAL_BASE_URL=http://127.0.0.1:8888`
 - Enter the repo with `cd drupal-admin-ui` and start the Webpack dev server with `yarn start`. This
 will open a new window at `http://localhost:3000/`
 
