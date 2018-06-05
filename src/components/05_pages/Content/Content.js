@@ -67,10 +67,10 @@ class Content extends Component {
     ).isRequired,
     requestContent: PropTypes.func.isRequired,
     requestContentTypes: PropTypes.func.isRequired,
-    nodes: PropTypes.arrayOf(PropTypes.object),
+    contentList: PropTypes.arrayOf(PropTypes.object),
   };
   static defaultProps = {
-    nodes: [],
+    contentList: [],
   };
   state = {
     contentTypes: [],
@@ -160,7 +160,7 @@ class Content extends Component {
             </TableRow>
           </TableHead>
           <TableBody>
-            {this.props.nodes.map(
+            {this.props.contentList.map(
               ({ type, attributes: { changed, nid, status, title } }) => (
                 <TableRow key={nid}>
                   <TableCell>{title}</TableCell>
@@ -202,7 +202,7 @@ class Content extends Component {
 
 const mapStateToProps = state => ({
   contentTypes: state.application.contentTypes,
-  nodes: state.content.nodes,
+  contentList: state.content.contentList,
 });
 
 export default connect(mapStateToProps, {

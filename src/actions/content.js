@@ -77,11 +77,11 @@ function* loadContent(action) {
       delete queryString.filter;
     }
 
-    const nodes = yield call(api, 'content', { queryString });
+    const contentList = yield call(api, 'content', { queryString });
     yield put({
       type: CONTENT_LOADED,
       payload: {
-        nodes,
+        contentList,
       },
     });
   } catch (error) {

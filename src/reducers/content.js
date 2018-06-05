@@ -1,7 +1,7 @@
 import { CONTENT_LOADED } from '../actions/content';
 
 export const initialState = {
-  nodes: [],
+  contentList: [],
 };
 
 export default (state = initialState, action) => {
@@ -9,10 +9,10 @@ export default (state = initialState, action) => {
     case CONTENT_LOADED: {
       return {
         ...state,
-        nodes: action.payload.nodes.data
-          ? action.payload.nodes.data.map(node => ({
-              ...node,
-              type: node.type.substr(6),
+        contentList: action.payload.contentList.data
+          ? action.payload.contentList.data.map(content => ({
+              ...content,
+              type: content.type.substr(6),
             }))
           : [],
       };
