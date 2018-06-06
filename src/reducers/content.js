@@ -9,6 +9,11 @@ export default (state = initialState, action) => {
     case CONTENT_LOADED: {
       return {
         ...state,
+        includes: action.payload.contentList.included.reduce((acc, cur) => {
+          acc[cur.type] = acc[cur.type] || {};
+          acc[cur.type][cur.id] = cur;
+          return acc;
+        }, {}),
         contentList: action.payload.contentList.data
           ? action.payload.contentList.data.map(content => ({
               ...content,
