@@ -169,7 +169,16 @@ class Content extends Component {
                   <TableCell>
                     {(status && 'Published') || 'Unpublished'}
                   </TableCell>
-                  <TableCell>{changed}</TableCell>
+                  <TableCell>
+                    {new Intl.DateTimeFormat(navigator.language, {
+                      weekday: 'long',
+                      year: 'numeric',
+                      month: 'long',
+                      day: 'numeric',
+                      hour: 'numeric',
+                      minute: 'numeric',
+                    }).format(new Date(changed * 1000))}
+                  </TableCell>
                   <TableCell>
                     <Button
                       variant="fab"

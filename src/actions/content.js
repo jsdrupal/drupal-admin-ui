@@ -29,7 +29,12 @@ function* loadContent(action) {
     yield put(showLoading());
 
     const queryString = {
-      sort: 'changed',
+      sort: {
+        'sort-changed': {
+          path: 'changed',
+          direction: 'DESC',
+        },
+      },
       filter: {},
     };
     if (title && title.length) {
