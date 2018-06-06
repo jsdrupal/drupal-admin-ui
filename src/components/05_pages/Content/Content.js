@@ -182,11 +182,23 @@ class Content extends Component {
                   <TableCell>
                     {this.props.includes['user--user'][
                       relationships.uid.data.id
-                    ]
-                      ? this.props.includes['user--user'][
-                          relationships.uid.data.id
-                        ].attributes.name
-                      : 'Anonymous (not verified)'}
+                    ] ? (
+                      <Link
+                        to={`/user/${
+                          this.props.includes['user--user'][
+                            relationships.uid.data.id
+                          ].attributes.uid
+                        }`}
+                      >
+                        {
+                          this.props.includes['user--user'][
+                            relationships.uid.data.id
+                          ].attributes.name
+                        }
+                      </Link>
+                    ) : (
+                      'Anonymous (not verified)'
+                    )}
                   </TableCell>
                   <TableCell>
                     {(status && 'Published') || 'Unpublished'}
