@@ -23,7 +23,7 @@ class RouteSubscriber extends RouteSubscriberBase {
     // Remove all non-collection routes for Cross Bundle resources.
     $remove_routes = [];
     foreach ($collection->getIterator() as $route_name => $route) {
-      if ($route->getOption('_is_jsonapi')) {
+      if ($route->getDefault('_is_jsonapi')) {
         $name_parts = explode('.', $route_name);
         $resource_key = $name_parts[1];
         $resource = $type_repository->getByTypeName($resource_key);
