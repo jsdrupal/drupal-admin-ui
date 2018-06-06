@@ -24,19 +24,21 @@ function* loadContent(action) {
     (action.payload.options && action.payload.options.contentTypes) || [];
   const status =
     (action.payload.options && action.payload.options.status) || null;
+  const sort = (action.payload.options && action.payload.options.sort) || null;
+
   try {
     yield put(resetLoading());
     yield put(showLoading());
 
     const queryString = {
-      sort: {
-        'sort-changed': {
-          path: 'changed',
-          direction: 'DESC',
-        },
-      },
       filter: {},
     };
+
+    if (sort) {
+      const { name, path, direction } = sort;
+      queryString.sort = { [`sort-${name}`]: { path, direction } };
+    }
+
     if (title && title.length) {
       queryString.filter = {
         ...queryString.filter,

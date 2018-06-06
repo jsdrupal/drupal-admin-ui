@@ -21,6 +21,7 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
+import TableSortLabel from '@material-ui/core/TableSortLabel';
 
 import Button from '@material-ui/core/Button';
 import EditIcon from '@material-ui/icons/Edit';
@@ -75,11 +76,17 @@ class Content extends Component {
   state = {
     contentTypes: [],
     status: null,
+    sort: { path: 'changed', name: 'changed', direction: 'DESC' },
   };
   componentDidMount() {
     this.props.requestContentTypes();
-    this.props.requestContent();
+    this.props.requestContent(this.state);
   }
+  tableSortHandler = (name, path, direction) => () => {
+    this.setState({ sort: { name, direction, path } }, () => {
+      this.props.requestContent(this.state);
+    });
+  };
   render = () => (
     <Fragment>
       <Paper>
@@ -155,8 +162,37 @@ class Content extends Component {
         <Table>
           <TableHead>
             <TableRow>
-              {['Title', 'Content Type', 'Status', 'Updated', 'Actions'].map(
-                item => <TableCell key={item}>{item}</TableCell>,
+              {[
+                { key: 'title', label: 'Title', sortable: true },
+                { key: 'type', label: 'Content Type', sortable: true },
+                { key: 'status', label: 'Status', sortable: true },
+                { key: 'changed', label: 'Updated', sortable: true },
+                { key: 'operations', label: 'Operations', sortable: false },
+              ].map(
+                ({ key, label, sortable }) =>
+                  sortable ? (
+                    <TableCell key={key}>
+                      <TableSortLabel
+                        direction={
+                          this.state.sort.name === key
+                            ? this.state.sort.direction.toLowerCase()
+                            : undefined
+                        }
+                        active={(this.state.sort.name === key && true) || false}
+                        onClick={this.tableSortHandler(
+                          key,
+                          key,
+                          (this.state.sort.name !== key && 'DESC') ||
+                            ((this.state.sort.direction === 'DESC' && 'ASC') ||
+                              'DESC'),
+                        )}
+                      >
+                        {label}
+                      </TableSortLabel>
+                    </TableCell>
+                  ) : (
+                    <TableCell key={key}>{label}</TableCell>
+                  ),
               )}
             </TableRow>
           </TableHead>
