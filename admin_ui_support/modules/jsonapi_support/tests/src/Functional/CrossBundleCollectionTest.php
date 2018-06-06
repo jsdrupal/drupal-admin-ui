@@ -44,6 +44,7 @@ class CrossBundleCollectionTest extends BrowserTestBase {
     $this->createNode([
       'type' => 'article',
       'title' => 'The article title',
+      'uid' => 1,
       'body' => [
         ['value' => 'The article body'],
       ],
@@ -51,6 +52,7 @@ class CrossBundleCollectionTest extends BrowserTestBase {
     $this->createNode([
       'type' => 'article',
       'title' => 'The article2 title',
+      'uid' => 1,
       'body' => [
         ['value' => 'The article2 body'],
       ],
@@ -60,6 +62,7 @@ class CrossBundleCollectionTest extends BrowserTestBase {
     ]);
     $this->createNode([
       'type' => 'page',
+      'uid' => 1,
       'title' => 'The page title',
       'body' => [
         ['value' => 'The page body'],
@@ -78,6 +81,9 @@ class CrossBundleCollectionTest extends BrowserTestBase {
    * @throws \GuzzleHttp\Exception\GuzzleException
    */
   public function testCollection() {
+    $this->drupalLogin($this->createUser([
+      'access user profiles',
+    ]));
     $data = $this->getDecodedGet('jsonapi/node')['data'];
     $this->assertEquals(
       [
@@ -124,7 +130,39 @@ class CrossBundleCollectionTest extends BrowserTestBase {
       $this->getDataTitles($data)
     );
 
-    // Confirm that all of the other methods/routes have been removed from the resource.
+    // Ensure that "include" works in query.
+    $json_response = $this->getDecodedGet('jsonapi/node', ['include' => 'uid']);
+    $data = $json_response['data'];
+    $this->assertEquals(
+      [
+        'The article title',
+        'The article2 title',
+        'The page title',
+      ],
+      $this->getDataTitles($data)
+    );
+    $node_uid_uuid = $data[0]['relationships']['uid']['data']['id'];
+    $included_uuid = $json_response['included'][0]['attributes']['uuid'];
+    $this->assertEquals($node_uid_uuid, $included_uuid);
+
+    // Ensure that "sort" works in query.
+    $query = [
+      'sort[sort-title][path]' => 'title',
+      'sort[sort-title][direction]' => 'DESC',
+    ];
+    $json_response = $this->getDecodedGet('jsonapi/node', $query);
+    $data = $json_response['data'];
+    $this->assertEquals(
+      [
+        'The page title',
+        'The article2 title',
+        'The article title',
+      ],
+      $this->getDataTitles($data)
+    );
+
+    // Confirm that all of the other methods/routes have been removed from the
+    // resource.
     $request_options[RequestOptions::HTTP_ERRORS] = FALSE;
     $response = $this->httpClient->request('POST', 'jsonapi/node', $request_options);
     $this->assertEquals('405', $response->getStatusCode());
