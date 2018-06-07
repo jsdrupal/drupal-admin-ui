@@ -178,7 +178,7 @@ class Content extends Component {
                             ? this.state.sort.direction.toLowerCase()
                             : undefined
                         }
-                        active={(this.state.sort.name === key && true) || false}
+                        active={this.state.sort.name === key}
                         onClick={this.tableSortHandler(
                           key,
                           key,
