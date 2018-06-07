@@ -77,6 +77,8 @@ function* loadContent(action) {
       };
     }
 
+    queryString.include = 'uid';
+
     // Unset this, otherwise it'll send 'filter=' to JSON:API and cause an error.
     if (!Object.keys(queryString.filter).length) {
       delete queryString.filter;
