@@ -69,9 +69,13 @@ class Content extends Component {
     requestContent: PropTypes.func.isRequired,
     requestContentTypes: PropTypes.func.isRequired,
     contentList: PropTypes.arrayOf(PropTypes.object),
+    includes: PropTypes.shape({
+      'user--user': PropTypes.object,
+    }),
   };
   static defaultProps = {
     contentList: [],
+    includes: {},
   };
   state = {
     contentTypes: [],
@@ -165,6 +169,7 @@ class Content extends Component {
               {[
                 { key: 'title', label: 'Title', sortable: true },
                 { key: 'type', label: 'Content Type', sortable: true },
+                { key: 'author', label: 'Author', sortable: false },
                 { key: 'status', label: 'Status', sortable: true },
                 { key: 'changed', label: 'Updated', sortable: true },
                 { key: 'operations', label: 'Operations', sortable: false },
@@ -198,10 +203,35 @@ class Content extends Component {
           </TableHead>
           <TableBody>
             {this.props.contentList.map(
-              ({ type, attributes: { changed, nid, status, title } }) => (
+              ({
+                type,
+                attributes: { changed, nid, status, title },
+                relationships,
+              }) => (
                 <TableRow key={nid}>
                   <TableCell>{title}</TableCell>
                   <TableCell>{this.props.contentTypes[type].name}</TableCell>
+                  <TableCell>
+                    {this.props.includes['user--user'][
+                      relationships.uid.data.id
+                    ] ? (
+                      <Link
+                        to={`/user/${
+                          this.props.includes['user--user'][
+                            relationships.uid.data.id
+                          ].attributes.uid
+                        }`}
+                      >
+                        {
+                          this.props.includes['user--user'][
+                            relationships.uid.data.id
+                          ].attributes.name
+                        }
+                      </Link>
+                    ) : (
+                      'Anonymous (not verified)'
+                    )}
+                  </TableCell>
                   <TableCell>
                     {(status && 'Published') || 'Unpublished'}
                   </TableCell>
@@ -249,6 +279,7 @@ class Content extends Component {
 const mapStateToProps = state => ({
   contentTypes: state.application.contentTypes,
   contentList: state.content.contentList,
+  includes: state.content.includes,
 });
 
 export default connect(mapStateToProps, {
