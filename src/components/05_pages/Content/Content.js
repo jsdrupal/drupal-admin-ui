@@ -80,14 +80,14 @@ class Content extends Component {
   state = {
     contentTypes: [],
     status: null,
-    sort: { path: 'changed', name: 'changed', direction: 'DESC' },
+    sort: { path: 'changed', direction: 'DESC' },
   };
   componentDidMount() {
     this.props.requestContentTypes();
     this.props.requestContent(this.state);
   }
-  tableSortHandler = (name, path, direction) => () => {
-    this.setState({ sort: { name, direction, path } }, () => {
+  tableSortHandler = (path, direction) => () => {
+    this.setState({ sort: { path, direction } }, () => {
       this.props.requestContent(this.state);
     });
   };
@@ -179,15 +179,14 @@ class Content extends Component {
                     <TableCell key={key}>
                       <TableSortLabel
                         direction={
-                          this.state.sort.name === key
+                          this.state.sort.path === key
                             ? this.state.sort.direction.toLowerCase()
                             : undefined
                         }
-                        active={this.state.sort.name === key}
+                        active={this.state.sort.path === key}
                         onClick={this.tableSortHandler(
                           key,
-                          key,
-                          (this.state.sort.name !== key && 'DESC') ||
+                          (this.state.sort.path !== key && 'DESC') ||
                             ((this.state.sort.direction === 'DESC' && 'ASC') ||
                               'DESC'),
                         )}

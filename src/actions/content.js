@@ -35,8 +35,8 @@ function* loadContent(action) {
     };
 
     if (sort) {
-      const { name, path, direction } = sort;
-      queryString.sort = { [`sort-${name}`]: { path, direction } };
+      const { path, direction } = sort;
+      queryString.sort = `${(direction === 'DESC' && '-') || ''}${path}`;
     }
 
     if (title && title.length) {
