@@ -9,11 +9,15 @@ export default (state = initialState, action) => {
     case CONTENT_LOADED: {
       return {
         ...state,
-        includes: action.payload.contentList.included.reduce((acc, cur) => {
-          acc[cur.type] = acc[cur.type] || {};
-          acc[cur.type][cur.id] = cur;
-          return acc;
-        }, {}),
+        // Group JSON API includes by their type.
+        includes: action.payload.contentList.included.reduce(
+          (accumulator, node) => {
+            accumulator[node.type] = accumulator[node.type] || {};
+            accumulator[node.type][node.id] = node;
+            return accumulator;
+          },
+          {},
+        ),
         contentList: action.payload.contentList.data
           ? action.payload.contentList.data.map(content => ({
               ...content,
