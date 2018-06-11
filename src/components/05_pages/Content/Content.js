@@ -39,7 +39,7 @@ const styles = {
     margin: 0.5rem;
     position: fixed;
     right: 0;
-    top: 0;
+    bottom: 0;
   `,
   formControl: css`
     margin: 0.5rem;
