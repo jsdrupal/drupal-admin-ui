@@ -232,7 +232,7 @@ class Content extends Component {
                       minute: 'numeric',
                     }).format(new Date(changed * 1000))}
                   </TableCell>
-                  <TableCell>
+                  <TableCell style={{ whiteSpace: 'nowrap' }}>
                     <IconButton
                       color="secondary"
                       aria-label="edit"
