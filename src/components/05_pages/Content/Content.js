@@ -26,8 +26,15 @@ import Button from '@material-ui/core/Button';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
 
-import { requestContentTypes } from '../../../actions/application';
-import { requestContent } from '../../../actions/content';
+import {
+  requestContentTypes,
+  requestActions,
+} from '../../../actions/application';
+import {
+  requestContent,
+  KNOWN_ACTIONS,
+  actionExecute,
+} from '../../../actions/content';
 
 const styles = {
   root: css`
@@ -68,6 +75,9 @@ class Content extends Component {
     requestContent: PropTypes.func.isRequired,
     requestContentTypes: PropTypes.func.isRequired,
     contentList: PropTypes.arrayOf(PropTypes.object),
+    requestActions: PropTypes.func.isRequired,
+    actionExecute: PropTypes.func.isRequired,
+    actions: PropTypes.arrayOf(PropTypes.object),
     includes: PropTypes.shape({
       'user--user': PropTypes.object,
     }),
@@ -75,15 +85,25 @@ class Content extends Component {
   static defaultProps = {
     contentList: [],
     includes: {},
+    actions: [],
   };
   state = {
     contentTypes: [],
     status: null,
+    action: null,
+    checked: {},
   };
   componentDidMount() {
     this.props.requestContentTypes();
     this.props.requestContent();
+    this.props.requestActions();
   }
+  executeAction = () => {
+    const action = this.props.actions.filter(
+      action => action.attributes.id === this.state.action,
+    )[0];
+    this.props.actionExecute(action, Object.keys(this.state.checked));
+  };
   render = () => (
     <Fragment>
       <Paper>
@@ -156,9 +176,38 @@ class Content extends Component {
           </FormControl>
         </div>
 
+        <div className={styles.filters}>
+          {this.props.actions && (
+            <FormControl className={styles.formControl}>
+              <InputLabel htmlFor="actions">Actions</InputLabel>
+              <Select
+                value={this.state.action || ''}
+                onChange={e => {
+                  this.setState({ action: e.target.value });
+                }}
+                input={<Input name="action" id="action" />}
+                autoWidth
+              >
+                <MenuItem value="">
+                  <em>None</em>
+                </MenuItem>
+                {this.props.actions.map(action => (
+                  <MenuItem key={action.id} value={action.attributes.id}>
+                    {action.attributes.label}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          )}
+          {this.state.action && (
+            <Button onClick={this.executeAction} color="primary" variant="contained">Save</Button>
+          )}
+        </div>
+
         <Table>
           <TableHead>
             <TableRow>
+              {<TableCell padding="checkbox" />}
               {[
                 'Title',
                 'Content Type',
@@ -177,6 +226,20 @@ class Content extends Component {
                 relationships,
               }) => (
                 <TableRow key={nid}>
+                  {
+                    <TableCell padding="checkbox">
+                      <Checkbox
+                        value={nid}
+                        onChange={(event, checked) => {
+                          this.setState(prevState => {
+                            prevState.checked[nid] = checked;
+                            return prevState;
+                          });
+                        }}
+                        checked={this.state.checked[nid] || false}
+                      />
+                    </TableCell>
+                  }
                   <TableCell>{title}</TableCell>
                   <TableCell>{this.props.contentTypes[type].name}</TableCell>
                   <TableCell>
@@ -248,9 +311,17 @@ const mapStateToProps = state => ({
   contentTypes: state.application.contentTypes,
   contentList: state.content.contentList,
   includes: state.content.includes,
+  actions: state.application.actions.filter(action =>
+    KNOWN_ACTIONS.includes(action.attributes.plugin),
+  ),
 });
 
-export default connect(mapStateToProps, {
-  requestContentTypes,
-  requestContent,
-})(Content);
+export default connect(
+  mapStateToProps,
+  {
+    requestActions,
+    requestContentTypes,
+    requestContent,
+    actionExecute,
+  },
+)(Content);

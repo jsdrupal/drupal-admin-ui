@@ -40,9 +40,31 @@ async function api(
       url = '/jsonapi/node';
       options.headers.Accept = 'application/vnd.api+json';
       break;
+    case 'actions':
+      url = '/jsonapi/action';
+      options.headers.Accept = 'application/vnd.api+json';
+      break;
     case 'contentTypes':
       url = '/jsonapi/node_type';
       options.headers.Accept = 'application/vnd.api+json';
+      break;
+    case 'node:delete':
+      options.headers.Accept = 'application/vnd.api+json';
+      options.headers['Content-Type'] = 'application/vnd.api+json';
+      options.method = 'DELETE';
+      url = parameters.node.links.self.replace(
+        process.env.REACT_APP_DRUPAL_BASE_URL,
+        '',
+      );
+      break;
+    case 'node:save':
+      options.headers.Accept = 'application/vnd.api+json';
+      options.method = 'PATCH';
+      options.body = JSON.stringify({ data: parameters.node });
+      url = parameters.node.links.self.replace(
+        process.env.REACT_APP_DRUPAL_BASE_URL,
+        '',
+      );
       break;
     default:
       break;

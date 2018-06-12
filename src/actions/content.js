@@ -1,4 +1,4 @@
-import { put, call, takeLatest } from 'redux-saga/effects';
+import { put, call, takeLatest, select, all } from 'redux-saga/effects';
 import {
   showLoading,
   hideLoading,
@@ -97,7 +97,141 @@ function* loadContent(action) {
     yield put(hideLoading());
   }
 }
+export const ACTION_EXECUTE = 'ACTION_EXECUTE';
+export const actionExecute = (action, nids) => {
+  return {
+    type: ACTION_EXECUTE,
+    payload: {
+      action,
+      nids,
+    },
+  };
+};
+
+export const KNOWN_ACTIONS = [
+  'entity:delete_action:node',
+  'node_make_sticky_action',
+  'node_make_unsticky_action',
+  'node_promote_action',
+  'entity:publish_action:node',
+  'node_unpromote_action',
+  'entity:unpublish_action:node',
+];
+
+// @todo Find a better name
+export function* doActionExecute({ payload: { action, nids } }) {
+  try {
+    const contentList = yield select(state => state.content.contentList);
+    const actions = nids
+      .map(nid => {
+        const node = contentList.filter(
+          contentItem => contentItem.attributes.nid == nid,
+        )[0];
+
+        let saveAction;
+        switch (action.attributes.plugin) {
+          case 'entity:delete_action:node':
+            saveAction = call(api, 'node:delete', { parameters: { node } });
+            break;
+          case 'node_make_sticky_action':
+            saveAction = call(api, 'node:save', {
+              parameters: {
+                node: {
+                  id: node.id,
+                  type: node.type,
+                  attributes: {
+                    sticky: true,
+                  },
+                  links: node.links,
+                },
+              },
+            });
+            break;
+          case 'node_make_unsticky_action':
+            saveAction = call(api, 'node:save', {
+              parameters: {
+                node: {
+                  id: node.id,
+                  type: node.type,
+                  attributes: {
+                    sticky: false,
+                  },
+                  links: node.links,
+                },
+              },
+            });
+            break;
+          case 'node_promote_action':
+            saveAction = call(api, 'node:save', {
+              parameters: {
+                node: {
+                  id: node.id,
+                  type: node.type,
+                  attributes: {
+                    promote: true,
+                  },
+                  links: node.links,
+                },
+              },
+            });
+            break;
+          case 'node_unpromote_action':
+            saveAction = call(api, 'node:save', {
+              parameters: {
+                node: {
+                  id: node.id,
+                  type: node.type,
+                  attributes: {
+                    promote: false,
+                  },
+                  links: node.links,
+                },
+              },
+            });
+            break;
+          case 'entity:publish_action:node':
+            saveAction = call(api, 'node:save', {
+              parameters: {
+                node: {
+                  id: node.id,
+                  type: node.type,
+                  attributes: {
+                    status: true,
+                  },
+                  links: node.links,
+                },
+              },
+            });
+            break;
+          case 'entity:unpublish_action:node':
+            saveAction = call(api, 'node:save', {
+              parameters: {
+                node: {
+                  id: node.id,
+                  type: node.type,
+                  attributes: {
+                    status: false,
+                  },
+                  links: node.links,
+                },
+              },
+            });
+            break;
+          default:
+            break;
+        }
+        return saveAction;
+      })
+      .filter(x => x);
+    const result = yield all(actions);
+  } catch (error) {
+    yield put(setMessage(error.toString()));
+  } finally {
+    yield put(hideLoading());
+  }
+}
 
 export default function* rootSaga() {
   yield takeLatest(CONTENT_REQUESTED, loadContent);
+  yield takeLatest(ACTION_EXECUTE, doActionExecute);
 }

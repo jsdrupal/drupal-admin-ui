@@ -78,7 +78,38 @@ function* loadContentTypes() {
   }
 }
 
+/**
+ * Gets all available action types.
+ */
+export const ACTIONS_REQUESTED = 'ACTIONS_REQUESTED';
+export const requestActions = () => ({
+  type: ACTIONS_REQUESTED,
+  payload: {},
+});
+
+export const getActionsCache = state => state.application.actions;
+export const ACTIONS_LOADED = 'ACTIONS_LOADED';
+function* loadActions() {
+  try {
+    let actions = yield select(getActionsCache);
+    if (!Object.keys(actions).length) {
+      actions = yield call(api, 'actions');
+    }
+    yield put({
+      type: ACTIONS_LOADED,
+      payload: {
+        actions,
+      },
+    });
+  } catch (error) {
+    yield put(setMessage(error.toString()));
+  } finally {
+    yield put(hideLoading());
+  }
+}
+
 export default function* watchRequestedMenu() {
   yield takeLatest(MENU_REQUESTED, loadMenu);
   yield takeLatest(CONTENT_TYPES_REQUESTED, loadContentTypes);
+  yield takeLatest(ACTIONS_REQUESTED, loadActions);
 }
