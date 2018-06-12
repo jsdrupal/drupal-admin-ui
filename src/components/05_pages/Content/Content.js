@@ -23,6 +23,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 
 import Button from '@material-ui/core/Button';
+import IconButton from '@material-ui/core/IconButton';
 import AddIcon from '@material-ui/icons/Add';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
@@ -232,8 +233,7 @@ class Content extends Component {
                     }).format(new Date(changed * 1000))}
                   </TableCell>
                   <TableCell>
-                    <Button
-                      variant="contained"
+                    <IconButton
                       color="secondary"
                       aria-label="edit"
                       className={styles.button}
@@ -241,16 +241,15 @@ class Content extends Component {
                       to={`/node/${nid}/edit`}
                     >
                       <EditIcon />
-                    </Button>
-                    <Button
-                      variant="contained"
+                    </IconButton>
+                    <IconButton
                       aria-label="delete"
                       className={styles.button}
                       component={Link}
                       to={`/node/${nid}/delete`}
                     >
                       <DeleteIcon />
-                    </Button>
+                    </IconButton>
                   </TableCell>
                 </TableRow>
               ),
