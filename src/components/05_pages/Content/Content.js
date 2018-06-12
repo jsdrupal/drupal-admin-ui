@@ -23,6 +23,8 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 
 import Button from '@material-ui/core/Button';
+import IconButton from '@material-ui/core/IconButton';
+import AddIcon from '@material-ui/icons/Add';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
 
@@ -33,6 +35,12 @@ const styles = {
   root: css`
     display: flex;
     flex-wrap: wrap;
+  `,
+  addButton: css`
+    margin: 0.5rem;
+    position: fixed;
+    right: 0;
+    bottom: 0;
   `,
   formControl: css`
     margin: 0.5rem;
@@ -154,6 +162,17 @@ class Content extends Component {
               <MenuItem value="unpublished">Unpublished</MenuItem>
             </Select>
           </FormControl>
+
+          <Button
+            variant="fab"
+            color="primary"
+            aria-label="add"
+            className={styles.addButton}
+            component={Link}
+            to="/node/add"
+          >
+            <AddIcon />
+          </Button>
         </div>
 
         <Table>
@@ -214,8 +233,7 @@ class Content extends Component {
                     }).format(new Date(changed * 1000))}
                   </TableCell>
                   <TableCell>
-                    <Button
-                      variant="fab"
+                    <IconButton
                       color="secondary"
                       aria-label="edit"
                       className={styles.button}
@@ -223,16 +241,15 @@ class Content extends Component {
                       to={`/node/${nid}/edit`}
                     >
                       <EditIcon />
-                    </Button>
-                    <Button
-                      variant="fab"
+                    </IconButton>
+                    <IconButton
                       aria-label="delete"
                       className={styles.button}
                       component={Link}
                       to={`/node/${nid}/delete`}
                     >
                       <DeleteIcon />
-                    </Button>
+                    </IconButton>
                   </TableCell>
                 </TableRow>
               ),
