@@ -1,5 +1,5 @@
 import React from 'react';
-import { func, node, arrayOf, shape, string } from 'prop-types';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { css } from 'emotion';
 import { Link } from 'react-router-dom';
@@ -48,7 +48,7 @@ class Default extends React.Component {
       <Drawer variant="permanent" classes={{ paper: styles.drawerPaper }}>
         <List>
           {this.props.menuLinks.map(({ link: menuLink }) => (
-            <ListItem button component={Link} to={menuLink.url}>
+            <ListItem button component={Link} to={menuLink.url} key={menuLink.url.replace(/\//g, '-')}>
               {iconMap[menuLink.url] ? (
                 <ListItemIcon>{iconMap[menuLink.url]}</ListItemIcon>
               ) : (
@@ -88,20 +88,20 @@ styles = {
 };
 
 Default.propTypes = {
-  children: node.isRequired,
-  message: shape({
-    message: string,
-    type: string,
+  children: PropTypes.node.isRequired,
+  message: PropTypes.shape({
+    message: PropTypes.string,
+    type: PropTypes.string,
   }),
-  menuLinks: arrayOf(
-    shape({
-      link: shape({
-        url: string,
-        title: string,
+  menuLinks: PropTypes.arrayOf(
+    PropTypes.shape({
+      link: PropTypes.shape({
+        url: PropTypes.string,
+        title: PropTypes.string,
       }),
     }),
   ).isRequired,
-  requestMenu: func.isRequired,
+  requestMenu: PropTypes.func.isRequired,
 };
 
 Default.defaultProps = {
@@ -110,7 +110,7 @@ Default.defaultProps = {
 
 const mapStateToProps = state => ({
   message: state.application.message || null,
-  menuLinks: state.application.menuLinks,
+  menuLinks: state.application.menuLinks || [],
 });
 
 export default connect(mapStateToProps, {
