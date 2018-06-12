@@ -233,7 +233,7 @@ class Content extends Component {
                   </TableCell>
                   <TableCell>
                     <Button
-                      variant="fab"
+                      variant="contained"
                       color="secondary"
                       aria-label="edit"
                       className={styles.button}
@@ -243,7 +243,7 @@ class Content extends Component {
                       <EditIcon />
                     </Button>
                     <Button
-                      variant="fab"
+                      variant="contained"
                       aria-label="delete"
                       className={styles.button}
                       component={Link}
