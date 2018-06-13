@@ -44,7 +44,9 @@ export default (state = initialState, action) => {
     case MENU_LOADED: {
       return {
         ...state,
-        menuLinks: Array.isArray(action.payload.menuLinks) ? action.payload.menuLinks : [],
+        menuLinks: Array.isArray(action.payload.menuLinks)
+          ? action.payload.menuLinks
+          : [],
       };
     }
     case DBLOG_COLLECTION_LOADED: {

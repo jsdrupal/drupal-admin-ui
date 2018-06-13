@@ -48,7 +48,12 @@ class Default extends React.Component {
       <Drawer variant="permanent" classes={{ paper: styles.drawerPaper }}>
         <List>
           {this.props.menuLinks.map(({ link: menuLink }) => (
-            <ListItem button component={Link} to={menuLink.url} key={menuLink.url.replace(/\//g, '-')}>
+            <ListItem
+              button
+              component={Link}
+              to={menuLink.url}
+              key={menuLink.url.replace(/\//g, '-')}
+            >
               {iconMap[menuLink.url] ? (
                 <ListItemIcon>{iconMap[menuLink.url]}</ListItemIcon>
               ) : (
