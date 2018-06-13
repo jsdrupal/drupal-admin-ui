@@ -21,6 +21,8 @@ export default (state = initialState, action) => {
         contentList: action.payload.contentList.data
           ? action.payload.contentList.data.map(content => ({
               ...content,
+              // @fixme Instead of doing that we should get the node type
+              // using the type relationship.
               type: content.type.substr(6),
             }))
           : [],

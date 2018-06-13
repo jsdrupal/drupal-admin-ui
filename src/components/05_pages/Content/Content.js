@@ -248,7 +248,7 @@ class Content extends Component {
                   {
                     <TableCell padding="checkbox">
                       <Checkbox
-                        value={nid}
+                        value={String(nid)}
                         onChange={(event, checked) => {
                           this.setState(prevState => {
                             prevState.checked[nid] = checked;

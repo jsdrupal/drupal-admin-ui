@@ -53,6 +53,13 @@ async function api(
       options.headers.Accept = 'application/vnd.api+json';
       break;
     case 'node:delete':
+      // Set the type to the right value for jsonapi to process.
+      // @todo Ideally this should not be differnet in the first place.
+      parameters.node = {
+        ...parameters.node,
+        type: parameters.node.type.includes('--') ? parameters.node.type : `node--${parameters.node.type}`,
+      };
+
       const deleteToken = await api('csrf_token');
       options.headers.Accept = 'application/vnd.api+json';
       options.headers['X-CSRF-Token'] = deleteToken;
@@ -64,6 +71,13 @@ async function api(
       );
       break;
     case 'node:save':
+      // Set the type to the right value for jsonapi to process.
+      // @todo Ideally this should not be differnet in the first place.
+      parameters.node = {
+        ...parameters.node,
+        type: parameters.node.type.includes('--') ? parameters.node.type : `node--${parameters.node.type}`,
+      };
+
       const saveToken = await api('csrf_token');
       options.headers.Accept = 'application/vnd.api+json';
       options.headers['X-CSRF-Token'] = saveToken;

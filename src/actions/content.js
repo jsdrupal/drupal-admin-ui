@@ -119,13 +119,15 @@ export const KNOWN_ACTIONS = [
 ];
 
 // @todo Find a better name
+// @todo How do we update the store with the new values of the nodes
+//    or the deleted nodes.
 export function* doActionExecute({ payload: { action, nids } }) {
   try {
     const contentList = yield select(state => state.content.contentList);
     const actions = nids
       .map(nid => {
         const node = contentList.filter(
-          contentItem => contentItem.attributes.nid == nid,
+          contentItem => String(contentItem.attributes.nid) === nid,
         )[0];
 
         let saveAction;
