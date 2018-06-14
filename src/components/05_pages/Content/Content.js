@@ -265,7 +265,6 @@ class Content extends Component {
                   </TableCell>
                   <TableCell style={{ whiteSpace: 'nowrap' }}>
                     <IconButton
-                      color="secondary"
                       aria-label="edit"
                       className={styles.button}
                       component={Link}
