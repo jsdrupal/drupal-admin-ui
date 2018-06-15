@@ -21,6 +21,7 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
+import TableSortLabel from '@material-ui/core/TableSortLabel';
 
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
@@ -104,12 +105,13 @@ class Content extends Component {
   state = {
     contentTypes: [],
     status: null,
+    sort: { path: 'changed', direction: 'DESC' },
     action: null,
     checked: {},
   };
   componentDidMount() {
     this.props.requestContentTypes();
-    this.props.requestContent();
+    this.props.requestContent(this.state);
     this.props.requestActions();
   }
   executeAction = () => {
@@ -117,6 +119,11 @@ class Content extends Component {
       action => action.attributes.id === this.state.action,
     )[0];
     this.props.actionExecute(action, Object.keys(this.state.checked));
+  };
+  tableSortHandler = (path, direction) => () => {
+    this.setState({ sort: { path, direction } }, () => {
+      this.props.requestContent(this.state);
+    });
   };
   render = () => (
     <Fragment>
@@ -240,13 +247,37 @@ class Content extends Component {
             <TableRow>
               {<TableCell padding="checkbox" />}
               {[
-                'Title',
-                'Content Type',
-                'Author',
-                'Status',
-                'Updated',
-                'Actions',
-              ].map(item => <TableCell key={item}>{item}</TableCell>)}
+                { key: 'title', label: 'Title', sortable: true },
+                { key: 'type', label: 'Content Type', sortable: true },
+                { key: 'author', label: 'Author', sortable: false },
+                { key: 'status', label: 'Status', sortable: true },
+                { key: 'changed', label: 'Updated', sortable: true },
+                { key: 'operations', label: 'Operations', sortable: false },
+              ].map(
+                ({ key, label, sortable }) =>
+                  sortable ? (
+                    <TableCell key={key}>
+                      <TableSortLabel
+                        direction={
+                          this.state.sort.path === key
+                            ? this.state.sort.direction.toLowerCase()
+                            : undefined
+                        }
+                        active={this.state.sort.path === key}
+                        onClick={this.tableSortHandler(
+                          key,
+                          (this.state.sort.path !== key && 'DESC') ||
+                            ((this.state.sort.direction === 'DESC' && 'ASC') ||
+                              'DESC'),
+                        )}
+                      >
+                        {label}
+                      </TableSortLabel>
+                    </TableCell>
+                  ) : (
+                    <TableCell key={key}>{label}</TableCell>
+                  ),
+              )}
             </TableRow>
           </TableHead>
           <TableBody>
@@ -309,7 +340,6 @@ class Content extends Component {
                   </TableCell>
                   <TableCell style={{ whiteSpace: 'nowrap' }}>
                     <IconButton
-                      color="secondary"
                       aria-label="edit"
                       className={styles.button}
                       component={Link}
