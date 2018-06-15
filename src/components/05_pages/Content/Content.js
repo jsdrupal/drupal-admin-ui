@@ -34,7 +34,7 @@ import {
 } from '../../../actions/application';
 import {
   requestContent,
-  KNOWN_ACTIONS,
+  SUPPORTED_ACTIONS,
   actionExecute,
 } from '../../../actions/content';
 
@@ -48,6 +48,12 @@ const styles = {
     position: fixed;
     right: 0;
     bottom: 0;
+  `,
+  action: css`
+    margin: 0.5rem;
+    margin-left: 0rem;
+    min-width: 8rem;
+    max-width: 19rem;
   `,
   formControl: css`
     margin: 0.5rem;
@@ -197,7 +203,7 @@ class Content extends Component {
 
         <div className={styles.filters}>
           {this.props.actions && (
-            <FormControl className={styles.formControl}>
+            <FormControl className={styles.action}>
               <InputLabel htmlFor="actions">Actions</InputLabel>
               <Select
                 value={this.state.action || ''}
@@ -219,7 +225,13 @@ class Content extends Component {
             </FormControl>
           )}
           {this.state.action && (
-            <Button onClick={this.executeAction} color="primary" variant="contained">Save</Button>
+            <Button
+              onClick={this.executeAction}
+              color="primary"
+              variant="contained"
+            >
+              Apply
+            </Button>
           )}
         </div>
 
@@ -329,7 +341,7 @@ const mapStateToProps = state => ({
   contentList: state.content.contentList,
   includes: state.content.includes,
   actions: state.application.actions.filter(action =>
-    KNOWN_ACTIONS.includes(action.attributes.plugin),
+    SUPPORTED_ACTIONS.includes(action.attributes.plugin),
   ),
 });
 

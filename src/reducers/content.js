@@ -1,4 +1,8 @@
-import { CONTENT_LOADED } from '../actions/content';
+import {
+  CONTENT_LOADED,
+  CONTENT_DELETE,
+  CONTENT_SAVE,
+} from '../actions/content';
 
 export const initialState = {
   contentList: [],
@@ -28,6 +32,16 @@ export default (state = initialState, action) => {
           : [],
       };
     }
+
+    case CONTENT_DELETE: {
+      return {
+        ...state,
+        contentList: state.contentList.filter(
+          content => content.id !== action.payload.content.id,
+        ),
+      };
+    }
+
     default: {
       return { ...state };
     }

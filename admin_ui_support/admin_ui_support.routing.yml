@@ -34,14 +34,14 @@ admin_ui_support.dblog_types:
     _permission: 'access site reports'
     _format: 'json'
 
-#admin_ui_support.dblog.overview:
-#  path: '/vfancy/admin/reports/dblog'
-#  defaults:
-#    _controller: '\Drupal\admin_ui_support\Controller\EmptyController::noop'
-#  options:
-#    _admin_related_route: 'dblog.overview'
-#  requirements:
-#    _permission: 'access site reports'
+admin_ui_support.dblog.overview:
+  path: '/vfancy/admin/reports/dblog'
+  defaults:
+    _controller: '\Drupal\admin_ui_support\Controller\EmptyController::noop'
+  options:
+    _admin_related_route: 'dblog.overview'
+  requirements:
+    _permission: 'access site reports'
 
 admin_ui_support.admin_ui_support_settings:
   path: '/admin/config/system/admin-ui-support'

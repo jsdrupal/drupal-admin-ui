@@ -103,8 +103,6 @@ function* loadActions() {
     });
   } catch (error) {
     yield put(setMessage(error.toString()));
-  } finally {
-    yield put(hideLoading());
   }
 }
 
