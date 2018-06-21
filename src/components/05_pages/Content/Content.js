@@ -89,6 +89,10 @@ class Content extends Component {
     contentTypes: [],
     status: null,
     sort: { path: 'changed', direction: 'DESC' },
+    page: {
+      offset: 0,
+      limit: 5,
+    },
   };
   componentDidMount() {
     this.props.requestContentTypes();
@@ -98,6 +102,26 @@ class Content extends Component {
     this.setState({ sort: { path, direction } }, () => {
       this.props.requestContent(this.state);
     });
+  };
+  nextHandler = () => {
+    this.setState(
+      ({ page: { offset, limit } }) => ({
+        page: { offset: offset + 5, limit },
+      }),
+      () => {
+        this.props.requestContent(this.state);
+      },
+    );
+  };
+  previousHandler = () => {
+    this.setState(
+      ({ page: { offset, limit } }) => ({
+        page: { offset: offset - 5, limit },
+      }),
+      () => {
+        this.props.requestContent(this.state);
+      },
+    );
   };
   render = () => (
     <Fragment>
@@ -286,6 +310,12 @@ class Content extends Component {
             )}
           </TableBody>
         </Table>
+        <Button variant="flat" onClick={this.previousHandler}>
+          Previous
+        </Button>
+        <Button variant="flat" onClick={this.nextHandler}>
+          Next
+        </Button>
       </Paper>
     </Fragment>
   );
