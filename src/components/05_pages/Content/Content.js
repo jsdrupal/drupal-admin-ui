@@ -91,7 +91,7 @@ class Content extends Component {
     sort: { path: 'changed', direction: 'DESC' },
     page: {
       offset: 0,
-      limit: 5,
+      limit: 50,
     },
   };
   componentDidMount() {
@@ -106,7 +106,7 @@ class Content extends Component {
   nextHandler = () => {
     this.setState(
       ({ page: { offset, limit } }) => ({
-        page: { offset: offset + 5, limit },
+        page: { offset: offset + this.state.page.limit, limit },
       }),
       () => {
         this.props.requestContent(this.state);
@@ -116,7 +116,7 @@ class Content extends Component {
   previousHandler = () => {
     this.setState(
       ({ page: { offset, limit } }) => ({
-        page: { offset: offset - 5, limit },
+        page: { offset: offset - this.state.page.limit, limit },
       }),
       () => {
         this.props.requestContent(this.state);
@@ -310,10 +310,18 @@ class Content extends Component {
             )}
           </TableBody>
         </Table>
-        <Button variant="flat" onClick={this.previousHandler}>
+        <Button
+          variant="flat"
+          aria-label="Previous Page"
+          onClick={this.previousHandler}
+        >
           Previous
         </Button>
-        <Button variant="flat" onClick={this.nextHandler}>
+        <Button
+          variant="flat"
+          aria-label="Next Page"
+          onClick={this.nextHandler}
+        >
           Next
         </Button>
       </Paper>
