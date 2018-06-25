@@ -6,7 +6,9 @@ exports.command = function drush(command = 'status', callback) {
 
   try {
     const proc = execSync(
-      `../vendor/bin/drush --uri=${process.env.REACT_APP_DRUPAL_BASE_URL} ${command}`,
+      `../vendor/bin/drush --uri=${
+        process.env.REACT_APP_DRUPAL_BASE_URL
+      } ${command}`,
     );
     procResult = proc.toString();
   } catch (error) {
