@@ -87,7 +87,12 @@ class Default extends React.Component {
         <Divider />
         <List>
           {this.props.menuLinks.map(({ link: menuLink }) => (
-            <ListItem button component={Link} to={menuLink.url}>
+            <ListItem
+              key={`${menuLink.url}:${menuLink.title}`}
+              button
+              component={Link}
+              to={menuLink.url}
+            >
               {iconMap[menuLink.url] ? (
                 <ListItemIcon>{iconMap[menuLink.url]}</ListItemIcon>
               ) : (
