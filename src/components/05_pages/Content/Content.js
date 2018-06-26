@@ -35,8 +35,7 @@ import { requestContent } from '../../../actions/content';
 
 const styles = {
   root: css`
-    display: flex;
-    flex-wrap: wrap;
+    margin-bottom: 50px;
   `,
   addButton: css`
     margin: 0.5rem;
@@ -144,7 +143,7 @@ class Content extends Component {
     const count = offset + contentList.length + (links.next ? 1 : 0);
 
     return (
-      <Fragment>
+      <div className={styles.root}>
         <Paper>
           <div className={styles.filters}>
             <TextField
@@ -351,7 +350,7 @@ class Content extends Component {
             />
           </div>
         </Paper>
-      </Fragment>
+      </div>
     );
   };
 }
