@@ -6,6 +6,16 @@ import {
 } from 'react-redux-loading-bar';
 import api from '../utils/api/api';
 
+export const OPEN_DRAWER = 'OPEN_DRAWER';
+export const openDrawer = () => ({
+  type: OPEN_DRAWER,
+});
+
+export const CLOSE_DRAWER = 'CLOSE_DRAWER';
+export const closeDrawer = () => ({
+  type: CLOSE_DRAWER,
+});
+
 export const SET_MESSAGE = 'SET_MESSAGE';
 export const MESSAGE_ERROR = 'MESSAGE_ERROR';
 export const MESSAGE_SUCCESS = 'MESSAGE_SUCCESS';

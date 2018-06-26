@@ -1,5 +1,5 @@
 import React from 'react';
-import { func, node, arrayOf, shape, string } from 'prop-types';
+import { func, node, arrayOf, shape, string, bool } from 'prop-types';
 import { connect } from 'react-redux';
 import { css } from 'emotion';
 import { Link } from 'react-router-dom';
@@ -23,7 +23,11 @@ import HelpIcon from '@material-ui/icons/Help';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 
-import { requestMenu } from '../../../actions/application';
+import {
+  requestMenu,
+  closeDrawer,
+  openDrawer,
+} from '../../../actions/application';
 import Message from '../../02_atoms/Message/Message';
 import ErrorBoundary from '../ErrorBoundary/ErrorBoundary';
 
@@ -41,18 +45,9 @@ const iconMap = {
 };
 
 class Default extends React.Component {
-  state = {
-    drawerOpen: false,
-  };
   componentWillMount() {
     this.props.requestMenu();
   }
-  handleDrawerOpen = () => {
-    this.setState({ drawerOpen: true });
-  };
-  handleDrawerClose = () => {
-    this.setState({ drawerOpen: false });
-  };
 
   render = () => (
     <div className={styles.outerWrapper}>
@@ -60,15 +55,15 @@ class Default extends React.Component {
       <Drawer
         variant="permanent"
         classes={{
-          paper: `${styles.drawerPaper} ${!this.state.drawerOpen &&
+          paper: `${styles.drawerPaper} ${!this.props.drawerOpen &&
             styles.drawerPaperClose}`,
         }}
-        open={this.state.drawerOpen}
+        open={this.props.drawerOpen}
       >
         <div className={styles.menuButtonWrapper}>
-          {this.state.drawerOpen ? (
+          {this.props.drawerOpen ? (
             <IconButton
-              onClick={this.handleDrawerClose}
+              onClick={this.props.closeDrawer}
               className={styles.menuButton}
             >
               <ChevronLeftIcon />
@@ -77,7 +72,7 @@ class Default extends React.Component {
             <IconButton
               color="inherit"
               aria-label="open drawer"
-              onClick={this.handleDrawerOpen}
+              onClick={this.props.openDrawer}
               className={styles.menuButton}
             >
               <MenuIcon />
@@ -160,17 +155,24 @@ Default.propTypes = {
     }),
   ).isRequired,
   requestMenu: func.isRequired,
+  openDrawer: func.isRequired,
+  closeDrawer: func.isRequired,
+  drawerOpen: bool,
 };
 
 Default.defaultProps = {
   message: null,
+  drawerOpen: false,
 };
 
 const mapStateToProps = state => ({
   message: state.application.message || null,
   menuLinks: state.application.menuLinks,
+  drawerOpen: state.application.drawerOpen,
 });
 
 export default connect(mapStateToProps, {
   requestMenu,
+  openDrawer,
+  closeDrawer,
 })(Default);
