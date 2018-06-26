@@ -5,7 +5,6 @@ import { Link } from 'react-router-dom';
 import { css } from 'emotion';
 
 import Paper from '@material-ui/core/Paper';
-
 import Input from '@material-ui/core/Input';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -27,7 +26,8 @@ import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import AddIcon from '@material-ui/icons/Add';
 import EditIcon from '@material-ui/icons/Edit';
-import DeleteIcon from '@material-ui/icons/Delete';
+
+import DeleteButton from '../../02_atoms/DeleteButton/DeleteButton';
 
 import { requestContentTypes } from '../../../actions/application';
 import { requestContent } from '../../../actions/content';
@@ -272,14 +272,10 @@ class Content extends Component {
                     >
                       <EditIcon />
                     </IconButton>
-                    <IconButton
-                      aria-label="delete"
-                      className={styles.button}
-                      component={Link}
-                      to={`/node/${nid}/delete`}
-                    >
-                      <DeleteIcon />
-                    </IconButton>
+                    <DeleteButton
+                      title={`Are you sure that you want to delete this content ${title}?`}
+                      text="This action cannot be undone."
+                    />
                   </TableCell>
                 </TableRow>
               ),
