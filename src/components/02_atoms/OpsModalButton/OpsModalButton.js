@@ -60,10 +60,10 @@ class OpsModalButton extends React.Component {
           </DialogContent>
           <DialogActions>
             <Button onClick={this.handleClose} color="primary">
-              Disagree
+              Delete
             </Button>
             <Button onClick={this.handleClose} color="primary">
-              Agree
+              Cancel
             </Button>
           </DialogActions>
         </Dialog>
@@ -75,9 +75,6 @@ class OpsModalButton extends React.Component {
 OpsModalButton.propTypes = {
   title: PropTypes.string.isRequired,
   text: PropTypes.string.isRequired,
-  children: PropTypes.oneOfType([
-    PropTypes.arrayOf(PropTypes.node),
-    PropTypes.node,
-  ]).isRequired,
+  children: PropTypes.node.isRequired,
 };
 export default OpsModalButton;
