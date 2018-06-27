@@ -346,7 +346,7 @@ class Content extends Component {
               page={offset / limit}
               onChangePage={this.pageChangeHandler}
               rowsPerPageOptions={[limit]}
-              labelDisplayedRows={() => {}}
+              labelDisplayedRows={({ page }) => `Page: ${page + 1}`}
             />
           </div>
         </Paper>
