@@ -2,6 +2,7 @@ import { CONTENT_LOADED } from '../actions/content';
 
 export const initialState = {
   contentList: [],
+  links: {},
 };
 
 export default (state = initialState, action) => {
@@ -24,6 +25,7 @@ export default (state = initialState, action) => {
               type: content.type.substr(6),
             }))
           : [],
+        links: action.payload.contentList.links,
       };
     }
     default: {
