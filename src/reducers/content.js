@@ -1,8 +1,4 @@
-import {
-  CONTENT_LOADED,
-  CONTENT_DELETE,
-  CONTENT_SAVE,
-} from '../actions/content';
+import { CONTENT_LOADED, CONTENT_DELETE } from '../actions/content';
 
 export const initialState = {
   contentList: [],

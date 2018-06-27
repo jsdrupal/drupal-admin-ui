@@ -164,7 +164,9 @@ class Content extends Component {
   };
 
   render = () => {
-    const { page: { offset, limit } } = this.state;
+    const {
+      page: { offset, limit },
+    } = this.state;
     const { links, contentList } = this.props;
 
     // Calculate the highest known count.
