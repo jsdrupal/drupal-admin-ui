@@ -5,6 +5,8 @@ import {
   DBLOG_FILTER_UPDATED,
 } from '../actions/reports';
 import {
+  CLOSE_DRAWER,
+  OPEN_DRAWER,
   SET_MESSAGE,
   CLEAR_MESSAGE,
   MENU_LOADED,
@@ -16,9 +18,22 @@ export const initialState = {
   menuLinks: [],
   filterString: '',
   contentTypes: {},
+  drawerOpen: false,
 };
 export default (state = initialState, action) => {
   switch (action.type) {
+    case CLOSE_DRAWER: {
+      return {
+        ...state,
+        drawerOpen: false,
+      };
+    }
+    case OPEN_DRAWER: {
+      return {
+        ...state,
+        drawerOpen: true,
+      };
+    }
     case SET_MESSAGE: {
       return {
         ...state,
