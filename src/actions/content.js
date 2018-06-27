@@ -141,10 +141,10 @@ export const SUPPORTED_ACTIONS = [
   'entity:unpublish_action:node',
 ];
 
-// @todo Find a better name
 // @todo How do we update the store with the new values of the nodes
-//    or the deleted nodes.
-export function* doActionExecute({ payload: { action, nids } }) {
+//    or the deleted nodes, see https://github.com/jsdrupal/drupal-admin-ui/issues/131
+// @todo Once jsonapi supports bulk operations, leverage it.
+export function* executeAction({ payload: { action, nids } }) {
   try {
     const contentList = yield select(state => state.content.contentList);
     const actions = nids
@@ -245,7 +245,7 @@ export function* doActionExecute({ payload: { action, nids } }) {
   }
 }
 
-function* doContentSave({ payload: { content } }) {
+function* saveContent({ payload: { content } }) {
   try {
     yield put(resetLoading());
     yield put(showLoading());
@@ -257,7 +257,7 @@ function* doContentSave({ payload: { content } }) {
   }
 }
 
-function* doContentDelete({ payload: { content } }) {
+function* deleteContent({ payload: { content } }) {
   try {
     yield put(resetLoading());
     yield put(showLoading());
@@ -271,7 +271,7 @@ function* doContentDelete({ payload: { content } }) {
 
 export default function* rootSaga() {
   yield takeLatest(CONTENT_REQUESTED, loadContent);
-  yield takeLatest(ACTION_EXECUTE, doActionExecute);
-  yield takeLatest(CONTENT_SAVE, doContentSave);
-  yield takeLatest(CONTENT_DELETE, doContentDelete);
+  yield takeLatest(ACTION_EXECUTE, executeAction);
+  yield takeLatest(CONTENT_SAVE, saveContent);
+  yield takeLatest(CONTENT_DELETE, deleteContent);
 }
