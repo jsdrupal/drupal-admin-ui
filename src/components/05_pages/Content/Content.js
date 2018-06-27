@@ -104,6 +104,8 @@ class Content extends Component {
     this.props.requestContent(this.state);
   }
   componentDidUpdate(prevProps) {
+    // Operations executed in the bottom of the page should scroll back to top
+    // when list content changes. For example, the pagination uses this.
     if (
       this.state.scrollToTop &&
       JSON.stringify(prevProps.contentList) !==
