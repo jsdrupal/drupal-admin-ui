@@ -30,8 +30,15 @@ import AddIcon from '@material-ui/icons/Add';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
 
-import { requestContentTypes } from '../../../actions/application';
-import { requestContent } from '../../../actions/content';
+import {
+  requestContentTypes,
+  requestActions,
+} from '../../../actions/application';
+import {
+  requestContent,
+  SUPPORTED_ACTIONS,
+  actionExecute,
+} from '../../../actions/content';
 
 const styles = {
   root: css`
@@ -42,6 +49,12 @@ const styles = {
     position: fixed;
     right: 0;
     bottom: 0;
+  `,
+  action: css`
+    margin: 0.5rem;
+    margin-left: 0rem;
+    min-width: 8rem;
+    max-width: 19rem;
   `,
   formControl: css`
     margin: 0.5rem;
@@ -77,6 +90,9 @@ class Content extends Component {
     requestContent: PropTypes.func.isRequired,
     requestContentTypes: PropTypes.func.isRequired,
     contentList: PropTypes.arrayOf(PropTypes.object),
+    requestActions: PropTypes.func.isRequired,
+    actionExecute: PropTypes.func.isRequired,
+    actions: PropTypes.arrayOf(PropTypes.object),
     includes: PropTypes.shape({
       'user--user': PropTypes.object,
     }),
@@ -87,6 +103,7 @@ class Content extends Component {
   static defaultProps = {
     contentList: [],
     includes: {},
+    actions: [],
     links: {},
   };
   state = {
@@ -98,11 +115,20 @@ class Content extends Component {
       offset: 0,
       limit: 50,
     },
+    action: null,
+    checked: {},
   };
   componentDidMount() {
     this.props.requestContentTypes();
     this.props.requestContent(this.state);
+    this.props.requestActions();
   }
+  executeAction = () => {
+    const action = this.props.actions.filter(
+      action => action.attributes.id === this.state.action,
+    )[0];
+    this.props.actionExecute(action, Object.keys(this.state.checked));
+  };
   componentDidUpdate(prevProps) {
     // Operations executed in the bottom of the page should scroll back to top
     // when list content changes. For example, the pagination uses this.
@@ -138,7 +164,9 @@ class Content extends Component {
   };
 
   render = () => {
-    const { page: { offset, limit } } = this.state;
+    const {
+      page: { offset, limit },
+    } = this.state;
     const { links, contentList } = this.props;
 
     // Calculate the highest known count.
@@ -229,6 +257,40 @@ class Content extends Component {
             </Button>
           </div>
 
+          <div className={styles.filters}>
+            {this.props.actions && (
+              <FormControl className={styles.action}>
+                <InputLabel htmlFor="actions">Actions</InputLabel>
+                <Select
+                  value={this.state.action || ''}
+                  onChange={e => {
+                    this.setState({ action: e.target.value });
+                  }}
+                  input={<Input name="action" id="action" />}
+                  autoWidth
+                >
+                  <MenuItem value="">
+                    <em>None</em>
+                  </MenuItem>
+                  {this.props.actions.map(action => (
+                    <MenuItem key={action.id} value={action.attributes.id}>
+                      {action.attributes.label}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            )}
+            {this.state.action && (
+              <Button
+                onClick={this.executeAction}
+                color="primary"
+                variant="contained"
+              >
+                Apply
+              </Button>
+            )}
+          </div>
+
           <div
             ref={node => {
               this.table = node;
@@ -237,6 +299,7 @@ class Content extends Component {
             <Table>
               <TableHead>
                 <TableRow>
+                  {<TableCell padding="checkbox" />}
                   {[
                     { key: 'title', label: 'Title', sortable: true },
                     { key: 'type', label: 'Content Type', sortable: true },
@@ -280,6 +343,20 @@ class Content extends Component {
                     relationships,
                   }) => (
                     <TableRow key={nid}>
+                      {
+                        <TableCell padding="checkbox">
+                          <Checkbox
+                            value={String(nid)}
+                            onChange={(event, checked) => {
+                              this.setState(prevState => {
+                                prevState.checked[nid] = checked;
+                                return prevState;
+                              });
+                            }}
+                            checked={this.state.checked[nid] || false}
+                          />
+                        </TableCell>
+                      }
                       <TableCell>{title}</TableCell>
                       <TableCell>
                         {this.props.contentTypes[type].name}
@@ -362,9 +439,17 @@ const mapStateToProps = state => ({
   contentList: state.content.contentList,
   includes: state.content.includes,
   links: state.content.links,
+  actions: state.application.actions.filter(action =>
+    SUPPORTED_ACTIONS.includes(action.attributes.plugin),
+  ),
 });
 
-export default connect(mapStateToProps, {
-  requestContentTypes,
-  requestContent,
-})(Content);
+export default connect(
+  mapStateToProps,
+  {
+    requestActions,
+    requestContentTypes,
+    requestContent,
+    actionExecute,
+  },
+)(Content);

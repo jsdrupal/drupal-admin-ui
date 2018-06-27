@@ -53,4 +53,7 @@ const mapStateToProps = ({ application: { roles } }) => ({
   roles,
 });
 
-export default connect(mapStateToProps, { requestRoles, cancelTask })(Roles);
+export default connect(
+  mapStateToProps,
+  { requestRoles, cancelTask },
+)(Roles);

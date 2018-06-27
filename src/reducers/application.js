@@ -11,6 +11,7 @@ import {
   CLEAR_MESSAGE,
   MENU_LOADED,
   CONTENT_TYPES_LOADED,
+  ACTIONS_LOADED,
 } from '../actions/application';
 
 export const initialState = {
@@ -18,8 +19,10 @@ export const initialState = {
   menuLinks: [],
   filterString: '',
   contentTypes: {},
+  actions: [],
   drawerOpen: false,
 };
+
 export default (state = initialState, action) => {
   switch (action.type) {
     case CLOSE_DRAWER: {
@@ -117,6 +120,12 @@ export default (state = initialState, action) => {
           }),
           {},
         ),
+      };
+    }
+    case ACTIONS_LOADED: {
+      return {
+        ...state,
+        actions: action.payload.actions.data,
       };
     }
     default: {

@@ -1,4 +1,4 @@
-import { put, call, takeLatest } from 'redux-saga/effects';
+import { put, call, takeLatest, select, all } from 'redux-saga/effects';
 import {
   showLoading,
   hideLoading,
@@ -106,6 +106,178 @@ function* loadContent(action) {
   }
 }
 
+export const CONTENT_SAVE = 'CONTENT_SAVE';
+export const contentSave = content => {
+  return {
+    type: CONTENT_SAVE,
+    payload: {
+      content,
+    },
+  };
+};
+
+export const CONTENT_DELETE = 'CONTENT_DELETE';
+export const contentDelete = content => {
+  return {
+    type: CONTENT_DELETE,
+    payload: {
+      content,
+    },
+  };
+};
+
+export const ACTION_EXECUTE = 'ACTION_EXECUTE';
+export const actionExecute = (action, nids) => {
+  return {
+    type: ACTION_EXECUTE,
+    payload: {
+      action,
+      nids,
+    },
+  };
+};
+
+export const SUPPORTED_ACTIONS = [
+  'entity:delete_action:node',
+  'node_make_sticky_action',
+  'node_make_unsticky_action',
+  'node_promote_action',
+  'entity:publish_action:node',
+  'node_unpromote_action',
+  'entity:unpublish_action:node',
+];
+
+// @todo How do we update the store with the new values of the nodes
+//    or the deleted nodes, see https://github.com/jsdrupal/drupal-admin-ui/issues/131
+// @todo Once jsonapi supports bulk operations, leverage it.
+export function* executeAction({ payload: { action, nids } }) {
+  try {
+    const contentList = yield select(state => state.content.contentList);
+    const actions = nids
+      .map(nid => {
+        const node = contentList.filter(
+          contentItem => String(contentItem.attributes.nid) === nid,
+        )[0];
+
+        let saveAction;
+        switch (action.attributes.plugin) {
+          case 'entity:delete_action:node':
+            saveAction = put(contentDelete(node));
+            break;
+          case 'node_make_sticky_action':
+            saveAction = put(
+              contentSave({
+                id: node.id,
+                type: node.type,
+                attributes: {
+                  sticky: true,
+                },
+                links: node.links,
+              }),
+            );
+            break;
+          case 'node_make_unsticky_action':
+            saveAction = put(
+              contentSave({
+                id: node.id,
+                type: node.type,
+                attributes: {
+                  sticky: false,
+                },
+                links: node.links,
+              }),
+            );
+            break;
+          case 'node_promote_action':
+            saveAction = put(
+              contentSave({
+                id: node.id,
+                type: node.type,
+                attributes: {
+                  promote: true,
+                },
+                links: node.links,
+              }),
+            );
+            break;
+          case 'node_unpromote_action':
+            saveAction = put(
+              contentSave({
+                id: node.id,
+                type: node.type,
+                attributes: {
+                  promote: false,
+                },
+                links: node.links,
+              }),
+            );
+            break;
+          case 'entity:publish_action:node':
+            saveAction = put(
+              contentSave({
+                id: node.id,
+                type: node.type,
+                attributes: {
+                  status: true,
+                },
+                links: node.links,
+              }),
+            );
+            break;
+          case 'entity:unpublish_action:node':
+            saveAction = put(
+              contentSave({
+                id: node.id,
+                type: node.type,
+                attributes: {
+                  status: false,
+                },
+                links: node.links,
+              }),
+            );
+            break;
+          default:
+            break;
+        }
+        return saveAction;
+      })
+      .filter(x => x);
+    const result = yield all(actions);
+    return result;
+  } catch (error) {
+    yield put(setMessage(error.toString()));
+  } finally {
+    yield put(hideLoading());
+  }
+}
+
+function* saveContent({ payload: { content } }) {
+  try {
+    yield put(resetLoading());
+    yield put(showLoading());
+    yield call(api, 'node:save', { parameters: { node: content } });
+  } catch (error) {
+    yield put(setMessage(error.toString()));
+  } finally {
+    yield put(hideLoading());
+  }
+}
+
+function* deleteContent({ payload: { content } }) {
+  try {
+    yield put(resetLoading());
+    yield put(showLoading());
+    yield call(api, 'node:delete', { parameters: { node: content } });
+  } catch (error) {
+    yield put(setMessage(error.toString()));
+  } finally {
+    yield put(hideLoading());
+  }
+}
+
 export default function* rootSaga() {
   yield takeLatest(CONTENT_REQUESTED, loadContent);
+  yield takeLatest(ACTION_EXECUTE, executeAction);
+  yield takeLatest(CONTENT_SAVE, saveContent);
+  yield takeLatest(CONTENT_DELETE, deleteContent);
 }
