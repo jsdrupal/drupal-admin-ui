@@ -25,6 +25,7 @@ function* loadContent(action) {
   const status =
     (action.payload.options && action.payload.options.status) || null;
   const sort = (action.payload.options && action.payload.options.sort) || null;
+  const page = (action.payload.options && action.payload.options.page) || null;
 
   try {
     yield put(resetLoading());
@@ -33,6 +34,11 @@ function* loadContent(action) {
     const queryString = {
       filter: {},
     };
+
+    if (page) {
+      const { offset, limit } = page;
+      queryString.page = { offset, limit };
+    }
 
     if (sort) {
       const { path, direction } = sort;
