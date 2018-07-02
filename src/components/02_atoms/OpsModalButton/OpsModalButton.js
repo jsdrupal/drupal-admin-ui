@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
@@ -39,11 +39,20 @@ class OpsModalButton extends React.Component {
 
   render() {
     // Pass all props except those consumed here down into the button.
-    const { title, text, cancelText, confirmText, ...buttonProps } = this.props;
+    const {
+      title,
+      text,
+      cancelText,
+      confirmText,
+      enterAction,
+      ...buttonProps
+    } = this.props;
 
     return (
-      <IconButton {...buttonProps} onClick={this.handleClickOpen}>
-        {this.props.children}
+      <Fragment>
+        <IconButton {...buttonProps} onClick={this.handleClickOpen}>
+          {this.props.children}
+        </IconButton>
         <Dialog
           open={this.state.open}
           TransitionComponent={Transition}
@@ -59,7 +68,13 @@ class OpsModalButton extends React.Component {
             </DialogContentText>
           </DialogContent>
           <DialogActions>
-            <Button onClick={this.handleClose} color="primary">
+            <Button
+              onClick={() => {
+                enterAction();
+                this.handleClose();
+              }}
+              color="primary"
+            >
               {confirmText}
             </Button>
             <Button onClick={this.handleClose} color="primary">
@@ -67,7 +82,7 @@ class OpsModalButton extends React.Component {
             </Button>
           </DialogActions>
         </Dialog>
-      </IconButton>
+      </Fragment>
     );
   }
 }
@@ -78,5 +93,6 @@ OpsModalButton.propTypes = {
   confirmText: PropTypes.string.isRequired,
   cancelText: PropTypes.string.isRequired,
   children: PropTypes.node.isRequired,
+  enterAction: PropTypes.func.isRequired,
 };
 export default OpsModalButton;

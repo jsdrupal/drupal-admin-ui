@@ -39,6 +39,7 @@ import {
   requestContent,
   SUPPORTED_ACTIONS,
   actionExecute,
+  contentDelete,
 } from '../../../actions/content';
 
 const styles = {
@@ -335,12 +336,13 @@ class Content extends Component {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {this.props.contentList.map(
-                  ({
+                {this.props.contentList.map(node => {
+                  const {
                     type,
                     attributes: { changed, nid, status, title },
                     relationships,
-                  }) => (
+                  } = node;
+                  return (
                     <TableRow key={nid}>
                       {
                         <TableCell padding="checkbox">
@@ -410,13 +412,16 @@ class Content extends Component {
                           text="This action cannot be undone."
                           cancelText="Cancel"
                           confirmText="Delete"
+                          enterAction={() => {
+                            this.props.contentDelete(node);
+                          }}
                         >
                           <DeleteIcon />
                         </OpsModalButton>
                       </TableCell>
                     </TableRow>
-                  ),
-                )}
+                  );
+                })}
               </TableBody>
             </Table>
             <TablePagination
@@ -450,4 +455,5 @@ export default connect(mapStateToProps, {
   requestContentTypes,
   requestContent,
   actionExecute,
+  contentDelete,
 })(Content);
