@@ -94,6 +94,7 @@ class Content extends Component {
     contentList: PropTypes.arrayOf(PropTypes.object),
     requestActions: PropTypes.func.isRequired,
     actionExecute: PropTypes.func.isRequired,
+    contentDelete: PropTypes.func.isRequired,
     actions: PropTypes.arrayOf(PropTypes.object),
     includes: PropTypes.shape({
       'user--user': PropTypes.object,
