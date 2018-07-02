@@ -1,4 +1,4 @@
-import { CONTENT_LOADED } from '../actions/content';
+import { CONTENT_LOADED, CONTENT_DELETE } from '../actions/content';
 
 export const initialState = {
   contentList: [],
@@ -22,12 +22,24 @@ export default (state = initialState, action) => {
         contentList: action.payload.contentList.data
           ? action.payload.contentList.data.map(content => ({
               ...content,
+              // @fixme Instead of doing that we should get the node type
+              // using the type relationship.
               type: content.type.substr(6),
             }))
           : [],
         links: action.payload.contentList.links,
       };
     }
+
+    case CONTENT_DELETE: {
+      return {
+        ...state,
+        contentList: state.contentList.filter(
+          content => content.id !== action.payload.content.id,
+        ),
+      };
+    }
+
     default: {
       return { ...state };
     }
