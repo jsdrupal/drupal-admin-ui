@@ -52,7 +52,7 @@ async function api(
       url = '/jsonapi/node_type';
       options.headers.Accept = 'application/vnd.api+json';
       break;
-    case 'node:delete':
+    case 'node:delete': {
       // Set the type to the right value for jsonapi to process.
       // @todo Ideally this should not be differnet in the first place.
       parameters.node = {
@@ -74,7 +74,8 @@ async function api(
         '',
       );
       break;
-    case 'node:save':
+    }
+    case 'node:save': {
       // Set the type to the right value for jsonapi to process.
       // @todo Ideally this should not be differnet in the first place.
       parameters.node = {
@@ -94,6 +95,7 @@ async function api(
         '',
       );
       break;
+    }
     default:
       break;
   }

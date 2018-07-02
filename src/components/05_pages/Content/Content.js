@@ -123,12 +123,6 @@ class Content extends Component {
     this.props.requestContent(this.state);
     this.props.requestActions();
   }
-  executeAction = () => {
-    const action = this.props.actions.filter(
-      action => action.attributes.id === this.state.action,
-    )[0];
-    this.props.actionExecute(action, Object.keys(this.state.checked));
-  };
   componentDidUpdate(prevProps) {
     // Operations executed in the bottom of the page should scroll back to top
     // when list content changes. For example, the pagination uses this.
@@ -140,6 +134,12 @@ class Content extends Component {
       window.scrollTo(0, this.table.offsetTop);
     }
   }
+  executeAction = () => {
+    const matchingAction = this.props.actions.filter(
+      action => action.attributes.id === this.state.action,
+    )[0];
+    this.props.actionExecute(matchingAction, Object.keys(this.state.checked));
+  };
   tableSortHandler = (path, direction) => () => {
     this.setState(
       {
@@ -164,9 +164,7 @@ class Content extends Component {
   };
 
   render = () => {
-    const {
-      page: { offset, limit },
-    } = this.state;
+    const { page: { offset, limit } } = this.state;
     const { links, contentList } = this.props;
 
     // Calculate the highest known count.
@@ -444,12 +442,9 @@ const mapStateToProps = state => ({
   ),
 });
 
-export default connect(
-  mapStateToProps,
-  {
-    requestActions,
-    requestContentTypes,
-    requestContent,
-    actionExecute,
-  },
-)(Content);
+export default connect(mapStateToProps, {
+  requestActions,
+  requestContentTypes,
+  requestContent,
+  actionExecute,
+})(Content);

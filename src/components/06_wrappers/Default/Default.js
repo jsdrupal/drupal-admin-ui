@@ -171,11 +171,8 @@ const mapStateToProps = state => ({
   drawerOpen: state.application.drawerOpen,
 });
 
-export default connect(
-  mapStateToProps,
-  {
-    requestMenu,
-    openDrawer,
-    closeDrawer,
-  },
-)(Default);
+export default connect(mapStateToProps, {
+  requestMenu,
+  openDrawer,
+  closeDrawer,
+})(Default);

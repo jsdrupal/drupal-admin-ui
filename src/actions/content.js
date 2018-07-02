@@ -107,35 +107,29 @@ function* loadContent(action) {
 }
 
 export const CONTENT_SAVE = 'CONTENT_SAVE';
-export const contentSave = content => {
-  return {
-    type: CONTENT_SAVE,
-    payload: {
-      content,
-    },
-  };
-};
+export const contentSave = content => ({
+  type: CONTENT_SAVE,
+  payload: {
+    content,
+  },
+});
 
 export const CONTENT_DELETE = 'CONTENT_DELETE';
-export const contentDelete = content => {
-  return {
-    type: CONTENT_DELETE,
-    payload: {
-      content,
-    },
-  };
-};
+export const contentDelete = content => ({
+  type: CONTENT_DELETE,
+  payload: {
+    content,
+  },
+});
 
 export const ACTION_EXECUTE = 'ACTION_EXECUTE';
-export const actionExecute = (action, nids) => {
-  return {
-    type: ACTION_EXECUTE,
-    payload: {
-      action,
-      nids,
-    },
-  };
-};
+export const actionExecute = (action, nids) => ({
+  type: ACTION_EXECUTE,
+  payload: {
+    action,
+    nids,
+  },
+});
 
 export const SUPPORTED_ACTIONS = [
   'entity:delete_action:node',
@@ -242,8 +236,7 @@ export function* executeAction({ payload: { action, nids } }) {
         return saveAction;
       })
       .filter(x => x);
-    const result = yield all(actions);
-    return result;
+    yield all(actions);
   } catch (error) {
     yield put(setMessage(error.toString()));
   } finally {
