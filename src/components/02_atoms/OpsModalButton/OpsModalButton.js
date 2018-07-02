@@ -39,7 +39,7 @@ class OpsModalButton extends React.Component {
 
   render() {
     // Pass all props except those consumed here down into the button.
-    const { title, text, ...buttonProps } = this.props;
+    const { title, text, cancelText, confirmText, ...buttonProps } = this.props;
 
     return (
       <IconButton {...buttonProps} onClick={this.handleClickOpen}>
@@ -60,10 +60,10 @@ class OpsModalButton extends React.Component {
           </DialogContent>
           <DialogActions>
             <Button onClick={this.handleClose} color="primary">
-              Delete
+              {confirmText}
             </Button>
             <Button onClick={this.handleClose} color="primary">
-              Cancel
+              {cancelText}
             </Button>
           </DialogActions>
         </Dialog>
@@ -75,6 +75,8 @@ class OpsModalButton extends React.Component {
 OpsModalButton.propTypes = {
   title: PropTypes.string.isRequired,
   text: PropTypes.string.isRequired,
+  confirmText: PropTypes.string.isRequired,
+  cancelText: PropTypes.string.isRequired,
   children: PropTypes.node.isRequired,
 };
 export default OpsModalButton;

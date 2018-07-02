@@ -333,6 +333,8 @@ class Content extends Component {
                           className={styles.button}
                           title={`Are you sure that you want to delete this content ${title}?`}
                           text="This action cannot be undone."
+                          cancelText="Cancel"
+                          confirmText="Delete"
                         >
                           <DeleteIcon />
                         </OpsModalButton>
