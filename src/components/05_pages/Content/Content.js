@@ -5,7 +5,6 @@ import { Link } from 'react-router-dom';
 import { css } from 'emotion';
 
 import Paper from '@material-ui/core/Paper';
-
 import Input from '@material-ui/core/Input';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -30,6 +29,8 @@ import AddIcon from '@material-ui/icons/Add';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
 
+import OpsModalButton from '../../02_atoms/OpsModalButton/OpsModalButton';
+
 import {
   requestContentTypes,
   requestActions,
@@ -38,6 +39,7 @@ import {
   requestContent,
   SUPPORTED_ACTIONS,
   actionExecute,
+  contentDelete,
 } from '../../../actions/content';
 
 const styles = {
@@ -92,6 +94,7 @@ class Content extends Component {
     contentList: PropTypes.arrayOf(PropTypes.object),
     requestActions: PropTypes.func.isRequired,
     actionExecute: PropTypes.func.isRequired,
+    contentDelete: PropTypes.func.isRequired,
     actions: PropTypes.arrayOf(PropTypes.object),
     includes: PropTypes.shape({
       'user--user': PropTypes.object,
@@ -334,12 +337,13 @@ class Content extends Component {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {this.props.contentList.map(
-                  ({
+                {this.props.contentList.map(node => {
+                  const {
                     type,
                     attributes: { changed, nid, status, title },
                     relationships,
-                  }) => (
+                  } = node;
+                  return (
                     <TableRow key={nid}>
                       {
                         <TableCell padding="checkbox">
@@ -402,18 +406,23 @@ class Content extends Component {
                         >
                           <EditIcon />
                         </IconButton>
-                        <IconButton
+                        <OpsModalButton
                           aria-label="delete"
                           className={styles.button}
-                          component={Link}
-                          to={`/node/${nid}/delete`}
+                          title={`Are you sure that you want to delete this content ${title}?`}
+                          text="This action cannot be undone."
+                          cancelText="Cancel"
+                          confirmText="Delete"
+                          enterAction={() => {
+                            this.props.contentDelete(node);
+                          }}
                         >
                           <DeleteIcon />
-                        </IconButton>
+                        </OpsModalButton>
                       </TableCell>
                     </TableRow>
-                  ),
-                )}
+                  );
+                })}
               </TableBody>
             </Table>
             <TablePagination
@@ -447,4 +456,5 @@ export default connect(mapStateToProps, {
   requestContentTypes,
   requestContent,
   actionExecute,
+  contentDelete,
 })(Content);
