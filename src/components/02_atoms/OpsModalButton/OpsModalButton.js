@@ -21,7 +21,7 @@ function Transition(props) {
  * When pressed a modal dialog slides up into view.
  */
 class OpsModalButton extends React.Component {
-    static propTypes = {
+  static propTypes = {
     /**
      * The dialog title.
      */
