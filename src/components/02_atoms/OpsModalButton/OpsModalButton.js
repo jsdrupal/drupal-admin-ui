@@ -19,15 +19,34 @@ function Transition(props) {
  * see for example  '@material-ui/icons/Add'
  *
  * When pressed a modal dialog slides up into view.
- *
- * Custom Properties :-
- *   title, string to appear in the modal dialog.
- *   text, string to appear below the title.
- *   cancelText, string to appear in the cancel button.
- *   confirmText, string to appear in the confirm button.
- *   enterAction, function to be called when the confirm button is pressed.
  */
 class OpsModalButton extends React.Component {
+    static propTypes = {
+    /**
+     * The dialog title.
+     */
+    title: PropTypes.string.isRequired,
+    /**
+     * The text below the dialog title.
+     */
+    text: PropTypes.string.isRequired,
+    /**
+     * The confirm button label.
+     */
+    confirmText: PropTypes.string.isRequired,
+    /**
+     * The cancel button label.
+     */
+    cancelText: PropTypes.string.isRequired,
+    /**
+     * Children of the button.
+     */
+    children: PropTypes.node.isRequired,
+    /**
+     * Called when the confirm button is pressed.
+     */
+    enterAction: PropTypes.func.isRequired,
+  };
   state = {
     open: false,
   };
@@ -90,12 +109,4 @@ class OpsModalButton extends React.Component {
   }
 }
 
-OpsModalButton.propTypes = {
-  title: PropTypes.string.isRequired,
-  text: PropTypes.string.isRequired,
-  confirmText: PropTypes.string.isRequired,
-  cancelText: PropTypes.string.isRequired,
-  children: PropTypes.node.isRequired,
-  enterAction: PropTypes.func.isRequired,
-};
 export default OpsModalButton;
