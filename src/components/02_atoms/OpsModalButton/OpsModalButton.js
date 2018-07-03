@@ -23,6 +23,9 @@ function Transition(props) {
  * Custom Properties :-
  *   title, string to appear in the modal dialog.
  *   text, string to appear below the title.
+ *   cancelText, string to appear in the cancel button.
+ *   confirmText, string to appear in the confirm button.
+ *   enterAction, function to be called when the confirm button is pressed.
  */
 class OpsModalButton extends React.Component {
   state = {
