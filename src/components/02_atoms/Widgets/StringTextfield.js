@@ -1,5 +1,5 @@
 import React from 'react';
-import { TextField } from '@material-ui/core/es/index';
+import TextField from '@material-ui/core/TextField';
 
 class StringTextfield extends React.Component {
   render() {
