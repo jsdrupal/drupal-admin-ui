@@ -35,6 +35,7 @@ class NodeForm extends React.Component {
                 onChange: this.onFieldChange(fieldName),
               });
             }
+            return null;
           })
           .filter(x => x)}
       </Fragment>
