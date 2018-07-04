@@ -7,6 +7,7 @@ import { Link } from 'react-router-dom';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Drawer from '@material-ui/core/Drawer';
 import List from '@material-ui/core/List';
+import IconButton from '@material-ui/core/IconButton';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
@@ -19,8 +20,14 @@ import SettingsIcon from '@material-ui/icons/Settings';
 import PeopleIcon from '@material-ui/icons/People';
 import AssesmentIcon from '@material-ui/icons/Assessment';
 import HelpIcon from '@material-ui/icons/Help';
+import MenuIcon from '@material-ui/icons/Menu';
+import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 
-import { requestMenu } from '../../../actions/application';
+import {
+  requestMenu,
+  closeDrawer,
+  openDrawer,
+} from '../../../actions/application';
 import Message from '../../02_atoms/Message/Message';
 import ErrorBoundary from '../ErrorBoundary/ErrorBoundary';
 
@@ -45,7 +52,34 @@ class Default extends React.Component {
   render = () => (
     <div className={styles.outerWrapper}>
       <CssBaseline />
-      <Drawer variant="permanent" classes={{ paper: styles.drawerPaper }}>
+      <Drawer
+        variant="permanent"
+        classes={{
+          paper: `${styles.drawerPaper} ${!this.props.drawerOpen &&
+            styles.drawerPaperClose}`,
+        }}
+        open={this.props.drawerOpen}
+      >
+        <div className={styles.menuButtonWrapper}>
+          {this.props.drawerOpen ? (
+            <IconButton
+              onClick={this.props.closeDrawer}
+              className={styles.menuButton}
+            >
+              <ChevronLeftIcon />
+            </IconButton>
+          ) : (
+            <IconButton
+              color="inherit"
+              aria-label="open drawer"
+              onClick={this.props.openDrawer}
+              className={styles.menuButton}
+            >
+              <MenuIcon />
+            </IconButton>
+          )}
+        </div>
+        <Divider />
         <List>
           {this.props.menuLinks.map(({ link: menuLink }) => (
             <ListItem
@@ -63,7 +97,7 @@ class Default extends React.Component {
             </ListItem>
           ))}
         </List>
-        <Divider />
+        {this.props.menuLinks.length ? <Divider /> : ''}
       </Drawer>
 
       <main className={styles.main} id={styles.main}>
@@ -77,6 +111,13 @@ class Default extends React.Component {
 }
 
 styles = {
+  menuButton: css`
+    margin: 8px 12px;
+  `,
+  menuButtonWrapper: css`
+    display: flex;
+    justify-content: flex-end;
+  `,
   outerWrapper: css`
     height: 100%;
     display: flex;
@@ -89,6 +130,13 @@ styles = {
   drawerPaper: css`
     position: relative;
     width: 250px;
+    transition: width 225ms cubic-bezier(0.4, 0, 0.6, 1) 0ms;
+  `,
+  drawerPaperClose: css`
+    overflow-x: 'hidden';
+    transition: none;
+    width: 72px;
+    transition: width 195ms cubic-bezier(0.4, 0, 0.6, 1) 0ms;
   `,
 };
 
@@ -107,17 +155,24 @@ Default.propTypes = {
     }),
   ).isRequired,
   requestMenu: PropTypes.func.isRequired,
+  openDrawer: PropTypes.func.isRequired,
+  closeDrawer: PropTypes.func.isRequired,
+  drawerOpen: PropTypes.bool,
 };
 
 Default.defaultProps = {
   message: null,
+  drawerOpen: false,
 };
 
 const mapStateToProps = state => ({
   message: state.application.message || null,
   menuLinks: state.application.menuLinks || [],
+  drawerOpen: state.application.drawerOpen,
 });
 
 export default connect(mapStateToProps, {
   requestMenu,
+  openDrawer,
+  closeDrawer,
 })(Default);
