@@ -45,11 +45,6 @@ function* loadMenu() {
     yield put(resetLoading());
     yield put(showLoading());
     const menuLinks = yield call(api, 'menu');
-    if (menuLinks.message) {
-      throw new Error(
-        'Unable to access data from Drupal. Did you set REACT_APP_DRUPAL_BASE_URL to localhost instead of 127.0.0.1?',
-      );
-    }
     yield put({
       type: MENU_LOADED,
       payload: {
@@ -57,6 +52,13 @@ function* loadMenu() {
       },
     });
   } catch (error) {
+    if (process.env.REACT_APP_DRUPAL_BASE_URL.includes('localhost')) {
+      yield put(
+        setMessage(
+          'Unable to access data from Drupal. Did you set REACT_APP_DRUPAL_BASE_URL to localhost instead of 127.0.0.1?',
+        ),
+      );
+    }
     yield put(setMessage(error.toString()));
   } finally {
     yield put(hideLoading());
