@@ -102,7 +102,9 @@ class Default extends React.Component {
 
       <main className={styles.main} id={styles.main}>
         <ErrorBoundary>
-          {this.props.message && <Message {...this.props.message} />}
+          {this.props.messages.map(message => (
+            <Message {...message} key={message.key} />
+          ))}
           {this.props.children}
         </ErrorBoundary>
       </main>
@@ -142,10 +144,12 @@ styles = {
 
 Default.propTypes = {
   children: PropTypes.node.isRequired,
-  message: PropTypes.shape({
-    message: PropTypes.string,
-    type: PropTypes.string,
-  }),
+  messages: PropTypes.arrayOf(
+    PropTypes.shape({
+      message: PropTypes.string,
+      type: PropTypes.string,
+    }),
+  ),
   menuLinks: PropTypes.arrayOf(
     PropTypes.shape({
       link: PropTypes.shape({
@@ -161,12 +165,12 @@ Default.propTypes = {
 };
 
 Default.defaultProps = {
-  message: null,
+  messages: [],
   drawerOpen: false,
 };
 
 const mapStateToProps = state => ({
-  message: state.application.message || null,
+  messages: state.application.messages || [],
   menuLinks: state.application.menuLinks || [],
   drawerOpen: state.application.drawerOpen,
 });
