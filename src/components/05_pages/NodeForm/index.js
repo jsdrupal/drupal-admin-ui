@@ -31,6 +31,7 @@ class NodeForm extends React.Component {
               // @todo How do we handle cardinality together with jsonapi
               // making a distinction between single value fields and multi value fields.
               return React.createElement(this.props.widgets[widget], {
+                value: this.state.entity[fieldName],
                 onChange: this.onFieldChange(fieldName),
               });
             }
