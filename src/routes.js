@@ -1,3 +1,4 @@
+import AddContent from './components/05_pages/AddContent/AddContent';
 import Content from './components/05_pages/Content/Content';
 import Permissions from './components/05_pages/Permissions/Permissions';
 import Roles from './components/05_pages/Roles';
@@ -9,6 +10,7 @@ const routes = {
   '/admin/people/permissions/:role?': Permissions,
   '/admin/people/roles/': Roles,
   '/admin/reports/dblog/': Dblog,
+  '/node/add': AddContent,
 };
 
 export default routes;
