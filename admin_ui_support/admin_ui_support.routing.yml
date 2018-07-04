@@ -52,3 +52,12 @@ admin_ui_support.admin_ui_support_settings:
     _permission: 'administer site configuration'
   options:
     _admin_route: TRUE
+
+admin_ui_support.system.admin_content:
+  path: '/vfancy/admin/content'
+  defaults:
+    _controller: '\Drupal\admin_ui_support\Controller\EmptyController::noop'
+  options:
+    _admin_related_route: 'system.admin_content'
+  requirements:
+    _permission: 'access administration pages'
