@@ -13,7 +13,9 @@ const routes = {
   '/admin/people/permissions/:role?': Permissions,
   '/admin/people/roles/': Roles,
   '/admin/reports/dblog/': Dblog,
-  '/node/add/recipes': () => <NodeForm uiMetadata={UiMetadata} widgets={widgets}/>,
+  '/node/add/recipes': () => (
+    <NodeForm uiMetadata={UiMetadata} widgets={widgets} />
+  ),
 };
 
 export default routes;

@@ -2,7 +2,12 @@ import React from 'react';
 
 class StringTextfield extends React.Component {
   render() {
-    return <input type="text" />;
+    return (
+      <input
+        onChange={event => this.props.onChange(event.target.value)}
+        type="text"
+      />
+    );
   }
 }
 
