@@ -8,9 +8,8 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import Drawer from '@material-ui/core/Drawer';
 import Divider from '@material-ui/core/Divider';
 
-import Menu from '../../04_organisms/Menu/Menu';
-
 import Message from '../../02_atoms/Message/Message';
+import Menu from '../../04_organisms/Menu/Menu';
 import ErrorBoundary from '../ErrorBoundary/ErrorBoundary';
 
 let styles;
@@ -44,6 +43,7 @@ styles = {
   drawerPaper: css`
     position: relative;
     width: 250px;
+    transition: width 225ms cubic-bezier(0.4, 0, 0.6, 1) 0ms;
   `,
 };
 
@@ -57,6 +57,7 @@ Default.propTypes = {
 
 Default.defaultProps = {
   message: null,
+  drawerOpen: false,
 };
 
 const mapStateToProps = state => ({
