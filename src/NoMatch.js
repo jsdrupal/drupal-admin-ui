@@ -1,12 +1,12 @@
 import { Component } from 'react';
-import { shape, string } from 'prop-types';
+import PropTypes from 'prop-types';
 
 import routes from './routes';
 
 const NoMatch = class NoMatch extends Component {
   static propTypes = {
-    location: shape({
-      pathname: string.isRequired,
+    location: PropTypes.shape({
+      pathname: PropTypes.string.isRequired,
     }).isRequired,
   };
   componentDidMount() {
