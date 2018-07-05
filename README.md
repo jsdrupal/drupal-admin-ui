@@ -7,12 +7,12 @@ This is an admin UI for Drupal, built with JavaScript and based on [create-react
 - [Drupal Admin UI](#drupal-admin-ui)
   * [Installation](#installation)
     + [Requirements](#requirements)
-    + [Steps](#steps) 
+    + [Steps](#steps)
   * [Running](#running)
   * [Developing](#developing)
     + [tl;dr](#tldr)
   * [Commands](#commands)
-  * [Contributing to This Repository](#contributing-to-this-repository)     
+  * [Contributing to This Repository](#contributing-to-this-repository)
 
 ## Installation
 
@@ -62,6 +62,7 @@ composer run-script start
 
 # New terminal window:
 composer run-script devify
+
 # Add the URL generated from the start command:
 vim drupal-admin-ui/.env.local
 cd drupal-admin-ui
