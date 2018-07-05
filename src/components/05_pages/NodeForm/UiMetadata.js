@@ -4,6 +4,10 @@ const UiMetadata = {
     widget: 'string_textfield',
     constraints: [],
   },
+  status: {
+    widget: 'boolean_checkbox',
+    constraints: [],
+  },
 };
 
 export default UiMetadata;
