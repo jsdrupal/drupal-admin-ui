@@ -1,4 +1,5 @@
 import qs from 'qs';
+import { ApiError } from './errors';
 
 async function api(
   endpoint,
@@ -108,6 +109,10 @@ async function api(
     }`,
     options,
   ).then(res => {
+    if (res.status !== 200) {
+      throw new ApiError(res.status, res.statusText, res.body);
+    }
+
     // CSRF tokens return text, not json.
     if (options.text) {
       return res.text();
