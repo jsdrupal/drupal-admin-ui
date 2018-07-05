@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { Markup } from 'interweave';
 import { css } from 'emotion';
 
 import Paper from '@material-ui/core/Paper';
@@ -38,10 +39,8 @@ class AddContent extends Component {
               <ListItemText
                 primary={this.props.contentTypes[contentType].name}
                 secondary={
-                  <div
-                    dangerouslySetInnerHTML={{
-                      __html: this.props.contentTypes[contentType].description,
-                    }}
+                  <Markup
+                    content={this.props.contentTypes[contentType].description}
                   />
                 }
               />
