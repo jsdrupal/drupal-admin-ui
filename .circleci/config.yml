@@ -2,42 +2,21 @@ aliases:
   - &default
     docker:
       - image: circleci/node:8-browsers
-  - &node-modules-key
-    v2-yarn-dependencies-{{ checksum "yarn.lock" }}
-  - &build-key
-    v2-build-{{ .Branch }}-{{ .Revision }}
-  - &restore-node-modules
-    restore_cache:
-      keys:
-        - *node-modules-key
-  - &restore-build
-    restore_cache:
-      keys:
-        - *build-key
 version: 2
 jobs:
   build:
     <<: *default
     steps:
       - checkout
-      - *restore-node-modules
       - run: yarn install
       - run: yarn build
-      - save_cache:
-          paths:
-            - node_modules
-          key: *node-modules-key
-      - save_cache:
-          paths:
-            - build
-          key: *build-key
   integration_tests:
       docker:
         - image: circleci/php:7.1-fpm-node-browsers
       steps:
         - checkout
-        - *restore-node-modules
-        - *restore-build
+        - run: yarn install
+        - run: yarn build
         - run:
             name: Fix PHP environment
             command: |
@@ -72,8 +51,8 @@ jobs:
     <<: *default
     steps:
       - checkout
-      - *restore-node-modules
-      - *restore-build
+      - run: yarn install
+      - run: yarn build
       - run: yarn test:lint:ci
       - store_test_results:
           path: reports
@@ -82,8 +61,8 @@ jobs:
     <<: *default
     steps:
       - checkout
-      - *restore-node-modules
-      - *restore-build
+      - run: yarn install
+      - run: yarn build
       - run: yarn test:unit:ci
       - store_test_results:
           path: reports
@@ -95,7 +74,8 @@ jobs:
           fingerprints:
             - "82:b8:cc:fe:02:24:17:b1:31:ba:dc:30:e1:01:7a:df"
       - checkout
-      - *restore-build
+      - run: yarn install
+      - run: yarn build
       - run: |
           mv ~/project/build ~
           git config --global user.name "⬅️✌️➡️"
@@ -116,7 +96,8 @@ jobs:
           fingerprints:
             - "6f:17:e5:59:16:41:04:82:3b:ba:fc:76:a7:b2:c8:6b"
       - checkout
-      - *restore-build
+      - run: yarn install
+      - run: yarn build
       - run: |
           mv ~/project/admin_ui_support ~
           git config --global user.name "⬅️✌️➡️"
