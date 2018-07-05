@@ -18,14 +18,12 @@ class NodeForm extends React.Component {
   }
 
   onFieldChange = fieldName => data => {
-    this.setState(prevState => {
-      return {
-        entity: {
-          ...prevState.entity,
-          [fieldName]: data,
-        },
-      };
-    });
+    this.setState(prevState => ({
+      entity: {
+        ...prevState.entity,
+        [fieldName]: data,
+      },
+    }));
   };
 
   render() {
@@ -38,9 +36,14 @@ class NodeForm extends React.Component {
               // @todo How do we handle cardinality together with jsonapi
               // making a distinction between single value fields and multi value fields.
               return React.createElement(this.props.widgets[widget], {
-                key: {fieldName},
+                key: { fieldName },
                 value: this.state.entity[fieldName],
-                label: this.props.schema.properties.attributes.properties[fieldName] && this.props.schema.properties.attributes.properties[fieldName].title,
+                label:
+                  this.props.schema.properties.attributes.properties[
+                    fieldName
+                  ] &&
+                  this.props.schema.properties.attributes.properties[fieldName]
+                    .title,
                 onChange: this.onFieldChange(fieldName),
               });
             }
