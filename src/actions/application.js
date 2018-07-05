@@ -44,12 +44,12 @@ function* loadMenu() {
   try {
     yield put(resetLoading());
     yield put(showLoading());
-    const maybeMenuLinks = yield call(api, 'menu');
+    const menuLinks = yield call(api, 'menu');
 
     yield put({
       type: MENU_LOADED,
       payload: {
-        maybeMenuLinks,
+        menuLinks,
       },
     });
   } catch (error) {
