@@ -61,3 +61,13 @@ admin_ui_support.system.admin_content:
     _admin_related_route: 'system.admin_content'
   requirements:
     _permission: 'access administration pages'
+
+admin_ui_support.node.add_page:
+  path: '/vfancy/node/add'
+  defaults:
+    _controller: '\Drupal\admin_ui_support\Controller\EmptyController::noop'
+  options:
+    _admin_related_route: 'node.add_page'
+    _node_operation_route: TRUE
+  requirements:
+    _node_add_access: 'node'
