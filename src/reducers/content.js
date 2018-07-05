@@ -17,7 +17,7 @@ export default (state = initialState, action) => {
               accumulator[node.type][node.id] = node;
               return accumulator;
             }, {})
-          : [],
+          : {},
         contentList: action.payload.contentList.data
           ? action.payload.contentList.data.map(content => ({
               ...content,
