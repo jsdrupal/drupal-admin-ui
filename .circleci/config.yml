@@ -34,7 +34,7 @@ jobs:
         - run:
             name: Fix PHP environment
             command: |
-                docker-php-ext-install gd
+                sudo docker-php-ext-install gd
         - run:
             name: Start Drupal and run integration tests
             command: |
