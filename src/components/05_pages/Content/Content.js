@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import { css } from 'emotion';
 
 import Paper from '@material-ui/core/Paper';
+import Typography from '@material-ui/core/Typography';
 import Input from '@material-ui/core/Input';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -78,6 +79,9 @@ const styles = {
   `,
   filters: css`
     padding: 0 1.5rem;
+  `,
+  noContentMessage: css`
+    padding: 0 1.5rem 1.5rem;
   `,
 };
 
@@ -259,7 +263,6 @@ class Content extends Component {
               <AddIcon />
             </Button>
           </div>
-
           <div className={styles.filters}>
             {this.props.actions && (
               <FormControl className={styles.action}>
@@ -293,7 +296,6 @@ class Content extends Component {
               </Button>
             )}
           </div>
-
           <div
             ref={node => {
               this.table = node;
@@ -436,6 +438,11 @@ class Content extends Component {
               rowsPerPageOptions={[limit]}
               labelDisplayedRows={({ page }) => `Page: ${page + 1}`}
             />
+            {!this.props.contentList.length && (
+              <Typography className={styles.noContentMessage}>
+                There is no content yet. {<Link to="/node/add">Add one</Link>}.
+              </Typography>
+            )}
           </div>
         </Paper>
       </div>
