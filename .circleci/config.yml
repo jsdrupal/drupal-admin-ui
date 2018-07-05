@@ -85,6 +85,8 @@ jobs:
                 export SIMPLETEST_BASE_URL=http://localhost:8888
                 export SYMFONY_DEPRECATIONS_HELPER=disabled
                 ./vendor/bin/phpunit -c docroot/core --log-junit reports/phpunit.xml docroot/modules/contrib/drupal-admin-ui-support
+        - store_test_results:
+            path: ~/drupal-admin-ui-demo/reports
   nightwatch:
       docker:
         - image: circleci/php:7.1-fpm-node-browsers
@@ -102,6 +104,8 @@ jobs:
                 yarn start &
                 sleep 10
                 yarn test:functional
+        - store_test_results:
+            path: ~/drupal-admin-ui-demo/drupal-admin-ui/reports
   lint:
     <<: *default
     steps:
