@@ -28,12 +28,12 @@ This is an admin UI for Drupal, built with JavaScript and based on [create-react
 ```
 composer create-project jsdrupal/drupal-admin-ui-demo -s dev --prefer-dist
 cd drupal-admin-ui-demo
-composer run-script install
+composer setup
 ```
 
 ## Running
 ```
-composer run-script start
+composer start
 ```
 
 Try visiting one of the converted pages, e.g. the user permissions or roles page.
@@ -41,8 +41,8 @@ Try visiting one of the converted pages, e.g. the user permissions or roles page
 ## Developing
 
 - Ensure you have [Node 8](https://nodejs.org/en/) and [Yarn](https://yarnpkg.com/) installed.
-- Make sure the webserver for Drupal is started with `composer run-script start`
-- Run `composer run-script devify`. You will now have a checkout of this repo in `drupal-admin-ui`.
+- Make sure the webserver for Drupal is started with `composer start`
+- Run `composer devify`. You will now have a checkout of this repo in `drupal-admin-ui`.
 It will also symlink the bundled production app to `docroot/vfancy`, and the support module to
 `docroot/modules/contrib`.
 - Edit `drupal-admin-ui/.env.local` and add in the URL for your currently running Drupal installation
@@ -54,14 +54,14 @@ will open a new window at `http://localhost:3000/`
 The webpack dev server has hot reloading, however you won't be able to seamlessly switch between
 Drupal and the React app. If you want to test out your changes in this context, enter the
 `drupal-admin-ui` directory and run `yarn build`. You can then visit the URL that
-`composer run-script start` generated.
+`composer start` generated.
 
 ### tl;dr
 ```
-composer run-script start
+composer start
 
 # New terminal window:
-composer run-script devify
+composer devify
 
 # Add the URL generated from the start command:
 vim drupal-admin-ui/.env.local
