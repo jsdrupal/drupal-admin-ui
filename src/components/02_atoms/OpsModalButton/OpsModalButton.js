@@ -80,14 +80,10 @@ class OpsModalButton extends React.Component {
           TransitionComponent={Transition}
           keepMounted="keepMounted"
           onClose={this.handleClose}
-          aria-labelledby="alert-dialog-slide-title"
-          aria-describedby="alert-dialog-slide-description"
         >
-          <DialogTitle id="alert-dialog-slide-title">{title}</DialogTitle>
+          <DialogTitle>{title}</DialogTitle>
           <DialogContent>
-            <DialogContentText id="alert-dialog-slide-description">
-              {text}
-            </DialogContentText>
+            <DialogContentText>{text}</DialogContentText>
           </DialogContent>
           <DialogActions>
             <Button
