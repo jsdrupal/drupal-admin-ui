@@ -1,5 +1,5 @@
 import React from 'react';
-import { shape, string } from 'prop-types';
+import PropTypes from 'prop-types';
 import { Redirect } from 'react-router-dom';
 
 const InitialRedirect = ({ location: { search } }) => {
@@ -15,8 +15,8 @@ const InitialRedirect = ({ location: { search } }) => {
 };
 
 InitialRedirect.propTypes = {
-  location: shape({
-    search: string.isRequired,
+  location: PropTypes.shape({
+    search: PropTypes.string.isRequired,
   }).isRequired,
 };
 
