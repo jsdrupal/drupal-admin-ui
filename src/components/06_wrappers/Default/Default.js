@@ -23,7 +23,9 @@ const Default = props => (
     </Drawer>
     <main className={styles.main} id={styles.main}>
       <ErrorBoundary>
-        {props.message && <Message {...props.message} />}
+        {props.messages.map(message => (
+          <Message {...message} key={message.key} />
+        ))}
         {props.children}
       </ErrorBoundary>
     </main>
@@ -49,19 +51,20 @@ styles = {
 
 Default.propTypes = {
   children: PropTypes.node.isRequired,
-  message: PropTypes.shape({
-    message: PropTypes.string,
-    type: PropTypes.string,
-  }),
+  messages: PropTypes.arrayOf(
+    PropTypes.shape({
+      message: PropTypes.string,
+      type: PropTypes.string,
+    }),
+  ),
 };
 
 Default.defaultProps = {
-  message: null,
-  drawerOpen: false,
+  messages: [],
 };
 
 const mapStateToProps = state => ({
-  message: state.application.message || null,
+  messages: state.application.messages || [],
 });
 
 export default connect(mapStateToProps)(Default);

@@ -308,36 +308,40 @@ class Content extends Component {
                   {[
                     { key: 'title', label: 'Title', sortable: true },
                     { key: 'type', label: 'Content Type', sortable: true },
-                    { key: 'author', label: 'Author', sortable: false },
+                    this.props.includes['user--user']
+                      ? { key: 'author', label: 'Author', sortable: false }
+                      : undefined,
                     { key: 'status', label: 'Status', sortable: true },
                     { key: 'changed', label: 'Updated', sortable: true },
                     { key: 'operations', label: 'Operations', sortable: false },
-                  ].map(
-                    ({ key, label, sortable }) =>
-                      sortable ? (
-                        <TableCell key={key}>
-                          <TableSortLabel
-                            direction={
-                              this.state.sort.path === key
-                                ? this.state.sort.direction.toLowerCase()
-                                : undefined
-                            }
-                            active={this.state.sort.path === key}
-                            onClick={this.tableSortHandler(
-                              key,
-                              (this.state.sort.path !== key && 'DESC') ||
-                                ((this.state.sort.direction === 'DESC' &&
-                                  'ASC') ||
-                                  'DESC'),
-                            )}
-                          >
-                            {label}
-                          </TableSortLabel>
-                        </TableCell>
-                      ) : (
-                        <TableCell key={key}>{label}</TableCell>
-                      ),
-                  )}
+                  ]
+                    .filter(x => x)
+                    .map(
+                      ({ key, label, sortable }) =>
+                        sortable ? (
+                          <TableCell key={key}>
+                            <TableSortLabel
+                              direction={
+                                this.state.sort.path === key
+                                  ? this.state.sort.direction.toLowerCase()
+                                  : undefined
+                              }
+                              active={this.state.sort.path === key}
+                              onClick={this.tableSortHandler(
+                                key,
+                                (this.state.sort.path !== key && 'DESC') ||
+                                  ((this.state.sort.direction === 'DESC' &&
+                                    'ASC') ||
+                                    'DESC'),
+                              )}
+                            >
+                              {label}
+                            </TableSortLabel>
+                          </TableCell>
+                        ) : (
+                          <TableCell key={key}>{label}</TableCell>
+                        ),
+                    )}
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -367,27 +371,29 @@ class Content extends Component {
                       <TableCell>
                         {this.props.contentTypes[type].name}
                       </TableCell>
-                      <TableCell>
-                        {this.props.includes['user--user'][
-                          relationships.uid.data.id
-                        ] ? (
-                          <Link
-                            to={`/user/${
-                              this.props.includes['user--user'][
-                                relationships.uid.data.id
-                              ].attributes.uid
-                            }`}
-                          >
-                            {
-                              this.props.includes['user--user'][
-                                relationships.uid.data.id
-                              ].attributes.name
-                            }
-                          </Link>
-                        ) : (
-                          'Anonymous (not verified)'
-                        )}
-                      </TableCell>
+                      {this.props.includes['user--user'] && (
+                        <TableCell>
+                          {this.props.includes['user--user'][
+                            relationships.uid.data.id
+                          ] ? (
+                            <Link
+                              to={`/user/${
+                                this.props.includes['user--user'][
+                                  relationships.uid.data.id
+                                ].attributes.uid
+                              }`}
+                            >
+                              {
+                                this.props.includes['user--user'][
+                                  relationships.uid.data.id
+                                ].attributes.name
+                              }
+                            </Link>
+                          ) : (
+                            'Anonymous (not verified)'
+                          )}
+                        </TableCell>
+                      )}
                       <TableCell>
                         {(status && 'Published') || 'Unpublished'}
                       </TableCell>

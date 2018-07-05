@@ -1,6 +1,6 @@
 import React from 'react';
 import { css } from 'emotion';
-import { string, oneOf } from 'prop-types';
+import PropTypes from 'prop-types';
 
 import { MESSAGE_ERROR, MESSAGE_SUCCESS } from '../../../actions/application';
 
@@ -12,8 +12,8 @@ const Message = ({ message, type }) => (
 );
 
 Message.propTypes = {
-  message: string.isRequired,
-  type: oneOf([MESSAGE_ERROR, MESSAGE_SUCCESS]).isRequired,
+  message: PropTypes.string.isRequired,
+  type: PropTypes.oneOf([MESSAGE_ERROR, MESSAGE_SUCCESS]).isRequired,
 };
 
 styles = {
