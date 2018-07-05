@@ -59,6 +59,7 @@ const App = () => (
             />
             {Object.keys(routes).map(route => (
               <Route
+                exact
                 path={route}
                 component={withDefault(withRouter(routes[route]))}
                 key={route}
