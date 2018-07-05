@@ -26,6 +26,10 @@ class NodeForm extends React.Component {
     widgets: PropTypes.objectOf(PropTypes.node).isRequired,
   };
 
+  static defaultProps = {
+    schema: {},
+  };
+
   constructor(props) {
     super(props);
 
