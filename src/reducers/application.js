@@ -40,7 +40,7 @@ export default (state = initialState, action) => {
     case SET_MESSAGE: {
       // This causes a new messages object to be created, instead of
       // maintaining a reference to the old data structure.
-      const messages = state.messages.map(message => message);
+      const messages = [...state.messages];
       messages.push({
         message: action.payload.message,
         type: action.payload.type,
