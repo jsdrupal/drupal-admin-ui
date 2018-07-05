@@ -45,9 +45,9 @@ jobs:
                 cd ../
                 composer create-project jsdrupal/drupal-admin-ui-demo -s dev --prefer-dist
                 cd drupal-admin-ui-demo
-                composer run-script install
-                composer run-script devify
-                composer run-script start &
+                composer setup
+                composer devify
+                composer start &
                 sleep 10
                 rm -rf drupal-admin-ui
                 mv ~/project drupal-admin-ui
