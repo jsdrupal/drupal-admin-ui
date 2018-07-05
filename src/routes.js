@@ -8,9 +8,9 @@ import Dblog from './components/05_pages/Reports/Dblog';
 const routes = {
   '/admin/content': Content,
   '/admin/people/permissions/:role?': Permissions,
-  '/admin/people/roles/': Roles,
-  '/admin/reports/dblog/': Dblog,
-  '/content/add': AddContent,
+  '/admin/people/roles': Roles,
+  '/admin/reports/dblog': Dblog,
+  '/node/add': AddContent,
 };
 
 export default routes;
