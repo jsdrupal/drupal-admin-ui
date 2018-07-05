@@ -159,7 +159,4 @@ const mapStateToProps = ({ application: { dblog } }) => ({
   ...dblog,
 });
 
-export default connect(
-  mapStateToProps,
-  { requestDblogCollection },
-)(Dblog);
+export default connect(mapStateToProps, { requestDblogCollection })(Dblog);

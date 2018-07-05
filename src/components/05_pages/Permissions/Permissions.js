@@ -276,7 +276,4 @@ styles = {
   `,
 };
 
-export default connect(
-  null,
-  { setMessage, clearMessage },
-)(Permissions);
+export default connect(null, { setMessage, clearMessage })(Permissions);
