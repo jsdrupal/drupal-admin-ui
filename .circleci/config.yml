@@ -6,6 +6,8 @@ aliases:
     restore_cache:
       keys:
         - v1-yarn-dependencies-{{ checksum "yarn.lock" }}
+    restore_cache:
+      keys:
         - v1-build-{{ .Branch }}-{{ .Revision }}
 version: 2
 jobs:
@@ -34,7 +36,7 @@ jobs:
         - run:
             name: Fix PHP environment
             command: |
-                sudo apt-get install -y libpng-dev
+                sudo apt-get install -y libpng-dev sqlite3
                 sudo docker-php-ext-install gd
         - run:
             name: Start Drupal and run integration tests
