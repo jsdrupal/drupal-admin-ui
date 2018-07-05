@@ -15,7 +15,7 @@ const BooleanCheckbox = props => (
 
 BooleanCheckbox.propTypes = {
   ...WidgetPropTypes,
-  checked: PropTypes.boolean,
+  checked: PropTypes.bool,
   label: PropTypes.string,
 };
 
