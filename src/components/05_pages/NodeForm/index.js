@@ -2,11 +2,28 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import Widgets from './Widgets';
 
+const lazyFunction = f => () => f().apply(this, arguments);
+
+let schemaType;
+const lazySchemaType = lazyFunction(() => schemaType);
+
+schemaType = PropTypes.shape({
+  type: PropTypes.string.isRequired,
+  title: PropTypes.string,
+  description: PropTypes.string,
+  properties: PropTypes.objectOf(lazyFunction(lazySchemaType)),
+}).isRequired;
+
 class NodeForm extends React.Component {
   static propTypes = {
-    uiMetadata: PropTypes.object,
-    schema: PropTypes.object,
-    widgets: PropTypes.object,
+    uiMetadata: PropTypes.objectOf(
+      PropTypes.shape({
+        widget: PropTypes.string.isRequired,
+        constraints: PropTypes.array,
+      }),
+    ).isRequired,
+    schema: schemaType,
+    widgets: PropTypes.objectOf(PropTypes.node).isRequired,
   };
 
   constructor(props) {
