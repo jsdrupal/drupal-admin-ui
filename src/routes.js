@@ -10,7 +10,7 @@ const routes = {
   '/admin/people/permissions/:role?': Permissions,
   '/admin/people/roles/': Roles,
   '/admin/reports/dblog/': Dblog,
-  '/node/add': AddContent,
+  '/content/add': AddContent,
 };
 
 export default routes;

@@ -256,7 +256,7 @@ class Content extends Component {
               aria-label="add"
               className={styles.addButton}
               component={Link}
-              to="/node/add"
+              to="/content/add"
             >
               <AddIcon />
             </Button>
