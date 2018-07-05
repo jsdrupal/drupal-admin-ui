@@ -2,7 +2,8 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import Widgets from './Widgets';
 
-const lazyFunction = f => () => f().apply(this, arguments);
+const lazyFunction = f => (props, propName, componentName, ...rest) =>
+  f(props, propName, componentName, ...rest);
 
 let schemaType;
 const lazySchemaType = lazyFunction(() => schemaType);
@@ -23,7 +24,12 @@ class NodeForm extends React.Component {
       }),
     ).isRequired,
     schema: schemaType,
-    widgets: PropTypes.objectOf(PropTypes.node).isRequired,
+    widgets: PropTypes.objectOf(
+      PropTypes.oneOfType([
+        PropTypes.func,
+        PropTypes.instanceOf(React.Component),
+      ]).isRequired,
+    ).isRequired,
   };
 
   static defaultProps = {
@@ -58,6 +64,7 @@ class NodeForm extends React.Component {
               // making a distinction between single value fields and multi value fields.
               return React.createElement(this.props.widgets[widget], {
                 key: { fieldName },
+                fieldName,
                 value: this.state.entity[fieldName],
                 label:
                   this.props.schema.properties.attributes.properties[
