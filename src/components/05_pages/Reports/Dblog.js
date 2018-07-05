@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import { func, arrayOf, shape, string, number, bool } from 'prop-types';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import LoadingBar from 'react-redux-loading-bar';
 import { Markup } from 'interweave';
@@ -9,21 +9,21 @@ import { Table, TBody, THead } from '../../01_subatomics/Table/Table';
 
 class Dblog extends Component {
   static propTypes = {
-    requestDblogCollection: func.isRequired,
-    entries: arrayOf(
-      shape({
-        wid: number.isRequired,
-        messageFormattedPlain: string.isRequired,
-        timestamp: number.isRequired,
-        type: string.isRequired,
+    requestDblogCollection: PropTypes.func.isRequired,
+    entries: PropTypes.arrayOf(
+      PropTypes.shape({
+        wid: PropTypes.number.isRequired,
+        messageFormattedPlain: PropTypes.string.isRequired,
+        timestamp: PropTypes.number.isRequired,
+        type: PropTypes.string.isRequired,
       }),
     ),
-    availableTypes: arrayOf(string),
-    filterOptions: shape({
-      sort: string,
-      severities: arrayOf(string),
+    availableTypes: PropTypes.arrayOf(PropTypes.string),
+    filterOptions: PropTypes.shape({
+      sort: PropTypes.string,
+      severities: PropTypes.arrayOf(PropTypes.string),
     }),
-    next: bool,
+    next: PropTypes.bool,
   };
   static defaultProps = {
     entries: null,

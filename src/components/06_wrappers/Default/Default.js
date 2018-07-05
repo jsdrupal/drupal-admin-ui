@@ -1,5 +1,5 @@
 import React from 'react';
-import { func, node, arrayOf, shape, string, bool } from 'prop-types';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { css } from 'emotion';
 import { Link } from 'react-router-dom';
@@ -141,23 +141,23 @@ styles = {
 };
 
 Default.propTypes = {
-  children: node.isRequired,
-  message: shape({
-    message: string,
-    type: string,
+  children: PropTypes.node.isRequired,
+  message: PropTypes.shape({
+    message: PropTypes.string,
+    type: PropTypes.string,
   }),
-  menuLinks: arrayOf(
-    shape({
-      link: shape({
-        url: string,
-        title: string,
+  menuLinks: PropTypes.arrayOf(
+    PropTypes.shape({
+      link: PropTypes.shape({
+        url: PropTypes.string,
+        title: PropTypes.string,
       }),
     }),
   ).isRequired,
-  requestMenu: func.isRequired,
-  openDrawer: func.isRequired,
-  closeDrawer: func.isRequired,
-  drawerOpen: bool,
+  requestMenu: PropTypes.func.isRequired,
+  openDrawer: PropTypes.func.isRequired,
+  closeDrawer: PropTypes.func.isRequired,
+  drawerOpen: PropTypes.bool,
 };
 
 Default.defaultProps = {
