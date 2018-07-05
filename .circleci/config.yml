@@ -32,6 +32,10 @@ jobs:
       steps:
         - checkout
         - run:
+            name: Fix PHP environment
+            command: |
+                docker-php-ext-install gd
+        - run:
             name: Start Drupal and run integration tests
             command: |
                 yarn install
