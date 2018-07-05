@@ -51,7 +51,8 @@ jobs:
                 sleep 10
                 rm -rf drupal-admin-ui
                 mv ~/project drupal-admin-ui
-                export SIMPLETEST_BASE_URL='http://localhost:8888'
+                export SIMPLETEST_BASE_URL=http://localhost:8888
+                export SYMFONY_DEPRECATIONS_HELPER=disabled
                 ./vendor/bin/phpunit -c docroot/core --log-junit reports/phpunit.xml docroot/modules/contrib/drupal-admin-ui-support
                 cd drupal-admin-ui
                 export REACT_APP_DRUPAL_BASE_URL="http://127.0.0.1:8888"
