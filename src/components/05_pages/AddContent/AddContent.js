@@ -8,7 +8,6 @@ import Paper from '@material-ui/core/Paper';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
-import { ListItemSecondaryAction } from '@material-ui/core';
 import { requestContentTypes } from '../../../actions/application';
 
 const styles = {
@@ -30,25 +29,28 @@ class AddContent extends Component {
   componentDidMount() {
     this.props.requestContentTypes();
   }
-  render = () => {
-    return (
-      <div className={styles.root}>
-        <Paper>
-          {console.log(this.props.contentTypes)}
-          <List>
-            {Object.keys(this.props.contentTypes).map(contentType => (
-              <ListItem key={contentType}>
-                <ListItemText
-                  primary={this.props.contentTypes[contentType].name}
-                  secondary={(<div dangerouslySetInnerHTML={{ __html: this.props.contentTypes[contentType].description}} />)}
-                />
-              </ListItem>
-            ))}
-          </List>
-        </Paper>
-      </div>
-    );
-  };
+  render = () => (
+    <div className={styles.root}>
+      <Paper>
+        <List>
+          {Object.keys(this.props.contentTypes).map(contentType => (
+            <ListItem button component={Link} to={`/node/add/${contentType}`}>
+              <ListItemText
+                primary={this.props.contentTypes[contentType].name}
+                secondary={
+                  <div
+                    dangerouslySetInnerHTML={{
+                      __html: this.props.contentTypes[contentType].description,
+                    }}
+                  />
+                }
+              />
+            </ListItem>
+          ))}
+        </List>
+      </Paper>
+    </div>
+  );
 }
 
 const mapStateToProps = state => ({
