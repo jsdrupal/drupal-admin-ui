@@ -2,14 +2,18 @@ aliases:
   - &default
     docker:
       - image: circleci/node:8-browsers
+  - &node-modules-key
+    v2-yarn-dependencies-{{ checksum "yarn.lock" }}
+  - &build-key
+    v2-build-{{ .Branch }}-{{ .Revision }}
   - &restore-node-modules
     restore_cache:
       keys:
-        - v1-yarn-dependencies-{{ checksum "yarn.lock" }}
+        - *node-modules-key
   - &restore-build
     restore_cache:
       keys:
-        - v1-build-{{ .Branch }}-{{ .Revision }}
+        - *build-key
 version: 2
 jobs:
   build:
@@ -22,11 +26,11 @@ jobs:
       - save_cache:
           paths:
             - node_modules
-          key: v1-yarn-dependencies-{{ checksum "yarn.lock" }}
+          key: *node-modules-key
       - save_cache:
           paths:
             - build
-          key: v1-build-{{ .Branch }}-{{ .Revision }}
+          key: *build-key
   integration_tests:
       docker:
         - image: circleci/php:7.1-fpm-node-browsers
