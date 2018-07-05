@@ -8,6 +8,7 @@ const NumberTextfield = props => (
     id={props.fieldName}
     value={props.value}
     onChange={event => props.onChange(event.target.value)}
+    inputProps={props.inputProps}
     type="number"
     margin="normal"
     label={props.label}
@@ -16,11 +17,19 @@ const NumberTextfield = props => (
 
 NumberTextfield.propTypes = {
   ...WidgetPropTypes,
+  inputProps: {
+    max: PropTypes.number,
+    min: PropTypes.number,
+    step: PropTypes.number,
+  },
   value: PropTypes.string,
 };
 
 NumberTextfield.defaultProps = {
-  value: 0,
+  inputProps: {
+    min: 0,
+  },
+  value: null,
 };
 
 export default NumberTextfield;
