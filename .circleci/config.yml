@@ -28,7 +28,7 @@ jobs:
           key: v1-build-{{ .Branch }}-{{ .Revision }}
   integration_tests:
       docker:
-        - image: circleci/7.1-fpm-node-browsers
+        - image: circleci/php:7.1-fpm-node-browsers
       steps:
         - checkout
         - run:
