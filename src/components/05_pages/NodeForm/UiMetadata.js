@@ -4,6 +4,10 @@ const UiMetadata = {
     widget: 'string_textfield',
     constraints: [],
   },
+  created: {
+    widget: 'timestamp_datetime',
+    constraints: [],
+  },
 };
 
 export default UiMetadata;
