@@ -1,4 +1,5 @@
 import React from 'react';
+import AddContent from './components/05_pages/AddContent/AddContent';
 import Content from './components/05_pages/Content/Content';
 import Permissions from './components/05_pages/Permissions/Permissions';
 import Roles from './components/05_pages/Roles';
@@ -12,8 +13,9 @@ import widgets from './components/05_pages/NodeForm/Widgets';
 const routes = {
   '/admin/content': Content,
   '/admin/people/permissions/:role?': Permissions,
-  '/admin/people/roles/': Roles,
-  '/admin/reports/dblog/': Dblog,
+  '/admin/people/roles': Roles,
+  '/admin/reports/dblog': Dblog,
+  '/node/add': AddContent,
   '/node/add/recipe': () => (
     <NodeForm schema={RecipeSchema} uiMetadata={UiMetadata} widgets={widgets} />
   ),
