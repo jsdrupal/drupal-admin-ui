@@ -134,7 +134,7 @@ workflows:
       - build
       - integration_tests:
           requires:
-            -build
+            - build
       - lint:
           requires:
             - build
