@@ -1,6 +1,6 @@
 import React from 'react';
 import { css, cx } from 'emotion';
-import { node, oneOfType, arrayOf, string, shape, number } from 'prop-types';
+import PropTypes from 'prop-types';
 
 let styles;
 
@@ -10,17 +10,26 @@ const TABLE = ({ children, ...props }) => (
   </table>
 );
 TABLE.propTypes = {
-  children: oneOfType([arrayOf(node), node]).isRequired,
+  children: PropTypes.oneOfType([
+    PropTypes.arrayOf(PropTypes.node),
+    PropTypes.node,
+  ]).isRequired,
 };
 
 const TR = ({ children, ...props }) => <tr {...props}>{children}</tr>;
 TR.propTypes = {
-  children: oneOfType([arrayOf(node), node]).isRequired,
+  children: PropTypes.oneOfType([
+    PropTypes.arrayOf(PropTypes.node),
+    PropTypes.node,
+  ]).isRequired,
 };
 
 const TD = ({ children, ...props }) => <td {...props}>{children}</td>;
 TD.propTypes = {
-  children: oneOfType([arrayOf(node), node]).isRequired,
+  children: PropTypes.oneOfType([
+    PropTypes.arrayOf(PropTypes.node),
+    PropTypes.node,
+  ]).isRequired,
 };
 
 const THEAD = ({ data }) => (
@@ -35,7 +44,7 @@ const THEAD = ({ data }) => (
   </thead>
 );
 THEAD.propTypes = {
-  data: arrayOf(string).isRequired,
+  data: PropTypes.arrayOf(PropTypes.string).isRequired,
 };
 
 const TBODY = ({ rows }) => (
@@ -56,11 +65,11 @@ const TBODY = ({ rows }) => (
   </tbody>
 );
 TBODY.propTypes = {
-  rows: arrayOf(
-    shape({
-      colspan: number,
-      key: string,
-      tds: arrayOf(node).isRequired,
+  rows: PropTypes.arrayOf(
+    PropTypes.shape({
+      colspan: PropTypes.number,
+      key: PropTypes.string,
+      tds: PropTypes.arrayOf(PropTypes.node).isRequired,
     }),
   ).isRequired,
 };
