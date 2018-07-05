@@ -22,6 +22,8 @@ class Dblog extends Component {
     filterOptions: PropTypes.shape({
       sort: PropTypes.string,
       severities: PropTypes.arrayOf(PropTypes.string),
+      offset: PropTypes.number,
+      types: PropTypes.arrayOf(PropTypes.string),
     }),
     next: PropTypes.bool,
   };
