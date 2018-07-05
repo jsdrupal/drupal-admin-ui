@@ -9,6 +9,7 @@ class StringTextfield extends React.Component {
         value={this.props.value}
         onChange={event => this.props.onChange(event.target.value)}
         margin="normal"
+        label={this.props.label}
       />
     );
   }

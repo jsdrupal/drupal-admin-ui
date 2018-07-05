@@ -5,6 +5,7 @@ import Roles from './components/05_pages/Roles';
 import Dblog from './components/05_pages/Reports/Dblog';
 import NodeForm from './components/05_pages/NodeForm';
 import UiMetadata from './components/05_pages/NodeForm/UiMetadata';
+import RecipeSchema from './components/05_pages/NodeForm/RecipeSchema';
 import widgets from './components/05_pages/NodeForm/Widgets';
 
 // @todo Share this with Drupal
@@ -13,8 +14,8 @@ const routes = {
   '/admin/people/permissions/:role?': Permissions,
   '/admin/people/roles/': Roles,
   '/admin/reports/dblog/': Dblog,
-  '/node/add/recipes': () => (
-    <NodeForm uiMetadata={UiMetadata} widgets={widgets} />
+  '/node/add/recipe': () => (
+    <NodeForm schema={RecipeSchema} uiMetadata={UiMetadata} widgets={widgets} />
   ),
 };
 
