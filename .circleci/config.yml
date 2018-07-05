@@ -1,95 +1,63 @@
 aliases:
-  - &drupal_defaults
-    docker:
-      - image: drpal/drupal-8.6.x-dev-test
-      - image: selenium/standalone-chrome-debug:3.7.1-beryllium
-      - image: mariadb:10.3
-        environment:
-          MYSQL_ALLOW_EMPTY_PASSWORD: 1
-    working_directory: /var/www/html/modules/custom
-  - &defaults
+  - &default
     docker:
       - image: circleci/node:8-browsers
-  - &restore-modules
-    restore_cache:
-      keys:
-        - v1-dependencies-{{ checksum "yarn.lock" }}
   - &restore-build
     restore_cache:
       keys:
-        - build-v1-{{ .Branch }}-{{ .Revision }}
-
+        - v1-yarn-dependencies-{{ checksum "yarn.lock" }}
+        - v1-build-{{ .Branch }}-{{ .Revision }}
 version: 2
 jobs:
-  drupal_update_dependencies: &update_dependencies
-    <<: *drupal_defaults
-    steps:
-      - checkout
-      # Restore Composer Cache
-      - restore_cache:
-          keys:
-            - v4-dependencies-{{ checksum "admin_ui_support/composer.json" }}
-            - v4-dependencies-
-      - run:
-          working_directory: /var/www/html
-          command: |
-            ./update-dependencies.sh $CIRCLE_PROJECT_REPONAME
-      # Add JSON API
-      - run:
-            working_directory: /var/www/html
-            command: /usr/local/bin/composer require drupal/jsonapi:^1.16
-      # Save Composer Cache
-      - save_cache:
-          paths:
-            - /root/.composer/cache/files
-          key: v4-dependencies-{{ checksum "admin_ui_support/composer.json" }}
-      - persist_to_workspace:
-          root: /var/www/html
-          paths:
-            - .
-  drupal_unit_kernel_tests: &unit_kernel_tests
-    <<: *drupal_defaults
-    steps:
-      - attach_workspace:
-          at: /var/www/html
-      - checkout
-      - run:
-          working_directory: /var/www/html
-          command: |
-            ./test.sh admin_ui_support
-          environment:
-            SYMFONY_DEPRECATIONS_HELPER: disabled
-      - run:
-          working_directory: /var/www/html
-          command: |
-            ./test.sh jsonapi_support
-          environment:
-            SYMFONY_DEPRECATIONS_HELPER: disabled
-      - store_test_results:
-          path: /var/www/html/artifacts/phpunit
-      - store_artifacts:
-          path: /var/www/html/artifacts
   build:
-    <<: *defaults
+    <<: *default
     steps:
       - checkout
       - restore_cache:
           keys:
-          - v1-dependencies-{{ checksum "yarn.lock" }}
+          - v1-yarn-dependencies-{{ checksum "yarn.lock" }}
       - run: yarn install
       - run: yarn build
       - save_cache:
           paths:
             - node_modules
-          key: v1-dependencies-{{ checksum "yarn.lock" }}
+          key: v1-yarn-dependencies-{{ checksum "yarn.lock" }}
       - save_cache:
           paths:
             - build
-            - node_modules
-          key: build-v1-{{ .Branch }}-{{ .Revision }}
+          key: v1-build-{{ .Branch }}-{{ .Revision }}
+  integration_tests:
+      docker:
+        - image: circleci/7.1-fpm-node-browsers
+      steps:
+        - checkout
+        - run:
+            name: Start Drupal and run integration tests
+            command: |
+                yarn install
+                yarn build
+                cd ../
+                composer create-project jsdrupal/drupal-admin-ui-demo -s dev --prefer-dist
+                cd drupal-admin-ui-demo
+                composer run-script install
+                rm -rf docroot/vfancy
+                mv ../$CIRCLE_PROJECT_REPONAME/build docroot/vfancy
+                composer run-script start &
+                sleep 10
+                export SIMPLETEST_BASE_URL='http://localhost:8888'
+                ./vendor/bin/phpunit -c docroot/core docroot/modules/contrib/drupal-admin-ui-supports
+                cd ../$CIRCLE_PROJECT_REPONAME
+                export REACT_APP_DRUPAL_BASE_URL="http://127.0.0.1:8888"
+                yarn start &
+                sleep 10
+                yarn test:functional
+        - store_test_results:
+            path: ~/drupal-admin-ui-demo/reports
+        - store_test_results:
+            path: ~/$CIRCLE_PROJECT_REPONAME/reports
 
   lint:
-    <<: *defaults
+    <<: *default
     steps:
       - checkout
       - *restore-build
@@ -98,7 +66,7 @@ jobs:
           path: reports
 
   unit:
-    <<: *defaults
+    <<: *default
     steps:
       - checkout
       - *restore-build
@@ -107,7 +75,7 @@ jobs:
           path: reports
 
   dist:
-    <<: *defaults
+    <<: *default
     steps:
       - add_ssh_keys:
           fingerprints:
@@ -127,10 +95,8 @@ jobs:
               git commit -m "Auto build from master"
               git push origin master
           fi
-
-
   dist_support:
-    <<: *defaults
+    <<: *default
     steps:
       - add_ssh_keys:
           fingerprints:
@@ -154,15 +120,10 @@ jobs:
 
 workflows:
   version: 2
-  drupal_test_and_lint:
-    jobs:
-      - drupal_update_dependencies
-      - drupal_unit_kernel_tests:
-          requires:
-            - drupal_update_dependencies
-  package:
+  test:
     jobs:
       - build
+      - integration_tests
       - lint:
           requires:
             - build
@@ -173,7 +134,7 @@ workflows:
           requires:
             - lint
             - unit
-            - build
+            - integration_tests
           filters:
            branches:
             only:
@@ -182,7 +143,7 @@ workflows:
           requires:
             - lint
             - unit
-            - build
+            - integration_tests
           filters:
            branches:
             only:
