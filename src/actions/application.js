@@ -79,8 +79,8 @@ export const getContentTypeCache = state => state.application.contentTypes;
 export const CONTENT_TYPES_LOADED = 'CONTENT_TYPES_LOADED';
 function* loadContentTypes() {
   try {
-    let contentTypes = yield select(getContentTypeCache);
-    if (!Object.keys(contentTypes).length) {
+    let contentTypes = { data: yield select(getContentTypeCache) };
+    if (!Object.keys(contentTypes.data).length) {
       contentTypes = yield call(api, 'contentTypes');
     }
     yield put({
@@ -109,8 +109,8 @@ export const getActionsCache = state => state.application.actions;
 export const ACTIONS_LOADED = 'ACTIONS_LOADED';
 function* loadActions() {
   try {
-    let actions = yield select(getActionsCache);
-    if (!Object.keys(actions).length) {
+    let actions = { data: yield select(getActionsCache) };
+    if (!Object.keys(actions.data).length) {
       actions = yield call(api, 'actions');
     }
     yield put({

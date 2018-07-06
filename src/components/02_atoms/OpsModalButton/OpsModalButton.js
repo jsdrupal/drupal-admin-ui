@@ -78,7 +78,6 @@ class OpsModalButton extends React.Component {
         <Dialog
           open={this.state.open}
           TransitionComponent={Transition}
-          keepMounted="keepMounted"
           onClose={this.handleClose}
         >
           <DialogTitle>{title}</DialogTitle>

@@ -17,11 +17,11 @@ const NumberTextfield = props => (
 
 NumberTextfield.propTypes = {
   ...WidgetPropTypes,
-  inputProps: {
+  inputProps: PropTypes.shape({
     max: PropTypes.number,
     min: PropTypes.number,
     step: PropTypes.number,
-  },
+  }),
   value: PropTypes.string,
 };
 
@@ -29,7 +29,7 @@ NumberTextfield.defaultProps = {
   inputProps: {
     min: 0,
   },
-  value: null,
+  value: '',
 };
 
 export default NumberTextfield;

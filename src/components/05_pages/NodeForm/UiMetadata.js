@@ -4,6 +4,10 @@ const UiMetadata = {
     widget: 'string_textfield',
     constraints: [],
   },
+  created: {
+    widget: 'timestamp_datetime',
+    constraints: [],
+  },
   field_number_of_servings: {
     widget: 'number_textfield',
     constraints: [],
