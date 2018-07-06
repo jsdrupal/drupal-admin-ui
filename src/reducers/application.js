@@ -5,46 +5,71 @@ import {
   DBLOG_FILTER_UPDATED,
 } from '../actions/reports';
 import {
+  CLOSE_DRAWER,
+  OPEN_DRAWER,
   SET_MESSAGE,
   CLEAR_MESSAGE,
   MENU_LOADED,
   CONTENT_TYPES_LOADED,
+  ACTIONS_LOADED,
 } from '../actions/application';
 
 export const initialState = {
-  message: null,
+  messages: [],
   menuLinks: [],
   filterString: '',
   contentTypes: {},
+  actions: [],
+  drawerOpen: false,
 };
+
 export default (state = initialState, action) => {
   switch (action.type) {
-    case SET_MESSAGE: {
+    case CLOSE_DRAWER: {
       return {
         ...state,
-        message: {
-          message: action.payload.message,
-          type: action.payload.type,
-        },
+        drawerOpen: false,
+      };
+    }
+    case OPEN_DRAWER: {
+      return {
+        ...state,
+        drawerOpen: true,
+      };
+    }
+    case SET_MESSAGE: {
+      // This causes a new messages object to be created, instead of
+      // maintaining a reference to the old data structure.
+      const messages = [...state.messages];
+      messages.push({
+        message: action.payload.message,
+        type: action.payload.type,
+        key: Date.now() + Math.random(),
+      });
+      return {
+        ...state,
+        messages,
       };
     }
     case CLEAR_MESSAGE: {
       return {
         ...state,
-        message: null,
+        messages: [],
       };
     }
     case LOCATION_CHANGE: {
       // Clear messages on every location change.
       return {
         ...state,
-        message: null,
+        messages: [],
       };
     }
     case MENU_LOADED: {
       return {
         ...state,
-        menuLinks: action.payload.menuLinks,
+        menuLinks: Array.isArray(action.payload.menuLinks)
+          ? action.payload.menuLinks
+          : [],
       };
     }
     case DBLOG_COLLECTION_LOADED: {
@@ -102,6 +127,12 @@ export default (state = initialState, action) => {
           }),
           {},
         ),
+      };
+    }
+    case ACTIONS_LOADED: {
+      return {
+        ...state,
+        actions: action.payload.actions.data,
       };
     }
     default: {
