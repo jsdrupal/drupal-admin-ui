@@ -4,7 +4,7 @@ module.exports = {
     browser
       .logUserIn()
       .relativeURL('/')
-      .waitForElementVisible('[data-nightwatch="menu"]', 1000)
+      .waitForElementVisible('[data-nightwatch="menu"] a[role="button"]', 1000)
       .getText('[data-nightwatch="menu"] a[role="button"]', function menuText(
         result,
       ) {

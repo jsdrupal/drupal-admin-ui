@@ -102,7 +102,7 @@ jobs:
                 cd drupal-admin-ui
                 export REACT_APP_DRUPAL_BASE_URL="http://127.0.0.1:8888"
                 yarn start &
-                sleep 10
+                sleep 20
                 yarn test:functional
         - store_test_results:
             path: ~/drupal-admin-ui-demo/drupal-admin-ui/reports/nightwatch
