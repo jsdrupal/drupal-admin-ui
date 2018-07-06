@@ -8,7 +8,6 @@ module.exports = {
       .getText('[data-nightwatch="menu"] a[role="button"]', function menuText(
         result,
       ) {
-        console.log(result);
         this.assert.strictEqual(result.value, 'Content');
       });
   },
