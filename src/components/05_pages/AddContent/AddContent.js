@@ -56,7 +56,4 @@ const mapStateToProps = state => ({
   contentTypes: state.application.contentTypes,
 });
 
-export default connect(
-  mapStateToProps,
-  { requestContentTypes },
-)(AddContent);
+export default connect(mapStateToProps, { requestContentTypes })(AddContent);

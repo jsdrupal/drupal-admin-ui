@@ -1,5 +1,6 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
+import withStyles from '@material-ui/core/es/styles/withStyles';
 import Widgets from './Widgets';
 
 const lazyFunction = f => (props, propName, componentName, ...rest) =>
@@ -14,6 +15,14 @@ schemaType = PropTypes.shape({
   description: PropTypes.string,
   properties: PropTypes.objectOf(lazyFunction(lazySchemaType)),
 }).isRequired;
+
+const styles = () => ({
+  container: {
+    display: 'flex',
+    flexWrap: 'wrap',
+    flexDirection: 'column',
+  },
+});
 
 class NodeForm extends React.Component {
   static propTypes = {
@@ -30,6 +39,7 @@ class NodeForm extends React.Component {
         PropTypes.instanceOf(React.Component),
       ]).isRequired,
     ).isRequired,
+    classes: PropTypes.objectOf(PropTypes.string).isRequired,
   };
 
   static defaultProps = {
@@ -55,7 +65,7 @@ class NodeForm extends React.Component {
 
   render() {
     return (
-      <Fragment>
+      <form className={this.props.classes.container}>
         {Object.entries(this.props.uiMetadata)
           .map(([fieldName, { widget }]) => {
             if (Widgets[widget]) {
@@ -63,7 +73,7 @@ class NodeForm extends React.Component {
               // @todo How do we handle cardinality together with jsonapi
               // making a distinction between single value fields and multi value fields.
               return React.createElement(this.props.widgets[widget], {
-                key: { fieldName },
+                key: fieldName,
                 fieldName,
                 value: this.state.entity[fieldName],
                 label:
@@ -78,9 +88,9 @@ class NodeForm extends React.Component {
             return null;
           })
           .filter(x => x)}
-      </Fragment>
+      </form>
     );
   }
 }
 
-export default NodeForm;
+export default withStyles(styles)(NodeForm);
