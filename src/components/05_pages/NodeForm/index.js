@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core';
+import { css } from 'emotion';
 import Widgets from './Widgets';
 
 const lazyFunction = f => (props, propName, componentName, ...rest) =>
@@ -16,13 +16,7 @@ schemaType = PropTypes.shape({
   properties: PropTypes.objectOf(lazyFunction(lazySchemaType)),
 }).isRequired;
 
-const styles = () => ({
-  container: {
-    display: 'flex',
-    flexWrap: 'wrap',
-    flexDirection: 'column',
-  },
-});
+let styles;
 
 class NodeForm extends React.Component {
   static propTypes = {
@@ -65,7 +59,7 @@ class NodeForm extends React.Component {
 
   render() {
     return (
-      <form className={this.props.classes.container}>
+      <form className={styles.container}>
         {Object.entries(this.props.uiMetadata)
           .map(([fieldName, { widget }]) => {
             if (Widgets[widget]) {
@@ -93,4 +87,12 @@ class NodeForm extends React.Component {
   }
 }
 
-export default withStyles(styles)(NodeForm);
+styles = {
+  container: css`
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+  `,
+};
+
+export default NodeForm;
