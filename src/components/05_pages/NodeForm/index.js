@@ -33,7 +33,6 @@ class NodeForm extends React.Component {
         PropTypes.instanceOf(React.Component),
       ]).isRequired,
     ).isRequired,
-    classes: PropTypes.objectOf(PropTypes.string).isRequired,
   };
 
   static defaultProps = {
