@@ -13,7 +13,6 @@ const BooleanCheckbox = props => {
       control={
         <CheckBox
           id={`${props.fieldName}-cb`}
-          checked={value}
           onChange={event => onChange(event.target.value)}
           margin="normal"
           value={value}
