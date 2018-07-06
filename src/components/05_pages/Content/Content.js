@@ -297,7 +297,10 @@ const mapStateToProps = state => ({
   includes: state.content.includes,
 });
 
-export default connect(mapStateToProps, {
-  requestContentTypes,
-  requestContent,
-})(Content);
+export default connect(
+  mapStateToProps,
+  {
+    requestContentTypes,
+    requestContent,
+  },
+)(Content);

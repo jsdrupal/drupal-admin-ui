@@ -118,6 +118,9 @@ const mapStateToProps = state => ({
   menuLinks: state.application.menuLinks,
 });
 
-export default connect(mapStateToProps, {
-  requestMenu,
-})(Default);
+export default connect(
+  mapStateToProps,
+  {
+    requestMenu,
+  },
+)(Default);
