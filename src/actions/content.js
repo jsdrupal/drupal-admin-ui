@@ -114,6 +114,14 @@ export const contentSave = content => ({
   },
 });
 
+export const CONTENT_ADD = 'CONTENT_ADD';
+export const contentAdd = content => ({
+  type: CONTENT_ADD,
+  payload: {
+    content,
+  },
+});
+
 export const CONTENT_DELETE = 'CONTENT_DELETE';
 export const contentDelete = content => ({
   type: CONTENT_DELETE,
@@ -256,6 +264,18 @@ function* saveContent({ payload: { content } }) {
   }
 }
 
+function* addContent({ payload: { content } }) {
+  try {
+    yield put(resetLoading());
+    yield put(showLoading());
+    yield call(api, 'node:add', { parameters: { node: content } });
+  } catch (error) {
+    yield put(setMessage(error.toString()));
+  } finally {
+    yield put(hideLoading());
+  }
+}
+
 function* deleteContent({ payload: { content } }) {
   try {
     yield put(resetLoading());
@@ -272,5 +292,6 @@ export default function* rootSaga() {
   yield takeLatest(CONTENT_REQUESTED, loadContent);
   yield takeLatest(ACTION_EXECUTE, executeAction);
   yield takeLatest(CONTENT_SAVE, saveContent);
+  yield takeLatest(CONTENT_ADD, addContent);
   yield takeLatest(CONTENT_DELETE, deleteContent);
 }

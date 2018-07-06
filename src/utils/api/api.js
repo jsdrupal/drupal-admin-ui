@@ -76,6 +76,29 @@ async function api(
       );
       break;
     }
+    case 'node:add': {
+      // Set the type to the right value for jsonapi to process.
+      // @todo Ideally this should not be differnet in the first place.
+      parameters.node = {
+        ...parameters.node,
+        type: parameters.node.type.includes('--')
+          ? parameters.node.type
+          : `node--${parameters.node.type}`,
+      };
+      // Ensure that we don't have an ID when creating new content.
+      delete parameters.node.id;
+      delete parameters.node.attributes.nid;
+      delete parameters.node.attributes.revision_timestamp;
+      delete parameters.node.attributes.changed;
+
+      const saveToken = await api('csrf_token');
+      options.headers.Accept = 'application/vnd.api+json';
+      options.headers['X-CSRF-Token'] = saveToken;
+      options.method = 'POST';
+      options.body = JSON.stringify({ data: parameters.node });
+      url = `/jsonapi/${parameters.node.type.replace('--', '/')}`;
+      break;
+    }
     case 'node:save': {
       // Set the type to the right value for jsonapi to process.
       // @todo Ideally this should not be differnet in the first place.

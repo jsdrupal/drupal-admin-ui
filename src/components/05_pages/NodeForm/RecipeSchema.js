@@ -65,6 +65,7 @@ export default {
         title: {
           type: 'string',
           title: 'Recipe Name',
+          default: '',
           maxLength: 255,
         },
         created: {

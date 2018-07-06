@@ -17,7 +17,12 @@ const routes = {
   '/admin/reports/dblog': Dblog,
   '/node/add': AddContent,
   '/node/add/recipe': () => (
-    <NodeForm schema={RecipeSchema} uiMetadata={UiMetadata} widgets={widgets} />
+    <NodeForm
+      schema={RecipeSchema}
+      uiMetadata={UiMetadata}
+      widgets={widgets}
+      bundleType="node--recipe"
+    />
   ),
 };
 

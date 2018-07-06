@@ -1,7 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import { withStyles } from '@material-ui/core';
+import Button from '@material-ui/core/Button';
 import Widgets from './Widgets';
+import { createEntity } from '../../../utils/api/schema';
+import { contentAdd } from '../../../actions/content';
 
 const lazyFunction = f => (props, propName, componentName, ...rest) =>
   f(props, propName, componentName, ...rest);
@@ -26,6 +30,7 @@ const styles = () => ({
 
 class NodeForm extends React.Component {
   static propTypes = {
+    entity: PropTypes.shape({}),
     uiMetadata: PropTypes.objectOf(
       PropTypes.shape({
         widget: PropTypes.string.isRequired,
@@ -40,27 +45,67 @@ class NodeForm extends React.Component {
       ]).isRequired,
     ).isRequired,
     classes: PropTypes.objectOf(PropTypes.string).isRequired,
+    contentAdd: PropTypes.func.isRequired,
+    bundleType: PropTypes.string.isRequired,
   };
 
   static defaultProps = {
     schema: {},
+    entity: null,
   };
 
   constructor(props) {
     super(props);
 
     this.state = {
-      entity: {},
+      // @todo figure out relationships.
+      entity: this.props.entity || {
+        ...createEntity(this.props.schema),
+        relationships: [],
+      },
     };
+    // Just contain values which are in the ui metadata.
+    this.state.entity.attributes = Object.entries(this.state.entity.attributes)
+      .filter(([key]) => Object.keys(this.props.uiMetadata).concat(['type']).includes(key))
+      .reduce((agg, [key, value]) => ({ ...agg, [key]: value }), {});
   }
 
   onFieldChange = fieldName => data => {
     this.setState(prevState => ({
       entity: {
         ...prevState.entity,
-        [fieldName]: data,
+        attributes: {
+          ...prevState.entity.attributes,
+          [fieldName]: data,
+        },
       },
     }));
+  };
+
+  onSave = () => {
+    // @todo Fill in values for fields without a field widget yet.
+    const { entity } = this.state;
+    entity.attributes.field_summary = entity.attributes.field_summary || {
+      value: 'Empty',
+      format: 'basic_html',
+    };
+    entity.attributes.field_recipe_instruction = entity.attributes.field_recipe_instruction || {
+      value: 'Empty',
+      format: 'basic_html',
+    };
+    entity.attributes.field_preparation_time = entity.attributes.field_preparation_time || 0;
+
+    entity.relationships = entity.relationships || {};
+    entity.relationships.field_author = entity.relationships.field_author || {};
+    entity.relationships.field_author.data = {
+      'type': 'user--user',
+      'id': '14c78269-19c9-4daa-82d1-9854aceb0028',
+    };
+
+    this.props.contentAdd({
+      ...entity,
+      type: this.props.bundleType,
+    });
   };
 
   render() {
@@ -75,7 +120,7 @@ class NodeForm extends React.Component {
               return React.createElement(this.props.widgets[widget], {
                 key: fieldName,
                 fieldName,
-                value: this.state.entity[fieldName],
+                value: this.state.entity.attributes[fieldName],
                 label:
                   this.props.schema.properties.attributes.properties[
                     fieldName
@@ -88,9 +133,19 @@ class NodeForm extends React.Component {
             return null;
           })
           .filter(x => x)}
+        <Button variant="contained" color="primary" onClick={this.onSave}>
+          Save
+        </Button>
       </form>
     );
   }
 }
 
-export default withStyles(styles)(NodeForm);
+export default withStyles(styles)(
+  connect(
+    () => ({}),
+    {
+      contentAdd,
+    },
+  )(NodeForm),
+);
