@@ -67,13 +67,14 @@
     "prettier": "prettier --write 'src/**/*.js'",
     "start": "react-scripts start",
     "build": "react-scripts build",
+    "eslint": "eslint ./src --max-warnings=0 --fix",
+    "jest": "react-scripts test --env=jsdom",
+    "nightwatch": "nightwatch --config ./src/tests/Nightwatch/nightwatch.conf.js",
+    "// Test commands for the CI": "⬅✌➡",
     "test": "yarn test:lint && yarn test:unit && yarn test:functional",
-    "test:functional": "nightwatch --config ./src/tests/Nightwatch/nightwatch.conf.js",
-    "test:unit": "react-scripts test --env=jsdom",
-    "test:unit:ci": "CI=true JEST_JUNIT_OUTPUT=reports/jest-junit.xml react-scripts test --testResultsProcessor ./node_modules/jest-junit --env=jsdom",
-    "test:lint": "eslint ./src --max-warnings=0",
-    "test:lint:fix": "eslint ./src --max-warnings=0 --fix",
-    "test:lint:ci": "eslint ./src --max-warnings=0 --format junit -o reports/eslint-junit.xml",
+    "test:functional": "yarn nightwatch",
+    "test:unit": "CI=true JEST_JUNIT_OUTPUT=reports/jest-junit.xml react-scripts test --testResultsProcessor ./node_modules/jest-junit --env=jsdom",
+    "test:lint": "eslint ./src --max-warnings=0 --format junit -o reports/eslint-junit.xml",
     "eject": "react-scripts eject"
   }
 }

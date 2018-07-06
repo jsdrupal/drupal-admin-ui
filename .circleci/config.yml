@@ -112,7 +112,7 @@ jobs:
       - checkout
       - *restore-node-modules
       - *restore-build
-      - run: yarn test:lint:ci
+      - run: yarn test:lint
       - store_test_results:
           path: reports
 
@@ -122,7 +122,7 @@ jobs:
       - checkout
       - *restore-node-modules
       - *restore-build
-      - run: yarn test:unit:ci
+      - run: yarn test:unit
       - store_test_results:
           path: reports
 
