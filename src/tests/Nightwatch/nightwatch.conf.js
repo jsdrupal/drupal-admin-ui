@@ -18,7 +18,7 @@ if (
 
 module.exports = {
   src_folders: ['src/tests/Nightwatch/Tests'],
-  output_folder: '../reports/nightwatch',
+  output_folder: 'reports/nightwatch',
   custom_commands_path: ['src/tests/Nightwatch/Commands'],
   page_objects_path: '',
   globals_path: 'src/tests/Nightwatch/globals.js',
@@ -50,7 +50,7 @@ module.exports = {
         enabled: true,
         on_failure: true,
         on_error: true,
-        path: '../reports/nightwatch/screenshots',
+        path: 'reports/nightwatch/screenshots',
       },
       end_session_on_fail: false,
     },

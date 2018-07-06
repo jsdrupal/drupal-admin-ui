@@ -105,7 +105,7 @@ jobs:
                 sleep 10
                 yarn test:functional
         - store_test_results:
-            path: ~/drupal-admin-ui-demo/drupal-admin-ui/reports
+            path: ~/drupal-admin-ui-demo/drupal-admin-ui/reports/nightwatch
   lint:
     <<: *default
     steps:
