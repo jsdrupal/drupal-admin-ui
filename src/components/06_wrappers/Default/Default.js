@@ -80,7 +80,7 @@ class Default extends React.Component {
           )}
         </div>
         <Divider />
-        <List>
+        <List data-nightwatch="menu">
           {this.props.menuLinks.map(({ link: menuLink }) => (
             <ListItem
               button
