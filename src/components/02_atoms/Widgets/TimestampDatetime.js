@@ -8,7 +8,7 @@ const TimestampDatetime = ({ fieldName, label, value }) => (
     id={fieldName}
     label={label}
     type="datetime-local"
-    value={value}
+    defaultValue={value}
     InputLabelProps={{
       shrink: true,
     }}
