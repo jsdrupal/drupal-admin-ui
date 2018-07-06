@@ -37,10 +37,10 @@ class Menu extends Component {
     <List data-nightwatch="menu">
       {this.props.menuLinks.map(({ link: menuLink }) => (
         <ListItem
-          key={`${menuLink.url}:${menuLink.title}`}
           button
           component={Link}
           to={menuLink.url}
+          key={menuLink.url.replace(/\//g, '-')}
         >
           {iconMap[menuLink.url] ? (
             <ListItemIcon>{iconMap[menuLink.url]}</ListItemIcon>
