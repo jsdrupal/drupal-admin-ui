@@ -106,6 +106,8 @@ jobs:
                 yarn test:functional
         - store_test_results:
             path: ~/drupal-admin-ui-demo/drupal-admin-ui/reports/nightwatch
+        - store_artifacts:
+            path: ~/drupal-admin-ui-demo/drupal-admin-ui/reports/nightwatch
   lint:
     <<: *default
     steps:
