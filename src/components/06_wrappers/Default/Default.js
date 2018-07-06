@@ -46,7 +46,7 @@ class Default extends React.Component {
     <div className={styles.outerWrapper}>
       <CssBaseline />
       <Drawer variant="permanent" classes={{ paper: styles.drawerPaper }}>
-        <List>
+        <List data-nightwatch="menu">
           {this.props.menuLinks.map(({ link: menuLink }) => (
             <ListItem
               key={`${menuLink.url}:${menuLink.title}`}
