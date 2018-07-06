@@ -133,8 +133,8 @@ export default {
         field_difficulty: {
           type: 'string',
           title: 'Difficulty',
-          enum: ['easy', 'medium', 'hard'],
-          default: 'medium',
+          options: ['easy', 'medium', 'hard'],
+          defaultValue: 'medium',
         },
         field_ingredients: {
           type: 'array',
