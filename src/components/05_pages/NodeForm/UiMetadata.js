@@ -4,14 +4,18 @@ const UiMetadata = {
     widget: 'string_textfield',
     constraints: [],
   },
-  status: {
-    widget: 'boolean_checkbox',
+  created: {
+    widget: 'timestamp_datetime',
     constraints: [],
   },
   field_number_of_servings: {
     widget: 'number_textfield',
     constraints: [],
   },
+  status: {
+    widget: 'boolean_checkbox',
+    constraints: [],
+  },  
 };
 
 export default UiMetadata;
