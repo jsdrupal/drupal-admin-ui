@@ -36,6 +36,7 @@ const FileUploadWidget = props => (
         }
         margin="normal"
         label="Alternative text"
+        required
       />
     )}
   </FormControl>
