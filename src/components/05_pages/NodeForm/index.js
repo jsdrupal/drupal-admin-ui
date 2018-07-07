@@ -33,6 +33,8 @@ class NodeForm extends React.Component {
         PropTypes.instanceOf(React.Component),
       ]).isRequired,
     ).isRequired,
+    entityTypeId: PropTypes.string.isRequired,
+    bundle: PropTypes.string.isRequired,
   };
 
   static defaultProps = {
@@ -56,6 +58,13 @@ class NodeForm extends React.Component {
     }));
   };
 
+  getSchemaInfo = (schema, fieldName) => {
+    return (
+      this.props.schema.properties.attributes.properties[fieldName] ||
+      this.props.schema.properties.relationships.properties[fieldName]
+    );
+  };
+
   render() {
     return (
       <form className={styles.container}>
@@ -65,16 +74,17 @@ class NodeForm extends React.Component {
               // @todo We need to pass along props.
               // @todo How do we handle cardinality together with jsonapi
               // making a distinction between single value fields and multi value fields.
+              const fieldSchema = this.getSchemaInfo(
+                this.props.schema,
+                fieldName,
+              );
               return React.createElement(this.props.widgets[widget], {
                 key: fieldName,
+                entityTypeId: this.props.entityTypeId,
+                bundle: this.props.bundle,
                 fieldName,
                 value: this.state.entity[fieldName],
-                label:
-                  this.props.schema.properties.attributes.properties[
-                    fieldName
-                  ] &&
-                  this.props.schema.properties.attributes.properties[fieldName]
-                    .title,
+                label: fieldSchema && fieldSchema.title,
                 onChange: this.onFieldChange(fieldName),
               });
             }
