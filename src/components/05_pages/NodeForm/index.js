@@ -58,12 +58,9 @@ class NodeForm extends React.Component {
     }));
   };
 
-  getSchemaInfo = (schema, fieldName) => {
-    return (
-      this.props.schema.properties.attributes.properties[fieldName] ||
-      this.props.schema.properties.relationships.properties[fieldName]
-    );
-  };
+  getSchemaInfo = (schema, fieldName) =>
+    this.props.schema.properties.attributes.properties[fieldName] ||
+    this.props.schema.properties.relationships.properties[fieldName];
 
   render() {
     return (

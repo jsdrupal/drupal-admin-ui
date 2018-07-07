@@ -46,7 +46,6 @@ class FileUpload extends React.Component {
 
     const { files } = event.dataTransfer;
     const reader = new window.FileReader();
-    const that = this;
 
     reader.onloadend = async ({ target: { readyState, result } }) => {
       if (readyState === window.FileReader.DONE) {
@@ -55,7 +54,9 @@ class FileUpload extends React.Component {
         const token = await api('csrf_token');
         const createdFile = await api('file:upload', {
           parameters: {
-            ...that.props,
+            entityTypeId: this.props.entityTypeId,
+            bundle: this.props.bundle,
+            fieldName: this.props.fieldName,
             fileName: files[0].name,
           },
           options: {
@@ -85,7 +86,8 @@ class FileUpload extends React.Component {
         onDragLeave={this.onDragLeave}
         onDrop={this.onDrop}
       >
-        {this.state.file && this.state.file.filename[0].value}
+        {(this.state.file && this.state.file.filename[0].value) ||
+          'Drop a file or click here to upload one.'}
       </Element>
     );
   }

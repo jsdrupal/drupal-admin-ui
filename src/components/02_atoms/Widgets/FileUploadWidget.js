@@ -43,7 +43,18 @@ const FileUploadWidget = props => (
 
 FileUploadWidget.propTypes = {
   ...WidgetPropTypes,
-  value: PropTypes.object,
+  value: PropTypes.shape({
+    data: PropTypes.shape({
+      uuid: PropTypes.arrayOf(
+        PropTypes.shape({
+          value: PropTypes.string.isRequired,
+        }),
+      ),
+    }),
+    meta: PropTypes.shape({
+      alt: PropTypes.string,
+    }),
+  }),
 };
 
 FileUploadWidget.defaultProps = {
