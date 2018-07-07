@@ -4,12 +4,19 @@ import styled from 'react-emotion';
 import api from './../../../utils/api/api';
 
 const Element = styled('div')`
-  border: ${props => props.drag ? '2px dashed red' : '2px dashed grey'};
+  border: ${props => (props.drag ? '2px dashed red' : '2px dashed grey')};
   border-radius: 3px;
   height: 150px;
 `;
 
 class FileUpload extends React.Component {
+  static propTypes = {
+    entityTypeId: PropTypes.string.isRequired,
+    bundle: PropTypes.string.isRequired,
+    fieldName: PropTypes.string.isRequired,
+    onFileUpload: PropTypes.func.isRequired,
+  };
+
   state = {
     drag: false,
     file: null,
@@ -45,11 +52,11 @@ class FileUpload extends React.Component {
       if (readyState === window.FileReader.DONE) {
         const { buffer } = new Uint8Array(result);
 
-        const token = await api('rest.csrf');
+        const token = await api('csrf_token');
         const createdFile = await api('file:upload', {
           parameters: {
             ...that.props,
-            file_name: files[0].name,
+            fileName: files[0].name,
           },
           options: {
             headers: {
@@ -83,21 +90,5 @@ class FileUpload extends React.Component {
     );
   }
 }
-
-/**
- *<FileUpload
- entity_type_id="node"
- bundle="article"
- field_name="field_image"
- onFileUpload={() => {}}
- />
- */
-
-FileUpload.propTypes = {
-  bundle: PropTypes.string.isRequired,
-  entity_type_id: PropTypes.string.isRequired,
-  field_name: PropTypes.string.isRequired,
-  onFileUpload: PropTypes.func.isRequired,
-};
 
 export default FileUpload;
