@@ -1,123 +1,110 @@
 import React from 'react';
-import { func, node, arrayOf, shape, string } from 'prop-types';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import LoadingBar from 'react-redux-loading-bar';
 import { css } from 'emotion';
-import { reveal as Menu } from 'react-burger-menu';
 import { Link } from 'react-router-dom';
-import { decorator as reduxBurgerMenu } from 'redux-burger-menu';
-import { requestMenu } from '../../../actions/application';
+
+import CssBaseline from '@material-ui/core/CssBaseline';
+import Drawer from '@material-ui/core/Drawer';
+import List from '@material-ui/core/List';
+import IconButton from '@material-ui/core/IconButton';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
+import Divider from '@material-ui/core/Divider';
+import ViewListIcon from '@material-ui/icons/ViewList';
+import BuildIcon from '@material-ui/icons/Build';
+import ColorLensIcon from '@material-ui/icons/ColorLens';
+import ExtensionIcon from '@material-ui/icons/Extension';
+import SettingsIcon from '@material-ui/icons/Settings';
+import PeopleIcon from '@material-ui/icons/People';
+import AssesmentIcon from '@material-ui/icons/Assessment';
+import HelpIcon from '@material-ui/icons/Help';
+import MenuIcon from '@material-ui/icons/Menu';
+import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
+
+import {
+  requestMenu,
+  closeDrawer,
+  openDrawer,
+} from '../../../actions/application';
 import Message from '../../02_atoms/Message/Message';
 import ErrorBoundary from '../ErrorBoundary/ErrorBoundary';
 
 let styles;
 
-const ConnectedMenu = reduxBurgerMenu(Menu, 'admin');
-
-export const filterMenuLinks = (searchString, menuLinks) => {
-  if (!searchString) {
-    return menuLinks;
-  }
-  return menuLinks
-    .map(menuLink => {
-      const subtree =
-        menuLink.subtree && filterMenuLinks(searchString, menuLink.subtree);
-      if (
-        (menuLink.link &&
-          `${menuLink.link.title}${menuLink.link.description}`
-            .toLowerCase()
-            .indexOf(searchString.toLowerCase()) !== -1) ||
-        (Array.isArray(subtree) && subtree.length > 0)
-      ) {
-        return {
-          ...menuLink,
-          subtree,
-        };
-      }
-      return null;
-    })
-    .filter(id => id);
+const iconMap = {
+  '/admin/content': <ViewListIcon />,
+  '/admin/structure': <BuildIcon />,
+  '/admin/appearance': <ColorLensIcon />,
+  '/admin/modules': <ExtensionIcon />,
+  '/admin/config': <SettingsIcon />,
+  '/admin/people': <PeopleIcon />,
+  '/admin/reports': <AssesmentIcon />,
+  '/admin/help': <HelpIcon />,
 };
 
 class Default extends React.Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      filterString: '',
-    };
-  }
-
   componentWillMount() {
     this.props.requestMenu();
   }
 
-  filterMenu = e => {
-    this.setState({
-      filterString: e.target.value,
-    });
-  };
-
   render = () => (
-    <div className={styles.outerWrapper} id={styles.outerWrapper}>
-      <ConnectedMenu
-        outerContainerId={styles.outerWrapper}
-        pageWrapId={styles.main}
-        burgerButtonClassName={styles.burgerButton}
-        burgerBarClassName={styles.burgerBar}
-        crossButtonClassName={styles.crossButton}
-        crossClassName={styles.cross}
-        menuClassName={styles.menu}
-        morphShapeClassName={styles.morphShape}
-        itemListClassName={styles.itemList}
-        overlayClassName={styles.overlay}
+    <div className={styles.outerWrapper}>
+      <CssBaseline />
+      <Drawer
+        variant="permanent"
+        classes={{
+          paper: `${styles.drawerPaper} ${!this.props.drawerOpen &&
+            styles.drawerPaperClose}`,
+        }}
+        open={this.props.drawerOpen}
       >
-        <input
-          className={styles.filterMenu}
-          type="textfield"
-          placeholder="Search"
-          onChange={this.filterMenu}
-          value={this.state.filterString}
-        />
-        {filterMenuLinks(this.state.filterString, this.props.menuLinks).map(
-          ({ link: menuLink, subtree }) => (
-            <ul
-              key={`${menuLink.menuName}--${menuLink.url}--${menuLink.title}`}
-              className={styles.menuList}
+        <div className={styles.menuButtonWrapper}>
+          {this.props.drawerOpen ? (
+            <IconButton
+              onClick={this.props.closeDrawer}
+              className={styles.menuButton}
             >
-              <li>
-                <Link to={menuLink.url} className={styles.topLevelLink}>
-                  {menuLink.title}
-                </Link>
-                <ul className={styles.menuListChildren}>
-                  {subtree.map(({ link: subMenuLink }) => (
-                    <li
-                      key={`
-                      ${subMenuLink.menuName}--
-                      ${subMenuLink.url}--
-                      ${subMenuLink.title}
-                    `}
-                      className={styles.menuListItem}
-                    >
-                      <Link
-                        to={subMenuLink.url}
-                        className={styles.childrenLink}
-                      >
-                        {subMenuLink.title}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </li>
-            </ul>
-          ),
-        )}
-      </ConnectedMenu>
+              <ChevronLeftIcon />
+            </IconButton>
+          ) : (
+            <IconButton
+              color="inherit"
+              aria-label="open drawer"
+              onClick={this.props.openDrawer}
+              className={styles.menuButton}
+            >
+              <MenuIcon />
+            </IconButton>
+          )}
+        </div>
+        <Divider />
+        <List data-nightwatch="menu">
+          {this.props.menuLinks.map(({ link: menuLink }) => (
+            <ListItem
+              button
+              component={Link}
+              to={menuLink.url}
+              key={menuLink.url.replace(/\//g, '-')}
+            >
+              {iconMap[menuLink.url] ? (
+                <ListItemIcon>{iconMap[menuLink.url]}</ListItemIcon>
+              ) : (
+                ''
+              )}
+              <ListItemText primary={menuLink.title} />
+            </ListItem>
+          ))}
+        </List>
+        {this.props.menuLinks.length ? <Divider /> : ''}
+      </Drawer>
 
       <main className={styles.main} id={styles.main}>
         <ErrorBoundary>
-          <LoadingBar />
-          {this.props.message && <Message {...this.props.message} />}
+          {this.props.messages.map(message => (
+            <Message {...message} key={message.key} />
+          ))}
           {this.props.children}
         </ErrorBoundary>
       </main>
@@ -126,112 +113,73 @@ class Default extends React.Component {
 }
 
 styles = {
+  menuButton: css`
+    margin: 8px 12px;
+  `,
+  menuButtonWrapper: css`
+    display: flex;
+    justify-content: flex-end;
+  `,
   outerWrapper: css`
     height: 100%;
-    background: #444444;
+    display: flex;
   `,
   main: css`
-    padding: 7rem 2rem 3rem;
+    flex-grow: 1;
+    padding: 2rem;
     height: 100%;
-    background: #ffffff;
   `,
-  filterMenu: css`
+  drawerPaper: css`
     position: relative;
-    margin: 8px;
-    top: 36px;
+    width: 250px;
+    transition: width 225ms cubic-bezier(0.4, 0, 0.6, 1) 0ms;
   `,
-  burgerButton: css`
-    position: absolute;
-    width: 36px;
-    height: 30px;
-    left: 36px;
-    top: 36px;
-  `,
-  burgerBar: css`
-    background: #373a47;
-  `,
-  crossButton: css`
-    height: 24px;
-    width: 24px;
-  `,
-  cross: css`
-    background: #bdc3c7;
-  `,
-  menu: css`
-    background: #fafafa;
-    font-size: 1.05rem;
-  `,
-  menuList: css`
-    list-style: none;
-    margin: 10px 0;
-    padding-left: 1.5rem;
-  `,
-  menuListChildren: css`
-    list-style: none;
-    padding: 10px 0 0 1.5rem;
-  `,
-  menuListItem: css`
-    padding-bottom: 10px;
-  `,
-  topLevelLink: css`
-    color: #272756;
-    font-weight: bold;
-    text-decoration: none;
-    font-size: 0.95rem;
-  `,
-  childrenLink: css`
-    color: #252629;
-    text-decoration: none;
-
-    &:hover {
-      color: #000000;
-    }
-  `,
-  morphShape: css`
-    fill: #373a47;
-  `,
-  itemList: css`
-    color: #b8b7ad;
-  `,
-  overlay: css`
-    background: rgba(0, 0, 0, 0.3);
+  drawerPaperClose: css`
+    overflow-x: 'hidden';
+    transition: none;
+    width: 72px;
+    transition: width 195ms cubic-bezier(0.4, 0, 0.6, 1) 0ms;
   `,
 };
 
 Default.propTypes = {
-  children: node.isRequired,
-  message: shape({
-    message: string,
-    type: string,
-  }),
-  menuLinks: arrayOf(
-    shape({
-      subtree: arrayOf(
-        shape({
-          link: shape({
-            url: string,
-            title: string,
-          }),
-        }),
-      ),
-      link: shape({
-        url: string,
-        title: string,
+  children: PropTypes.node.isRequired,
+  messages: PropTypes.arrayOf(
+    PropTypes.shape({
+      message: PropTypes.string,
+      type: PropTypes.string,
+    }),
+  ),
+  menuLinks: PropTypes.arrayOf(
+    PropTypes.shape({
+      link: PropTypes.shape({
+        url: PropTypes.string,
+        title: PropTypes.string,
       }),
     }),
   ).isRequired,
-  requestMenu: func.isRequired,
+  requestMenu: PropTypes.func.isRequired,
+  openDrawer: PropTypes.func.isRequired,
+  closeDrawer: PropTypes.func.isRequired,
+  drawerOpen: PropTypes.bool,
 };
 
 Default.defaultProps = {
-  message: null,
+  messages: [],
+  drawerOpen: false,
 };
 
 const mapStateToProps = state => ({
-  message: state.application.message || null,
-  menuLinks: state.application.menuLinks,
+  messages: state.application.messages || [],
+  menuLinks: state.application.menuLinks || [],
+  drawerOpen: state.application.drawerOpen,
 });
 
-export default connect(mapStateToProps, {
-  requestMenu,
-})(Default);
+export default connect(
+  mapStateToProps,
+  {
+    requestMenu,
+    openDrawer,
+    closeDrawer,
+  },
+)(Default);

@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
-import { string, shape, func } from 'prop-types';
+import PropTypes from 'prop-types';
 import makeCancelable from 'makecancelable';
 import { Markup } from 'interweave';
 import { css } from 'emotion';
@@ -27,11 +27,11 @@ let styles;
 
 const Permissions = class Permissions extends Component {
   static propTypes = {
-    setMessage: func.isRequired,
-    clearMessage: func.isRequired,
-    match: shape({
-      params: shape({
-        role: string,
+    setMessage: PropTypes.func.isRequired,
+    clearMessage: PropTypes.func.isRequired,
+    match: PropTypes.shape({
+      params: PropTypes.shape({
+        role: PropTypes.string,
       }).isRequired,
     }).isRequired,
   };
@@ -276,4 +276,7 @@ styles = {
   `,
 };
 
-export default connect(null, { setMessage, clearMessage })(Permissions);
+export default connect(
+  null,
+  { setMessage, clearMessage },
+)(Permissions);

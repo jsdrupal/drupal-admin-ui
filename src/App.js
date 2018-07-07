@@ -11,14 +11,16 @@ import { Provider } from 'react-redux';
 import createSagaMiddleware from 'redux-saga';
 import { composeWithDevTools } from 'redux-devtools-extension/developmentOnly';
 
+import JssProvider from 'react-jss/lib/JssProvider';
+import { create } from 'jss';
+import { createGenerateClassName, jssPreset } from '@material-ui/core/styles';
+
 import routes from './routes';
 
+import Content from './components/05_pages/Content/Content';
 import Default from './components/06_wrappers/Default/Default';
-import Home from './components/05_pages/Home/Home';
 import NoMatch from './NoMatch';
 
-import normalize from './styles/normalize'; // eslint-disable-line no-unused-vars
-import base from './styles/base'; // eslint-disable-line no-unused-vars
 import actions from './actions/index';
 import reducers from './reducers/index';
 import ErrorBoundary from './components/06_wrappers/ErrorBoundary/ErrorBoundary';
@@ -35,29 +37,41 @@ const store = createStore(
 );
 sagaMiddleware.run(actions);
 
+const generateClassName = createGenerateClassName();
+const jss = create(jssPreset());
+// We define a custom insertion point that JSS will look for injecting the styles in the DOM.
+jss.options.insertionPoint = document.getElementById('jss-insertion-point');
+
 const withDefault = component => () => (
   <Default>{React.createElement(component)}</Default>
 );
 
 const App = () => (
-  <ErrorBoundary>
-    <Provider store={store}>
-      <ConnectedRouter history={history}>
-        <Switch>
-          <Route exact path="/" component={withDefault(withRouter(Home))} />
-          {Object.keys(routes).map(route => (
+  <JssProvider jss={jss} generateClassName={generateClassName}>
+    <ErrorBoundary>
+      <Provider store={store}>
+        <ConnectedRouter history={history}>
+          <Switch>
             <Route
-              path={route}
-              component={withDefault(withRouter(routes[route]))}
-              key={route}
+              exact
+              path="/"
+              component={withDefault(withRouter(Content))}
             />
-          ))}
-          <Route path="/(vfancy/?)" component={withRouter(InitialRedirect)} />
-          <Route component={NoMatch} />
-        </Switch>
-      </ConnectedRouter>
-    </Provider>
-  </ErrorBoundary>
+            {Object.keys(routes).map(route => (
+              <Route
+                exact
+                path={route}
+                component={withDefault(withRouter(routes[route]))}
+                key={route}
+              />
+            ))}
+            <Route path="/(vfancy/?)" component={withRouter(InitialRedirect)} />
+            <Route component={NoMatch} />
+          </Switch>
+        </ConnectedRouter>
+      </Provider>
+    </ErrorBoundary>
+  </JssProvider>
 );
 
 export default App;

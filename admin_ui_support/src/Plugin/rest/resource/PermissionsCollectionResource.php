@@ -2,10 +2,7 @@
 
 namespace Drupal\admin_ui_support\Plugin\rest\resource;
 
-use Drupal\Component\Render\PlainTextOutput;
 use Drupal\Core\Extension\ExtensionList;
-use Drupal\Core\Extension\ModuleExtensionList;
-use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Render\RenderContext;
 use Drupal\Core\Render\RendererInterface;
 use Drupal\rest\Plugin\ResourceBase;
@@ -62,7 +59,7 @@ class PermissionsCollectionResource extends ResourceBase {
    * @param \Psr\Log\LoggerInterface $logger
    *   A logger instance.
    * @param \Drupal\user\PermissionHandlerInterface $permission_handler
-   *   The permission handler
+   *   The permission handler.
    * @param \Drupal\Core\Render\RendererInterface $renderer
    *   The renderer.
    * @param \Drupal\Core\Extension\ExtensionList $module_extension_list
@@ -100,7 +97,7 @@ class PermissionsCollectionResource extends ResourceBase {
    */
   public function get() {
     $context = new RenderContext();
-    
+
     $permissions = $this->renderer->executeInRenderContext($context, function () {
       $permissions = $this->permissionHandler->getPermissions();
       foreach ($permissions as $id => $permission) {
