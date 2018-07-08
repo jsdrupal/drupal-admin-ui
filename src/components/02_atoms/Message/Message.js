@@ -1,8 +1,7 @@
 import React from 'react';
 import { css } from 'emotion';
 import PropTypes from 'prop-types';
-
-import { MESSAGE_ERROR, MESSAGE_SUCCESS } from '../../../actions/application';
+import { MESSAGE_ERROR, MESSAGE_SUCCESS } from '../../../constants/messages';
 
 let styles;
 let modifierClassMap;
