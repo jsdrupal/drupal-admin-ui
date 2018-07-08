@@ -31,7 +31,7 @@ import {
   closeDrawer,
   openDrawer,
 } from '../../../actions/application';
-import { MESSAGE_ERROR } from "../../../constants/messages";
+import { MESSAGE_ERROR } from '../../../constants/messages';
 
 let styles;
 
