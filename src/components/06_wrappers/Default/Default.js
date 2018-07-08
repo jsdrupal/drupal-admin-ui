@@ -23,13 +23,15 @@ import HelpIcon from '@material-ui/icons/Help';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 
+import Message from '../../02_atoms/Message/Message';
+import ErrorBoundary from '../ErrorBoundary/ErrorBoundary';
+
 import {
   requestMenu,
   closeDrawer,
   openDrawer,
 } from '../../../actions/application';
-import Message from '../../02_atoms/Message/Message';
-import ErrorBoundary from '../ErrorBoundary/ErrorBoundary';
+import { MESSAGE_ERROR } from '../../../constants/messages';
 
 let styles;
 
@@ -103,7 +105,7 @@ class Default extends React.Component {
       <main className={styles.main} id={styles.main}>
         <ErrorBoundary>
           {this.props.messages.map(message => (
-            <Message {...message} key={message.key} />
+            <Message {...message} key={message.key} type={MESSAGE_ERROR} />
           ))}
           {this.props.children}
         </ErrorBoundary>

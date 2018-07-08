@@ -4,8 +4,9 @@ import {
   hideLoading,
   resetLoading,
 } from 'react-redux-loading-bar';
-import api from '../utils/api/api';
 
+import api from '../utils/api/api';
+import { MESSAGE_ERROR } from '../constants/messages';
 import { setMessage } from './application';
 
 export const CONTENT_REQUESTED = 'CONTENT_REQUESTED';
@@ -100,7 +101,7 @@ function* loadContent(action) {
       },
     });
   } catch (error) {
-    yield put(setMessage(error.toString()));
+    yield put(setMessage(error.toString(), MESSAGE_ERROR));
   } finally {
     yield put(hideLoading());
   }
@@ -238,7 +239,7 @@ export function* executeAction({ payload: { action, nids } }) {
       .filter(x => x);
     yield all(actions);
   } catch (error) {
-    yield put(setMessage(error.toString()));
+    yield put(setMessage(error.toString(), MESSAGE_ERROR));
   } finally {
     yield put(hideLoading());
   }
@@ -250,7 +251,7 @@ function* saveContent({ payload: { content } }) {
     yield put(showLoading());
     yield call(api, 'node:save', { parameters: { node: content } });
   } catch (error) {
-    yield put(setMessage(error.toString()));
+    yield put(setMessage(error.toString(), MESSAGE_ERROR));
   } finally {
     yield put(hideLoading());
   }
@@ -262,7 +263,7 @@ function* deleteContent({ payload: { content } }) {
     yield put(showLoading());
     yield call(api, 'node:delete', { parameters: { node: content } });
   } catch (error) {
-    yield put(setMessage(error.toString()));
+    yield put(setMessage(error.toString(), MESSAGE_ERROR));
   } finally {
     yield put(hideLoading());
   }

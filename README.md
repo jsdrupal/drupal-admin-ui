@@ -40,7 +40,7 @@ Try visiting one of the converted pages, e.g. the user permissions or roles page
 
 ## Developing
 
-- Ensure you have [Node 8](https://nodejs.org/en/) and [Yarn](https://yarnpkg.com/) installed.
+- Ensure you have [Node 8](https://nodejs.org/en/) or greater and [Yarn](https://yarnpkg.com/) installed.
 - Make sure the webserver for Drupal is started with `composer start`
 - Run `composer devify`. You will now have a checkout of this repo in `drupal-admin-ui`.
 It will also symlink the bundled production app to `docroot/vfancy`, and the support module to
