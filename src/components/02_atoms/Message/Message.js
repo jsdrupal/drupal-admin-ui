@@ -12,7 +12,7 @@ const Message = ({ message, type }) => (
 
 Message.propTypes = {
   message: PropTypes.string.isRequired,
-  type: PropTypes.oneOf([MESSAGE_ERROR, MESSAGE_SUCCESS]),
+  type: PropTypes.oneOf([MESSAGE_ERROR, MESSAGE_SUCCESS]).isRequired,
 };
 
 styles = {
