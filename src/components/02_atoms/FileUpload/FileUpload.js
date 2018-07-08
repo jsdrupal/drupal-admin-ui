@@ -23,21 +23,20 @@ class FileUpload extends React.Component {
   };
 
   onDragOver = event => {
+    event.stopPropagation();
+    event.preventDefault();
     this.setState({
       drag: true,
     });
-
-    event.stopPropagation();
-    event.preventDefault();
     event.dataTransfer.dropEffect = 'dragend';
   };
 
   onDragLeave = event => {
+    event.stopPropagation();
+    event.preventDefault();
     this.setState({
       drag: false,
     });
-    event.stopPropagation();
-    event.preventDefault();
   };
 
   onDrop = event => {
@@ -67,14 +66,17 @@ class FileUpload extends React.Component {
           },
         });
 
-        this.props.onFileUpload(createdFile);
-        this.setState({
-          drag: false,
-          file: createdFile,
-        });
+        this.setState(
+          {
+            drag: false,
+            file: createdFile,
+          },
+          () => this.props.onFileUpload(createdFile),
+        );
       }
     };
 
+    // @TODO Handle multipe file uploads
     reader.readAsArrayBuffer(files[0]);
   };
 
@@ -86,7 +88,9 @@ class FileUpload extends React.Component {
         onDragLeave={this.onDragLeave}
         onDrop={this.onDrop}
       >
-        {(this.state.file && this.state.file.filename[0].value) ||
+        {(this.state.file &&
+          this.state.file.filename &&
+          this.state.file.filename[0].value) ||
           'Drop a file or click here to upload one.'}
       </Element>
     );
