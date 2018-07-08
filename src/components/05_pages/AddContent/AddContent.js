@@ -58,5 +58,5 @@ const mapStateToProps = state => ({
 
 export default connect(
   mapStateToProps,
-  { requestContentTypes })
-(AddContent);
+  { requestContentTypes },
+)(AddContent);
