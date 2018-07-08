@@ -14,26 +14,25 @@ const styles = {
 };
 
 const OptionsSelect = ({
-  name,
   label,
   value,
-  options,
   onChange,
   helpText,
   fieldName,
+  enum: options,
+  default: defaultValue,
 }) => (
   <FormControl>
-    <InputLabel htmlFor={name}>{label}</InputLabel>
+    <InputLabel htmlFor={fieldName}>{label}</InputLabel>
     <NativeSelect
-      value={value}
+      value={value || defaultValue}
       onChange={event => onChange(event.target.value)}
       inputProps={{
         name: fieldName,
-        id: name,
+        id: fieldName,
       }}
       className={styles.select}
     >
-      <option value="" />
       {options.map(option => (
         <option key={option} value={option}>
           {option}
@@ -46,17 +45,17 @@ const OptionsSelect = ({
 
 OptionsSelect.propTypes = {
   ...WidgetPropTypes,
-  name: PropTypes.string,
   value: PropTypes.string,
   helpText: PropTypes.string,
-  options: PropTypes.arrayOf(PropTypes.string),
+  default: PropTypes.string,
+  enum: PropTypes.arrayOf(PropTypes.string),
 };
 
 OptionsSelect.defaultProps = {
-  name: '',
+  enum: [],
   value: '',
+  default: '',
   helpText: '',
-  options: [],
 };
 
 export default OptionsSelect;
