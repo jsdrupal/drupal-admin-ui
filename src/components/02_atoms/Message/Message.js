@@ -15,10 +15,6 @@ Message.propTypes = {
   type: PropTypes.oneOf([MESSAGE_ERROR, MESSAGE_SUCCESS]),
 };
 
-Message.defaultProps = {
-  type: MESSAGE_ERROR,
-};
-
 styles = {
   message: css`
     padding: 20px 25px;

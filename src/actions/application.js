@@ -19,7 +19,13 @@ export const closeDrawer = () => ({
 
 export const SET_MESSAGE = 'SET_MESSAGE';
 
-export const setMessage = (message, type = MESSAGE_ERROR) => ({
+/**
+ *
+ * @param {string} message
+ * @param type - one of the message constants exported from constants/messages.js
+ * @returns {{type: string, payload: {message: *, type: *}}}
+ */
+export const setMessage = (message, type) => ({
   type: SET_MESSAGE,
   payload: {
     message,
@@ -56,10 +62,11 @@ function* loadMenu() {
       yield put(
         setMessage(
           'Unable to access data from Drupal. Did you set REACT_APP_DRUPAL_BASE_URL to localhost instead of 127.0.0.1?',
+          MESSAGE_ERROR,
         ),
       );
     }
-    yield put(setMessage(error.toString()));
+    yield put(setMessage(error.toString(), MESSAGE_ERROR));
   } finally {
     yield put(hideLoading());
   }
@@ -89,7 +96,7 @@ function* loadContentTypes() {
       },
     });
   } catch (error) {
-    yield put(setMessage(error.toString()));
+    yield put(setMessage(error.toString(), MESSAGE_ERROR));
   } finally {
     yield put(hideLoading());
   }
@@ -119,7 +126,7 @@ function* loadActions() {
       },
     });
   } catch (error) {
-    yield put(setMessage(error.toString()));
+    yield put(setMessage(error.toString(), MESSAGE_ERROR));
   }
 }
 

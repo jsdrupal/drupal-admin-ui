@@ -43,7 +43,7 @@ export default (state = initialState, action) => {
       const messages = [...state.messages];
       messages.push({
         message: action.payload.message,
-        type: action.payload.type || null,
+        type: action.payload.type,
         key: Date.now() + Math.random(),
       });
       return {
