@@ -6,14 +6,12 @@ import { Markup } from 'interweave';
 import { css } from 'emotion';
 import { StickyContainer, Sticky } from 'react-sticky';
 
-import {
-  setMessage,
-  clearMessage,
-  MESSAGE_SUCCESS,
-} from '../../../actions/application';
 import Loading from '../../02_atoms/Loading/Loading';
 import { Table, TBody, THead } from '../../01_subatomics/Table/Table';
+
 import api from '../../../utils/api/api';
+import { MESSAGE_SUCCESS } from '../../../constants/messages';
+import { setMessage, clearMessage } from '../../../actions/application';
 
 export const filterPermissions = (input, permissions) =>
   permissions.filter(
