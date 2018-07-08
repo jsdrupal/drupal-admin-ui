@@ -61,12 +61,16 @@ class NodeForm extends React.Component {
       // @todo figure out relationships.
       entity: this.props.entity || {
         ...createEntity(this.props.schema),
-        relationships: [],
+        relationships: {},
       },
     };
     // Just contain values which are in the ui metadata.
     this.state.entity.attributes = Object.entries(this.state.entity.attributes)
-      .filter(([key]) => Object.keys(this.props.uiMetadata).concat(['type']).includes(key))
+      .filter(([key]) =>
+        Object.keys(this.props.uiMetadata)
+          .concat(['type'])
+          .includes(key),
+      )
       .reduce((agg, [key, value]) => ({ ...agg, [key]: value }), {});
   }
 
@@ -89,17 +93,32 @@ class NodeForm extends React.Component {
       value: 'Empty',
       format: 'basic_html',
     };
-    entity.attributes.field_recipe_instruction = entity.attributes.field_recipe_instruction || {
+    entity.attributes.field_recipe_instruction = entity.attributes
+      .field_recipe_instruction || {
       value: 'Empty',
       format: 'basic_html',
     };
-    entity.attributes.field_preparation_time = entity.attributes.field_preparation_time || 0;
+    entity.attributes.field_preparation_time =
+      entity.attributes.field_preparation_time || 0;
 
     entity.relationships = entity.relationships || {};
     entity.relationships.field_author = entity.relationships.field_author || {};
     entity.relationships.field_author.data = {
-      'type': 'user--user',
-      'id': '14c78269-19c9-4daa-82d1-9854aceb0028',
+      type: 'user--user',
+      id: '425db657-f642-4979-b12a-b0347c2906b6',
+    };
+
+    entity.relationships.field_image = entity.relationships.field_image || {};
+    entity.relationships.field_image.data = {
+      type: 'file--file',
+      id: 'ad861ab2-81d7-4ff6-afb8-316ef3ee03df',
+      meta: {
+        alt:
+          'A delicious deep layered Mediterranean quiche with basil garnish.',
+        title: null,
+        width: 768,
+        height: 511,
+      },
     };
 
     this.props.contentAdd({
