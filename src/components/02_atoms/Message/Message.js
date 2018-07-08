@@ -1,9 +1,7 @@
 import React from 'react';
 import { css } from 'emotion';
 import PropTypes from 'prop-types';
-
-export const MESSAGE_ERROR = 'MESSAGE_ERROR';
-export const MESSAGE_SUCCESS = 'MESSAGE_SUCCESS';
+import { MESSAGE_ERROR, MESSAGE_SUCCESS } from '../../../constants/messages';
 
 let styles;
 let modifierClassMap;

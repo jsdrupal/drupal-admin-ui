@@ -5,6 +5,7 @@ import {
   resetLoading,
 } from 'react-redux-loading-bar';
 import api from '../utils/api/api';
+import { MESSAGE_ERROR } from '../constants/messages';
 
 export const OPEN_DRAWER = 'OPEN_DRAWER';
 export const openDrawer = () => ({
@@ -18,7 +19,7 @@ export const closeDrawer = () => ({
 
 export const SET_MESSAGE = 'SET_MESSAGE';
 
-export const setMessage = (message, type) => ({
+export const setMessage = (message, type = MESSAGE_ERROR) => ({
   type: SET_MESSAGE,
   payload: {
     message,
