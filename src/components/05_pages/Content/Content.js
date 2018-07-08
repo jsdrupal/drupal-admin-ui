@@ -370,7 +370,7 @@ class Content extends Component {
                         </TableCell>
                       }
                       <TableCell>
-                        <InputLabel htmlFor={rowSelectId}>{title}</InputLabel>
+                        <label htmlFor={rowSelectId}>{title}</label>
                       </TableCell>
                       <TableCell>
                         {this.props.contentTypes[type].name}
