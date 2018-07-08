@@ -17,10 +17,8 @@ export const closeDrawer = () => ({
 });
 
 export const SET_MESSAGE = 'SET_MESSAGE';
-export const MESSAGE_ERROR = 'MESSAGE_ERROR';
-export const MESSAGE_SUCCESS = 'MESSAGE_SUCCESS';
 
-export const setMessage = (message, type = MESSAGE_ERROR) => ({
+export const setMessage = (message, type) => ({
   type: SET_MESSAGE,
   payload: {
     message,

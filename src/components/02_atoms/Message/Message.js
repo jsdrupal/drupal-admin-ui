@@ -2,7 +2,8 @@ import React from 'react';
 import { css } from 'emotion';
 import PropTypes from 'prop-types';
 
-import { MESSAGE_ERROR, MESSAGE_SUCCESS } from '../../../actions/application';
+export const MESSAGE_ERROR = 'MESSAGE_ERROR';
+export const MESSAGE_SUCCESS = 'MESSAGE_SUCCESS';
 
 let styles;
 let modifierClassMap;
@@ -13,7 +14,11 @@ const Message = ({ message, type }) => (
 
 Message.propTypes = {
   message: PropTypes.string.isRequired,
-  type: PropTypes.oneOf([MESSAGE_ERROR, MESSAGE_SUCCESS]).isRequired,
+  type: PropTypes.oneOf([MESSAGE_ERROR, MESSAGE_SUCCESS]),
+};
+
+Message.defaultProps = {
+  type: MESSAGE_ERROR,
 };
 
 styles = {

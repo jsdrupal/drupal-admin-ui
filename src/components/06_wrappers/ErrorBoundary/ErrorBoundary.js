@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import Message from '../../02_atoms/Message/Message';
-import { MESSAGE_ERROR } from '../../../actions/application';
 
 class ErrorBoundary extends React.Component {
   constructor(props) {
@@ -21,9 +20,7 @@ class ErrorBoundary extends React.Component {
 
   render() {
     if (this.state.error) {
-      return (
-        <Message message={this.state.error.toString()} type={MESSAGE_ERROR} />
-      );
+      return <Message message={this.state.error.toString()} />;
     }
 
     return this.props.children;
