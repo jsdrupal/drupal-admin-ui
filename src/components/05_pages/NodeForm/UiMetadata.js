@@ -15,7 +15,7 @@ const UiMetadata = {
   status: {
     widget: 'boolean_checkbox',
     constraints: [],
-  },  
+  },
 };
 
 export default UiMetadata;
