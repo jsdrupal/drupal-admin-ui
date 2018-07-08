@@ -57,12 +57,12 @@ class FileUpload extends React.Component {
             bundle: this.props.bundle,
             fieldName: this.props.fieldName,
             fileName: files[0].name,
+            body: buffer,
           },
           options: {
             headers: {
               'X-CSRF-Token': token,
             },
-            body: buffer,
           },
         });
 
