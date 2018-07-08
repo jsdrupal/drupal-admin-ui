@@ -2,7 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import Message from '../../02_atoms/Message/Message';
-import { MESSAGE_ERROR } from '../../../actions/application';
+
+import { MESSAGE_ERROR } from '../../../constants/messages';
 
 class ErrorBoundary extends React.Component {
   constructor(props) {
