@@ -4,6 +4,8 @@ description: 'Provides endpoints for the drupal-admin-ui'
 version: VERSION
 core: 8.x
 dependencies:
+  - drupal:file
+  - drupal:serialization
   - drupal:rest
   - jsonapi:jsonapi
   - jsonapi_tables:jsonapi_tables
