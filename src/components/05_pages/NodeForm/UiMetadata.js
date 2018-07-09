@@ -8,6 +8,10 @@ const UiMetadata = {
     widget: 'timestamp_datetime',
     constraints: [],
   },
+  field_image: {
+    widget: 'image_image',
+    constraints: [],
+  },
   field_number_of_servings: {
     widget: 'number_textfield',
     constraints: [],
