@@ -47,7 +47,7 @@ const iconMap = {
 };
 
 class Default extends React.Component {
-  componentWillMount() {
+  componentDidMount() {
     this.props.requestMenu();
   }
 
