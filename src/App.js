@@ -58,7 +58,10 @@ const App = () => (
                   key={route}
                 />
               ))}
-              <Route path="/(vfancy/?)" component={withRouter(InitialRedirect)} />
+              <Route
+                path="/(vfancy/?)"
+                component={withRouter(InitialRedirect)}
+              />
               <Route component={NoMatch} />
             </Switch>
           </Default>
