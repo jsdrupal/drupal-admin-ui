@@ -46,19 +46,19 @@ OptionsSelect.propTypes = {
   ...WidgetPropTypes,
   value: PropTypes.string,
   helpText: PropTypes.string,
-  schema: {
+  schema: PropTypes.shape({
     default: PropTypes.string,
     enum: PropTypes.arrayOf(PropTypes.string),
-  },
+  }),
 };
 
 OptionsSelect.defaultProps = {
   value: '',
   helpText: '',
-  schema: PropTypes.shape({
+  schema: {
     enum: [],
     default: '',
-  }),
+  },
 };
 
 export default OptionsSelect;
