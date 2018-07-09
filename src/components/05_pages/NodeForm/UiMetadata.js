@@ -16,6 +16,10 @@ const UiMetadata = {
     widget: 'number_textfield',
     constraints: [],
   },
+  status: {
+    widget: 'boolean_checkbox',
+    constraints: [],
+  },
 };
 
 export default UiMetadata;
