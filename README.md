@@ -72,16 +72,14 @@ yarn start
 
 ## Commands
 
-|`yarn run <script>`|Description|
+See package.json for a full list
+
+|`yarn <script>`|Description|
 |------------------|-----------|
 |`start`|Serves your app at `localhost:3000`.|
 |`build`|Compiles the application for production into folder `./build`.|
 |`test`|Runs all available tests.|
-|`test:unit`|Starts an interactive test runner for running unit tests with Jest.|
-|`test:unit:ci`|Runs unit tests with Jest and outputs results with JUnit.|
-|`test:lint`|Lints all files.|
-|`test:lint:fix`|Fixes linter errors that can be solved automatically.|
-|`test:lint:ci`|Lints all files and outputs results with JUnit.|
+|`storybook`|Starts [Storybook](https://storybook.js.org/) UI dev environment
 
 ## Contributing to This Repository
 
