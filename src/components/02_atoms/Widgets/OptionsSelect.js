@@ -19,8 +19,7 @@ const OptionsSelect = ({
   onChange,
   helpText,
   fieldName,
-  enum: options,
-  default: defaultValue,
+  schema: { enum: options, default: defaultValue },
 }) => (
   <FormControl>
     <InputLabel htmlFor={fieldName}>{label}</InputLabel>
@@ -47,15 +46,19 @@ OptionsSelect.propTypes = {
   ...WidgetPropTypes,
   value: PropTypes.string,
   helpText: PropTypes.string,
-  default: PropTypes.string,
-  enum: PropTypes.arrayOf(PropTypes.string),
+  schema: {
+    default: PropTypes.string,
+    enum: PropTypes.arrayOf(PropTypes.string),
+  },
 };
 
 OptionsSelect.defaultProps = {
-  enum: [],
   value: '',
-  default: '',
   helpText: '',
+  schema: PropTypes.shape({
+    enum: [],
+    default: '',
+  }),
 };
 
 export default OptionsSelect;
