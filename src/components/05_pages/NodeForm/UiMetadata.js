@@ -16,6 +16,10 @@ const UiMetadata = {
     widget: 'number_textfield',
     constraints: [],
   },
+  field_difficulty: {
+    widget: 'options_select',
+    constraints: [],
+  },
   status: {
     widget: 'boolean_checkbox',
     constraints: [],
