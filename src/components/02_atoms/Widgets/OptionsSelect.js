@@ -47,18 +47,14 @@ OptionsSelect.propTypes = {
   value: PropTypes.string,
   helpText: PropTypes.string,
   schema: PropTypes.shape({
-    default: PropTypes.string,
-    enum: PropTypes.arrayOf(PropTypes.string),
-  }),
+    default: PropTypes.string.isRequired,
+    enum: PropTypes.arrayOf(PropTypes.string).isRequired,
+  }).isRequired,
 };
 
 OptionsSelect.defaultProps = {
   value: '',
   helpText: '',
-  schema: {
-    enum: [],
-    default: '',
-  },
 };
 
 export default OptionsSelect;
