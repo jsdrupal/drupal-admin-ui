@@ -102,7 +102,7 @@ class Dblog extends Component {
           label="Type"
           multiple
           size={this.props.availableTypes.length}
-          onChange={this.typeFilterHandler}
+          onBlur={this.typeFilterHandler}
           selected={this.props.filterOptions.types}
         >
           {this.props.availableTypes.map(type => (
@@ -116,7 +116,7 @@ class Dblog extends Component {
           label="Severity"
           multiple
           size={8}
-          onChange={this.severityFilterHandler}
+          onBlur={this.severityFilterHandler}
           selected={this.props.filterOptions.severities}
         >
           {[
