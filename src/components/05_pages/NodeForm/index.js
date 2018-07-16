@@ -75,6 +75,7 @@ class NodeForm extends React.Component {
                 this.props.schema,
                 fieldName,
               );
+
               return React.createElement(this.props.widgets[widget], {
                 key: fieldName,
                 entityTypeId: this.props.entityTypeId,
@@ -82,6 +83,7 @@ class NodeForm extends React.Component {
                 fieldName,
                 value: this.state.entity[fieldName],
                 label: fieldSchema && fieldSchema.title,
+                schema: fieldSchema,
                 onChange: this.onFieldChange(fieldName),
               });
             }
