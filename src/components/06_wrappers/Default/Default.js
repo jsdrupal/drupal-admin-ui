@@ -137,7 +137,7 @@ styles = {
     transition: width 225ms cubic-bezier(0.4, 0, 0.6, 1) 0ms;
   `,
   drawerPaperClose: css`
-    overflow-x: 'hidden';
+    overflow-x: hidden;
     transition: none;
     width: 72px;
     transition: width 195ms cubic-bezier(0.4, 0, 0.6, 1) 0ms;
