@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { withStyles } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
+import { css } from 'emotion';
+
 import Widgets from './Widgets';
 import { createEntity } from '../../../utils/api/schema';
 import { contentAdd } from '../../../actions/content';
@@ -20,13 +22,13 @@ schemaType = PropTypes.shape({
   properties: PropTypes.objectOf(lazyFunction(lazySchemaType)),
 }).isRequired;
 
-const styles = () => ({
-  container: {
-    display: 'flex',
-    flexWrap: 'wrap',
-    flexDirection: 'column',
-  },
-});
+const styles = {
+  container: css`
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+  `,
+};
 
 class NodeForm extends React.Component {
   static propTypes = {
@@ -44,9 +46,11 @@ class NodeForm extends React.Component {
         PropTypes.instanceOf(React.Component),
       ]).isRequired,
     ).isRequired,
-    classes: PropTypes.objectOf(PropTypes.string).isRequired,
+    // classes: PropTypes.objectOf(PropTypes.string).isRequired,
     contentAdd: PropTypes.func.isRequired,
     bundleType: PropTypes.string.isRequired,
+    entityTypeId: PropTypes.string.isRequired,
+    bundle: PropTypes.string.isRequired,
   };
 
   static defaultProps = {
@@ -127,31 +131,41 @@ class NodeForm extends React.Component {
     });
   };
 
+  getSchemaInfo = (schema, fieldName) =>
+    this.props.schema.properties.attributes.properties[fieldName] ||
+    this.props.schema.properties.relationships.properties[fieldName];
+
   render() {
     return (
-      <form className={this.props.classes.container}>
+      <form className={styles.container}>
         {Object.entries(this.props.uiMetadata)
           .map(([fieldName, { widget }]) => {
             if (Widgets[widget]) {
               // @todo We need to pass along props.
               // @todo How do we handle cardinality together with jsonapi
               // making a distinction between single value fields and multi value fields.
+              const fieldSchema = this.getSchemaInfo(
+                this.props.schema,
+                fieldName,
+              );
+
               return React.createElement(this.props.widgets[widget], {
                 key: fieldName,
+
+                entityTypeId: this.props.entityTypeId,
+                bundle: this.props.bundle,
                 fieldName,
-                value: this.state.entity.attributes[fieldName],
-                label:
-                  this.props.schema.properties.attributes.properties[
-                    fieldName
-                  ] &&
-                  this.props.schema.properties.attributes.properties[fieldName]
-                    .title,
+                value: this.state.entity[fieldName],
+                label: fieldSchema && fieldSchema.title,
+                schema: fieldSchema,
+
                 onChange: this.onFieldChange(fieldName),
               });
             }
             return null;
           })
           .filter(x => x)}
+
         <Button variant="contained" color="primary" onClick={this.onSave}>
           Save
         </Button>

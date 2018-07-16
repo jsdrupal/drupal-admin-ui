@@ -14,7 +14,8 @@ async function api(
       url = '/admin-api/menu?_format=json';
       break;
     case 'dblog':
-      url = '/jsonapi/watchdog_entity/watchdog_entity';
+      url = '/jsonapi/watchdog_entity/';
+      options.headers.Accept = 'application/vnd.api+json';
       break;
     case 'csrf_token':
       url = '/session/token';
@@ -37,6 +38,17 @@ async function api(
       options.method = 'PATCH';
       options.body = JSON.stringify({ data: parameters.role });
       options.headers['Content-Type'] = 'application/vnd.api+json';
+      break;
+    case 'file:upload':
+      url = `/file/upload/${parameters.entityTypeId}/${parameters.bundle}/${
+        parameters.fieldName
+      }`;
+      options.method = 'POST';
+      options.headers['Content-Type'] = 'application/octet-stream';
+      options.headers['Content-Disposition'] = `file; filename="${
+        parameters.fileName
+      }"`;
+      options.body = parameters.body;
       break;
     case 'permissions':
       url = '/admin-api/permissions?_format=json';
@@ -132,7 +144,7 @@ async function api(
     }`,
     options,
   ).then(res => {
-    if (res.status !== 200) {
+    if (![200, 201].includes(res.status)) {
       throw new ApiError(res.status, res.statusText, res.body);
     }
 

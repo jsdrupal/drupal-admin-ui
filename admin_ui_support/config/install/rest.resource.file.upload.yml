@@ -1,0 +1,16 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - file
+    - serialization
+    - user
+id: file.upload
+plugin_id: 'file:upload'
+granularity: method
+configuration:
+  POST:
+    supported_formats:
+      - json
+    supported_auth:
+      - cookie

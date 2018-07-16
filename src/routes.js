@@ -22,6 +22,8 @@ const routes = {
       uiMetadata={UiMetadata}
       widgets={widgets}
       bundleType="node--recipe"
+      entityTypeId="node"
+      bundle="recipe"
     />
   ),
 };

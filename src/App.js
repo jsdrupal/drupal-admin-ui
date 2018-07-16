@@ -42,32 +42,29 @@ const jss = create(jssPreset());
 // We define a custom insertion point that JSS will look for injecting the styles in the DOM.
 jss.options.insertionPoint = document.getElementById('jss-insertion-point');
 
-const withDefault = component => () => (
-  <Default>{React.createElement(component)}</Default>
-);
-
 const App = () => (
   <JssProvider jss={jss} generateClassName={generateClassName}>
     <ErrorBoundary>
       <Provider store={store}>
         <ConnectedRouter history={history}>
-          <Switch>
-            <Route
-              exact
-              path="/"
-              component={withDefault(withRouter(Content))}
-            />
-            {Object.keys(routes).map(route => (
+          <Default>
+            <Switch>
+              <Route exact path="/" component={withRouter(Content)} />
+              {Object.keys(routes).map(route => (
+                <Route
+                  exact
+                  path={route}
+                  component={withRouter(routes[route])}
+                  key={route}
+                />
+              ))}
               <Route
-                exact
-                path={route}
-                component={withDefault(withRouter(routes[route]))}
-                key={route}
+                path="/(vfancy/?)"
+                component={withRouter(InitialRedirect)}
               />
-            ))}
-            <Route path="/(vfancy/?)" component={withRouter(InitialRedirect)} />
-            <Route component={NoMatch} />
-          </Switch>
+              <Route component={NoMatch} />
+            </Switch>
+          </Default>
         </ConnectedRouter>
       </Provider>
     </ErrorBoundary>
