@@ -22,7 +22,6 @@ class ErrorBoundary extends React.Component {
 
   render() {
     if (this.state.error) {
-      console.log(this.state.error);
       return (
         <Message message={this.state.error.toString()} type={MESSAGE_ERROR} />
       );
