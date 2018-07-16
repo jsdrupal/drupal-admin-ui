@@ -46,7 +46,6 @@ class NodeForm extends React.Component {
         PropTypes.instanceOf(React.Component),
       ]).isRequired,
     ).isRequired,
-    // classes: PropTypes.objectOf(PropTypes.string).isRequired,
     contentAdd: PropTypes.func.isRequired,
     bundleType: PropTypes.string.isRequired,
     entityTypeId: PropTypes.string.isRequired,

@@ -1,4 +1,4 @@
-export const createEntity = schema => {
+const createEntity = schema => {
   if (typeof schema.default !== 'undefined') {
     return schema.default;
   }
@@ -24,7 +24,8 @@ export const createEntity = schema => {
     case 'language_reference':
       return null;
     default:
-      debugger;
       throw new Error('Unhandled case');
   }
 };
+
+export { createEntity }; // eslint-disable-line
