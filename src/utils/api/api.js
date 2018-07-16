@@ -14,7 +14,8 @@ async function api(
       url = '/admin-api/menu?_format=json';
       break;
     case 'dblog':
-      url = '/jsonapi/watchdog_entity/watchdog_entity';
+      url = '/jsonapi/watchdog_entity/';
+      options.headers.Accept = 'application/vnd.api+json';
       break;
     case 'csrf_token':
       url = '/session/token';
