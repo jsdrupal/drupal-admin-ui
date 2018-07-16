@@ -66,7 +66,7 @@ class NodeForm extends React.Component {
     return (
       <form className={styles.container}>
         {Object.entries(this.props.uiMetadata)
-          .map(([fieldName, { widget }]) => {
+          .map(([fieldName, { widget, inputProps }]) => {
             if (Widgets[widget]) {
               // @todo We need to pass along props.
               // @todo How do we handle cardinality together with jsonapi
@@ -85,6 +85,7 @@ class NodeForm extends React.Component {
                 label: fieldSchema && fieldSchema.title,
                 schema: fieldSchema,
                 onChange: this.onFieldChange(fieldName),
+                inputProps,
               });
             }
             return null;

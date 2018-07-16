@@ -31,6 +31,12 @@ const UiMetadata = {
   field_cooking_time: {
     widget: 'number_textfield',
     constraints: [],
+    inputProps: {
+      min: 0,
+      max: null,
+      prefix: '',
+      suffix: ' minutes',
+    },
   },
 };
 
