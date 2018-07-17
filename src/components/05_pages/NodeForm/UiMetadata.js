@@ -24,6 +24,26 @@ const UiMetadata = {
     widget: 'boolean_checkbox',
     constraints: [],
   },
+  field_preparation_time: {
+    widget: 'number_textfield',
+    constraints: [],
+    inputProps: {
+      min: 0,
+      max: null,
+      prefix: '',
+      suffix: ' minutes',
+    },
+  },
+  field_cooking_time: {
+    widget: 'number_textfield',
+    constraints: [],
+    inputProps: {
+      min: 0,
+      max: null,
+      prefix: '',
+      suffix: ' minutes',
+    },
+  },
 };
 
 export default UiMetadata;
