@@ -33,7 +33,7 @@ class AddContent extends Component {
   render = () => (
     <div className={styles.root}>
       <Paper>
-        <List>
+        <List data-nightwatch="node-type-list">
           {Object.keys(this.props.contentTypes).map(contentType => (
             <ListItem button component={Link} to={`/node/add/${contentType}`}>
               <ListItemText
