@@ -1,6 +1,7 @@
 module.exports = {
   '@tags': ['menu'],
   menuRenders(browser) {
+    // force rebuild.
     browser
       .logUserIn()
       .relativeURL('/')
@@ -11,6 +12,7 @@ module.exports = {
         result,
       ) {
         this.assert.strictEqual(result.value, 'Content');
-      });
+      })
+      .end();
   },
 };
