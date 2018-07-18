@@ -8,6 +8,8 @@ use Drupal\Tests\UnitTestCase;
 
 /**
  * @coversDefaultClass \Drupal\jsonapi_support\ResourceType\CrossBundlesResourceType
+ *
+ * @group jsonapi_support
  */
 class CrossBundlesResourceTypeTest extends UnitTestCase {
 
