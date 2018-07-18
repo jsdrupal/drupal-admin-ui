@@ -17,7 +17,7 @@ const styles = {
   `,
 };
 
-class AddContent extends Component {
+export class AddContent extends Component {
   static propTypes = {
     contentTypes: PropTypes.objectOf(
       PropTypes.shape({
@@ -35,7 +35,12 @@ class AddContent extends Component {
       <Paper>
         <List>
           {Object.keys(this.props.contentTypes).map(contentType => (
-            <ListItem button component={Link} to={`/node/add/${contentType}`}>
+            <ListItem
+              button
+              component={Link}
+              to={`/node/add/${contentType}`}
+              key={`node-add-${contentType}`}
+            >
               <ListItemText
                 primary={this.props.contentTypes[contentType].name}
                 secondary={
