@@ -1,6 +1,7 @@
 module.exports = {
   '@tags': ['menu'],
   menuRenders(browser) {
+    // force rebuild.
     browser
       .logUserIn()
       .relativeURL('/')
