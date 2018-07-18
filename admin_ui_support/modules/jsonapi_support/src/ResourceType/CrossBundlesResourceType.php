@@ -17,4 +17,11 @@ class CrossBundlesResourceType extends ResourceType {
     return $this->entityTypeId;
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  public function getBundle() {
+    return NULL;
+  }
+
 }
