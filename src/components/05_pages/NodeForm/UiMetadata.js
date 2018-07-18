@@ -44,6 +44,13 @@ const UiMetadata = {
       suffix: ' minutes',
     },
   },
+  field_tags: {
+    widget: 'entity_reference',
+    constraints: [],
+    inputProps: {
+      resourceIdentifer: 'taxonomy_term/recipe_category',
+    },
+  },
 };
 
 export default UiMetadata;
