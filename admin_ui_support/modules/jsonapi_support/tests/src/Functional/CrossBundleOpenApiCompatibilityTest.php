@@ -9,6 +9,8 @@ use Drupal\Tests\BrowserTestBase;
  *
  * Currently the OpenAPI module is only able to determine that GET method exists
  * on the route and does not return the bundle generic entity definition.
+ *
+ * @group jsonapi_support
  */
 class CrossBundleOpenApiCompatibilityTest extends BrowserTestBase {
 
