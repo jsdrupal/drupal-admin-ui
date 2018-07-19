@@ -48,7 +48,7 @@ const UiMetadata = {
     widget: 'entity_reference',
     constraints: [],
     inputProps: {
-      resourceIdentifer: 'taxonomy_term/recipe_category',
+      resourceIdentifer: 'recipe_category',
     },
   },
 };

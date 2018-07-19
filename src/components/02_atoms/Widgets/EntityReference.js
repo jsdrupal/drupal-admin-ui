@@ -23,41 +23,8 @@ class EntityReference extends React.Component {
   state = {
     inputValue: '',
     selectedItem: [],
-    loading: true,
-    placeholder: 'Loading...',
-  };
-
-  componentDidMount = () => {
-    api('taxonomy_term', {
-      parameters: {
-        termType: 'recipe_category',
-      },
-    }).then(({ data: terms }) => {
-      this.setState({
-        loading: false,
-        placeholder: '',
-        suggestions: terms.map(({ attributes: { name: label } }) => ({
-          label,
-        })),
-      });
-    });
-  };
-
-  getSuggestions = inputValue => {
-    let count = 0;
-
-    return this.state.suggestions.filter(suggestion => {
-      const keep =
-        (!inputValue ||
-          suggestion.label.toLowerCase().indexOf(inputValue.toLowerCase()) !==
-            -1) &&
-        count < 5;
-
-      if (keep) {
-        count += 1;
-      }
-      return keep;
-    });
+    suggestions: [],
+    loading: false,
   };
 
   handleChange = item => {
@@ -74,7 +41,31 @@ class EntityReference extends React.Component {
   };
 
   handleInputChange = event => {
-    this.setState({ inputValue: event.target.value });
+    this.setState({ loading: true, inputValue: event.target.value }, () => {
+      api('taxonomy_term', {
+        queryString: {
+          filter: {
+            name: {
+              condition: {
+                path: 'name',
+                operator: 'CONTAINS',
+                value: this.state.inputValue,
+              },
+            },
+          },
+        },
+        parameters: {
+          termType: this.props.inputProps.resourceIdentifer,
+        },
+      }).then(({ data: terms }) => {
+        this.setState({
+          loading: false,
+          suggestions: terms.map(({ attributes: { name: label } }) => ({
+            label,
+          })),
+        });
+      });
+    });
   };
 
   handleKeyDown = event => {
@@ -147,7 +138,6 @@ class EntityReference extends React.Component {
           getInputProps,
           getItemProps,
           isOpen,
-          inputValue: inputValue2,
           selectedItem: selectedItem2,
           highlightedIndex,
         }) => (
@@ -168,21 +158,22 @@ class EntityReference extends React.Component {
                 )),
                 onChange: this.handleInputChange,
                 onKeyDown: this.handleKeyDown,
-                placeholder: this.state.placeholder,
+                placeholder: '',
                 id: 'integration-downshift-multiple',
               }),
             })}
             {isOpen ? (
               <Paper className="paper" square>
-                {this.getSuggestions(inputValue2).map((suggestion, index) =>
-                  this.renderSuggestion({
-                    suggestion,
-                    index,
-                    itemProps: getItemProps({ item: suggestion.label }),
-                    highlightedIndex,
-                    selectedItem: selectedItem2,
-                  }),
-                )}
+                {!this.state.loading &&
+                  this.state.suggestions.map((suggestion, index) =>
+                    this.renderSuggestion({
+                      suggestion,
+                      index,
+                      itemProps: getItemProps({ item: suggestion.label }),
+                      highlightedIndex,
+                      selectedItem: selectedItem2,
+                    }),
+                  )}
               </Paper>
             ) : null}
           </div>
