@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { Markup } from 'interweave';
 import { css } from 'emotion';
@@ -9,7 +8,6 @@ import Paper from '@material-ui/core/Paper';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
-import { requestContentTypes } from '../../../actions/application';
 
 const styles = {
   root: css`
@@ -17,7 +15,7 @@ const styles = {
   `,
 };
 
-export class AddContent extends Component {
+export default class extends Component {
   static propTypes = {
     contentTypes: PropTypes.objectOf(
       PropTypes.shape({
@@ -56,12 +54,3 @@ export class AddContent extends Component {
     </div>
   );
 }
-
-const mapStateToProps = state => ({
-  contentTypes: state.application.contentTypes,
-});
-
-export default connect(
-  mapStateToProps,
-  { requestContentTypes },
-)(AddContent);
