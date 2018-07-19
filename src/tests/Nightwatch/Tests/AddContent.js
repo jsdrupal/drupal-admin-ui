@@ -4,25 +4,26 @@ module.exports = {
     browser
       .logUserIn()
       .relativeURL('/node/add')
-      .waitForElementVisible('[data-nightwatch="node-type-list"] a', 10000)
-      .getText(
+      .waitForElementVisible('[data-nightwatch="node-type-list"] a');
+
+    browser.expect
+      .element(
         '[data-nightwatch="node-type-list"] a:nth-child(1) span:first-child',
-        function testArticleShow(result) {
-          this.assert.strictEqual(result.value, 'Article');
-        },
       )
-      .getText(
+      .text.to.equal('Article');
+
+    browser.expect
+      .element(
         '[data-nightwatch="node-type-list"] a:nth-child(2) span:first-child',
-        function testBasicPageShow(result) {
-          this.assert.strictEqual(result.value, 'Basic page');
-        },
       )
-      .getText(
+      .text.to.equal('Basic page');
+
+    browser.expect
+      .element(
         '[data-nightwatch="node-type-list"] a:nth-child(3) span:first-child',
-        function testRecipeShows(result) {
-          this.assert.strictEqual(result.value, 'Recipe');
-        },
       )
-      .end();
+      .text.to.equal('Recipe');
+
+    browser.end();
   },
 };
