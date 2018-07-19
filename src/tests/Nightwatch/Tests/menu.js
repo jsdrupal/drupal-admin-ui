@@ -11,6 +11,7 @@ module.exports = {
         result,
       ) {
         this.assert.strictEqual(result.value, 'Content');
-      });
+      })
+      .end();
   },
 };
