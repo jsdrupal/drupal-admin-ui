@@ -4,9 +4,9 @@ module.exports = {
     browser
       .logUserIn()
       .relativeURL('/')
-      .waitForElementVisible('button[aria-label="open drawer"]', 10000)
+      .waitForElementVisible('button[aria-label="open drawer"]')
       .click('button[aria-label="open drawer"]')
-      .waitForElementVisible('[data-nightwatch="menu"] a[role="button"]', 10000)
+      .waitForElementVisible('[data-nightwatch="menu"] a[role="button"]')
       .getText('[data-nightwatch="menu"] a[role="button"]', function menuText(
         result,
       ) {
