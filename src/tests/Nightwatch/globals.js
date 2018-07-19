@@ -6,6 +6,7 @@ import fs from 'fs';
 
 module.exports = {
   asyncHookTimeout: 60000,
+  waitForConditionTimeout: 10000,
   before(done) {
     chromedriver.start();
     done();
