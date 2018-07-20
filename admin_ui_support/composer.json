@@ -11,7 +11,8 @@
         "drupal/drupal-extension": "master-dev",
         "bex/behat-screenshot": "^1.2",
         "phpmd/phpmd": "^2.6",
-        "phpmetrics/phpmetrics": "^2.3"
+        "phpmetrics/phpmetrics": "^2.3",
+        "drupal/openapi": "1.x-dev"
     },
     "require": {
         "php": "^5.5.9 || ^7.0",
