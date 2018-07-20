@@ -10,6 +10,7 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import { requestContentTypes } from '../../../actions/application';
+import PageTitle from '../../02_atoms/PageTitle';
 
 const styles = {
   root: css`
@@ -32,8 +33,9 @@ class AddContent extends Component {
   }
   render = () => (
     <div className={styles.root}>
+      <PageTitle>Add content</PageTitle>
       <Paper>
-        <List>
+        <List data-nightwatch="node-type-list">
           {Object.keys(this.props.contentTypes).map(contentType => (
             <ListItem button component={Link} to={`/node/add/${contentType}`}>
               <ListItemText

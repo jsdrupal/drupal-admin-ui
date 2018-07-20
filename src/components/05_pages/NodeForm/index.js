@@ -1,7 +1,10 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { css } from 'emotion';
+import Paper from '@material-ui/core/Paper';
+
 import Widgets from './Widgets';
+import PageTitle from '../../02_atoms/PageTitle';
 
 const lazyFunction = f => (props, propName, componentName, ...rest) =>
   f(props, propName, componentName, ...rest);
@@ -64,34 +67,39 @@ class NodeForm extends React.Component {
 
   render() {
     return (
-      <form className={styles.container}>
-        {Object.entries(this.props.uiMetadata)
-          .map(([fieldName, { widget, inputProps }]) => {
-            if (Widgets[widget]) {
-              // @todo We need to pass along props.
-              // @todo How do we handle cardinality together with jsonapi
-              // making a distinction between single value fields and multi value fields.
-              const fieldSchema = this.getSchemaInfo(
-                this.props.schema,
-                fieldName,
-              );
+      <Fragment>
+        <PageTitle>Create {this.props.bundle}</PageTitle>
+        <Paper>
+          <form className={styles.container}>
+            {Object.entries(this.props.uiMetadata)
+              .map(([fieldName, { widget, inputProps }]) => {
+                if (Widgets[widget]) {
+                  // @todo We need to pass along props.
+                  // @todo How do we handle cardinality together with jsonapi
+                  // making a distinction between single value fields and multi value fields.
+                  const fieldSchema = this.getSchemaInfo(
+                    this.props.schema,
+                    fieldName,
+                  );
 
-              return React.createElement(this.props.widgets[widget], {
-                key: fieldName,
-                entityTypeId: this.props.entityTypeId,
-                bundle: this.props.bundle,
-                fieldName,
-                value: this.state.entity[fieldName],
-                label: fieldSchema && fieldSchema.title,
-                schema: fieldSchema,
-                onChange: this.onFieldChange(fieldName),
-                inputProps,
-              });
-            }
-            return null;
-          })
-          .filter(x => x)}
-      </form>
+                  return React.createElement(this.props.widgets[widget], {
+                    key: fieldName,
+                    entityTypeId: this.props.entityTypeId,
+                    bundle: this.props.bundle,
+                    fieldName,
+                    value: this.state.entity[fieldName],
+                    label: fieldSchema && fieldSchema.title,
+                    schema: fieldSchema,
+                    onChange: this.onFieldChange(fieldName),
+                    inputProps,
+                  });
+                }
+                return null;
+              })
+              .filter(x => x)}
+          </form>
+        </Paper>
+      </Fragment>
     );
   }
 }
