@@ -12,7 +12,7 @@ import WidgetPropTypes from '../../05_pages/NodeForm/WidgetPropTypes';
 
 import api from './../../../utils/api/api';
 
-class EntityReference extends React.Component {
+class EntityReferenceAutocompleteWidget extends React.Component {
   static propTypes = {
     ...WidgetPropTypes,
     inputProps: PropTypes.shape({
@@ -185,4 +185,4 @@ class EntityReference extends React.Component {
   }
 }
 
-export default EntityReference;
+export default EntityReferenceAutocompleteWidget;

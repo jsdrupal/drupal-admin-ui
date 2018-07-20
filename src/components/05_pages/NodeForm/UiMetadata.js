@@ -45,7 +45,7 @@ const UiMetadata = {
     },
   },
   field_tags: {
-    widget: 'entity_reference',
+    widget: 'entity_reference_autocomplete',
     constraints: [],
     inputProps: {
       bundle: 'taxonomy_term',
