@@ -82,18 +82,19 @@ class Default extends React.Component {
         >
           <List data-nightwatch="menu">
             {this.props.menuLinks.map(({ link: menuLink }) => (
-              <ListItem key={menuLink.url.replace(/\//g, '-')}>
-                <Link
-                  component={Link}
-                  to={menuLink.url}
-                  aria-label={menuLink.title}
-                />
-                {iconMap[menuLink.url] ? (
-                  <ListItemIcon>{iconMap[menuLink.url]}</ListItemIcon>
-                ) : (
-                  ''
-                )}
-                <ListItemText primary={menuLink.title} />
+              <ListItem
+                key={menuLink.url.replace(/\//g, '-')}
+                component="li"
+                button
+              >
+                <Link to={menuLink.url} className={styles.menuLink}>
+                  {iconMap[menuLink.url] ? (
+                    <ListItemIcon>{iconMap[menuLink.url]}</ListItemIcon>
+                  ) : (
+                    ''
+                  )}
+                  <ListItemText primary={menuLink.title} />
+                </Link>
               </ListItem>
             ))}
           </List>
@@ -112,6 +113,10 @@ class Default extends React.Component {
 }
 
 styles = {
+  menuLink: css`
+    display: inherit;
+    text-decoration: inherit;
+  `,
   menuButton: css`
     margin: 8px 12px;
   `,
