@@ -23,21 +23,19 @@ class EntityReference extends React.Component {
 
   state = {
     inputValue: '',
-    selectedItem: [],
+    selectedItems: [],
     suggestions: [],
     loading: false,
   };
 
   handleChange = item => {
-    let { selectedItem } = this.state;
+    let { selectedItems } = this.state;
 
-    if (selectedItem.indexOf(item) === -1) {
-      selectedItem = [...selectedItem, item];
-    }
+    selectedItems = Array.from((new Set(selectedItems)).add(item));
 
     this.setState({
       inputValue: '',
-      selectedItem,
+      selectedItems,
     });
   };
 
@@ -71,23 +69,23 @@ class EntityReference extends React.Component {
   };
 
   handleKeyDown = event => {
-    const { inputValue, selectedItem } = this.state;
+    const { inputValue, selectedItems } = this.state;
     if (
-      selectedItem.length &&
+      selectedItems.length &&
       !inputValue.length &&
       keycode(event) === 'backspace'
     ) {
       this.setState({
-        selectedItem: selectedItem.slice(0, selectedItem.length - 1),
+        selectedItems: selectedItems.slice(0, selectedItems.length - 1),
       });
     }
   };
 
   handleDelete = item => () => {
     this.setState(state => {
-      const selectedItem = [...state.selectedItem];
-      selectedItem.splice(selectedItem.indexOf(item), 1);
-      return { selectedItem };
+      const selectedItems = [...state.selectedItems];
+      selectedItems.splice(selectedItems.indexOf(item), 1);
+      return { selectedItems };
     });
   };
 
@@ -128,19 +126,19 @@ class EntityReference extends React.Component {
   );
 
   render() {
-    const { inputValue, selectedItem } = this.state;
+    const { inputValue, selectedItems } = this.state;
 
     return (
       <Downshift
         inputValue={inputValue}
         onChange={this.handleChange}
-        selectedItem={selectedItem}
+        selectedItem={selectedItems}
       >
         {({
           getInputProps,
           getItemProps,
           isOpen,
-          selectedItem: selectedItem2,
+          selectedItem,
           highlightedIndex,
         }) => (
           <div className="container">
@@ -149,7 +147,7 @@ class EntityReference extends React.Component {
               label: this.props.label,
               InputProps: getInputProps({
                 disabled: this.state.loading,
-                startAdornment: selectedItem.map(item => (
+                startAdornment: selectedItems.map(item => (
                   <Chip
                     key={item}
                     tabIndex={-1}
@@ -173,7 +171,7 @@ class EntityReference extends React.Component {
                       index,
                       itemProps: getItemProps({ item: suggestion.label }),
                       highlightedIndex,
-                      selectedItem: selectedItem2,
+                      selectedItem,
                     }),
                   )}
               </Paper>
