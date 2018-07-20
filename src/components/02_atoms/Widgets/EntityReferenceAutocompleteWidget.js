@@ -42,31 +42,37 @@ class EntityReferenceAutocompleteWidget extends React.Component {
   handleInputChange = event => {
     this.setState({ loading: true, inputValue: event.target.value }, () => {
       const { bundle, type } = this.props.inputProps;
-      api(bundle, {
-        queryString: {
-          filter: {
-            // @todo On the longrun fetch the label_key from the entity type
-            //   definition.
-            name: {
-              condition: {
-                path: 'name',
-                operator: 'CONTAINS',
-                value: this.state.inputValue,
-              },
+      this.fetchSuggestedEntities(bundle, type, this.state.inputValue).then(
+        ({ data: items }) => {
+          this.setState({
+            loading: false,
+            suggestions: items.map(({ attributes: { name: label } }) => ({
+              label,
+            })),
+          });
+        },
+      );
+    });
+  };
+
+  fetchSuggestedEntities = (bundle, type, input) => {
+    return api(bundle, {
+      queryString: {
+        filter: {
+          // @todo On the longrun fetch the label_key from the entity type
+          //   definition.
+          name: {
+            condition: {
+              path: 'name',
+              operator: 'CONTAINS',
+              value: input,
             },
           },
         },
-        parameters: {
-          type,
-        },
-      }).then(({ data: items }) => {
-        this.setState({
-          loading: false,
-          suggestions: items.map(({ attributes: { name: label } }) => ({
-            label,
-          })),
-        });
-      });
+      },
+      parameters: {
+        type,
+      },
     });
   };
 
