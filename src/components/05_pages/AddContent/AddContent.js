@@ -8,6 +8,7 @@ import Paper from '@material-ui/core/Paper';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
+import PageTitle from '../../02_atoms/PageTitle';
 
 const styles = {
   root: css`
@@ -30,6 +31,7 @@ export default class extends Component {
   }
   render = () => (
     <div className={styles.root}>
+      <PageTitle>Add content</PageTitle>
       <Paper>
         <List data-nightwatch="node-type-list">
           {Object.keys(this.props.contentTypes).map(contentType => (
