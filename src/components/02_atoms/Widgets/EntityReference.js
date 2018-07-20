@@ -31,7 +31,7 @@ class EntityReference extends React.Component {
   handleChange = item => {
     let { selectedItems } = this.state;
 
-    selectedItems = Array.from((new Set(selectedItems)).add(item));
+    selectedItems = Array.from(new Set(selectedItems).add(item));
 
     this.setState({
       inputValue: '',
@@ -99,7 +99,7 @@ class EntityReference extends React.Component {
     selectedItem,
   }) => {
     const isHighlighted = highlightedIndex === index;
-    const isSelected = (selectedItem || '').indexOf(suggestion.label) > -1;
+    const isSelected = (selectedItem || '').includes(suggestion.label);
 
     return (
       <MenuItem
