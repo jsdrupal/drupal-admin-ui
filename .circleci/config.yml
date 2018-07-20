@@ -64,6 +64,8 @@ jobs:
                 cd drupal-admin-ui-demo
                 composer setup
                 composer devify
+                composer config repositories.repo-name path "../project/admin_ui_support"
+                composer require justafish/drupal-admin-ui-support
                 rm -rf drupal-admin-ui
                 mv ~/project drupal-admin-ui
         - save_cache:
@@ -167,7 +169,6 @@ jobs:
           rm -rf ~/admin_ui_support/.git
           mv ~/build-repo/.git ~/admin_ui_support/.git
           cd ~/admin_ui_support
-          cp ~/project/.circleci/drupal-admin-ui-support--composer.json composer.json
           git add .
           if ! git diff-index --quiet HEAD --; then
               git commit -m "Auto build from master"
