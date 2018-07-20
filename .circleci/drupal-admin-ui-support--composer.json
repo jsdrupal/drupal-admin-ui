@@ -1,9 +1,0 @@
-{
-  "name": "justafish/drupal-admin-ui-support",
-  "type": "drupal-module",
-  "description": "Drupal support module for the v fancy React admin UI",
-  "license": "GPL-2.0+",
-  "require": {
-    "php": "^5.5.9 || ^7.0"
-  }
-}
