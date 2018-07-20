@@ -118,3 +118,11 @@ If someone has made a pull request and you would like to add code to their branc
   .
   git push <your-fork> <branch-name>
   ```
+  
+  ## Development best practises
+  
+  ### Testing
+  
+  We do have both functional level testing ([nightwatch](http://nightwatchjs.org/)), but also more component/unit testing ((jest)[https://jestjs.io/]).
+  
+  If you struggle to decide where to add test coverage: Nightwatch should test the common path and jest is for detailed test coverage.
