@@ -11,6 +11,7 @@
         "drupal/openapi": "1.x-dev"
     },
     "require": {
-        "drupal/jsonapi": "^1.15"
+        "drupal/jsonapi": "^1.22",
+        "drupal/openapi": "1.x-dev"
     }
 }
