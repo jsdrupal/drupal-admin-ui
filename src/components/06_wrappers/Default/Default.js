@@ -11,7 +11,6 @@ import IconButton from '@material-ui/core/IconButton';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import Divider from '@material-ui/core/Divider';
 import ViewListIcon from '@material-ui/icons/ViewList';
 import BuildIcon from '@material-ui/icons/Build';
 import ColorLensIcon from '@material-ui/icons/ColorLens';
@@ -54,54 +53,52 @@ class Default extends React.Component {
   render = () => (
     <div className={styles.outerWrapper}>
       <CssBaseline />
-      <Drawer
-        variant="permanent"
-        classes={{
-          paper: `${styles.drawerPaper} ${!this.props.drawerOpen &&
-            styles.drawerPaperClose}`,
-        }}
-        open={this.props.drawerOpen}
-      >
-        <div className={styles.menuButtonWrapper}>
-          {this.props.drawerOpen ? (
-            <IconButton
-              onClick={this.props.closeDrawer}
-              className={styles.menuButton}
-            >
-              <ChevronLeftIcon />
-            </IconButton>
-          ) : (
-            <IconButton
-              color="inherit"
-              aria-label="open drawer"
-              onClick={this.props.openDrawer}
-              className={styles.menuButton}
-            >
-              <MenuIcon />
-            </IconButton>
-          )}
-        </div>
-        <Divider />
-        <List data-nightwatch="menu">
-          {this.props.menuLinks.map(({ link: menuLink }) => (
-            <ListItem
-              button
-              component={Link}
-              to={menuLink.url}
-              key={menuLink.url.replace(/\//g, '-')}
-            >
-              {iconMap[menuLink.url] ? (
-                <ListItemIcon>{iconMap[menuLink.url]}</ListItemIcon>
-              ) : (
-                ''
-              )}
-              <ListItemText primary={menuLink.title} />
-            </ListItem>
-          ))}
-        </List>
-        {this.props.menuLinks.length ? <Divider /> : ''}
-      </Drawer>
-
+      <div className={styles.menuColumn}>
+        {this.props.drawerOpen ? (
+          <IconButton
+            aria-label="close drawer"
+            onClick={this.props.closeDrawer}
+            className={styles.menuButton}
+          >
+            <ChevronLeftIcon />
+          </IconButton>
+        ) : (
+          <IconButton
+            color="inherit"
+            aria-label="open drawer"
+            onClick={this.props.openDrawer}
+            className={styles.menuButton}
+          >
+            <MenuIcon />
+          </IconButton>
+        )}
+        <Drawer
+          variant="permanent"
+          classes={{
+            paper: `${styles.drawerPaper} ${!this.props.drawerOpen &&
+              styles.drawerPaperClose}`,
+          }}
+          open={this.props.drawerOpen}
+        >
+          <List data-nightwatch="menu">
+            {this.props.menuLinks.map(({ link: menuLink }) => (
+              <ListItem key={menuLink.url.replace(/\//g, '-')}>
+                <Link
+                  component={Link}
+                  to={menuLink.url}
+                  aria-label={menuLink.title}
+                />
+                {iconMap[menuLink.url] ? (
+                  <ListItemIcon>{iconMap[menuLink.url]}</ListItemIcon>
+                ) : (
+                  ''
+                )}
+                <ListItemText primary={menuLink.title} />
+              </ListItem>
+            ))}
+          </List>
+        </Drawer>
+      </div>
       <main className={styles.main} id={styles.main}>
         <ErrorBoundary>
           {this.props.messages.map(message => (
@@ -118,9 +115,10 @@ styles = {
   menuButton: css`
     margin: 8px 12px;
   `,
-  menuButtonWrapper: css`
+  menuColumn: css`
     display: flex;
-    justify-content: flex-end;
+    flex-direction: column;
+    justify-content: flex-start;
   `,
   outerWrapper: css`
     height: 100%;
