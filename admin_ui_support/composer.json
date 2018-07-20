@@ -1,4 +1,8 @@
 {
+    "name": "justafish/drupal-admin-ui-support",
+    "type": "drupal-module",
+    "description": "Drupal support module for the v fancy React admin UI",
+    "license": "GPL-2.0+",
     "require-dev": {
         "cweagans/composer-patches": "^1.6",
         "behat/mink-selenium2-driver": "1.3.x-dev",
@@ -10,6 +14,7 @@
         "phpmetrics/phpmetrics": "^2.3"
     },
     "require": {
+        "php": "^5.5.9 || ^7.0",
         "drupal/jsonapi": "^1.22",
         "drupal/openapi": "1.x-dev"
     }
