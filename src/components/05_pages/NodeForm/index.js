@@ -45,7 +45,7 @@ class NodeForm extends React.Component {
   };
 
   static defaultProps = {
-    schema: null,
+    schema: false,
   };
 
   constructor(props) {
@@ -57,7 +57,7 @@ class NodeForm extends React.Component {
   }
 
   componentDidMount() {
-    this.props.requestSchema(this.props.entityTypeId, this.props.bundle);
+    this.props.requestSchema();
   }
 
   onFieldChange = fieldName => data => {
@@ -122,8 +122,8 @@ styles = {
   `,
 };
 
-const mapStateToProps = state => ({
-  schema: state.content.schema,
+const mapStateToProps = (state, { bundle, entityTypeId }) => ({
+  schema: state.content.schema[`${entityTypeId}--${bundle}`],
 });
 
 export default connect(

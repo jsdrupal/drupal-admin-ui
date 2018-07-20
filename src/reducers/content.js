@@ -7,6 +7,7 @@ import {
 export const initialState = {
   contentList: [],
   links: {},
+  schema: {},
 };
 
 export default (state = initialState, action) => {

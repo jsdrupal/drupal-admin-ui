@@ -10,24 +10,23 @@ import { MESSAGE_ERROR } from '../constants/messages';
 import { setMessage } from './application';
 
 export const SCHEMA_REQUESTED = 'SCHEMA_REQUESTED';
-export const requestSchema = (entity, bundle) => ({
+export const requestSchema = () => ({
   type: SCHEMA_REQUESTED,
-  payload: { entity, bundle },
+  payload: {},
 });
 
 export const SCHEMA_LOADED = 'SCHEMA_LOADED';
-function* loadSchema({ payload: { entity, bundle } }) {
+function* loadSchema() {
   try {
     yield put(resetLoading());
     yield put(showLoading());
 
     // @todo Can we filter this? Fetching the entire schema seems silly.
-    const fullSchema = yield call(api, 'schema');
-
+    const { definitions: schema } = yield call(api, 'schema');
     yield put({
       type: SCHEMA_LOADED,
       payload: {
-        schema: fullSchema.definitions[`${entity}--${bundle}`],
+        schema,
       },
     });
   } catch (error) {
