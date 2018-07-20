@@ -1,9 +1,9 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { css } from 'emotion';
-import Widgets from './Widgets';
-
 import Paper from '@material-ui/core/Paper';
+
+import Widgets from './Widgets';
 import PageTitle from '../../02_atoms/PageTitle';
 
 const lazyFunction = f => (props, propName, componentName, ...rest) =>

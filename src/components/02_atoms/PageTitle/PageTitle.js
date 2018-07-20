@@ -13,7 +13,9 @@ const styles = {
 };
 
 const PageTitle = ({ children }) => (
-  <Typography variant="headline" classes={{ root: styles.title }}>{children}</Typography>
+  <Typography variant="headline" classes={{ root: styles.title }}>
+    {children}
+  </Typography>
 );
 
 PageTitle.propTypes = {
@@ -25,6 +27,8 @@ function reducePropsToState(propsList) {
   if (innermostProps) {
     return innermostProps.children;
   }
+
+  return false;
 }
 
 function handleStateChangeOnClient(title) {
