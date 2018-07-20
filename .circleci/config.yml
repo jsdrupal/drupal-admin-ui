@@ -64,7 +64,7 @@ jobs:
                 cd drupal-admin-ui-demo
                 composer setup
                 composer devify
-                composer config repositories.repo-name path "./drupal-admin-ui/admin_ui_support"
+                composer config repositories.repo-name path "../project/admin_ui_support"
                 composer require justafish/drupal-admin-ui-support
                 rm -rf drupal-admin-ui
                 mv ~/project drupal-admin-ui
