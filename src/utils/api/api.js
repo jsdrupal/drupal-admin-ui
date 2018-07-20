@@ -110,7 +110,7 @@ async function api(
       break;
     }
     case 'taxonomy_term': {
-      url = `/jsonapi/taxonomy_term/${parameters.termType}`;
+      url = `/jsonapi/taxonomy_term/${parameters.type}`;
       options.headers.Accept = 'application/vnd.api+json';
       break;
     }

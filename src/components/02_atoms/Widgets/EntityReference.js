@@ -16,7 +16,8 @@ class EntityReference extends React.Component {
   static propTypes = {
     ...WidgetPropTypes,
     inputProps: PropTypes.shape({
-      resourceIdentifer: PropTypes.string,
+      bundle: PropTypes.string,
+      type: PropTypes.string,
     }).isRequired,
   };
 
@@ -42,7 +43,8 @@ class EntityReference extends React.Component {
 
   handleInputChange = event => {
     this.setState({ loading: true, inputValue: event.target.value }, () => {
-      api('taxonomy_term', {
+      const { bundle, type } = this.props.inputProps;
+      api(bundle, {
         queryString: {
           filter: {
             name: {
@@ -55,12 +57,12 @@ class EntityReference extends React.Component {
           },
         },
         parameters: {
-          termType: this.props.inputProps.resourceIdentifer,
+          type,
         },
-      }).then(({ data: terms }) => {
+      }).then(({ data: items }) => {
         this.setState({
           loading: false,
-          suggestions: terms.map(({ attributes: { name: label } }) => ({
+          suggestions: items.map(({ attributes: { name: label } }) => ({
             label,
           })),
         });
