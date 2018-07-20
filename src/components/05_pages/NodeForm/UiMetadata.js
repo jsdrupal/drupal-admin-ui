@@ -7,9 +7,6 @@ const UiMetadata = {
   field_author: {
     widget: 'entity_reference_autocomplete',
     constraints: [],
-    inputProps: {
-      bundle: 'user',
-    },
   },
   created: {
     widget: 'timestamp_datetime',
@@ -54,10 +51,6 @@ const UiMetadata = {
   field_tags: {
     widget: 'entity_reference_autocomplete',
     constraints: [],
-    inputProps: {
-      bundle: 'taxonomy_term',
-      type: 'recipe_category',
-    },
   },
 };
 

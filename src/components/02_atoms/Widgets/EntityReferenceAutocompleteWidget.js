@@ -41,17 +41,23 @@ class EntityReferenceAutocompleteWidget extends React.Component {
 
   handleInputChange = event => {
     this.setState({ loading: true, inputValue: event.target.value }, () => {
-      const { bundle, type } = this.props.inputProps;
-      this.fetchSuggestedEntities(bundle, type, this.state.inputValue).then(
-        ({ data: items }) => {
-          this.setState({
-            loading: false,
-            suggestions: items.map(({ attributes: { name: label } }) => ({
-              label,
-            })),
-          });
-        },
-      );
+      // @todo Move this call to the mounting component?
+      const [
+        entityTypeId,
+        [bundle],
+      ] = this.determineEntityTypeAndBundlesFromSchema(this.props.schema);
+      this.fetchSuggestedEntities(
+        entityTypeId,
+        bundle,
+        this.state.inputValue,
+      ).then(({ data: items }) => {
+        this.setState({
+          loading: false,
+          suggestions: items.map(({ attributes: { name: label } }) => ({
+            label,
+          })),
+        });
+      });
     });
   };
 
@@ -132,6 +138,21 @@ class EntityReferenceAutocompleteWidget extends React.Component {
       {...other}
     />
   );
+
+  determineEntityTypeAndBundlesFromSchema = schema => {
+    // For some reason different entity references have different schema.
+    const resourceNames = (
+      schema.properties.data.items || schema.properties.data
+    ).properties.type.enum;
+    return resourceNames
+      .map(name => name.split('--'))
+      .reduce(([, bundles = []], [entityTypeId, bundle]) => {
+        return [
+          entityTypeId,
+          [...bundles, entityTypeId === bundle ? undefined : bundle],
+        ];
+      }, []);
+  };
 
   render() {
     const { inputValue, selectedItems } = this.state;
