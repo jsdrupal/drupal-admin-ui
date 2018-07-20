@@ -114,6 +114,12 @@ async function api(
       options.headers.Accept = 'application/vnd.api+json';
       break;
     }
+
+    case 'user': {
+      url = `/jsonapi/user`;
+      options.headers.Accept = 'application/vnd.api+json';
+      break;
+    }
     default:
       break;
   }

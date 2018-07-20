@@ -4,6 +4,13 @@ const UiMetadata = {
     widget: 'string_textfield',
     constraints: [],
   },
+  field_author: {
+    widget: 'entity_reference_autocomplete',
+    constraints: [],
+    inputProps: {
+      bundle: 'user',
+    },
+  },
   created: {
     widget: 'timestamp_datetime',
     constraints: [],
