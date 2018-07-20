@@ -22,18 +22,18 @@ PageTitle.propTypes = {
   children: PropTypes.node.isRequired,
 };
 
-function reducePropsToState(propsList) {
+const reducePropsToState = propsList => {
   const innermostProps = propsList[propsList.length - 1];
   if (innermostProps) {
     return innermostProps.children;
   }
 
   return false;
-}
+};
 
-function handleStateChangeOnClient(title) {
+const handleStateChangeOnClient = title => {
   document.title = title || '';
-}
+};
 
 export default withSideEffect(reducePropsToState, handleStateChangeOnClient)(
   PageTitle,
