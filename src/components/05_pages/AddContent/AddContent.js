@@ -31,7 +31,7 @@ export default class extends Component {
   render = () => (
     <div className={styles.root}>
       <Paper>
-        <List>
+        <List data-nightwatch="node-type-list">
           {Object.keys(this.props.contentTypes).map(contentType => (
             <ListItem
               button
