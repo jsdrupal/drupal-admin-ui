@@ -87,7 +87,11 @@ class Default extends React.Component {
                 component="li"
                 button
               >
-                <Link to={menuLink.url} className={styles.menuLink}>
+                <Link
+                  to={menuLink.url}
+                  className={styles.menuLink}
+                  role="button"
+                >
                   {iconMap[menuLink.url] ? (
                     <ListItemIcon>{iconMap[menuLink.url]}</ListItemIcon>
                   ) : (
