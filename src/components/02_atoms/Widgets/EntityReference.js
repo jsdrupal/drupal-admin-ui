@@ -45,6 +45,8 @@ class EntityReference extends React.Component {
       api(bundle, {
         queryString: {
           filter: {
+            // @todo On the longrun fetch the label_key from the entity type
+            //   definition.
             name: {
               condition: {
                 path: 'name',
