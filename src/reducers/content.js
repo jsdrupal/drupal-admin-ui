@@ -1,4 +1,8 @@
-import { CONTENT_LOADED, CONTENT_DELETE } from '../actions/content';
+import {
+  CONTENT_LOADED,
+  CONTENT_DELETE,
+  SCHEMA_LOADED,
+} from '../actions/content';
 
 export const initialState = {
   contentList: [],
@@ -36,6 +40,13 @@ export default (state = initialState, action) => {
         contentList: state.contentList.filter(
           content => content.id !== action.payload.content.id,
         ),
+      };
+    }
+
+    case SCHEMA_LOADED: {
+      return {
+        ...state,
+        schema: action.payload.schema,
       };
     }
 
