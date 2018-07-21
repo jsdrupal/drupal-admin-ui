@@ -6,7 +6,6 @@ import Button from '@material-ui/core/Button';
 import { css } from 'emotion';
 import Paper from '@material-ui/core/Paper';
 
-
 import Widgets from './Widgets';
 import PageTitle from '../../02_atoms/PageTitle';
 
@@ -57,24 +56,28 @@ class NodeForm extends React.Component {
     schema: false,
   };
 
-  constructor(props) {
-    super(props);
+  static getDerivedStateFromProps(props, prevState) {
+    if (!props.schema) {
+      return prevState;
+    }
 
-    this.state = {
+    const state = {
+      ...prevState,
       // @todo figure out relationships.
-      entity: this.props.entity || {
-        ...createEntity(this.props.schema),
+      entity: props.entity || {
+        ...createEntity(props.schema),
         relationships: {},
       },
     };
     // Just contain values which are in the ui metadata.
-    this.state.entity.attributes = Object.entries(this.state.entity.attributes)
+    state.entity.data.attributes = Object.entries(state.entity.data.attributes)
       .filter(([key]) =>
-        Object.keys(this.props.uiMetadata)
+        Object.keys(props.uiMetadata)
           .concat(['type'])
           .includes(key),
       )
       .reduce((agg, [key, value]) => ({ ...agg, [key]: value }), {});
+    return state;
   }
 
   componentDidMount() {
@@ -135,8 +138,8 @@ class NodeForm extends React.Component {
   };
 
   getSchemaInfo = (schema, fieldName) =>
-    this.props.schema.properties.attributes.properties[fieldName] ||
-    this.props.schema.properties.relationships.properties[fieldName];
+    this.props.schema.properties.data.properties.attributes.properties[fieldName] ||
+    this.props.schema.properties.data.properties.relationships.properties[fieldName];
 
   render() {
     return (
@@ -156,25 +159,25 @@ class NodeForm extends React.Component {
                       fieldName,
                     );
 
-              return React.createElement(this.props.widgets[widget], {
-                key: fieldName,
-                entityTypeId: this.props.entityTypeId,
-                bundle: this.props.bundle,
-                fieldName,
-                value: this.state.entity[fieldName],
-                label: fieldSchema && fieldSchema.title,
-                schema: fieldSchema,
-                onChange: this.onFieldChange(fieldName),
-                inputProps,
-              });
-            }
-            return null;
-          })
-          .filter(x => x)}
-            <Button variant="contained" color="primary" onClick={this.onSave}>
-              Save
-            </Button>
-          </form>
+                    return React.createElement(this.props.widgets[widget], {
+                      key: fieldName,
+                      entityTypeId: this.props.entityTypeId,
+                      bundle: this.props.bundle,
+                      fieldName,
+                      value: this.state.entity[fieldName],
+                      label: fieldSchema && fieldSchema.title,
+                      schema: fieldSchema,
+                      onChange: this.onFieldChange(fieldName),
+                      inputProps,
+                    });
+                  }
+                  return null;
+                })
+                .filter(x => x)}
+              <Button variant="contained" color="primary" onClick={this.onSave}>
+                Save
+              </Button>
+            </form>
           </Paper>
         )}
       </Fragment>
