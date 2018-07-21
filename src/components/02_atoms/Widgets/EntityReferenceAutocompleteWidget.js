@@ -61,8 +61,8 @@ class EntityReferenceAutocompleteWidget extends React.Component {
     });
   };
 
-  fetchSuggestedEntities = (bundle, type, input) => {
-    return api(bundle, {
+  fetchSuggestedEntities = (bundle, type, input) =>
+    api(bundle, {
       queryString: {
         filter: {
           // @todo On the longrun fetch the label_key from the entity type
@@ -80,7 +80,6 @@ class EntityReferenceAutocompleteWidget extends React.Component {
         type,
       },
     });
-  };
 
   handleKeyDown = event => {
     const { inputValue, selectedItems } = this.state;
@@ -101,6 +100,22 @@ class EntityReferenceAutocompleteWidget extends React.Component {
       selectedItems.splice(selectedItems.indexOf(item), 1);
       return { selectedItems };
     });
+  };
+
+  determineEntityTypeAndBundlesFromSchema = schema => {
+    // For some reason different entity references have different schema.
+    const resourceNames = (
+      schema.properties.data.items || schema.properties.data
+    ).properties.type.enum;
+    return resourceNames
+      .map(name => name.split('--'))
+      .reduce(
+        ([, bundles = []], [entityTypeId, bundle]) => [
+          entityTypeId,
+          [...bundles, entityTypeId === bundle ? undefined : bundle],
+        ],
+        [],
+      );
   };
 
   renderSuggestion = ({
@@ -138,21 +153,6 @@ class EntityReferenceAutocompleteWidget extends React.Component {
       {...other}
     />
   );
-
-  determineEntityTypeAndBundlesFromSchema = schema => {
-    // For some reason different entity references have different schema.
-    const resourceNames = (
-      schema.properties.data.items || schema.properties.data
-    ).properties.type.enum;
-    return resourceNames
-      .map(name => name.split('--'))
-      .reduce(([, bundles = []], [entityTypeId, bundle]) => {
-        return [
-          entityTypeId,
-          [...bundles, entityTypeId === bundle ? undefined : bundle],
-        ];
-      }, []);
-  };
 
   render() {
     const { inputValue, selectedItems } = this.state;
