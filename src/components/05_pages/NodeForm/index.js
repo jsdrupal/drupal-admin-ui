@@ -1,11 +1,16 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { withStyles } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import { css } from 'emotion';
+import Paper from '@material-ui/core/Paper';
+
 
 import Widgets from './Widgets';
+import PageTitle from '../../02_atoms/PageTitle';
+
+import { requestSchema } from '../../../actions/content';
 import { createEntity } from '../../../utils/api/schema';
 import { contentAdd } from '../../../actions/content';
 
@@ -22,13 +27,7 @@ schemaType = PropTypes.shape({
   properties: PropTypes.objectOf(lazyFunction(lazySchemaType)),
 }).isRequired;
 
-const styles = {
-  container: css`
-    display: flex;
-    flex-wrap: wrap;
-    flex-direction: column;
-  `,
-};
+let styles;
 
 class NodeForm extends React.Component {
   static propTypes = {
@@ -50,11 +49,12 @@ class NodeForm extends React.Component {
     bundleType: PropTypes.string.isRequired,
     entityTypeId: PropTypes.string.isRequired,
     bundle: PropTypes.string.isRequired,
+    requestSchema: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
-    schema: {},
     entity: null,
+    schema: false,
   };
 
   constructor(props) {
@@ -75,6 +75,10 @@ class NodeForm extends React.Component {
           .includes(key),
       )
       .reduce((agg, [key, value]) => ({ ...agg, [key]: value }), {});
+  }
+
+  componentDidMount() {
+    this.props.requestSchema();
   }
 
   onFieldChange = fieldName => data => {
@@ -136,28 +140,30 @@ class NodeForm extends React.Component {
 
   render() {
     return (
-      <form className={styles.container}>
-        {Object.entries(this.props.uiMetadata)
-          .map(([fieldName, { widget, inputProps }]) => {
-            if (Widgets[widget]) {
-              // @todo We need to pass along props.
-              // @todo How do we handle cardinality together with jsonapi
-              // making a distinction between single value fields and multi value fields.
-              const fieldSchema = this.getSchemaInfo(
-                this.props.schema,
-                fieldName,
-              );
+      <Fragment>
+        <PageTitle>Create {this.props.bundle}</PageTitle>
+        {this.props.schema && (
+          <Paper>
+            <form className={styles.container}>
+              {Object.entries(this.props.uiMetadata)
+                .map(([fieldName, { widget, inputProps }]) => {
+                  if (Widgets[widget]) {
+                    // @todo We need to pass along props.
+                    // @todo How do we handle cardinality together with jsonapi
+                    // making a distinction between single value fields and multi value fields.
+                    const fieldSchema = this.getSchemaInfo(
+                      this.props.schema,
+                      fieldName,
+                    );
 
               return React.createElement(this.props.widgets[widget], {
                 key: fieldName,
-
                 entityTypeId: this.props.entityTypeId,
                 bundle: this.props.bundle,
                 fieldName,
                 value: this.state.entity[fieldName],
                 label: fieldSchema && fieldSchema.title,
                 schema: fieldSchema,
-
                 onChange: this.onFieldChange(fieldName),
                 inputProps,
               });
@@ -165,20 +171,33 @@ class NodeForm extends React.Component {
             return null;
           })
           .filter(x => x)}
-
-        <Button variant="contained" color="primary" onClick={this.onSave}>
-          Save
-        </Button>
-      </form>
+            <Button variant="contained" color="primary" onClick={this.onSave}>
+              Save
+            </Button>
+          </form>
+          </Paper>
+        )}
+      </Fragment>
     );
   }
 }
 
-export default withStyles(styles)(
-  connect(
-    () => ({}),
-    {
-      contentAdd,
-    },
-  )(NodeForm),
-);
+styles = {
+  container: css`
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+  `,
+};
+
+const mapStateToProps = (state, { bundle, entityTypeId }) => ({
+  schema: state.content.schema[`${entityTypeId}--${bundle}`],
+});
+
+export default connect(
+  mapStateToProps,
+  {
+    requestSchema,
+    contentAdd,
+  },
+)(NodeForm);
