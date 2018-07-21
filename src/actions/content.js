@@ -9,6 +9,33 @@ import api from '../utils/api/api';
 import { MESSAGE_ERROR } from '../constants/messages';
 import { setMessage } from './application';
 
+export const SCHEMA_REQUESTED = 'SCHEMA_REQUESTED';
+export const requestSchema = () => ({
+  type: SCHEMA_REQUESTED,
+  payload: {},
+});
+
+export const SCHEMA_LOADED = 'SCHEMA_LOADED';
+function* loadSchema() {
+  try {
+    yield put(resetLoading());
+    yield put(showLoading());
+
+    // @todo Can we filter this? Fetching the entire schema seems silly.
+    const { definitions: schema } = yield call(api, 'schema');
+    yield put({
+      type: SCHEMA_LOADED,
+      payload: {
+        schema,
+      },
+    });
+  } catch (error) {
+    yield put(setMessage(error.toString(), MESSAGE_ERROR));
+  } finally {
+    yield put(hideLoading());
+  }
+}
+
 export const CONTENT_REQUESTED = 'CONTENT_REQUESTED';
 export const requestContent = (
   options = { contentTypes: [], status: null },
@@ -270,6 +297,7 @@ function* deleteContent({ payload: { content } }) {
 }
 
 export default function* rootSaga() {
+  yield takeLatest(SCHEMA_REQUESTED, loadSchema);
   yield takeLatest(CONTENT_REQUESTED, loadContent);
   yield takeLatest(ACTION_EXECUTE, executeAction);
   yield takeLatest(CONTENT_SAVE, saveContent);
