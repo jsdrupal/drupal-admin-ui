@@ -31,6 +31,7 @@ import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
 
 import OpsModalButton from '../../02_atoms/OpsModalButton/OpsModalButton';
+import PageTitle from '../../02_atoms/PageTitle';
 
 import {
   requestContentTypes,
@@ -181,6 +182,7 @@ class Content extends Component {
 
     return (
       <div className={styles.root}>
+        <PageTitle>Content</PageTitle>
         <Paper>
           <div className={styles.filters}>
             <TextField

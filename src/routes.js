@@ -1,5 +1,5 @@
 import React from 'react';
-import AddContent from './components/05_pages/AddContent/AddContent';
+import AddContent from './components/05_pages/AddContent';
 import Content from './components/05_pages/Content/Content';
 import Permissions from './components/05_pages/Permissions/Permissions';
 import Roles from './components/05_pages/Roles';
