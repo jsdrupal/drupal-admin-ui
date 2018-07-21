@@ -109,6 +109,10 @@ async function api(
       );
       break;
     }
+    case 'schema': {
+      url = '/openapi/jsonapi';
+      break;
+    }
     default:
       break;
   }
