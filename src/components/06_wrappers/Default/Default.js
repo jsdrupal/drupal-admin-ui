@@ -11,6 +11,7 @@ import IconButton from '@material-ui/core/IconButton';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
+import Divider from '@material-ui/core/Divider';
 import ViewListIcon from '@material-ui/icons/ViewList';
 import BuildIcon from '@material-ui/icons/Build';
 import ColorLensIcon from '@material-ui/icons/ColorLens';
@@ -53,33 +54,34 @@ class Default extends React.Component {
   render = () => (
     <div className={styles.outerWrapper}>
       <CssBaseline />
-      <div className={styles.menuColumn}>
-        {this.props.drawerOpen ? (
-          <IconButton
-            aria-label="close drawer"
-            onClick={this.props.closeDrawer}
-            className={styles.menuButton}
-          >
-            <ChevronLeftIcon />
-          </IconButton>
-        ) : (
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            onClick={this.props.openDrawer}
-            className={styles.menuButton}
-          >
-            <MenuIcon />
-          </IconButton>
-        )}
-        <Drawer
-          variant="permanent"
-          classes={{
-            paper: `${styles.drawerPaper} ${!this.props.drawerOpen &&
-              styles.drawerPaperClose}`,
-          }}
-          open={this.props.drawerOpen}
-        >
+      <Drawer
+        variant="permanent"
+        classes={{
+          paper: `${styles.drawerPaper} ${!this.props.drawerOpen &&
+            styles.drawerPaperClose}`,
+        }}
+        open={this.props.drawerOpen}
+      >
+        <div className={styles.menuButtonWrapper}>
+          {this.props.drawerOpen ? (
+            <IconButton
+              aria-label="close drawer"
+              onClick={this.props.closeDrawer}
+              className={styles.menuButton}
+            >
+              <ChevronLeftIcon />
+            </IconButton>
+          ) : (
+            <IconButton
+              color="inherit"
+              aria-label="open drawer"
+              onClick={this.props.openDrawer}
+              className={styles.menuButton}
+            >
+              <MenuIcon />
+            </IconButton>
+          )}
+          <Divider />
           <List data-nightwatch="menu">
             {this.props.menuLinks.map(({ link: menuLink }) => (
               <ListItem
@@ -102,8 +104,10 @@ class Default extends React.Component {
               </ListItem>
             ))}
           </List>
-        </Drawer>
-      </div>
+          {this.props.menuLinks.length ? <Divider /> : ''}
+        </div>
+      </Drawer>
+
       <main className={styles.main} id={styles.main}>
         <ErrorBoundary>
           {this.props.messages.map(message => (
@@ -124,10 +128,9 @@ styles = {
   menuButton: css`
     margin: 8px 12px;
   `,
-  menuColumn: css`
+  menuWrapper: css`
     display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
+    justify-content: flex-end;
   `,
   outerWrapper: css`
     height: 100%;
