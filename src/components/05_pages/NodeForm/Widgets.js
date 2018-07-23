@@ -4,7 +4,7 @@ import StringTextfield from '../../02_atoms/Widgets/StringTextfield';
 import BooleanCheckbox from '../../02_atoms/Widgets/BooleanCheckbox';
 import TimestampDatetime from '../../02_atoms/Widgets/TimestampDatetime';
 import FileUploadWidget from '../../02_atoms/Widgets/FileUploadWidget';
-import EntityReferenceAutocompleteWidget from '../../02_atoms/Widgets/EntityReferenceAutocompleteWidget';
+import EntityReferenceAutocomplete from '../../02_atoms/Widgets/EntityReferenceAutocomplete';
 
 // @todo How do we do extensibility from modules, maybe a build step?
 const widgets = {
@@ -14,7 +14,7 @@ const widgets = {
   boolean_checkbox: BooleanCheckbox,
   timestamp_datetime: TimestampDatetime,
   image_image: FileUploadWidget,
-  entity_reference_autocomplete: EntityReferenceAutocompleteWidget,
+  entity_reference_autocomplete: EntityReferenceAutocomplete,
 };
 
 export default widgets;
