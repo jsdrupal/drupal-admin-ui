@@ -2,7 +2,11 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { css } from 'emotion';
+
+import FormControl from '@material-ui/core/FormControl';
 import Paper from '@material-ui/core/Paper';
+import Divider from '@material-ui/core/Divider';
+import Button from '@material-ui/core/Button';
 
 import Widgets from './Widgets';
 import PageTitle from '../../02_atoms/PageTitle';
@@ -79,34 +83,40 @@ class NodeForm extends React.Component {
         <PageTitle>Create {this.props.bundle}</PageTitle>
         {this.props.schema && (
           <Paper>
-            <form className={styles.container}>
-              {Object.entries(this.props.uiMetadata)
-                .map(([fieldName, { widget, inputProps }]) => {
-                  if (Widgets[widget]) {
-                    // @todo We need to pass along props.
-                    // @todo How do we handle cardinality together with jsonapi
-                    // making a distinction between single value fields and multi value fields.
-                    const fieldSchema = this.getSchemaInfo(
-                      this.props.schema,
-                      fieldName,
-                    );
+            <div className={styles.container}>
+              <FormControl margin="normal" fullWidth>
+                {Object.entries(this.props.uiMetadata)
+                  .map(([fieldName, { widget, inputProps }]) => {
+                    if (Widgets[widget]) {
+                      // @todo We need to pass along props.
+                      // @todo How do we handle cardinality together with jsonapi
+                      // making a distinction between single value fields and multi value fields.
+                      const fieldSchema = this.getSchemaInfo(
+                        this.props.schema,
+                        fieldName,
+                      );
 
-                    return React.createElement(this.props.widgets[widget], {
-                      key: fieldName,
-                      entityTypeId: this.props.entityTypeId,
-                      bundle: this.props.bundle,
-                      fieldName,
-                      value: this.state.entity[fieldName],
-                      label: fieldSchema && fieldSchema.title,
-                      schema: fieldSchema,
-                      onChange: this.onFieldChange(fieldName),
-                      inputProps,
-                    });
-                  }
-                  return null;
-                })
-                .filter(x => x)}
-            </form>
+                      return React.createElement(this.props.widgets[widget], {
+                        key: fieldName,
+                        entityTypeId: this.props.entityTypeId,
+                        bundle: this.props.bundle,
+                        fieldName,
+                        value: this.state.entity[fieldName],
+                        label: fieldSchema && fieldSchema.title,
+                        schema: fieldSchema,
+                        onChange: this.onFieldChange(fieldName),
+                        inputProps,
+                      });
+                    }
+                    return null;
+                  })
+                  .filter(x => x)}
+              </FormControl>
+              <Divider classes={{ root: styles.divider }} />
+              <Button variant="contained" color="primary" onClick={() => {}}>
+                Save
+              </Button>
+            </div>
           </Paper>
         )}
       </Fragment>
@@ -116,9 +126,10 @@ class NodeForm extends React.Component {
 
 styles = {
   container: css`
-    display: flex;
-    flex-wrap: wrap;
-    flex-direction: column;
+    padding: 5px 50px 40px;
+  `,
+  divider: css`
+    margin: 30px 0;
   `,
 };
 
