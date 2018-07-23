@@ -5,7 +5,9 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import WidgetPropTypes from '../../05_pages/NodeForm/WidgetPropTypes';
 
 const BooleanCheckbox = props => {
-  const { onChange, label, id, value, ...checkboxProps } = props;
+  const { onChange, label, value } = props;
+  const checkboxProps = Object.assign({}, props);
+  delete checkboxProps.entityTypeId;
 
   return (
     <FormControlLabel
