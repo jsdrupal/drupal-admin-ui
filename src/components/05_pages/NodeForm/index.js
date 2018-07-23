@@ -74,8 +74,8 @@ class NodeForm extends React.Component {
   };
 
   getSchemaInfo = (schema, fieldName) =>
-    this.props.schema.properties.attributes.properties[fieldName] ||
-    this.props.schema.properties.relationships.properties[fieldName];
+    schema.properties.data.properties.attributes.properties[fieldName] ||
+    schema.properties.data.properties.relationships.properties[fieldName];
 
   render() {
     return (
