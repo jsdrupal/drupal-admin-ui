@@ -5,7 +5,7 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import WidgetPropTypes from '../../05_pages/NodeForm/WidgetPropTypes';
 
 const BooleanCheckbox = props => {
-  const { entityTypeId, onChange, label, value, ...checkboxProps } = props;
+  const { onChange, label, value } = props;
 
   return (
     <FormControlLabel
@@ -16,7 +16,6 @@ const BooleanCheckbox = props => {
           onChange={event => onChange(event.target.checked)}
           margin="normal"
           value={value}
-          {...checkboxProps}
         />
       }
       label={label}
