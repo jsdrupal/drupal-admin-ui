@@ -81,31 +81,27 @@ class Default extends React.Component {
               <MenuIcon />
             </IconButton>
           )}
-          <Divider />
-          <List data-nightwatch="menu">
-            {this.props.menuLinks.map(({ link: menuLink }) => (
-              <ListItem
-                key={menuLink.url.replace(/\//g, '-')}
-                component="li"
-                button
-              >
-                <Link
-                  to={menuLink.url}
-                  className={styles.menuLink}
-                  role="button"
-                >
-                  {iconMap[menuLink.url] ? (
-                    <ListItemIcon>{iconMap[menuLink.url]}</ListItemIcon>
-                  ) : (
-                    ''
-                  )}
-                  <ListItemText primary={menuLink.title} />
-                </Link>
-              </ListItem>
-            ))}
-          </List>
-          {this.props.menuLinks.length ? <Divider /> : ''}
         </div>
+        <Divider />
+        <List data-nightwatch="menu">
+          {this.props.menuLinks.map(({ link: menuLink }) => (
+            <ListItem
+              key={menuLink.url.replace(/\//g, '-')}
+              component="li"
+              button
+            >
+              <Link to={menuLink.url} className={styles.menuLink} role="button">
+                {iconMap[menuLink.url] ? (
+                  <ListItemIcon>{iconMap[menuLink.url]}</ListItemIcon>
+                ) : (
+                  ''
+                )}
+                <ListItemText primary={menuLink.title} />
+              </Link>
+            </ListItem>
+          ))}
+        </List>
+        {this.props.menuLinks.length ? <Divider /> : ''}
       </Drawer>
 
       <main className={styles.main} id={styles.main}>
@@ -128,7 +124,7 @@ styles = {
   menuButton: css`
     margin: 8px 12px;
   `,
-  menuWrapper: css`
+  menuButtonWrapper: css`
     display: flex;
     justify-content: flex-end;
   `,
