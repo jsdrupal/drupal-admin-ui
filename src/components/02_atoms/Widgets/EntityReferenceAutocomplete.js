@@ -24,19 +24,24 @@ class EntityReferenceAutocomplete extends React.Component {
   state = {
     inputValue: '',
     selectedItems: [],
-    suggestions: [],
+    suggestions: new Map(),
     loading: false,
   };
 
   handleChange = item => {
     let { selectedItems } = this.state;
 
-    selectedItems = Array.from(new Set(selectedItems).add(item));
+    selectedItems = Array.from(new Set(selectedItems).add(item.id));
 
-    this.setState({
-      inputValue: '',
-      selectedItems,
-    });
+    this.setState(
+      {
+        inputValue: '',
+        selectedItems,
+      },
+      () => {
+        this.props.onChange(selectedItems);
+      },
+    );
   };
 
   handleInputChange = event => {
@@ -53,9 +58,12 @@ class EntityReferenceAutocomplete extends React.Component {
       ).then(({ data: items }) => {
         this.setState({
           loading: false,
-          suggestions: items.map(({ attributes: { name: label } }) => ({
-            label,
-          })),
+          suggestions: new Map(
+            items.map(({ id, attributes: { name: label } }) => [
+              id,
+              { id, label },
+            ]),
+          ),
         });
       });
     });
@@ -94,10 +102,10 @@ class EntityReferenceAutocomplete extends React.Component {
     }
   };
 
-  handleDelete = item => () => {
+  handleDelete = id => () => {
     this.setState(state => {
       const selectedItems = [...state.selectedItems];
-      selectedItems.splice(selectedItems.indexOf(item), 1);
+      selectedItems.splice(selectedItems.indexOf(id), 1);
       return { selectedItems };
     });
   };
@@ -126,12 +134,12 @@ class EntityReferenceAutocomplete extends React.Component {
     selectedItem,
   }) => {
     const isHighlighted = highlightedIndex === index;
-    const isSelected = (selectedItem || '').includes(suggestion.label);
+    const isSelected = (selectedItem || '').includes(suggestion.id);
 
     return (
       <MenuItem
         {...itemProps}
-        key={suggestion.label}
+        key={suggestion.id}
         selected={isHighlighted}
         component="div"
         style={{
@@ -162,6 +170,7 @@ class EntityReferenceAutocomplete extends React.Component {
         inputValue={inputValue}
         onChange={this.handleChange}
         selectedItem={selectedItems}
+        itemToString={item => (item ? item.label : '')}
       >
         {({
           getInputProps,
@@ -176,13 +185,13 @@ class EntityReferenceAutocomplete extends React.Component {
               label: this.props.label,
               InputProps: getInputProps({
                 disabled: this.state.loading,
-                startAdornment: selectedItems.map(item => (
+                startAdornment: selectedItems.map(id => (
                   <Chip
-                    key={item}
+                    key={id}
                     tabIndex={-1}
-                    label={item}
+                    label={this.state.suggestions.get(id).label}
                     className="chip"
-                    onDelete={this.handleDelete(item)}
+                    onDelete={this.handleDelete(id)}
                   />
                 )),
                 onChange: this.handleInputChange,
@@ -194,14 +203,15 @@ class EntityReferenceAutocomplete extends React.Component {
             {isOpen ? (
               <Paper className="paper" square>
                 {!this.state.loading &&
-                  this.state.suggestions.map((suggestion, index) =>
-                    this.renderSuggestion({
-                      suggestion,
-                      index,
-                      itemProps: getItemProps({ item: suggestion.label }),
-                      highlightedIndex,
-                      selectedItem,
-                    }),
+                  Array.from(this.state.suggestions.values()).map(
+                    (suggestion, index) =>
+                      this.renderSuggestion({
+                        suggestion,
+                        index,
+                        itemProps: getItemProps({ item: suggestion }),
+                        highlightedIndex,
+                        selectedItem,
+                      }),
                   )}
               </Paper>
             ) : null}
