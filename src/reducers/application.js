@@ -135,8 +135,7 @@ export default (state = initialState, action) => {
         actions: action.payload.actions.data,
       };
     }
-    default: {
-      return { ...state };
-    }
+    default:
+      return state;
   }
 };
