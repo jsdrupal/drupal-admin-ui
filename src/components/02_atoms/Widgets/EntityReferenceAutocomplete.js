@@ -23,26 +23,21 @@ class EntityReferenceAutocomplete extends React.Component {
 
   state = {
     inputValue: '',
-    selectedItems: [],
+    selectedItems: {},
     suggestions: new Map(),
     loading: false,
   };
 
-  handleChange = item => {
-    let { selectedItems } = this.state;
-
-    selectedItems = Array.from(new Set(selectedItems).add(item.id));
-
+  handleChange = ({ id, label }) =>
     this.setState(
-      {
+      ({ selectedItems }) => ({
         inputValue: '',
-        selectedItems,
-      },
+        selectedItems: { ...selectedItems, ...{ [id]: { id, label } } },
+      }),
       () => {
-        this.props.onChange(selectedItems);
+        this.props.onChange(this.state.selectedItems);
       },
     );
-  };
 
   handleInputChange = event => {
     this.setState({ loading: true, inputValue: event.target.value }, () => {
@@ -104,8 +99,8 @@ class EntityReferenceAutocomplete extends React.Component {
 
   handleDelete = id => () => {
     this.setState(state => {
-      const selectedItems = [...state.selectedItems];
-      selectedItems.splice(selectedItems.indexOf(id), 1);
+      const { selectedItems } = state;
+      delete selectedItems[id];
       return { selectedItems };
     });
   };
@@ -131,10 +126,10 @@ class EntityReferenceAutocomplete extends React.Component {
     index,
     itemProps,
     highlightedIndex,
-    selectedItem,
+    selectedItem: selectedItems,
   }) => {
     const isHighlighted = highlightedIndex === index;
-    const isSelected = (selectedItem || '').includes(suggestion.id);
+    const isSelected = Object.keys(selectedItems).includes(suggestion.id);
 
     return (
       <MenuItem
@@ -185,15 +180,17 @@ class EntityReferenceAutocomplete extends React.Component {
               label: this.props.label,
               InputProps: getInputProps({
                 disabled: this.state.loading,
-                startAdornment: selectedItems.map(id => (
-                  <Chip
-                    key={id}
-                    tabIndex={-1}
-                    label={this.state.suggestions.get(id).label}
-                    className="chip"
-                    onDelete={this.handleDelete(id)}
-                  />
-                )),
+                startAdornment: Object.entries(selectedItems).map(
+                  ([key, value]) => (
+                    <Chip
+                      key={key}
+                      tabIndex={-1}
+                      label={value.label}
+                      className="chip"
+                      onDelete={this.handleDelete(key)}
+                    />
+                  ),
+                ),
                 onChange: this.handleInputChange,
                 onKeyDown: this.handleKeyDown,
                 placeholder: '',
