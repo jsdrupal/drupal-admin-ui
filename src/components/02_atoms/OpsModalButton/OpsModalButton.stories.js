@@ -11,9 +11,8 @@ import TableRow from '@material-ui/core/TableRow';
 
 import OpsModalButton from './OpsModalButton';
 
-storiesOf('Table Operations/OpsModalButton', module).addWithJSX(
-  'Default',
-  () => (
+storiesOf('Table Operations/OpsModalButton', module)
+  .addDecorator(story => (
     <Table>
       <TableHead>
         <TableRow>
@@ -24,20 +23,20 @@ storiesOf('Table Operations/OpsModalButton', module).addWithJSX(
       <TableBody>
         <TableRow>
           <TableCell>Push button to see the modal pop up.</TableCell>
-          <TableCell>
-            <OpsModalButton
-              aria-label="edit"
-              title="Are you sure that you want to edit this element?"
-              text="This action cannot be undone."
-              cancelText="Cancel"
-              confirmText="Edit"
-              enterAction={() => {}}
-            >
-              <EditIcon />
-            </OpsModalButton>
-          </TableCell>
+          <TableCell>{story()}</TableCell>
         </TableRow>
       </TableBody>
     </Table>
-  ),
-);
+  ))
+  .addWithJSX('Default', () => (
+    <OpsModalButton
+      aria-label="edit"
+      title="Are you sure that you want to edit this element?"
+      text="This action cannot be undone."
+      cancelText="Cancel"
+      confirmText="Edit"
+      enterAction={() => {}}
+    >
+      <EditIcon />
+    </OpsModalButton>
+  ));
