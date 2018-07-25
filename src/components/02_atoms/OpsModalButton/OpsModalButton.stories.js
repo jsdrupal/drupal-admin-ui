@@ -11,7 +11,19 @@ import TableRow from '@material-ui/core/TableRow';
 
 import OpsModalButton from './OpsModalButton';
 
-storiesOf('Table Operations/OpsModalButton', module)
+storiesOf('OpsModalButton', module)
+  .add('Default', () => (
+    <OpsModalButton
+      aria-label="edit"
+      title="Are you sure that you want to edit this element?"
+      text="This action cannot be undone."
+      cancelText="Cancel"
+      confirmText="Edit"
+      enterAction={() => {}}
+    >
+      <EditIcon />
+    </OpsModalButton>
+  ))
   .addDecorator(story => (
     <Table>
       <TableHead>
@@ -28,7 +40,7 @@ storiesOf('Table Operations/OpsModalButton', module)
       </TableBody>
     </Table>
   ))
-  .addWithJSX('Default', () => (
+  .addWithJSX('Inside a table column', () => (
     <OpsModalButton
       aria-label="edit"
       title="Are you sure that you want to edit this element?"
