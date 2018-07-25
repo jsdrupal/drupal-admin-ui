@@ -3,8 +3,5 @@ import applicationSaga from './application';
 import contentSaga from './content';
 
 export default function* rootSaga() {
-  yield all([
-    applicationSaga(),
-    contentSaga(),
-  ]);
+  yield all([applicationSaga(), contentSaga()]);
 }
