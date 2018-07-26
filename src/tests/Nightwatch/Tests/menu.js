@@ -6,7 +6,7 @@ module.exports = {
       .relativeURL('/')
       .waitForElementVisible('button[aria-label="open drawer"]')
       .click('button[aria-label="open drawer"]')
-      .waitForElementVisible('[data-nightwatch="menu"] a[role="button"]')
+      .waitForElementVisible('[data-nightwatch="menu"] li a[role="button"]')
       .getText('[data-nightwatch="menu"] a[role="button"]', function menuText(
         result,
       ) {
