@@ -11,6 +11,7 @@ This is an admin UI for Drupal, built with JavaScript and based on [create-react
   * [Running](#running)
   * [Developing](#developing)
     + [tl;dr](#tldr)
+  * [Development guidelines](#developmentguidelines)
   * [Commands](#commands)
   * [Contributing to This Repository](#contributing-to-this-repository)
 
@@ -81,6 +82,15 @@ See package.json for a full list
 |`test`|Runs all available tests.|
 |`storybook`|Starts [Storybook](https://storybook.js.org/) UI dev environment
 
+
+## Development guidelines
+  
+### Testing
+  
+We have functional testing with [Nightwatch](http://nightwatchjs.org/), and component/unit testing with [Jest](https://jestjs.io/).
+
+When deciding which system to use to add test coverage, the general rule is Nightwatch should be used to test the common path, and Jest can be used for more detailed test coverage. Nightwatch tests will run slower as they simulate clicking around in a real browser.
+
 ## Contributing to This Repository
 
 - [Fork this repo](https://help.github.com/articles/fork-a-repo/) to your own user
@@ -119,10 +129,3 @@ If someone has made a pull request and you would like to add code to their branc
   git push <your-fork> <branch-name>
   ```
   
-  ## Development best practises
-  
-  ### Testing
-  
-We have functional testing with ([nightwatch](http://nightwatchjs.org/)), and component/unit testing with ((jest)[https://jestjs.io/]).
-
-When deciding which system to use to add test coverage, the general rule is Nightwatch should be used to test the common path, and Jest can be used for more detailed test coverage. Nightwatch tests will run slower as they simulate clicking around in a real browser.
