@@ -11,7 +11,7 @@ This is an admin UI for Drupal, built with JavaScript and based on [create-react
   * [Running](#running)
   * [Developing](#developing)
     + [tl;dr](#tldr)
-  * [Development guidelines](#developmentguidelines)
+  * [Development guidelines](#development-guidelines)
   * [Commands](#commands)
   * [Contributing to This Repository](#contributing-to-this-repository)
 
