@@ -32,7 +32,8 @@ const reducePropsToState = propsList => {
 };
 
 const handleStateChangeOnClient = title => {
-  document.title = title || '';
+  document.title =
+    (Array.isArray(title) ? title : [title]).map(e => e.trim()).join(' ') || '';
 };
 
 export default withSideEffect(reducePropsToState, handleStateChangeOnClient)(
