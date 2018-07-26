@@ -123,6 +123,6 @@ If someone has made a pull request and you would like to add code to their branc
   
   ### Testing
   
-  We do have both functional level testing ([nightwatch](http://nightwatchjs.org/)), but also more component/unit testing ((jest)[https://jestjs.io/]).
-  
-  If you struggle to decide where to add test coverage: Nightwatch should test the common path and jest is for detailed test coverage.
+We have functional testing with ([nightwatch](http://nightwatchjs.org/)), and component/unit testing with ((jest)[https://jestjs.io/]).
+
+When deciding which system to use to add test coverage, the general rule is Nightwatch should be used to test the common path, and Jest can be used for more detailed test coverage. Nightwatch tests will run slower as they simulate clicking around in a real browser.
