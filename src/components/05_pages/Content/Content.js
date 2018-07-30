@@ -267,7 +267,13 @@ class Content extends Component {
           </div>
           <div className={styles.filters}>
             {this.props.actions && (
-              <FormControl className={styles.action}>
+              <FormControl
+                className={styles.action}
+                disabled={
+                  Object.values(this.state.checked).filter(Boolean).length ===
+                    0 || false
+                }
+              >
                 <InputLabel htmlFor="action">Actions</InputLabel>
                 <Select
                   value={this.state.action || ''}
