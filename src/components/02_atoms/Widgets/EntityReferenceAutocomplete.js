@@ -18,7 +18,11 @@ class EntityReferenceAutocomplete extends React.Component {
     inputProps: PropTypes.shape({
       bundle: PropTypes.string,
       type: PropTypes.string,
-    }).isRequired,
+    }),
+  };
+
+  static defaultProps = {
+    inputProps: {},
   };
 
   state = {

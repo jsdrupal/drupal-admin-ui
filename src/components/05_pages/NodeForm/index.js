@@ -1,8 +1,7 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { withStyles } from '@material-ui/core';
-import Button from '@material-ui/core/Button';
+
 import { css } from 'emotion';
 
 import FormControl from '@material-ui/core/FormControl';
@@ -13,9 +12,8 @@ import Button from '@material-ui/core/Button';
 import Widgets from './Widgets';
 import PageTitle from '../../02_atoms/PageTitle';
 
-import { requestSchema } from '../../../actions/content';
+import { requestSchema, contentAdd } from '../../../actions/content';
 import { createEntity } from '../../../utils/api/schema';
-import { contentAdd } from '../../../actions/content';
 
 const lazyFunction = f => (props, propName, componentName, ...rest) =>
   f(props, propName, componentName, ...rest);
@@ -34,14 +32,13 @@ let styles;
 
 class NodeForm extends React.Component {
   static propTypes = {
-    entity: PropTypes.shape({}),
     uiMetadata: PropTypes.objectOf(
       PropTypes.shape({
         widget: PropTypes.string.isRequired,
         constraints: PropTypes.array,
       }),
     ).isRequired,
-    schema: schemaType,
+    schema: PropTypes.oneOfType([schemaType, PropTypes.bool]),
     widgets: PropTypes.objectOf(
       PropTypes.oneOfType([
         PropTypes.func,
@@ -49,14 +46,12 @@ class NodeForm extends React.Component {
       ]).isRequired,
     ).isRequired,
     contentAdd: PropTypes.func.isRequired,
-    bundleType: PropTypes.string.isRequired,
     entityTypeId: PropTypes.string.isRequired,
     bundle: PropTypes.string.isRequired,
     requestSchema: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
-    entity: null,
     schema: false,
   };
 
