@@ -155,6 +155,7 @@ class EntityReferenceAutocomplete extends React.Component {
   renderInput = ({ InputProps, ref, label, ...other }) => (
     <TextField
       label={label}
+      // @todo Disable the browser built in autocompletion.
       InputProps={{
         inputRef: ref,
         ...InputProps,
