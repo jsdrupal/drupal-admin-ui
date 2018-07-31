@@ -31,6 +31,12 @@ const reducePropsToState = propsList => {
   return false;
 };
 
+/**
+ * Set the title of the page based on the children of PageTitle.
+ *
+ * @param  {(String|Array)} title
+ *   Title may be an array if the number children is > 1
+ */
 const handleStateChangeOnClient = title => {
   document.title =
     (Array.isArray(title) ? title : [title]).map(e => e.trim()).join(' ') || '';
