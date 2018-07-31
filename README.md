@@ -70,6 +70,13 @@ cd drupal-admin-ui
 yarn start
 ```
 
+### React AXE
+
+Due to outstanding performance issues, `react-axe` is behind a flag. To enable the assessment provided by `react-axe` pass an environment variable when starting the application.
+
+```
+REACT_APP_AXE=true yarn start
+```
 
 ## Commands
 
