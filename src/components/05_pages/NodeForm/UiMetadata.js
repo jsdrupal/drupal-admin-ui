@@ -4,6 +4,10 @@ const UiMetadata = {
     widget: 'string_textfield',
     constraints: [],
   },
+  field_author: {
+    widget: 'entity_reference_autocomplete',
+    constraints: [],
+  },
   created: {
     widget: 'timestamp_datetime',
     constraints: [],
@@ -43,6 +47,10 @@ const UiMetadata = {
       prefix: '',
       suffix: ' minutes',
     },
+  },
+  field_tags: {
+    widget: 'entity_reference_autocomplete',
+    constraints: [],
   },
 };
 

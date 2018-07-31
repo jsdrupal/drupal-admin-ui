@@ -267,8 +267,14 @@ class Content extends Component {
           </div>
           <div className={styles.filters}>
             {this.props.actions && (
-              <FormControl className={styles.action}>
-                <InputLabel htmlFor="actions">Actions</InputLabel>
+              <FormControl
+                className={styles.action}
+                disabled={
+                  Object.values(this.state.checked).filter(Boolean).length ===
+                    0 || false
+                }
+              >
+                <InputLabel htmlFor="action">Actions</InputLabel>
                 <Select
                   value={this.state.action || ''}
                   onChange={e => {
@@ -353,11 +359,13 @@ class Content extends Component {
                     attributes: { changed, nid, status, title },
                     relationships,
                   } = node;
+                  const rowSelectId = `row-select-for-${String(nid)}`;
                   return (
                     <TableRow key={nid}>
                       {
                         <TableCell padding="checkbox">
                           <Checkbox
+                            id={rowSelectId}
                             value={String(nid)}
                             onChange={(event, checked) => {
                               this.setState(prevState => {
@@ -369,7 +377,9 @@ class Content extends Component {
                           />
                         </TableCell>
                       }
-                      <TableCell>{title}</TableCell>
+                      <TableCell>
+                        <label htmlFor={rowSelectId}>{title}</label>
+                      </TableCell>
                       <TableCell>
                         {this.props.contentTypes[type].name}
                       </TableCell>
@@ -445,6 +455,8 @@ class Content extends Component {
               onChangePage={this.pageChangeHandler}
               rowsPerPageOptions={[limit]}
               labelDisplayedRows={({ page }) => `Page: ${page + 1}`}
+              nextIconButtonProps={{ 'aria-label': 'Next content page.' }}
+              backIconButtonProps={{ 'aria-label': 'Previous content page.' }}
             />
             {!this.props.contentList.length && (
               <Typography className={styles.noContentMessage}>

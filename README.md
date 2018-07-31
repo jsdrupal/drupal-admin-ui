@@ -11,6 +11,7 @@ This is an admin UI for Drupal, built with JavaScript and based on [create-react
   * [Running](#running)
   * [Developing](#developing)
     + [tl;dr](#tldr)
+  * [Development guidelines](#development-guidelines)
   * [Commands](#commands)
   * [Contributing to This Repository](#contributing-to-this-repository)
 
@@ -69,6 +70,13 @@ cd drupal-admin-ui
 yarn start
 ```
 
+### React AXE
+
+Due to outstanding performance issues, `react-axe` is behind a flag. To enable the assessment provided by `react-axe` pass an environment variable when starting the application.
+
+```
+REACT_APP_AXE=true yarn start
+```
 
 ## Commands
 
@@ -80,6 +88,15 @@ See package.json for a full list
 |`build`|Compiles the application for production into folder `./build`.|
 |`test`|Runs all available tests.|
 |`storybook`|Starts [Storybook](https://storybook.js.org/) UI dev environment
+
+
+## Development guidelines
+  
+### Testing
+  
+We have functional testing with [Nightwatch](http://nightwatchjs.org/), and component/unit testing with [Jest](https://jestjs.io/).
+
+When deciding which system to use to add test coverage, the general rule is Nightwatch should be used to test the common path, and Jest can be used for more detailed test coverage. Nightwatch tests will run slower as they simulate clicking around in a real browser.
 
 ## Contributing to This Repository
 
@@ -118,3 +135,4 @@ If someone has made a pull request and you would like to add code to their branc
   .
   git push <your-fork> <branch-name>
   ```
+  
