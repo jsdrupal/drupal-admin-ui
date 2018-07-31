@@ -16,7 +16,7 @@ import TimestampDatetime from './TimestampDatetime';
  *
  *  https://github.com/storybooks/addon-jsx/issues/30
  *
- * The get both the logger to function while still pretty printing sample code
+ * To get both the logger to function while still pretty printing sample code
  * in the JSX tab a toSting() method must be provided.
  */
 const onChangeAction = action('onChange');
