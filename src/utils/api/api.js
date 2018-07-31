@@ -109,6 +109,16 @@ async function api(
       );
       break;
     }
+    case 'taxonomy_term': {
+      url = `/jsonapi/taxonomy_term/${parameters.type}`;
+      options.headers.Accept = 'application/vnd.api+json';
+      break;
+    }
+    case 'user': {
+      url = `/jsonapi/user`;
+      options.headers.Accept = 'application/vnd.api+json';
+      break;
+    }
     case 'schema': {
       url = '/openapi/jsonapi';
       break;
