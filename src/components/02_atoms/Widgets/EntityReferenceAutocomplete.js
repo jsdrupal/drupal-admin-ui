@@ -91,18 +91,24 @@ class EntityReferenceAutocomplete extends React.Component {
       !inputValue.length &&
       keycode(event) === 'backspace'
     ) {
-      this.setState({
-        selectedItems: selectedItems.slice(0, selectedItems.length - 1),
-      });
+      this.setState(
+        {
+          selectedItems: selectedItems.slice(0, selectedItems.length - 1),
+        },
+        () => this.props.onChange(this.state.selectedItems),
+      );
     }
   };
 
   handleDelete = id => () => {
-    this.setState(state => {
-      const { selectedItems } = state;
-      delete selectedItems[id];
-      return { selectedItems };
-    });
+    this.setState(
+      state => {
+        const { selectedItems } = state;
+        delete selectedItems[id];
+        return { selectedItems };
+      },
+      () => this.props.onChange(this.state.selectedItems),
+    );
   };
 
   determineEntityTypeAndBundlesFromSchema = schema => {
