@@ -120,7 +120,9 @@ async function api(
       break;
     }
     case 'schema': {
-      url = '/openapi/jsonapi';
+      url = `/schemata/${[parameters.entityTypeId, parameters.bundle].join(
+        '/',
+      )}?_describes=api_json&_format=schema_json`;
       break;
     }
     default:
