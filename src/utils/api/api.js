@@ -123,6 +123,16 @@ async function api(
       url = '/openapi/jsonapi';
       break;
     }
+    case 'field_schema': {
+      url = `/jsonapi/field_config?filter[bundle]=${
+        parameters.bundle
+      }&filter[entity_type]=${parameters.entityTypeId}`;
+      break;
+    }
+    case 'form_display': {
+      url = '/jsonapi/entity_form_display';
+      break;
+    }
     default:
       break;
   }

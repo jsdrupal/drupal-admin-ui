@@ -8,10 +8,10 @@ import Paper from '@material-ui/core/Paper';
 import Divider from '@material-ui/core/Divider';
 import Button from '@material-ui/core/Button';
 
-import Widgets from './Widgets';
 import PageTitle from '../../02_atoms/PageTitle';
 
 import { requestSchema } from '../../../actions/content';
+import { requestUIConfigSchema } from '../../../actions/schema';
 
 const lazyFunction = f => (props, propName, componentName, ...rest) =>
   f(props, propName, componentName, ...rest);
@@ -30,12 +30,6 @@ let styles;
 
 class NodeForm extends React.Component {
   static propTypes = {
-    uiMetadata: PropTypes.objectOf(
-      PropTypes.shape({
-        widget: PropTypes.string.isRequired,
-        constraints: PropTypes.array,
-      }),
-    ).isRequired,
     schema: schemaType,
     widgets: PropTypes.objectOf(
       PropTypes.oneOfType([
@@ -46,10 +40,19 @@ class NodeForm extends React.Component {
     entityTypeId: PropTypes.string.isRequired,
     bundle: PropTypes.string.isRequired,
     requestSchema: PropTypes.func.isRequired,
+    requestUIConfigSchema: PropTypes.func.isRequired,
+    uiSchema: PropTypes.oneOfType([
+      PropTypes.shape({
+        fieldSchema: PropTypes.shape({}),
+        formDisplaySchema: PropTypes.shape({}),
+      }),
+      PropTypes.bool,
+    ]),
   };
 
   static defaultProps = {
     schema: false,
+    uiSchema: false,
   };
 
   constructor(props) {
@@ -62,6 +65,10 @@ class NodeForm extends React.Component {
 
   componentDidMount() {
     this.props.requestSchema();
+    this.props.requestUIConfigSchema({
+      entityTypeId: this.props.entityTypeId,
+      bundle: this.props.bundle,
+    });
   }
 
   onFieldChange = fieldName => data => {
@@ -81,44 +88,84 @@ class NodeForm extends React.Component {
     return (
       <Fragment>
         <PageTitle>Create {this.props.bundle}</PageTitle>
-        {this.props.schema && (
-          <Paper>
-            <div className={styles.container}>
-              <FormControl margin="normal" fullWidth>
-                {Object.entries(this.props.uiMetadata)
-                  .map(([fieldName, { widget, inputProps }]) => {
-                    if (Widgets[widget]) {
-                      // @todo We need to pass along props.
-                      // @todo How do we handle cardinality together with jsonapi
-                      // making a distinction between single value fields and multi value fields.
-                      const fieldSchema = this.getSchemaInfo(
-                        this.props.schema,
-                        fieldName,
-                      );
+        {this.props.schema &&
+          this.props.uiSchema && (
+            <Paper>
+              <div className={styles.container}>
+                <FormControl margin="normal" fullWidth>
+                  {Array.from(
+                    new Set([
+                      ...Object.keys(this.props.uiSchema.fieldSchema),
+                      ...Object.keys(this.props.uiSchema.formDisplaySchema),
+                    ]),
+                  )
+                    .map(fieldName => {
+                      const {
+                        fieldSchema,
+                        formDisplaySchema,
+                      } = this.props.uiSchema;
 
-                      return React.createElement(this.props.widgets[widget], {
-                        key: fieldName,
-                        entityTypeId: this.props.entityTypeId,
-                        bundle: this.props.bundle,
-                        fieldName,
-                        value: this.state.entity[fieldName],
-                        label: fieldSchema && fieldSchema.title,
-                        schema: fieldSchema,
-                        onChange: this.onFieldChange(fieldName),
-                        inputProps,
-                      });
-                    }
-                    return null;
-                  })
-                  .filter(x => x)}
-              </FormControl>
-              <Divider classes={{ root: styles.divider }} />
-              <Button variant="contained" color="primary" onClick={() => {}}>
-                Save
-              </Button>
-            </div>
-          </Paper>
-        )}
+                      if (
+                        Object.keys(this.props.widgets).filter(name =>
+                          formDisplaySchema[fieldName].type.startsWith(name),
+                        ).length
+                      ) {
+                        // @todo We need to pass along props.
+                        // @todo How do we handle cardinality together with jsonapi
+                        // making a distinction between single value fields and multi value fields.
+                        const entityFieldSchema = this.getSchemaInfo(
+                          this.props.schema,
+                          fieldName,
+                        );
+
+                        const fieldSchemaSettings = Object.prototype.hasOwnProperty.call(
+                          fieldSchema,
+                          fieldName,
+                        )
+                          ? fieldSchema[fieldName].attributes.settings
+                          : {};
+                        const formDisplaySettings = Object.prototype.hasOwnProperty.call(
+                          formDisplaySchema,
+                          fieldName,
+                        )
+                          ? formDisplaySchema[fieldName].settings
+                          : {};
+
+                        const [widgetMachineName] = Object.keys(
+                          this.props.widgets,
+                        ).filter(name =>
+                          formDisplaySchema[fieldName].type.startsWith(name),
+                        );
+                        const FieldWidget = this.props.widgets[
+                          widgetMachineName
+                        ];
+
+                        return React.createElement(FieldWidget, {
+                          key: fieldName,
+                          entityTypeId: this.props.entityTypeId,
+                          bundle: this.props.bundle,
+                          fieldName,
+                          value: this.state.entity[fieldName],
+                          label: entityFieldSchema && entityFieldSchema.title,
+                          schema: entityFieldSchema,
+                          onChange: this.onFieldChange(fieldName),
+                          inputProps: {
+                            ...fieldSchemaSettings,
+                            ...formDisplaySettings,
+                          },
+                        });
+                      }
+                      return null;
+                    })
+                    .filter(x => x)}
+                </FormControl>
+                <Divider classes={{ root: styles.divider }} />
+                <Button variant="contained" color="primary" onClick={() => {}}>
+                  Save
+                </Button>
+              </div>
+            </Paper>
+          )}
       </Fragment>
     );
   }
@@ -135,11 +182,13 @@ styles = {
 
 const mapStateToProps = (state, { bundle, entityTypeId }) => ({
   schema: state.content.schema[`${entityTypeId}--${bundle}`],
+  uiSchema: state.schema.uiSchema[`${entityTypeId}--${bundle}`],
 });
 
 export default connect(
   mapStateToProps,
   {
     requestSchema,
+    requestUIConfigSchema,
   },
 )(NodeForm);
