@@ -46,7 +46,6 @@ class NodeForm extends React.Component {
       ]).isRequired,
     ).isRequired,
     contentAdd: PropTypes.func.isRequired,
-    bundleType: PropTypes.string.isRequired,
     entityTypeId: PropTypes.string.isRequired,
     bundle: PropTypes.string.isRequired,
     requestSchema: PropTypes.func.isRequired,
@@ -61,12 +60,15 @@ class NodeForm extends React.Component {
       return prevState;
     }
 
+    if (Object.prototype.hasOwnProperty.call(prevState || {}, 'entity')) {
+      return prevState;
+    }
+
     const state = {
       ...prevState,
       // @todo figure out relationships.
       entity: props.entity || {
         ...createEntity(props.schema),
-        relationships: {},
       },
     };
     // Just contain values which are in the ui metadata.
@@ -84,13 +86,32 @@ class NodeForm extends React.Component {
     this.props.requestSchema();
   }
 
-  onFieldChange = fieldName => data => {
+  onAttributeChange = fieldName => data => {
     this.setState(prevState => ({
       entity: {
-        ...prevState.entity,
-        attributes: {
-          ...prevState.entity.attributes,
-          [fieldName]: data,
+        data: {
+          ...prevState.entity.data,
+          attributes: {
+            ...prevState.entity.data.attributes,
+            [fieldName]: data,
+          },
+        },
+      },
+    }));
+  };
+
+  onRelationshipChange = fieldName => data => {
+    const fieldData = Object.keys(data).map(id => data[id]);
+    this.setState(prevState => ({
+      entity: {
+        data: {
+          ...prevState.entity.data,
+          relationships: {
+            ...prevState.entity.data.relationships,
+            [fieldName]: {
+              data: fieldData.length === 1 ? fieldData[0] : fieldData,
+            },
+          },
         },
       },
     }));
@@ -99,6 +120,7 @@ class NodeForm extends React.Component {
   onSave = () => {
     // @todo Fill in values for fields without a field widget yet.
     const { entity } = this.state;
+
     entity.attributes.field_summary = entity.attributes.field_summary || {
       value: 'Empty',
       format: 'basic_html',
@@ -133,7 +155,7 @@ class NodeForm extends React.Component {
 
     this.props.contentAdd({
       ...entity,
-      type: this.props.bundleType,
+      type: this.props.bundle,
     });
   };
 
@@ -160,15 +182,29 @@ class NodeForm extends React.Component {
                         fieldName,
                       );
 
+                      const {
+                        attributes,
+                        relationships,
+                      } = this.props.schema.properties.data.properties;
+
+                      const propType =
+                        (attributes.properties[fieldName] && 'attributes') ||
+                        (relationships.properties[fieldName] &&
+                          'relationships');
+
                       return React.createElement(this.props.widgets[widget], {
                         key: fieldName,
                         entityTypeId: this.props.entityTypeId,
                         bundle: this.props.bundle,
                         fieldName,
-                        value: this.state.entity[fieldName],
+                        value: this.state.entity.data[propType][fieldName],
                         label: fieldSchema && fieldSchema.title,
                         schema: fieldSchema,
-                        onChange: this.onFieldChange(fieldName),
+                        onChange: this[
+                          propType === 'attributes'
+                            ? 'onAttributeChange'
+                            : 'onRelationshipChange'
+                        ](fieldName),
                         inputProps,
                       });
                     }
@@ -177,7 +213,7 @@ class NodeForm extends React.Component {
                   .filter(x => x)}
               </FormControl>
               <Divider classes={{ root: styles.divider }} />
-              <Button variant="contained" color="primary" onClick={() => {}}>
+              <Button variant="contained" color="primary" onClick={this.onSave}>
                 Save
               </Button>
             </div>
