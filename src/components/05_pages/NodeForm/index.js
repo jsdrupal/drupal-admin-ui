@@ -119,7 +119,7 @@ class NodeForm extends React.Component {
 
   onSave = () => {
     // @todo Fill in values for fields without a field widget yet.
-    const { entity } = this.state;
+    const { data: entity } = this.state.entity;
 
     entity.attributes.field_summary = entity.attributes.field_summary || {
       value: 'Empty',
@@ -129,15 +129,6 @@ class NodeForm extends React.Component {
       .field_recipe_instruction || {
       value: 'Empty',
       format: 'basic_html',
-    };
-    entity.attributes.field_preparation_time =
-      entity.attributes.field_preparation_time || 0;
-
-    entity.relationships = entity.relationships || {};
-    entity.relationships.field_author = entity.relationships.field_author || {};
-    entity.relationships.field_author.data = {
-      type: 'user--user',
-      id: '425db657-f642-4979-b12a-b0347c2906b6',
     };
 
     entity.relationships.field_image = entity.relationships.field_image || {};
@@ -149,14 +140,18 @@ class NodeForm extends React.Component {
           'A delicious deep layered Mediterranean quiche with basil garnish.',
         title: null,
         width: 768,
+        data: {
+          type: 'user--user',
+          id: '425db657-f642-4979-b12a-b0347c2906b6',
+        },
         height: 511,
       },
     };
-
-    this.props.contentAdd({
+    const data = {
       ...entity,
-      type: this.props.bundle,
-    });
+      type: `${this.props.entityTypeId}--${this.props.bundle}`,
+    };
+    this.props.contentAdd(data);
   };
 
   getSchemaInfo = (schema, fieldName) =>
