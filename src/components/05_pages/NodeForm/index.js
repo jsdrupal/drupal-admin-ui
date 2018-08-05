@@ -66,7 +66,6 @@ class NodeForm extends React.Component {
 
     const state = {
       ...prevState,
-      // @todo figure out relationships.
       entity: props.entity || {
         ...createEntity(props.schema),
       },
@@ -132,7 +131,7 @@ class NodeForm extends React.Component {
   };
 
   onSave = () => {
-    // @todo Fill in values for fields without a field widget yet.
+    // @todo Remove in https://github.com/jsdrupal/drupal-admin-ui/issues/245
     const { data: entity } = this.state.entity;
 
     entity.attributes.field_summary = entity.attributes.field_summary || {
