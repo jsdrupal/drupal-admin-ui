@@ -29,13 +29,15 @@ const FileUploadWidget = props => (
         />
         {props.value && (
           <TextField
-            value={(props.value.meta || {}).alt || ''}
+            value={(props.value.data.meta || {}).alt || ''}
             onChange={event =>
               props.onChange({
                 ...props.value,
-                meta: {
-                  ...(props.value.meta || {}),
-                  alt: event.target.value,
+                data: {
+                  meta: {
+                    ...(props.value.meta || {}),
+                    alt: event.target.value,
+                  },
                 },
               })
             }

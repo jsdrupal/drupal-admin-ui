@@ -101,7 +101,16 @@ class NodeForm extends React.Component {
   };
 
   onRelationshipChange = fieldName => data => {
-    const fieldData = Object.keys(data).map(id => data[id]);
+    // Support widgets with multiple cardinality.
+    let fieldData;
+    let isMultiple;
+    if (typeof data.data !== 'undefined') {
+      fieldData = data.data;
+      isMultiple = false;
+    } else {
+      fieldData = Object.values(data);
+      isMultiple = true;
+    }
     this.setState(prevState => ({
       entity: {
         data: {
@@ -109,7 +118,12 @@ class NodeForm extends React.Component {
           relationships: {
             ...prevState.entity.data.relationships,
             [fieldName]: {
-              data: fieldData.length === 1 ? fieldData[0] : fieldData,
+              data: isMultiple
+                ? fieldData
+                : {
+                    ...prevState.entity.data.relationships[fieldName].data,
+                    ...fieldData,
+                  },
             },
           },
         },
@@ -131,22 +145,6 @@ class NodeForm extends React.Component {
       format: 'basic_html',
     };
 
-    entity.relationships.field_image = entity.relationships.field_image || {};
-    entity.relationships.field_image.data = {
-      type: 'file--file',
-      id: 'ad861ab2-81d7-4ff6-afb8-316ef3ee03df',
-      meta: {
-        alt:
-          'A delicious deep layered Mediterranean quiche with basil garnish.',
-        title: null,
-        width: 768,
-        data: {
-          type: 'user--user',
-          id: '425db657-f642-4979-b12a-b0347c2906b6',
-        },
-        height: 511,
-      },
-    };
     const data = {
       ...entity,
       type: `${this.props.entityTypeId}--${this.props.bundle}`,
