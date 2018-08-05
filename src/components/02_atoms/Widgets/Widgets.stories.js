@@ -22,6 +22,16 @@ import TimestampDatetime from './TimestampDatetime';
 const onChangeAction = action('onChange');
 onChangeAction.toString = () => "action('onChange')";
 
+const fileData = {
+  file: {
+    type: 'file--file',
+    url: 'url',
+    id: 'id',
+    filename: 'filename',
+  },
+  meta: { alt: 'This is an alternative.' },
+};
+
 storiesOf('Widgets/BooleanCheckbox', module).addWithJSX('Default', () => (
   <BooleanCheckbox
     fieldName="ControlOne"
@@ -29,19 +39,58 @@ storiesOf('Widgets/BooleanCheckbox', module).addWithJSX('Default', () => (
     onChange={onChangeAction}
   />
 ));
-storiesOf('Widgets/FileUploadWidget', module).addWithJSX('Default', () => (
-  <FileUploadWidget
-    bundle="node"
-    entityTypeId="Article"
-    fieldName="image-file"
-    label="File to be uploaded"
-    onChange={onChangeAction}
-    value={{
-      data: { uuid: [{ value: '1234' }] },
-      meta: { alt: 'This is an alternative.' },
-    }}
-  />
-));
+storiesOf('Widgets/FileUploadWidget/Single File', module).addWithJSX(
+  'Default',
+  () => (
+    <FileUploadWidget
+      bundle="node"
+      entityTypeId="Article"
+      fieldName="image-file"
+      label="File to be uploaded"
+      onChange={onChangeAction}
+      value={{
+        data: {
+          0: fileData,
+        },
+      }}
+      schema={{
+        properties: {
+          data: {
+            type: 'object',
+          },
+        },
+      }}
+    />
+  ),
+);
+
+storiesOf('Widgets/FileUploadWidget/Multiple File', module).addWithJSX(
+  'Default',
+  () => (
+    <FileUploadWidget
+      bundle="node"
+      entityTypeId="Article"
+      fieldName="image-file"
+      label="Files to be uploaded"
+      onChange={onChangeAction}
+      value={{
+        data: {
+          0: fileData,
+          1: fileData,
+          2: fileData,
+        },
+      }}
+      schema={{
+        maxItems: 10,
+        properties: {
+          data: {
+            type: 'array',
+          },
+        },
+      }}
+    />
+  ),
+);
 
 storiesOf('Widgets/NumberTextfield', module).addWithJSX('Default', () => (
   <NumberTextfield

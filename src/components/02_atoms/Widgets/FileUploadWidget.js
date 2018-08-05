@@ -43,22 +43,31 @@ const FileUploadWidget = ({
   fieldName,
   inputProps,
   entityTypeId,
+  schema: { properties, maxItems },
 }) => {
-  const length = value && value.data && Object.keys(value.data).length;
+  const length = (value && value.data && Object.keys(value.data).length) || 0;
+  const multiple = properties.data.type === 'array'; // If array then allow for multiple uploads
+  const maxItemsCount = maxItems || 1; // maxItems is only set if array, so set to 1 as default
+
   return (
     <FormControl>
       <Element>
         <FormLabel component="legend">{label}</FormLabel>
         <div
           style={{
-            display: !inputProps.multiple && length ? 'none' : 'block',
+            display:
+              (!multiple && length) || length === maxItemsCount
+                ? 'none'
+                : 'block',
           }}
         >
           <FileUpload
             bundle={bundle}
+            multiple={multiple}
             fieldName={fieldName}
             inputProps={inputProps}
             entityTypeId={entityTypeId}
+            RemainingUploads={maxItemsCount - length}
             onFileUpload={files => {
               const data = files.reduce((arr, file) => {
                 arr[file.uuid[0].value] = {
@@ -166,16 +175,22 @@ FileUploadWidget.propTypes = {
     }),
   }),
   inputProps: PropTypes.shape({
-    multiple: PropTypes.bool,
     file_extensions: PropTypes.string,
     max_filesize: PropTypes.number,
   }),
+  schema: PropTypes.shape({
+    maxItems: PropTypes.number,
+    properties: PropTypes.shape({
+      data: PropTypes.shape({
+        type: PropTypes.string.isRequired,
+      }),
+    }),
+  }).isRequired,
 };
 
 FileUploadWidget.defaultProps = {
   value: {},
   inputProps: {
-    multiple: true,
     file_extensions: 'png gif jpg jpeg',
     max_filesize: 2000000,
   },

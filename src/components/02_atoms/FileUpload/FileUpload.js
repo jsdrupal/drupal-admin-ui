@@ -3,8 +3,10 @@ import PropTypes from 'prop-types';
 import styled from 'react-emotion';
 import Card from '@material-ui/core/Card';
 import Button from '@material-ui/core/Button';
+import Typography from '@material-ui/core/Typography';
 import CardContent from '@material-ui/core/CardContent';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
+import LinearProgress from '@material-ui/core/LinearProgress';
 import api from './../../../utils/api/api';
 
 const Element = styled('div')`
@@ -13,6 +15,7 @@ const Element = styled('div')`
   padding: 80px;
   width: 100%;
   position: relative;
+  margin-bottom: 20px;
 `;
 
 const Text = styled('div')`
@@ -28,19 +31,13 @@ const Text = styled('div')`
   }
 `;
 
-const Error = styled('div')`
-  color: red;
+const marginBottom = {
+  marginBottom: '20px',
+};
 
-  > ul {
-    > li {
-      margin-bottom: 10px;
-    }
-
-    p {
-      margin: 0;
-    }
-  }
-`;
+const error = {
+  color: 'red',
+};
 
 class FileUpload extends Component {
   static propTypes = {
@@ -48,8 +45,9 @@ class FileUpload extends Component {
     bundle: PropTypes.string.isRequired,
     fieldName: PropTypes.string.isRequired,
     onFileUpload: PropTypes.func.isRequired,
+    multiple: PropTypes.bool.isRequired,
+    RemainingUploads: PropTypes.number.isRequired,
     inputProps: PropTypes.shape({
-      multiple: PropTypes.bool,
       file_extensions: PropTypes.string,
       max_filesize: PropTypes.number,
     }).isRequired,
@@ -63,6 +61,7 @@ class FileUpload extends Component {
     files: [],
     errors: [],
     filesLength: 0,
+    isDisabled: false,
   };
 
   /**
@@ -73,7 +72,7 @@ class FileUpload extends Component {
   onDragOver = event => {
     event.stopPropagation();
     event.preventDefault();
-    this.setBorder('red');
+    this.setElementStyles('red');
     event.dataTransfer.dropEffect = 'dragend';
   };
 
@@ -84,7 +83,7 @@ class FileUpload extends Component {
   onDragLeave = event => {
     event.stopPropagation();
     event.preventDefault();
-    this.setBorder();
+    this.setElementStyles();
   };
 
   /**
@@ -106,13 +105,19 @@ class FileUpload extends Component {
   };
 
   /**
-   * Sets the border of the element.
+   * Sets the styles of the drop zone element.
+   * Set the border and opacity.
    * @param {String} [color="grey"] Color of the border.
    */
-  setBorder = (color = 'grey') => {
-    const { element } = this;
+  setElementStyles = (color = 'grey') => {
+    const {
+      element,
+      state: { isDisabled },
+    } = this;
+
     if (element) {
       element.style.border = `2px dashed ${color}`;
+      element.style.opacity = `${isDisabled ? '0.3' : '1'}`;
     }
   };
 
@@ -184,7 +189,7 @@ class FileUpload extends Component {
    * @param {Number} size file size.
    * @param {String} name file name.
    */
-  checkFile = ({ type, size, name }) => {
+  checkFile = ({ type, size, name, lastModified }) => {
     /* eslint-disable camelcase */
     const errors = {};
     const extension = type.split('/')[1]; // <MIME_subtype>
@@ -210,6 +215,7 @@ class FileUpload extends Component {
     // Check if there are errors
     if (Object.keys(errors).length > 0) {
       errors.name = `The specified file ${name} could not be uploaded.`;
+      errors.id = lastModified;
 
       // Set the state with error and update total
       this.setState(
@@ -230,9 +236,16 @@ class FileUpload extends Component {
    * Resets the state if all file/s have been uploaded.
    */
   resetState = () => {
-    const { total, filesLength } = this.state;
+    const {
+      setElementStyles,
+      state: { total, filesLength },
+    } = this;
+
     if (total === filesLength) {
-      this.setState({ files: [], filesLength: 0, total: 0 });
+      this.setState(
+        { files: [], filesLength: 0, total: 0, isDisabled: false },
+        setElementStyles,
+      );
     }
   };
 
@@ -243,20 +256,32 @@ class FileUpload extends Component {
    */
   readFile = files => {
     const {
-      setBorder,
+      setElementStyles,
       checkFile,
       uploadFile,
-      props: {
-        inputProps: { multiple },
-      },
+      props: { multiple, RemainingUploads },
     } = this;
 
-    this.setState({ filesLength: files.length, errors: [] });
-    setBorder();
+    // Slice the files if more than the remaining uploads length
+    const slicedFiles = Object.keys(files)
+      .slice(0, RemainingUploads)
+      .reduce((obj, value) => {
+        obj[value] = files[value];
+        return obj;
+      }, {});
+
+    this.setState(
+      {
+        errors: [],
+        isDisabled: true,
+        filesLength: Object.keys(slicedFiles).length,
+      },
+      setElementStyles,
+    );
 
     if (multiple) {
-      Object.keys(files).forEach(key => {
-        const file = files[key];
+      Object.keys(slicedFiles).forEach(key => {
+        const file = slicedFiles[key];
         if (checkFile(file)) {
           uploadFile(file);
         }
@@ -264,9 +289,21 @@ class FileUpload extends Component {
     }
 
     // If single file upload, upload the first file from the dropped files
-    if (!multiple && checkFile(files[0])) {
-      uploadFile(files[0]);
+    if (!multiple && checkFile(slicedFiles[0])) {
+      uploadFile(slicedFiles[0]);
     }
+  };
+
+  /**
+   * If disabled, then prevent all file upload events.
+   * @param {Function} fn Event function.
+   */
+  isEnabled = fn => {
+    if (this.state.isDisabled) {
+      return null;
+    }
+
+    return fn;
   };
 
   render = () => {
@@ -274,36 +311,36 @@ class FileUpload extends Component {
       onDrop,
       onClick,
       getFiles,
+      isEnabled,
       onDragOver,
       onDragLeave,
-      state: { errors },
-      props: {
-        inputProps: { multiple },
-      },
+      state: { total, errors, isDisabled, filesLength },
+      props: { multiple, RemainingUploads },
     } = this;
 
     return (
       <Card>
         <CardContent>
           <Element
-            onDrop={onDrop}
-            onClick={onClick}
-            onDragOver={onDragOver}
-            onDragLeave={onDragLeave}
+            onDrop={isEnabled(onDrop)}
+            onClick={isEnabled(onClick)}
+            onDragOver={isEnabled(onDragOver)}
+            onDragLeave={isEnabled(onDragLeave)}
             innerRef={element => {
               this.element = element;
             }}
           >
             <Text>
-              <p>
+              <Typography style={marginBottom} component="p">
                 {multiple
                   ? 'Drop files or click here to upload.'
                   : 'Drop a file or click here to upload.'}
-              </p>
+              </Typography>
               <Button
                 size="small"
                 color="primary"
                 variant="contained"
+                disabled={isDisabled}
                 aria-label="Upload Image/s"
               >
                 Upload <CloudUploadIcon className="icon" />
@@ -321,21 +358,44 @@ class FileUpload extends Component {
             />
           </Element>
 
+          {filesLength > 0 && (
+            <LinearProgress
+              style={marginBottom}
+              variant="determinate"
+              value={(total / filesLength) * 100}
+            />
+          )}
+
+          <Typography component="p">
+            Remaining uploads: {RemainingUploads}
+          </Typography>
+
           {errors.length > 0 && (
-            <Error>
-              <p>One or more files could not be uploaded.</p>
-              <ul>
-                {errors.map(({ name, size, type }) => (
-                  <li>
+            <div>
+              <Typography style={error} component="p">
+                One or more files could not be uploaded.
+              </Typography>
+
+              <Typography style={error} component="ul">
+                {errors.map(({ name, size, type, id }) => (
+                  <Typography style={error} component="li" key={id}>
                     {name}
-                    <ul>
-                      {size && <li>{size}</li>}
-                      {type && <li>{type}</li>}
-                    </ul>
-                  </li>
+                    <Typography style={error} component="ul">
+                      {size && (
+                        <Typography style={error} component="li">
+                          {size}
+                        </Typography>
+                      )}
+                      {type && (
+                        <Typography style={error} component="li">
+                          {type}
+                        </Typography>
+                      )}
+                    </Typography>
+                  </Typography>
                 ))}
-              </ul>
-            </Error>
+              </Typography>
+            </div>
           )}
         </CardContent>
       </Card>
