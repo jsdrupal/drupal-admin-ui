@@ -1,4 +1,4 @@
-import { SCHEMA_LOADED } from '../actions/schema';
+import { SCHEMA_LOADED, UI_SCHEMA_LOADED } from '../actions/schema';
 
 export const initialState = {
   uiSchema: {},
@@ -8,6 +8,15 @@ export const initialState = {
 export default (state = initialState, action) => {
   switch (action.type) {
     case SCHEMA_LOADED: {
+      return {
+        ...state,
+        schema: {
+          [`${action.payload.entityTypeId}--${action.payload.bundle}`]: action
+            .payload.entitySchema,
+        },
+      };
+    }
+    case UI_SCHEMA_LOADED: {
       const [
         {
           attributes: { content: formDisplaySchema },
@@ -19,10 +28,6 @@ export default (state = initialState, action) => {
       }, {});
       return {
         ...state,
-        schema: {
-          [`${action.payload.entityTypeId}--${action.payload.bundle}`]: action
-            .payload.entitySchema,
-        },
         uiSchema: {
           ...state.uiSchema,
           [`${action.payload.entityTypeId}--${action.payload.bundle}`]: {

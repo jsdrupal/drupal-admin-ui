@@ -11,7 +11,7 @@ import Button from '@material-ui/core/Button';
 import PageTitle from '../../02_atoms/PageTitle';
 
 import { contentAdd } from '../../../actions/content';
-import { requestSchema } from '../../../actions/schema';
+import { requestSchema, requestUiSchema } from '../../../actions/schema';
 
 import { createEntity } from '../../../utils/api/schema';
 
@@ -43,6 +43,7 @@ class NodeForm extends React.Component {
     entityTypeId: PropTypes.string.isRequired,
     bundle: PropTypes.string.isRequired,
     requestSchema: PropTypes.func.isRequired,
+    requestUiSchema: PropTypes.func.isRequired,
     uiSchema: PropTypes.oneOfType([
       PropTypes.shape({
         fieldSchema: PropTypes.shape({}),
@@ -85,6 +86,10 @@ class NodeForm extends React.Component {
 
   componentDidMount() {
     this.props.requestSchema({
+      entityTypeId: this.props.entityTypeId,
+      bundle: this.props.bundle,
+    });
+    this.props.requestUiSchema({
       entityTypeId: this.props.entityTypeId,
       bundle: this.props.bundle,
     });
@@ -199,51 +204,48 @@ class NodeForm extends React.Component {
                           relationships,
                         } = this.props.schema.properties.data.properties;
 
-                        const propType =
-                          (attributes.properties[fieldName] && 'attributes') ||
-                          (relationships.properties[fieldName] &&
-                            'relationships');
-
-                        const fieldSchemaSettings = Object.prototype.hasOwnProperty.call(
-                          fieldSchema,
-                          fieldName,
-                        )
-                          ? fieldSchema[fieldName].attributes.settings
-                          : {};
-                        const formDisplaySettings = Object.prototype.hasOwnProperty.call(
-                          formDisplaySchema,
-                          fieldName,
-                        )
-                          ? formDisplaySchema[fieldName].settings
-                          : {};
-
-                        const [widgetMachineName] = Object.keys(
-                          this.props.widgets,
-                        ).filter(name =>
-                          formDisplaySchema[fieldName].type.startsWith(name),
-                        );
-                        const FieldWidget = this.props.widgets[
-                          widgetMachineName
-                        ];
-
-                        return React.createElement(FieldWidget, {
-                          key: fieldName,
-                          entityTypeId: this.props.entityTypeId,
-                          bundle: this.props.bundle,
-                          fieldName,
-                          value: this.state.entity[fieldName],
-                          label: entityFieldSchema && entityFieldSchema.title,
-                          schema: entityFieldSchema,
-                          onChange: this[
-                            propType === 'attributes'
-                              ? 'onAttributeChange'
-                              : 'onRelationshipChange'
-                          ](fieldName),
-                          inputProps: {
-                            ...fieldSchemaSettings,
-                            ...formDisplaySettings,
+                        return React.createElement(
+                          this.props.widgets[
+                            Object.keys(this.props.widgets)
+                              .filter(name =>
+                                formDisplaySchema[fieldName].type.startsWith(
+                                  name,
+                                ),
+                              )
+                              .shift()
+                          ],
+                          {
+                            key: fieldName,
+                            entityTypeId: this.props.entityTypeId,
+                            bundle: this.props.bundle,
+                            fieldName,
+                            value: this.state.entity[fieldName],
+                            label: entityFieldSchema && entityFieldSchema.title,
+                            schema: entityFieldSchema,
+                            onChange: this[
+                              ((attributes.properties[fieldName] &&
+                                'attributes') ||
+                                (relationships.properties[fieldName] &&
+                                  'relationships')) === 'attributes'
+                                ? 'onAttributeChange'
+                                : 'onRelationshipChange'
+                            ](fieldName),
+                            inputProps: {
+                              ...(Object.prototype.hasOwnProperty.call(
+                                fieldSchema,
+                                fieldName,
+                              )
+                                ? fieldSchema[fieldName].attributes.settings
+                                : {}),
+                              ...(Object.prototype.hasOwnProperty.call(
+                                formDisplaySchema,
+                                fieldName,
+                              )
+                                ? formDisplaySchema[fieldName].settings
+                                : {}),
+                            },
                           },
-                        });
+                        );
                       }
                       return null;
                     })
@@ -283,6 +285,7 @@ export default connect(
   mapStateToProps,
   {
     requestSchema,
+    requestUiSchema,
     contentAdd,
   },
 )(NodeForm);
