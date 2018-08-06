@@ -47,7 +47,10 @@ export default (state = initialState, action) => {
     case SCHEMA_LOADED: {
       return {
         ...state,
-        schema: action.payload.schema,
+        schema: {
+          [`${action.payload.entityTypeId}--${action.payload.bundle}`]: action
+            .payload.schema,
+        },
       };
     }
 

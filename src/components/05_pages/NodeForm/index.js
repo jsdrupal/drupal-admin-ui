@@ -13,6 +13,8 @@ import PageTitle from '../../02_atoms/PageTitle';
 import { requestSchema } from '../../../actions/content';
 import { requestUIConfigSchema } from '../../../actions/schema';
 
+import { createEntity } from '../../../utils/api/schema';
+
 const lazyFunction = f => (props, propName, componentName, ...rest) =>
   f(props, propName, componentName, ...rest);
 
@@ -30,13 +32,14 @@ let styles;
 
 class NodeForm extends React.Component {
   static propTypes = {
-    schema: schemaType,
+    schema: PropTypes.oneOfType([schemaType, PropTypes.bool]),
     widgets: PropTypes.objectOf(
       PropTypes.oneOfType([
         PropTypes.func,
         PropTypes.instanceOf(React.Component),
       ]).isRequired,
     ).isRequired,
+    contentAdd: PropTypes.func.isRequired,
     entityTypeId: PropTypes.string.isRequired,
     bundle: PropTypes.string.isRequired,
     requestSchema: PropTypes.func.isRequired,
@@ -55,29 +58,107 @@ class NodeForm extends React.Component {
     uiSchema: false,
   };
 
-  constructor(props) {
-    super(props);
+  static getDerivedStateFromProps(props, prevState) {
+    if (!props.schema) {
+      return prevState;
+    }
 
-    this.state = {
-      entity: {},
+    if (Object.prototype.hasOwnProperty.call(prevState || {}, 'entity')) {
+      return prevState;
+    }
+
+    const state = {
+      ...prevState,
+      entity: props.entity || {
+        ...createEntity(props.schema),
+      },
     };
+    // Just contain values which are in the ui metadata.
+    state.entity.data.attributes = Object.entries(state.entity.data.attributes)
+      .filter(([key]) =>
+        Object.keys(props.uiMetadata)
+          .concat(['type'])
+          .includes(key),
+      )
+      .reduce((agg, [key, value]) => ({ ...agg, [key]: value }), {});
+    return state;
   }
 
   componentDidMount() {
-    this.props.requestSchema();
+    this.props.requestSchema({
+      entityTypeId: this.props.entityTypeId,
+      bundle: this.props.bundle,
+    });
     this.props.requestUIConfigSchema({
       entityTypeId: this.props.entityTypeId,
       bundle: this.props.bundle,
     });
   }
 
-  onFieldChange = fieldName => data => {
+  onAttributeChange = fieldName => data => {
     this.setState(prevState => ({
       entity: {
-        ...prevState.entity,
-        [fieldName]: data,
+        data: {
+          ...prevState.entity.data,
+          attributes: {
+            ...prevState.entity.data.attributes,
+            [fieldName]: data,
+          },
+        },
       },
     }));
+  };
+
+  onRelationshipChange = fieldName => data => {
+    // Support widgets with multiple cardinality.
+    let fieldData;
+    let isMultiple;
+    if (typeof data.data !== 'undefined') {
+      fieldData = data.data;
+      isMultiple = false;
+    } else {
+      fieldData = Object.values(data);
+      isMultiple = true;
+    }
+    this.setState(prevState => ({
+      entity: {
+        data: {
+          ...prevState.entity.data,
+          relationships: {
+            ...prevState.entity.data.relationships,
+            [fieldName]: {
+              data: isMultiple
+                ? fieldData
+                : {
+                    ...prevState.entity.data.relationships[fieldName].data,
+                    ...fieldData,
+                  },
+            },
+          },
+        },
+      },
+    }));
+  };
+
+  onSave = () => {
+    // @todo Remove in https://github.com/jsdrupal/drupal-admin-ui/issues/245
+    const { data: entity } = this.state.entity;
+
+    entity.attributes.field_summary = entity.attributes.field_summary || {
+      value: 'Empty',
+      format: 'basic_html',
+    };
+    entity.attributes.field_recipe_instruction = entity.attributes
+      .field_recipe_instruction || {
+      value: 'Empty',
+      format: 'basic_html',
+    };
+
+    const data = {
+      ...entity,
+      type: `${this.props.entityTypeId}--${this.props.bundle}`,
+    };
+    this.props.contentAdd(data);
   };
 
   getSchemaInfo = (schema, fieldName) =>

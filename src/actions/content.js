@@ -10,22 +10,26 @@ import { MESSAGE_ERROR } from '../constants/messages';
 import { setMessage } from './application';
 
 export const SCHEMA_REQUESTED = 'SCHEMA_REQUESTED';
-export const requestSchema = () => ({
+export const requestSchema = ({ entityTypeId, bundle }) => ({
   type: SCHEMA_REQUESTED,
-  payload: {},
+  payload: { entityTypeId, bundle },
 });
 
 export const SCHEMA_LOADED = 'SCHEMA_LOADED';
-function* loadSchema() {
+function* loadSchema(action) {
+  const { entityTypeId, bundle } = action.payload;
   try {
     yield put(resetLoading());
     yield put(showLoading());
 
-    // @todo Can we filter this? Fetching the entire schema seems silly.
-    const { definitions: schema } = yield call(api, 'schema');
+    const schema = yield call(api, 'schema', {
+      parameters: { entityTypeId, bundle },
+    });
     yield put({
       type: SCHEMA_LOADED,
       payload: {
+        entityTypeId,
+        bundle,
         schema,
       },
     });
@@ -137,6 +141,14 @@ function* loadContent(action) {
 export const CONTENT_SAVE = 'CONTENT_SAVE';
 export const contentSave = content => ({
   type: CONTENT_SAVE,
+  payload: {
+    content,
+  },
+});
+
+export const CONTENT_ADD = 'CONTENT_ADD';
+export const contentAdd = content => ({
+  type: CONTENT_ADD,
   payload: {
     content,
   },
@@ -284,6 +296,18 @@ function* saveContent({ payload: { content } }) {
   }
 }
 
+function* addContent({ payload: { content } }) {
+  try {
+    yield put(resetLoading());
+    yield put(showLoading());
+    yield call(api, 'node:add', { parameters: { node: content } });
+  } catch (error) {
+    yield put(setMessage(error.toString()));
+  } finally {
+    yield put(hideLoading());
+  }
+}
+
 function* deleteContent({ payload: { content } }) {
   try {
     yield put(resetLoading());
@@ -301,5 +325,6 @@ export default function* rootSaga() {
   yield takeLatest(CONTENT_REQUESTED, loadContent);
   yield takeLatest(ACTION_EXECUTE, executeAction);
   yield takeLatest(CONTENT_SAVE, saveContent);
+  yield takeLatest(CONTENT_ADD, addContent);
   yield takeLatest(CONTENT_DELETE, deleteContent);
 }
