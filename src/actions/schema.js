@@ -1,4 +1,4 @@
-import { put, call, takeLatest } from 'redux-saga/effects';
+import { put, takeLatest } from 'redux-saga/effects';
 import {
   showLoading,
   hideLoading,
@@ -9,34 +9,48 @@ import api from '../utils/api/api';
 import { MESSAGE_ERROR } from '../constants/messages';
 import { setMessage } from './application';
 
-// UI CONFIG SCHEMA
-export const UI_CONFIG_SCHEMA_REQUESTED = 'UI_CONFIG_SCHEMA_REQUESTED';
-export const requestUIConfigSchema = ({ entityTypeId, bundle }) => ({
-  type: UI_CONFIG_SCHEMA_REQUESTED,
+export const SCHEMA_REQUESTED = 'SCHEMA_REQUESTED';
+export const requestSchema = ({ entityTypeId, bundle }) => ({
+  type: SCHEMA_REQUESTED,
   payload: { entityTypeId, bundle },
 });
 
-export const UI_CONFIG_SCHEMA_LOADED = 'UI_CONFIG_SCHEMA_LOADED';
+export const SCHEMA_LOADED = 'SCHEMA_LOADED';
 function* loadSchema(action) {
   const { entityTypeId, bundle } = action.payload;
   try {
     yield put(resetLoading());
     yield put(showLoading());
-    const { data: fieldSchema } = yield call(api, 'field_schema', {
-      parameters: { entityTypeId, bundle, mode: 'default' },
-    });
-    const { data: formDisplaySchema } = yield call(api, 'form_display', {
-      queryString: {
-        filter: { bundle, targetEntityType: entityTypeId, mode: 'default' },
-      },
-    });
+
+    const [
+      { data: fieldSchema },
+      { data: formDisplaySchema },
+      entitySchema,
+    ] = yield Promise.all([
+      api('field_schema', {
+        queryString: {
+          filter: { entity_type: entityTypeId, bundle, mode: 'default' },
+        },
+      }),
+      api('form_display', {
+        queryString: {
+          filter: { targetEntityType: entityTypeId, bundle, mode: 'default' },
+        },
+      }),
+      api('schema', {
+        parameters: { entityTypeId, bundle },
+        queryString: { _describes: 'api_json', _format: 'schema_json' },
+      }),
+    ]);
+
     yield put({
-      type: UI_CONFIG_SCHEMA_LOADED,
+      type: SCHEMA_LOADED,
       payload: {
         entityTypeId,
         bundle,
         fieldSchema,
         formDisplaySchema,
+        entitySchema,
       },
     });
   } catch (error) {
@@ -47,5 +61,5 @@ function* loadSchema(action) {
 }
 
 export default function* rootSaga() {
-  yield takeLatest(UI_CONFIG_SCHEMA_REQUESTED, loadSchema);
+  yield takeLatest(SCHEMA_REQUESTED, loadSchema);
 }

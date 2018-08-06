@@ -147,13 +147,11 @@ async function api(
     case 'schema': {
       url = `/schemata/${[parameters.entityTypeId, parameters.bundle].join(
         '/',
-      )}?_describes=api_json&_format=schema_json`;
+      )}`;
       break;
     }
     case 'field_schema': {
-      url = `/jsonapi/field_config?filter[bundle]=${
-        parameters.bundle
-      }&filter[entity_type]=${parameters.entityTypeId}`;
+      url = '/jsonapi/field_config';
       break;
     }
     case 'form_display': {

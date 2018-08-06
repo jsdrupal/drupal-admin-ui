@@ -10,8 +10,8 @@ import Button from '@material-ui/core/Button';
 
 import PageTitle from '../../02_atoms/PageTitle';
 
-import { requestSchema, contentAdd } from '../../../actions/content';
-import { requestUIConfigSchema } from '../../../actions/schema';
+import { contentAdd } from '../../../actions/content';
+import { requestSchema } from '../../../actions/schema';
 
 import { createEntity } from '../../../utils/api/schema';
 
@@ -43,7 +43,6 @@ class NodeForm extends React.Component {
     entityTypeId: PropTypes.string.isRequired,
     bundle: PropTypes.string.isRequired,
     requestSchema: PropTypes.func.isRequired,
-    requestUIConfigSchema: PropTypes.func.isRequired,
     uiSchema: PropTypes.oneOfType([
       PropTypes.shape({
         fieldSchema: PropTypes.shape({}),
@@ -86,10 +85,6 @@ class NodeForm extends React.Component {
 
   componentDidMount() {
     this.props.requestSchema({
-      entityTypeId: this.props.entityTypeId,
-      bundle: this.props.bundle,
-    });
-    this.props.requestUIConfigSchema({
       entityTypeId: this.props.entityTypeId,
       bundle: this.props.bundle,
     });
@@ -205,7 +200,7 @@ class NodeForm extends React.Component {
                         } = this.props.schema.properties.data.properties;
 
                         const propType =
-                        (attributes.properties[fieldName] && 'attributes') ||
+                          (attributes.properties[fieldName] && 'attributes') ||
                           (relationships.properties[fieldName] &&
                             'relationships');
 
@@ -255,7 +250,11 @@ class NodeForm extends React.Component {
                     .filter(x => x)}
                 </FormControl>
                 <Divider classes={{ root: styles.divider }} />
-                <Button variant="contained" color="primary" onClick={() => {}}>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={this.onSave}
+                >
                   Save
                 </Button>
               </div>
@@ -276,7 +275,7 @@ styles = {
 };
 
 const mapStateToProps = (state, { bundle, entityTypeId }) => ({
-  schema: state.content.schema[`${entityTypeId}--${bundle}`],
+  schema: state.schema.schema[`${entityTypeId}--${bundle}`],
   uiSchema: state.schema.uiSchema[`${entityTypeId}--${bundle}`],
 });
 
@@ -284,7 +283,6 @@ export default connect(
   mapStateToProps,
   {
     requestSchema,
-    requestUIConfigSchema,
     contentAdd,
   },
 )(NodeForm);
