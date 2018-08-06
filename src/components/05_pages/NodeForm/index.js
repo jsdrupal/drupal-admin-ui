@@ -10,7 +10,7 @@ import Button from '@material-ui/core/Button';
 
 import PageTitle from '../../02_atoms/PageTitle';
 
-import { requestSchema } from '../../../actions/content';
+import { requestSchema, contentAdd } from '../../../actions/content';
 import { requestUIConfigSchema } from '../../../actions/schema';
 
 import { createEntity } from '../../../utils/api/schema';
@@ -76,7 +76,7 @@ class NodeForm extends React.Component {
     // Just contain values which are in the ui metadata.
     state.entity.data.attributes = Object.entries(state.entity.data.attributes)
       .filter(([key]) =>
-        Object.keys(props.uiMetadata)
+        Object.keys(props.uiSchema)
           .concat(['type'])
           .includes(key),
       )
@@ -199,6 +199,16 @@ class NodeForm extends React.Component {
                           fieldName,
                         );
 
+                        const {
+                          attributes,
+                          relationships,
+                        } = this.props.schema.properties.data.properties;
+
+                        const propType =
+                        (attributes.properties[fieldName] && 'attributes') ||
+                          (relationships.properties[fieldName] &&
+                            'relationships');
+
                         const fieldSchemaSettings = Object.prototype.hasOwnProperty.call(
                           fieldSchema,
                           fieldName,
@@ -229,7 +239,11 @@ class NodeForm extends React.Component {
                           value: this.state.entity[fieldName],
                           label: entityFieldSchema && entityFieldSchema.title,
                           schema: entityFieldSchema,
-                          onChange: this.onFieldChange(fieldName),
+                          onChange: this[
+                            propType === 'attributes'
+                              ? 'onAttributeChange'
+                              : 'onRelationshipChange'
+                          ](fieldName),
                           inputProps: {
                             ...fieldSchemaSettings,
                             ...formDisplaySettings,
@@ -271,5 +285,6 @@ export default connect(
   {
     requestSchema,
     requestUIConfigSchema,
+    contentAdd,
   },
 )(NodeForm);
