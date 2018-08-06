@@ -82,7 +82,10 @@ class NodeForm extends React.Component {
   }
 
   componentDidMount() {
-    this.props.requestSchema();
+    this.props.requestSchema({
+      entityTypeId: this.props.entityTypeId,
+      bundle: this.props.bundle,
+    });
   }
 
   onAttributeChange = fieldName => data => {
