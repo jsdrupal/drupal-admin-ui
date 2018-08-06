@@ -92,17 +92,19 @@ class NodeForm extends React.Component {
   }
 
   onAttributeChange = fieldName => data => {
-    this.setState(prevState => ({
-      entity: {
-        data: {
-          ...prevState.entity.data,
-          attributes: {
-            ...prevState.entity.data.attributes,
-            [fieldName]: data,
+    this.setState(
+      prevState => ({
+        entity: {
+          data: {
+            ...prevState.entity.data,
+            attributes: {
+              ...prevState.entity.data.attributes,
+              [fieldName]: data,
+            },
           },
         },
-      },
-    }), this.storeToLocalStorage,
+      }),
+      this.storeToLocalStorage,
     );
   };
 
@@ -117,24 +119,26 @@ class NodeForm extends React.Component {
       fieldData = Object.values(data);
       isMultiple = true;
     }
-    this.setState(prevState => ({
-      entity: {
-        data: {
-          ...prevState.entity.data,
-          relationships: {
-            ...prevState.entity.data.relationships,
-            [fieldName]: {
-              data: isMultiple
-                ? fieldData
-                : {
-                    ...prevState.entity.data.relationships[fieldName].data,
-                    ...fieldData,
-                  },
+    this.setState(
+      prevState => ({
+        entity: {
+          data: {
+            ...prevState.entity.data,
+            relationships: {
+              ...prevState.entity.data.relationships,
+              [fieldName]: {
+                data: isMultiple
+                  ? fieldData
+                  : {
+                      ...prevState.entity.data.relationships[fieldName].data,
+                      ...fieldData,
+                    },
+              },
             },
           },
         },
-      },
-    }), this.storeToLocalStorage,
+      }),
+      this.storeToLocalStorage,
     );
   };
 
