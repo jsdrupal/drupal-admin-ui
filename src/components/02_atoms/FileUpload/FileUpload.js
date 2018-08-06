@@ -1,10 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'react-emotion';
-import Card from '@material-ui/core/Card';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
-import CardContent from '@material-ui/core/CardContent';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import api from './../../../utils/api/api';
@@ -15,7 +13,6 @@ const Element = styled('div')`
   padding: 80px;
   width: 100%;
   position: relative;
-  margin-bottom: 20px;
 `;
 
 const Text = styled('div')`
@@ -31,8 +28,12 @@ const Text = styled('div')`
   }
 `;
 
-const marginBottom = {
-  marginBottom: '20px',
+const marginTopDense = {
+  marginTop: '10px',
+};
+
+const marginTop = {
+  marginTop: '20px',
 };
 
 const error = {
@@ -319,86 +320,85 @@ class FileUpload extends Component {
     } = this;
 
     return (
-      <Card>
-        <CardContent>
-          <Element
-            onDrop={isEnabled(onDrop)}
-            onClick={isEnabled(onClick)}
-            onDragOver={isEnabled(onDragOver)}
-            onDragLeave={isEnabled(onDragLeave)}
-            innerRef={element => {
-              this.element = element;
+      <div>
+        <Element
+          onDrop={isEnabled(onDrop)}
+          onClick={isEnabled(onClick)}
+          onDragOver={isEnabled(onDragOver)}
+          onDragLeave={isEnabled(onDragLeave)}
+          innerRef={element => {
+            this.element = element;
+          }}
+        >
+          <Text>
+            <Typography variant="subheading">
+              {multiple
+                ? 'Drop files or click here to upload.'
+                : 'Drop a file or click here to upload.'}
+            </Typography>
+            <Button
+              size="small"
+              color="primary"
+              variant="contained"
+              disabled={isDisabled}
+              aria-label="Upload Image/s"
+              style={marginTop}
+            >
+              Upload <CloudUploadIcon className="icon" />
+            </Button>
+          </Text>
+
+          <input
+            type="file"
+            onChange={getFiles}
+            multiple={multiple}
+            style={{ display: 'none' }}
+            ref={element => {
+              this.input = element;
             }}
-          >
-            <Text>
-              <Typography style={marginBottom} component="p">
-                {multiple
-                  ? 'Drop files or click here to upload.'
-                  : 'Drop a file or click here to upload.'}
-              </Typography>
-              <Button
-                size="small"
-                color="primary"
-                variant="contained"
-                disabled={isDisabled}
-                aria-label="Upload Image/s"
-              >
-                Upload <CloudUploadIcon className="icon" />
-              </Button>
-            </Text>
+          />
+        </Element>
 
-            <input
-              type="file"
-              onChange={getFiles}
-              multiple={multiple}
-              style={{ display: 'none' }}
-              ref={element => {
-                this.input = element;
-              }}
-            />
-          </Element>
+        {filesLength > 0 && (
+          <LinearProgress
+            style={marginTop}
+            variant="determinate"
+            value={(total / filesLength) * 100}
+          />
+        )}
 
-          {filesLength > 0 && (
-            <LinearProgress
-              style={marginBottom}
-              variant="determinate"
-              value={(total / filesLength) * 100}
-            />
-          )}
+        <Typography component="p" style={marginTopDense}>
+          Remaining uploads: {RemainingUploads}
+        </Typography>
 
-          <Typography component="p">
-            Remaining uploads: {RemainingUploads}
-          </Typography>
+        {errors.length > 0 && (
+          <div>
+            <Typography style={error} component="p">
+              One or more files could not be uploaded.
+            </Typography>
 
-          {errors.length > 0 && (
-            <div>
-              <Typography style={error} component="p">
-                One or more files could not be uploaded.
-              </Typography>
-
-              <Typography style={error} component="ul">
-                {errors.map(({ name, size, type, id }) => (
-                  <Typography style={error} component="li" key={id}>
-                    {name}
-                    <Typography style={error} component="ul">
-                      {size && (
-                        <Typography style={error} component="li">
-                          {size}
-                        </Typography>
-                      )}
-                      {type && (
-                        <Typography style={error} component="li">
-                          {type}
-                        </Typography>
-                      )}
-                    </Typography>
+            <Typography style={error} component="ul">
+              {errors.map(({ name, size, type, id }) => (
+                <Typography style={error} component="li" key={id}>
+                  {name}
+                  <Typography style={error} component="ul">
+                    {size && (
+                      <Typography style={error} component="li">
+                        {size}
+                      </Typography>
+                    )}
+                    {type && (
+                      <Typography style={error} component="li">
+                        {type}
+                      </Typography>
+                    )}
                   </Typography>
-                ))}
-              </Typography>
-            </div>
-          )}
-        </CardContent>
-      </Card>
+                </Typography>
+              ))}
+            </Typography>
+          </div>
+        )}
+      </div>
     );
   };
 }

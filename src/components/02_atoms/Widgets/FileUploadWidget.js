@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'react-emotion';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
+import Divider from '@material-ui/core/Divider';
 import FormControl from '@material-ui/core/FormControl';
 import FormLabel from '@material-ui/core/FormLabel';
 import TextField from '@material-ui/core/TextField';
@@ -13,6 +14,10 @@ import DeleteIcon from '@material-ui/icons/Delete';
 
 import WidgetPropTypes from '../../05_pages/NodeForm/WidgetPropTypes';
 import FileUpload from '../FileUpload/FileUpload';
+
+const CardWrapper = styled('div')`
+  margin-top: 15px;
+`;
 
 const Element = styled('div')`
   > div {
@@ -50,7 +55,7 @@ const FileUploadWidget = ({
   const maxItemsCount = maxItems || 1; // maxItems is only set if array, so set to 1 as default
 
   return (
-    <FormControl>
+    <FormControl margin="normal">
       <Element>
         <FormLabel component="legend">{label}</FormLabel>
         <div
@@ -93,66 +98,72 @@ const FileUploadWidget = ({
         </div>
 
         {length > 0 && (
-          <Card>
-            <CardContent>
-              <List>
-                {Object.keys(value.data).map(key => {
-                  const {
-                    meta: { alt },
-                    file: { url, filename },
-                  } = value.data[key];
+          <CardWrapper>
+            <Card>
+              <CardContent>
+                <List>
+                  {Object.keys(value.data).map((key, index) => {
+                    const {
+                      meta: { alt },
+                      file: { url, filename },
+                    } = value.data[key];
+                    const last = Object.keys(value.data).length - 1 === index;
 
-                  return (
-                    <ListItem key={key}>
-                      <Image>
-                        <img
-                          alt={alt || filename}
-                          src={`${process.env.REACT_APP_DRUPAL_BASE_URL}${url}`}
-                        />
-                      </Image>
-                      <TextField
-                        required
-                        value={alt}
-                        margin="normal"
-                        label="Alternative text"
-                        onChange={event =>
-                          onChange({
-                            data: {
-                              ...value.data,
-                              [key]: {
-                                ...value.data[key],
-                                meta: {
-                                  alt: event.target.value,
+                    return (
+                      <Fragment>
+                        <ListItem key={key}>
+                          <Image>
+                            <img
+                              alt={alt || filename}
+                              src={`${process.env.REACT_APP_DRUPAL_BASE_URL}${url}`}
+                            />
+                          </Image>
+                          <TextField
+                            required
+                            value={alt}
+                            margin="normal"
+                            label="Alternative text"
+                            onChange={event =>
+                              onChange({
+                                data: {
+                                  ...value.data,
+                                  [key]: {
+                                    ...value.data[key],
+                                    meta: {
+                                      alt: event.target.value,
+                                    },
+                                  },
                                 },
-                              },
-                            },
-                          })
-                        }
-                      />
-                      <Button
-                        mini
-                        variant="fab"
-                        color="secondary"
-                        className="remove"
-                        aria-label="Remove Image"
-                        id={key}
-                        onClick={event => {
-                          const {
-                            data: { [event.currentTarget.id]: remove, ...data },
-                          } = value;
-                          onChange({
-                            data,
-                          });
-                        }}
-                      >
-                        <DeleteIcon />
-                      </Button>
-                    </ListItem>
-                  );
-                })}
-              </List>
-            </CardContent>
-          </Card>
+                              })
+                            }
+                          />
+                          <Button
+                            mini
+                            variant="fab"
+                            color="secondary"
+                            className="remove"
+                            aria-label="Remove Image"
+                            id={key}
+                            onClick={event => {
+                              const {
+                                data: { [event.currentTarget.id]: remove, ...data },
+                              } = value;
+                              onChange({
+                                data,
+                              });
+                            }}
+                          >
+                            <DeleteIcon />
+                          </Button>
+                        </ListItem>
+                        {!last && <Divider />}
+                      </Fragment>
+                    );
+                  })}
+                </List>
+              </CardContent>
+            </Card>
+          </CardWrapper>
         )}
       </Element>
     </FormControl>
