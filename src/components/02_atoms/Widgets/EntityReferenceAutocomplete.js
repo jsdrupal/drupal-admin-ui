@@ -18,7 +18,11 @@ class EntityReferenceAutocomplete extends React.Component {
     inputProps: PropTypes.shape({
       bundle: PropTypes.string,
       type: PropTypes.string,
-    }).isRequired,
+    }),
+  };
+
+  static defaultProps = {
+    inputProps: {},
   };
 
   state = {
@@ -32,7 +36,20 @@ class EntityReferenceAutocomplete extends React.Component {
     this.setState(
       ({ selectedItems }) => ({
         inputValue: '',
-        selectedItems: { ...selectedItems, ...{ [id]: { id, label } } },
+        selectedItems: {
+          ...selectedItems,
+          ...{
+            [id]: {
+              id,
+              label,
+              // Figure out a better way to handle this.
+              type: (
+                this.props.schema.properties.data.items ||
+                this.props.schema.properties.data
+              ).properties.type.enum[0],
+            },
+          },
+        },
       }),
       () => {
         this.props.onChange(this.state.selectedItems);
