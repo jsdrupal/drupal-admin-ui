@@ -32,6 +32,7 @@ schemaType = PropTypes.shape({
 let styles;
 
 class NodeForm extends React.Component {
+
   static propTypes = {
     uiMetadata: PropTypes.objectOf(
       PropTypes.shape({
@@ -56,6 +57,11 @@ class NodeForm extends React.Component {
     schema: false,
   };
 
+  state = {
+    restorableEntity: null,
+  };
+
+
   static getDerivedStateFromProps(props, prevState) {
     if (!props.schema) {
       return prevState;
@@ -70,7 +76,6 @@ class NodeForm extends React.Component {
       entity: props.entity || {
         ...createEntity(props.schema),
       },
-      restorableEntity: null,
     };
     // Just contain values which are in the ui metadata.
     state.entity.data.attributes = Object.entries(state.entity.data.attributes)
@@ -170,8 +175,8 @@ class NodeForm extends React.Component {
   restoreLoadedContent = () => {
     // When editing content we don't want to override content which was touched in the meantime.
     if (
-      this.state.entity.created &&
-      this.state.entity.created > this.state.restorableEntity
+      this.state.entity.data.attributes.changed &&
+      this.state.entity.data.attributes.changed > this.state.restorableEntity.data.attributes.changed
     ) {
       return;
     }
@@ -193,7 +198,7 @@ class NodeForm extends React.Component {
     if (window.localStorage) {
       const item = JSON.stringify(this.state.entity);
       window.localStorage.setItem(
-        `drupal_admin_ui__node_${this.props.bundle}`,
+        `drupal_admin_ui__node_${this.props.bundle}:${this.state.entity && this.state.entity.data.id || ''}`,
         item,
       );
     }
@@ -202,7 +207,7 @@ class NodeForm extends React.Component {
   loadFromLocalStorage = () => {
     if (window.localStorage) {
       const item = window.localStorage.getItem(
-        `drupal_admin_ui__node_${this.props.bundle}`,
+        `drupal_admin_ui__node_${this.props.bundle}:${this.state.entity && this.state.entity.data.id || ''}`,
       );
       if (item) {
         this.setState({
