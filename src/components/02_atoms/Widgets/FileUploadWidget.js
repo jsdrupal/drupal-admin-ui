@@ -54,7 +54,7 @@ const FileUploadWidget = ({
   // If array then allow for multiple uploads.
   const multiple = properties.data.type === 'array';
   // maxItems is only set if array, so set to 1 as default.
-  const maxItemsCount = multiple ? (maxItems || 100000000000) : 1;
+  const maxItemsCount = multiple ? maxItems || 100000000000 : 1;
 
   return (
     <FormControl margin="normal">
