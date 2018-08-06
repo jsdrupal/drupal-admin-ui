@@ -186,6 +186,7 @@ class Content extends Component {
         <Paper>
           <div className={styles.filters}>
             <TextField
+              inputProps={{ 'aria-label': 'Title' }}
               label="Title"
               placeholder="Title"
               onChange={e => {
