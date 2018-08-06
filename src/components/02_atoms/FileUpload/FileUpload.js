@@ -47,7 +47,7 @@ class FileUpload extends Component {
     fieldName: PropTypes.string.isRequired,
     onFileUpload: PropTypes.func.isRequired,
     multiple: PropTypes.bool.isRequired,
-    RemainingUploads: PropTypes.number.isRequired,
+    remainingUploads: PropTypes.number.isRequired,
     inputProps: PropTypes.shape({
       file_extensions: PropTypes.string,
       max_filesize: PropTypes.number,
@@ -260,12 +260,12 @@ class FileUpload extends Component {
       setElementStyles,
       checkFile,
       uploadFile,
-      props: { multiple, RemainingUploads },
+      props: { multiple, remainingUploads },
     } = this;
 
     // Slice the files if more than the remaining uploads length
     const slicedFiles = Object.keys(files)
-      .slice(0, RemainingUploads)
+      .slice(0, remainingUploads)
       .reduce((obj, value) => {
         obj[value] = files[value];
         return obj;
@@ -316,7 +316,7 @@ class FileUpload extends Component {
       onDragOver,
       onDragLeave,
       state: { total, errors, isDisabled, filesLength },
-      props: { multiple, RemainingUploads },
+      props: { multiple, remainingUploads },
     } = this;
 
     return (
@@ -367,9 +367,11 @@ class FileUpload extends Component {
           />
         )}
 
-        <Typography component="p" style={marginTopDense}>
-          Remaining uploads: {RemainingUploads}
-        </Typography>
+        {remainingUploads <= 15 && (
+          <Typography component="p" style={marginTopDense}>
+            Remaining uploads: {remainingUploads}
+          </Typography>
+        )}
 
         {errors.length > 0 && (
           <div>

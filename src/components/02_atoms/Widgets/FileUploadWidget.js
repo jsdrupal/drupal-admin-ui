@@ -52,7 +52,7 @@ const FileUploadWidget = ({
 }) => {
   const length = (value && value.data && Object.keys(value.data).length) || 0;
   const multiple = properties.data.type === 'array'; // If array then allow for multiple uploads
-  const maxItemsCount = maxItems || 1; // maxItems is only set if array, so set to 1 as default
+  const maxItemsCount = multiple ? maxItems || 100000000000 : 1; // maxItems is only set if array, so set to 1 as default
 
   return (
     <FormControl margin="normal">
@@ -72,7 +72,7 @@ const FileUploadWidget = ({
             fieldName={fieldName}
             inputProps={inputProps}
             entityTypeId={entityTypeId}
-            RemainingUploads={maxItemsCount - length}
+            remainingUploads={maxItemsCount - length}
             onFileUpload={files => {
               const data = files.reduce((arr, file) => {
                 arr[file.uuid[0].value] = {
@@ -115,7 +115,9 @@ const FileUploadWidget = ({
                           <Image>
                             <img
                               alt={alt || filename}
-                              src={`${process.env.REACT_APP_DRUPAL_BASE_URL}${url}`}
+                              src={`${
+                                process.env.REACT_APP_DRUPAL_BASE_URL
+                              }${url}`}
                             />
                           </Image>
                           <TextField
@@ -139,14 +141,17 @@ const FileUploadWidget = ({
                           />
                           <Button
                             mini
+                            id={key}
                             variant="fab"
                             color="secondary"
                             className="remove"
                             aria-label="Remove Image"
-                            id={key}
                             onClick={event => {
                               const {
-                                data: { [event.currentTarget.id]: remove, ...data },
+                                data: {
+                                  [event.currentTarget.id]: remove,
+                                  ...data
+                                },
                               } = value;
                               onChange({
                                 data,
