@@ -1,9 +1,4 @@
 import { LOCATION_CHANGE } from 'react-router-redux';
-import { ROLES_LOADED } from '../actions/roles';
-import {
-  DBLOG_COLLECTION_LOADED,
-  DBLOG_FILTER_UPDATED,
-} from '../actions/reports';
 import {
   CLOSE_DRAWER,
   OPEN_DRAWER,
@@ -70,48 +65,6 @@ export default (state = initialState, action) => {
         menuLinks: Array.isArray(action.payload.menuLinks)
           ? action.payload.menuLinks
           : [],
-      };
-    }
-    case DBLOG_COLLECTION_LOADED: {
-      const { dblog, ...rest } = state;
-      return {
-        ...rest,
-        dblog: {
-          ...dblog,
-          next:
-            Object.prototype.hasOwnProperty.call(
-              action.payload.dbLogEntries.links,
-              'next',
-            ) || false,
-          entries: action.payload.dbLogEntries.data.map(
-            ({
-              attributes: {
-                wid,
-                message_formatted_plain: messageFormattedPlain,
-                timestamp,
-                type,
-              },
-            }) => ({ wid, messageFormattedPlain, timestamp, type }),
-          ),
-          availableTypes: action.payload.dbLogEntriesTypes,
-        },
-      };
-    }
-    case DBLOG_FILTER_UPDATED: {
-      const { dblog, ...rest } = state;
-      return {
-        ...rest,
-        dblog: {
-          ...dblog,
-          filterOptions: action.payload.options,
-        },
-      };
-    }
-    case ROLES_LOADED: {
-      const roles = action.payload.roles.data;
-      return {
-        ...state,
-        roles,
       };
     }
     case CONTENT_TYPES_LOADED: {
