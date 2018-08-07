@@ -9,24 +9,12 @@ import Paper from '@material-ui/core/Paper';
 import Divider from '@material-ui/core/Divider';
 import Button from '@material-ui/core/Button';
 
+import SchemaPropType from './SchemaPropType';
 import Widgets from './Widgets';
 import PageTitle from '../../02_atoms/PageTitle';
 
 import { requestSchema, contentAdd } from '../../../actions/content';
 import { createEntity } from '../../../utils/api/schema';
-
-const lazyFunction = f => (props, propName, componentName, ...rest) =>
-  f(props, propName, componentName, ...rest);
-
-let schemaType;
-const lazySchemaType = lazyFunction(() => schemaType);
-
-schemaType = PropTypes.shape({
-  type: PropTypes.string.isRequired,
-  title: PropTypes.string,
-  description: PropTypes.string,
-  properties: PropTypes.objectOf(lazyFunction(lazySchemaType)),
-}).isRequired;
 
 let styles;
 
@@ -38,7 +26,7 @@ class NodeForm extends React.Component {
         constraints: PropTypes.array,
       }),
     ).isRequired,
-    schema: PropTypes.oneOfType([schemaType, PropTypes.bool]),
+    schema: PropTypes.oneOfType([SchemaPropType, PropTypes.bool]),
     widgets: PropTypes.objectOf(
       PropTypes.oneOfType([
         PropTypes.func,
@@ -187,11 +175,9 @@ class NodeForm extends React.Component {
                         value: this.state.entity.data[propType][fieldName],
                         label: fieldSchema && fieldSchema.title,
                         schema: fieldSchema,
-                        onChange: this[
-                          propType === 'attributes'
-                            ? 'onAttributeChange'
-                            : 'onRelationshipChange'
-                        ](fieldName),
+                        onChange: (propType === 'attributes'
+                          ? this.onAttributeChange
+                          : this.onRelationshipChange)(fieldName),
                         inputProps,
                       });
                     }
