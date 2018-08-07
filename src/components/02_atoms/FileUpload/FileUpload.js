@@ -50,7 +50,7 @@ class FileUpload extends Component {
     remainingUploads: PropTypes.number.isRequired,
     inputProps: PropTypes.shape({
       file_extensions: PropTypes.string,
-      max_filesize: PropTypes.number,
+      max_filesize: PropTypes.string,
     }).isRequired,
   };
 
@@ -202,7 +202,7 @@ class FileUpload extends Component {
     } = this;
 
     // Check file size
-    if (size > max_filesize) {
+    if (size > Number(max_filesize)) {
       // TODO: Convert max_filesize to MB
       errors.size =
         'The file could not be saved because it exceeds 2 MB, the maximum allowed size for uploads.';
