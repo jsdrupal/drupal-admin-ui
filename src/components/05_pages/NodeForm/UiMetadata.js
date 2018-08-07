@@ -28,6 +28,14 @@ const UiMetadata = {
       suffix: ' minutes',
     },
   },
+  field_recipe_instruction: {
+    widget: 'text_textarea',
+    constraints: [],
+  },
+  field_summary: {
+    widget: 'text_textarea',
+    constraints: [],
+  },
   field_number_of_servings: {
     widget: 'number_textfield',
     constraints: [],
