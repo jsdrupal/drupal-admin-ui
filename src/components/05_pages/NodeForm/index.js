@@ -13,7 +13,7 @@ import PageTitle from '../../02_atoms/PageTitle';
 import { contentAdd } from '../../../actions/content';
 import { requestSchema, requestUiSchema } from '../../../actions/schema';
 
-import { createEntity } from '../../../utils/api/schema';
+import { createEntity, createUISchema } from '../../../utils/api/schema';
 
 const lazyFunction = f => (props, propName, componentName, ...rest) =>
   f(props, propName, componentName, ...rest);
@@ -166,80 +166,47 @@ class NodeForm extends React.Component {
             <Paper>
               <div className={styles.container}>
                 <FormControl margin="normal" fullWidth>
-                  {Array.from(
-                    new Set([
-                      ...Object.keys(this.props.uiSchema.fieldSchema),
-                      ...Object.keys(this.props.uiSchema.formDisplaySchema),
-                    ]),
+                  {Object.entries(
+                    createUISchema(
+                      this.props.uiSchema.fieldSchema,
+                      this.props.uiSchema.formDisplaySchema,
+                      this.props.widgets,
+                    ),
                   )
-                    .map(fieldName => {
+                    .map(([fieldName, { widget, inputProps }]) => {
+                      // @todo We need to pass along props.
+                      // @todo How do we handle cardinality together with jsonapi
+                      // making a distinction between single value fields and multi value fields.
+                      const entityFieldSchema = this.getSchemaInfo(
+                        this.props.schema,
+                        fieldName,
+                      );
+
                       const {
-                        fieldSchema,
-                        formDisplaySchema,
-                      } = this.props.uiSchema;
+                        attributes,
+                        relationships,
+                      } = this.props.schema.properties.data.properties;
 
-                      if (
-                        Object.keys(this.props.widgets).filter(name =>
-                          formDisplaySchema[fieldName].type.startsWith(name),
-                        ).length
-                      ) {
-                        // @todo We need to pass along props.
-                        // @todo How do we handle cardinality together with jsonapi
-                        // making a distinction between single value fields and multi value fields.
-                        const entityFieldSchema = this.getSchemaInfo(
-                          this.props.schema,
-                          fieldName,
-                        );
+                      const propType =
+                        (attributes.properties[fieldName] && 'attributes') ||
+                        (relationships.properties[fieldName] &&
+                          'relationships');
 
-                        const {
-                          attributes,
-                          relationships,
-                        } = this.props.schema.properties.data.properties;
-
-                        return React.createElement(
-                          this.props.widgets[
-                            Object.keys(this.props.widgets)
-                              .filter(name =>
-                                formDisplaySchema[fieldName].type.startsWith(
-                                  name,
-                                ),
-                              )
-                              .shift()
-                          ],
-                          {
-                            key: fieldName,
-                            entityTypeId: this.props.entityTypeId,
-                            bundle: this.props.bundle,
-                            fieldName,
-                            value: this.state.entity[fieldName],
-                            label: entityFieldSchema && entityFieldSchema.title,
-                            schema: entityFieldSchema,
-                            onChange: this[
-                              ((attributes.properties[fieldName] &&
-                                'attributes') ||
-                                (relationships.properties[fieldName] &&
-                                  'relationships')) === 'attributes'
-                                ? 'onAttributeChange'
-                                : 'onRelationshipChange'
-                            ](fieldName),
-                            inputProps: {
-                              ...(Object.prototype.hasOwnProperty.call(
-                                fieldSchema,
-                                fieldName,
-                              )
-                                ? fieldSchema[fieldName].attributes.settings
-                                : {}),
-                              ...(Object.prototype.hasOwnProperty.call(
-                                formDisplaySchema,
-                                fieldName,
-                              )
-                                ? formDisplaySchema[fieldName].settings
-                                : {}),
-                            },
-                          },
-                        );
-                      }
-                      return null;
+                      return React.createElement(widget, {
+                        key: fieldName,
+                        entityTypeId: this.props.entityTypeId,
+                        bundle: this.props.bundle,
+                        fieldName,
+                        value: this.state.entity.data[propType][fieldName],
+                        label: entityFieldSchema && entityFieldSchema.title,
+                        schema: entityFieldSchema,
+                        onChange: this[
+                          propType === 'attributes'
+                            ? 'onAttributeChange'
+                            : 'onRelationshipChange'
+                        ](fieldName),
+                        inputProps,
+                      });
                     })
                     .filter(x => x)}
                 </FormControl>
