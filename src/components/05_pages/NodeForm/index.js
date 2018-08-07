@@ -177,7 +177,7 @@ class NodeForm extends React.Component {
                       // @todo We need to pass along props.
                       // @todo How do we handle cardinality together with jsonapi
                       // making a distinction between single value fields and multi value fields.
-                      const entityFieldSchema = this.getSchemaInfo(
+                      const entitySchema = this.getSchemaInfo(
                         this.props.schema,
                         fieldName,
                       );
@@ -198,13 +198,11 @@ class NodeForm extends React.Component {
                         bundle: this.props.bundle,
                         fieldName,
                         value: this.state.entity.data[propType][fieldName],
-                        label: entityFieldSchema && entityFieldSchema.title,
-                        schema: entityFieldSchema,
-                        onChange: this[
-                          propType === 'attributes'
-                            ? 'onAttributeChange'
-                            : 'onRelationshipChange'
-                        ](fieldName),
+                        label: entitySchema && entitySchema.title,
+                        schema: entitySchema,
+                        onChange: (propType === 'attributes'
+                          ? this.onAttributeChange
+                          : this.onRelationshipChange)(fieldName),
                         inputProps,
                       });
                     })
