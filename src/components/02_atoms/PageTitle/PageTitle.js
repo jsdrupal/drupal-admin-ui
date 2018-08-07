@@ -28,7 +28,7 @@ const reducePropsToState = propsList => {
     return innermostProps.children;
   }
 
-  return false;
+  return null;
 };
 
 /**
@@ -38,8 +38,9 @@ const reducePropsToState = propsList => {
  *   Title may be an array if the number children is > 1
  */
 const handleStateChangeOnClient = title => {
-  document.title =
-    (Array.isArray(title) ? title : [title]).map(e => e.trim()).join(' ') || '';
+  document.title = (Array.isArray(title) ? title : [title])
+    .map(e => (e ? e.trim() : ''))
+    .join(' ');
 };
 
 export default withSideEffect(reducePropsToState, handleStateChangeOnClient)(

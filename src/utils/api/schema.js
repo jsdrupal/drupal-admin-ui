@@ -12,7 +12,7 @@ const createEntity = schema => {
         {},
       );
     case 'array':
-      return [createEntity(schema.items)];
+      return [];
     case 'string':
       return '';
     case 'number':
