@@ -5,6 +5,7 @@ import { storiesOf } from '@storybook/react';
 import { action } from '@storybook/addon-actions';
 
 import BooleanCheckbox from './BooleanCheckbox';
+import EntityReferenceAutocomplete from './EntityReferenceAutocomplete';
 import FileUploadWidget from './FileUploadWidget';
 import NumberTextfield from './NumberTextfield';
 import OptionsSelect from './OptionsSelect';
