@@ -74,3 +74,32 @@ it('should create arrays', () => {
     }),
   ).toEqual(['']);
 });
+
+it('multi value field state is initialized as empty array', () => {
+  expect(
+    createEntity({
+      maxItems: 3,
+      title: 'Image',
+      type: 'object',
+      properties: {
+        data: {
+          type: 'array',
+          items: {
+            type: 'object',
+            properties: {
+              id: {
+                type: 'string',
+                title: 'Resource ID',
+              },
+              type: {
+                type: 'string',
+                title: 'Referenced resource',
+              },
+            },
+            required: ['id', 'type'],
+          },
+        },
+      },
+    }),
+  ).toEqual({ data: [] });
+});
