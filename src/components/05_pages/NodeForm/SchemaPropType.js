@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 const lazyFunction = f => (props, propName, componentName, ...rest) =>
   f(props, propName, componentName, ...rest);
 
-var schemaType;
+let schemaType;
 const lazySchemaType = lazyFunction(() => schemaType);
 
 export default PropTypes.shape({
