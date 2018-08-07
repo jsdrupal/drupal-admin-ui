@@ -9,12 +9,14 @@ import Chip from '@material-ui/core/Chip';
 import MenuItem from '@material-ui/core/MenuItem';
 
 import WidgetPropTypes from '../../05_pages/NodeForm/WidgetPropTypes';
+import SchemaPropType from '../../05_pages/NodeForm/SchemaPropType';
 
 import api from './../../../utils/api/api';
 
 class EntityReferenceAutocomplete extends React.Component {
   static propTypes = {
     ...WidgetPropTypes,
+    schema: SchemaPropType.isRequired,
     inputProps: PropTypes.shape({
       bundle: PropTypes.string,
       type: PropTypes.string,
