@@ -38,6 +38,7 @@ const createUISchema = (fieldSchema, formDisplaySchema, widgets) =>
           formDisplaySchema[fieldName].type.startsWith(name),
         ).length,
     )
+    .sort((a, b) => formDisplaySchema[a].weight - formDisplaySchema[b].weight)
     .reduce((acc, currentFieldName) => {
       const widget =
         widgets[
@@ -58,12 +59,13 @@ const createUISchema = (fieldSchema, formDisplaySchema, widgets) =>
           ? formDisplaySchema[currentFieldName].settings
           : {}),
       };
-      acc[currentFieldName] = {
+      acc.push({
+        fieldName: currentFieldName,
         constraints: [],
         widget,
         inputProps,
-      };
+      });
       return acc;
-    }, {});
+    }, []);
 
 export { createEntity, createUISchema };

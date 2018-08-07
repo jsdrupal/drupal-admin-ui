@@ -28,7 +28,7 @@ function* loadUiSchema(action) {
     ] = yield Promise.all([
       api('field_schema', {
         queryString: {
-          filter: { entity_type: entityTypeId, bundle, mode: 'default' },
+          filter: { entity_type: entityTypeId, bundle },
         },
       }),
       api('form_display', {

@@ -154,14 +154,12 @@ class NodeForm extends React.Component {
             <Paper>
               <div className={styles.container}>
                 <FormControl margin="normal" fullWidth>
-                  {Object.entries(
-                    createUISchema(
-                      this.props.uiSchema.fieldSchema,
-                      this.props.uiSchema.formDisplaySchema,
-                      this.props.widgets,
-                    ),
+                  {createUISchema(
+                    this.props.uiSchema.fieldSchema,
+                    this.props.uiSchema.formDisplaySchema,
+                    this.props.widgets,
                   )
-                    .map(([fieldName, { widget, inputProps }]) => {
+                    .map(({ fieldName, widget, inputProps }) => {
                       // @todo We need to pass along props.
                       // @todo How do we handle cardinality together with jsonapi
                       // making a distinction between single value fields and multi value fields.
