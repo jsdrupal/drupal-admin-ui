@@ -9,37 +9,6 @@ import api from '../utils/api/api';
 import { MESSAGE_ERROR } from '../constants/messages';
 import { setMessage } from './application';
 
-export const SCHEMA_REQUESTED = 'SCHEMA_REQUESTED';
-export const requestSchema = ({ entityTypeId, bundle }) => ({
-  type: SCHEMA_REQUESTED,
-  payload: { entityTypeId, bundle },
-});
-
-export const SCHEMA_LOADED = 'SCHEMA_LOADED';
-function* loadSchema(action) {
-  const { entityTypeId, bundle } = action.payload;
-  try {
-    yield put(resetLoading());
-    yield put(showLoading());
-
-    const schema = yield call(api, 'schema', {
-      parameters: { entityTypeId, bundle },
-    });
-    yield put({
-      type: SCHEMA_LOADED,
-      payload: {
-        entityTypeId,
-        bundle,
-        schema,
-      },
-    });
-  } catch (error) {
-    yield put(setMessage(error.toString(), MESSAGE_ERROR));
-  } finally {
-    yield put(hideLoading());
-  }
-}
-
 export const CONTENT_REQUESTED = 'CONTENT_REQUESTED';
 export const requestContent = (
   options = { contentTypes: [], status: null },
@@ -321,7 +290,6 @@ function* deleteContent({ payload: { content } }) {
 }
 
 export default function* rootSaga() {
-  yield takeLatest(SCHEMA_REQUESTED, loadSchema);
   yield takeLatest(CONTENT_REQUESTED, loadContent);
   yield takeLatest(ACTION_EXECUTE, executeAction);
   yield takeLatest(CONTENT_SAVE, saveContent);
