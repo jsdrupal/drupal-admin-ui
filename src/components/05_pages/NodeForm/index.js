@@ -175,11 +175,9 @@ class NodeForm extends React.Component {
                         value: this.state.entity.data[propType][fieldName],
                         label: fieldSchema && fieldSchema.title,
                         schema: fieldSchema,
-                        onChange: this[
-                          propType === 'attributes'
-                            ? 'onAttributeChange'
-                            : 'onRelationshipChange'
-                        ](fieldName),
+                        onChange: (propType === 'attributes'
+                          ? this.onAttributeChange
+                          : this.onRelationshipChange)(fieldName),
                         inputProps,
                       });
                     }
