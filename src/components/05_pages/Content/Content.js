@@ -210,7 +210,9 @@ class Content extends Component {
                     this.props.requestContent(this.state);
                   });
                 }}
-                input={<Input name="content-type" id="content-type" />}
+                input={
+                  <Input name="content-type" id="select-multiple-checkbox" />
+                }
                 renderValue={selected => (
                   <div className={styles.chips}>
                     {selected.map(value => (
