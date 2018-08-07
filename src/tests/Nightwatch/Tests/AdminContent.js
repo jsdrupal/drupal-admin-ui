@@ -8,11 +8,20 @@ module.exports = {
 
     browser.click('[data-nightwatch="content-type-select"]');
 
-    browser.expect.element('#menu-content-type ul>li[data-value="article"]').to.be.visible;
+    browser.expect
+      .element('#menu-content-type ul>li:nth-child(1)')
+      .to.have.attribute('data-value')
+      .equals('article');
 
-    browser.expect.element('#menu-content-type ul>li[data-value="page"]').to.be.visible;
+    browser.expect
+      .element('#menu-content-type ul>li:nth-child(2)')
+      .to.have.attribute('data-value')
+      .equals('page');
 
-    browser.expect.element('#menu-content-type ul>li[data-value="recipe"]').to.be.visible;
+    browser.expect
+      .element('#menu-content-type ul>li:nth-child(3)')
+      .to.have.attribute('data-value')
+      .equals('recipe');
 
     browser.end();
   },
