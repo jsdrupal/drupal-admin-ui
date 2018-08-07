@@ -203,7 +203,6 @@ class EntityReferenceAutocomplete extends React.Component {
               fullWidth: true,
               label: this.props.label,
               InputProps: getInputProps({
-                disabled: this.state.loading,
                 startAdornment: Object.entries(selectedItems).map(
                   ([key, value]) => (
                     <Chip
