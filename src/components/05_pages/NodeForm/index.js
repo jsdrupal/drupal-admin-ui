@@ -82,7 +82,10 @@ class NodeForm extends React.Component {
   }
 
   componentDidMount() {
-    this.props.requestSchema();
+    this.props.requestSchema({
+      entityTypeId: this.props.entityTypeId,
+      bundle: this.props.bundle,
+    });
   }
 
   onAttributeChange = fieldName => data => {
@@ -102,13 +105,10 @@ class NodeForm extends React.Component {
   onRelationshipChange = fieldName => data => {
     // Support widgets with multiple cardinality.
     let fieldData;
-    let isMultiple;
     if (typeof data.data !== 'undefined') {
       fieldData = data.data;
-      isMultiple = false;
     } else {
       fieldData = Object.values(data);
-      isMultiple = true;
     }
     this.setState(prevState => ({
       entity: {
@@ -117,12 +117,7 @@ class NodeForm extends React.Component {
           relationships: {
             ...prevState.entity.data.relationships,
             [fieldName]: {
-              data: isMultiple
-                ? fieldData
-                : {
-                    ...prevState.entity.data.relationships[fieldName].data,
-                    ...fieldData,
-                  },
+              data: fieldData,
             },
           },
         },
