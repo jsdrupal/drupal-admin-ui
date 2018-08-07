@@ -50,7 +50,18 @@ const FileUploadWidget = ({
   entityTypeId,
   schema: { properties, maxItems },
 }) => {
-  const length = (value && value.data && Object.keys(value.data).length) || 0;
+  // Filter out empty values.
+  const filteredData = Object.entries(value.data)
+    .filter(([, value2]) => value2.file && value2.file.id)
+    .reduce(
+      (agg, [key, value2]) => ({
+        ...agg,
+        [key]: value2,
+      }),
+      {},
+    );
+  const length =
+    (value && filteredData && Object.keys(filteredData).length) || 0;
   // If array then allow for multiple uploads.
   const multiple = properties.data.type === 'array';
   // maxItems is only set if array, so set to 1 as default.
@@ -104,7 +115,7 @@ const FileUploadWidget = ({
             <Card>
               <CardContent>
                 <List>
-                  {Object.keys(value.data).map((key, index) => {
+                  {Object.keys(filteredData).map((key, index) => {
                     const {
                       meta: { alt },
                       file: { url, filename },
