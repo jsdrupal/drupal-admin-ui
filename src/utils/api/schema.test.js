@@ -72,7 +72,7 @@ it('should create arrays', () => {
         maxLength: 255,
       },
     }),
-  ).toEqual(['']);
+  ).toEqual([]);
 });
 
 it('multi value field state is initialized as empty array', () => {
