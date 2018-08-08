@@ -7,7 +7,7 @@ import FormLabel from '@material-ui/core/FormLabel';
 import WidgetPropTypes from '../../05_pages/NodeForm/WidgetPropTypes';
 
 const TextArea = props => (
-  <FormControl component="fieldset">
+  <FormControl component="fieldset" margin="normal">
     <FormLabel component="legend">{props.label}</FormLabel>
     <CKEditor
       editor={ClassicEditor}
