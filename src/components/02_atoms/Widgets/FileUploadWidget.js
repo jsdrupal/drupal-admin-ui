@@ -70,7 +70,9 @@ const FileUploadWidget = ({
   return (
     <FormControl margin="normal">
       <Element>
-        <FormLabel component="legend">{label}</FormLabel>
+        <FormLabel component="legend" required={inputProps.required}>
+          {label}
+        </FormLabel>
         <div
           style={{
             display:

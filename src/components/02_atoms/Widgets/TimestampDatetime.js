@@ -3,7 +3,13 @@ import PropTypes from 'prop-types';
 import TextField from '@material-ui/core/TextField';
 import WidgetPropTypes from '../../05_pages/NodeForm/WidgetPropTypes';
 
-const TimestampDatetime = ({ fieldName, label, value, onChange }) => (
+const TimestampDatetime = ({
+  fieldName,
+  label,
+  value,
+  onChange,
+  inputProps,
+}) => (
   <TextField
     id={fieldName}
     label={label}
@@ -14,6 +20,7 @@ const TimestampDatetime = ({ fieldName, label, value, onChange }) => (
     InputLabelProps={{
       shrink: true,
     }}
+    required={inputProps.required}
   />
 );
 

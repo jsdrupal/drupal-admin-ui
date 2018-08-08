@@ -21,6 +21,7 @@ const NumberTextfield = ({ label, value, onChange, fieldName, inputProps }) => (
     type="number"
     margin="normal"
     label={label}
+    required={inputProps.required}
   />
 );
 

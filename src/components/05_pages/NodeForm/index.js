@@ -189,7 +189,12 @@ class NodeForm extends React.Component {
                         onChange: (propType === 'attributes'
                           ? this.onAttributeChange
                           : this.onRelationshipChange)(fieldName),
-                        inputProps,
+                        inputProps: {
+                          ...inputProps,
+                          required: this.props.schema.properties.data.properties.attributes.required.includes(
+                            fieldName,
+                          ),
+                        },
                       });
                     })
                     .filter(x => x)}
