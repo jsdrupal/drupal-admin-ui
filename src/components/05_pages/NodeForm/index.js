@@ -145,66 +145,66 @@ class NodeForm extends React.Component {
     schema.properties.data.properties.attributes.properties[fieldName] ||
     schema.properties.data.properties.relationships.properties[fieldName];
 
+  createField = ({ fieldName, widget, inputProps }) => {
+    // @todo We need to pass along props.
+    // @todo How do we handle cardinality together with jsonapi
+    // making a distinction between single value fields and multi value fields.
+    const fieldSchema = this.getSchemaInfo(this.props.schema, fieldName);
+
+    const {
+      attributes,
+      relationships,
+    } = this.props.schema.properties.data.properties;
+
+    const propType =
+      (attributes.properties[fieldName] && 'attributes') ||
+      (relationships.properties[fieldName] && 'relationships');
+
+    return React.createElement(widget, {
+      key: fieldName,
+      entityTypeId: this.props.entityTypeId,
+      bundle: this.props.bundle,
+      fieldName,
+      value: this.state.entity.data[propType][fieldName],
+      label: fieldSchema && fieldSchema.title,
+      schema: fieldSchema,
+      onChange: (propType === 'attributes'
+        ? this.onAttributeChange
+        : this.onRelationshipChange)(fieldName),
+      inputProps,
+    });
+  };
+
   render() {
+    let result = null;
+    if (this.props.schema && this.props.uiSchema) {
+      const { right, left } = createUISchema(
+        this.props.uiSchema.fieldSchema,
+        this.props.uiSchema.formDisplaySchema,
+        this.props.widgets,
+        ['promote', 'status', 'sticky'],
+      );
+      result = (
+        <Paper>
+          <div className={styles.container}>
+            <FormControl margin="normal" fullWidth>
+              <div className={styles.gridRoot}>
+                <Paper>{left.map(this.createField)}</Paper>
+                <Paper>{right.map(this.createField)}</Paper>
+              </div>
+              <Divider classes={{ root: styles.divider }} />
+              <Button variant="contained" color="primary" onClick={this.onSave}>
+                Save
+              </Button>
+            </FormControl>
+          </div>
+        </Paper>
+      );
+    }
     return (
       <Fragment>
         <PageTitle>Create {this.props.bundle}</PageTitle>
-        {this.props.schema &&
-          this.props.uiSchema && (
-            <Paper>
-              <div className={styles.container}>
-                <FormControl margin="normal" fullWidth>
-                  {createUISchema(
-                    this.props.uiSchema.fieldSchema,
-                    this.props.uiSchema.formDisplaySchema,
-                    this.props.widgets,
-                  )
-                    .map(({ fieldName, widget, inputProps }) => {
-                      // @todo We need to pass along props.
-                      // @todo How do we handle cardinality together with jsonapi
-                      // making a distinction between single value fields and multi value fields.
-                      const fieldSchema = this.getSchemaInfo(
-                        this.props.schema,
-                        fieldName,
-                      );
-
-                      const {
-                        attributes,
-                        relationships,
-                      } = this.props.schema.properties.data.properties;
-
-                      const propType =
-                        (attributes.properties[fieldName] && 'attributes') ||
-                        (relationships.properties[fieldName] &&
-                          'relationships');
-
-                      return React.createElement(widget, {
-                        key: fieldName,
-                        entityTypeId: this.props.entityTypeId,
-                        bundle: this.props.bundle,
-                        fieldName,
-                        value: this.state.entity.data[propType][fieldName],
-                        label: fieldSchema && fieldSchema.title,
-                        schema: fieldSchema,
-                        onChange: (propType === 'attributes'
-                          ? this.onAttributeChange
-                          : this.onRelationshipChange)(fieldName),
-                        inputProps,
-                      });
-                    })
-                    .filter(x => x)}
-                </FormControl>
-                <Divider classes={{ root: styles.divider }} />
-                <Button
-                  variant="contained"
-                  color="primary"
-                  onClick={this.onSave}
-                >
-                  Save
-                </Button>
-              </div>
-            </Paper>
-          )}
+        {result}
       </Fragment>
     );
   }
@@ -216,6 +216,12 @@ styles = {
   `,
   divider: css`
     margin: 30px 0;
+  `,
+  gridRoot: css`
+    display: grid;
+    width: 100%;
+    grid-gap: 20px;
+    grid-template-columns: 75% 25%;
   `,
 };
 

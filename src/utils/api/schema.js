@@ -28,7 +28,12 @@ const createEntity = schema => {
   }
 };
 
-const createUISchema = (fieldSchema, formDisplaySchema, widgets) =>
+const createUISchema = (
+  fieldSchema,
+  formDisplaySchema,
+  widgets,
+  secondaryColumnFields,
+) =>
   Array.from(
     new Set([...Object.keys(fieldSchema), ...Object.keys(formDisplaySchema)]),
   )
@@ -39,33 +44,42 @@ const createUISchema = (fieldSchema, formDisplaySchema, widgets) =>
         ).length,
     )
     .sort((a, b) => formDisplaySchema[a].weight - formDisplaySchema[b].weight)
-    .reduce((acc, currentFieldName) => {
-      const widget =
-        widgets[
-          Object.keys(widgets)
-            .filter(name =>
-              formDisplaySchema[currentFieldName].type.startsWith(name),
-            )
-            .shift()
-        ];
-      const inputProps = {
-        ...(Object.prototype.hasOwnProperty.call(fieldSchema, currentFieldName)
-          ? fieldSchema[currentFieldName].attributes.settings
-          : {}),
-        ...(Object.prototype.hasOwnProperty.call(
-          formDisplaySchema,
-          currentFieldName,
-        )
-          ? formDisplaySchema[currentFieldName].settings
-          : {}),
-      };
-      acc.push({
-        fieldName: currentFieldName,
-        constraints: [],
-        widget,
-        inputProps,
-      });
-      return acc;
-    }, []);
+    .reduce(
+      (acc, currentFieldName) => {
+        const widget =
+          widgets[
+            Object.keys(widgets)
+              .filter(name =>
+                formDisplaySchema[currentFieldName].type.startsWith(name),
+              )
+              .shift()
+          ];
+        const inputProps = {
+          ...(Object.prototype.hasOwnProperty.call(
+            fieldSchema,
+            currentFieldName,
+          )
+            ? fieldSchema[currentFieldName].attributes.settings
+            : {}),
+          ...(Object.prototype.hasOwnProperty.call(
+            formDisplaySchema,
+            currentFieldName,
+          )
+            ? formDisplaySchema[currentFieldName].settings
+            : {}),
+        };
+        acc[
+          (secondaryColumnFields.includes(currentFieldName) && 'right') ||
+            'left'
+        ].push({
+          fieldName: currentFieldName,
+          constraints: [],
+          widget,
+          inputProps,
+        });
+        return acc;
+      },
+      { right: [], left: [] },
+    );
 
 export { createEntity, createUISchema };
