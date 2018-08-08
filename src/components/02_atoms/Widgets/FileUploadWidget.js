@@ -123,8 +123,8 @@ const FileUploadWidget = ({
                     const last = Object.keys(value.data).length - 1 === index;
 
                     return (
-                      <Fragment>
-                        <ListItem key={key}>
+                      <Fragment key={key}>
+                        <ListItem>
                           <Image>
                             <img
                               alt={alt || filename}

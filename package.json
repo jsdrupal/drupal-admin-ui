@@ -1,7 +1,7 @@
 {
   "name": "vfancy",
   "version": "0.1.0",
-  "license" : "MIT",
+  "license": "MIT",
   "private": true,
   "engines": {
     "yarn": ">= 1.6",
@@ -66,6 +66,7 @@
     "eslint-plugin-jsx-a11y": "^6.1.0",
     "eslint-plugin-prettier": "^2.6.0",
     "eslint-plugin-react": "^7.4.0",
+    "fetch-mock": "^6.5.2",
     "jest-junit": "^3.6.0",
     "mkdirp": "^0.5.1",
     "nightwatch": "^0.9.21",
