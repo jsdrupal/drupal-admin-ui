@@ -10,8 +10,8 @@ import TextArea from '../../02_atoms/Widgets/TextArea';
 // @todo How do we do extensibility from modules, maybe a build step?
 const widgets = {
   options_select: OptionsSelect,
-  number_textfield: NumberTextfield,
-  string_textfield: StringTextfield,
+  number: NumberTextfield,
+  string: StringTextfield,
   boolean_checkbox: BooleanCheckbox,
   timestamp_datetime: TimestampDatetime,
   image_image: FileUploadWidget,
