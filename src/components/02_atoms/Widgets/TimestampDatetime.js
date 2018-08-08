@@ -9,6 +9,7 @@ const TimestampDatetime = ({ fieldName, label, value, onChange }) => (
     label={label}
     type="datetime-local"
     defaultValue={value}
+    margin="normal"
     onChange={event => onChange(event.target.value)}
     InputLabelProps={{
       shrink: true,
