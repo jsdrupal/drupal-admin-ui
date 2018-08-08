@@ -24,6 +24,7 @@ import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 
 import Message from '../../02_atoms/Message/Message';
+import Snackbar from '../../02_atoms/Snackbar/SnackbarMessage';
 import ErrorBoundary from '../ErrorBoundary/ErrorBoundary';
 
 import {
@@ -31,6 +32,12 @@ import {
   closeDrawer,
   openDrawer,
 } from '../../../actions/application';
+import {
+  SUMMON_SNACKBAR,
+  summonSnackbar,
+  DISMISS_SNACKBAR,
+  dismissSnackbar,
+} from '../../../actions/snackbar';
 import { MESSAGE_ERROR } from '../../../constants/messages';
 
 let styles;
@@ -111,7 +118,12 @@ class Default extends React.Component {
           ))}
           {this.props.children}
         </ErrorBoundary>
+        <Snackbar
+          {...this.props.snackbar}
+          onClose={this.props.dismissSnackbar.bind(this)}
+        />
       </main>
+
     </div>
   );
 }
@@ -166,9 +178,15 @@ Default.propTypes = {
       }),
     }),
   ).isRequired,
+  snackbar: PropTypes.shape({
+    message: PropTypes.string,
+    open: PropTypes.bool,
+  }).isRequired,
   requestMenu: PropTypes.func.isRequired,
   openDrawer: PropTypes.func.isRequired,
   closeDrawer: PropTypes.func.isRequired,
+  summonSnackbar: PropTypes.func.isRequired,
+  dismissSnackbar: PropTypes.func.isRequired,
   drawerOpen: PropTypes.bool,
 };
 
@@ -181,6 +199,7 @@ const mapStateToProps = state => ({
   messages: state.application.messages || [],
   menuLinks: state.application.menuLinks || [],
   drawerOpen: state.application.drawerOpen,
+  snackbar: state.snackbar,
 });
 
 export default connect(
@@ -189,5 +208,7 @@ export default connect(
     requestMenu,
     openDrawer,
     closeDrawer,
+    summonSnackbar,
+    dismissSnackbar,
   },
 )(Default);
