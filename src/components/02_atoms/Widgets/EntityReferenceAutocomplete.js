@@ -60,6 +60,7 @@ class EntityReferenceAutocomplete extends React.Component {
     if (this.isSingleAndHasSelectedItem()) {
       return;
     }
+
     this.setState({ loading: true, inputValue: event.target.value }, () => {
       // @todo Move this call to the mounting component?
       const [
