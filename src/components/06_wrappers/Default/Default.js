@@ -32,12 +32,7 @@ import {
   closeDrawer,
   openDrawer,
 } from '../../../actions/application';
-import {
-  SUMMON_SNACKBAR,
-  summonSnackbar,
-  DISMISS_SNACKBAR,
-  dismissSnackbar,
-} from '../../../actions/snackbar';
+import { summonSnackbar, dismissSnackbar } from '../../../actions/snackbar';
 import { MESSAGE_ERROR } from '../../../constants/messages';
 
 let styles;
@@ -120,10 +115,9 @@ class Default extends React.Component {
         </ErrorBoundary>
         <Snackbar
           {...this.props.snackbar}
-          onClose={this.props.dismissSnackbar.bind(this)}
+          onClose={this.props.dismissSnackbar}
         />
       </main>
-
     </div>
   );
 }

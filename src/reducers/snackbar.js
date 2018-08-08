@@ -10,7 +10,7 @@ export default (state = initialState, action) => {
     case SUMMON_SNACKBAR: {
       return {
         ...state,
-        message:action.payload,
+        message: action.payload,
         open: true,
       };
     }
