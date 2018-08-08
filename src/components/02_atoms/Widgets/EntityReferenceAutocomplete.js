@@ -57,6 +57,9 @@ class EntityReferenceAutocomplete extends React.Component {
     );
 
   handleInputChange = event => {
+    if (this.isSingleAndHasSelectedItem()) {
+      return;
+    }
     this.setState({ loading: true, inputValue: event.target.value }, () => {
       // @todo Move this call to the mounting component?
       const [
@@ -144,6 +147,15 @@ class EntityReferenceAutocomplete extends React.Component {
       );
   };
 
+  isSingleAndHasSelectedItem = () => {
+    const {
+      props: { schema },
+      state: { selectedItems },
+    } = this;
+    const isSingle = schema.properties.data.type !== 'array';
+    return isSingle && !!Object.keys(selectedItems).length;
+  };
+
   renderSuggestion = ({
     suggestion,
     index,
@@ -151,6 +163,10 @@ class EntityReferenceAutocomplete extends React.Component {
     highlightedIndex,
     selectedItem: selectedItems,
   }) => {
+    if (this.isSingleAndHasSelectedItem()) {
+      return null;
+    }
+
     const isHighlighted = highlightedIndex === index;
     const isSelected = Object.keys(selectedItems).includes(suggestion.id);
 
