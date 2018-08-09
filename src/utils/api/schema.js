@@ -28,12 +28,7 @@ const createEntity = schema => {
   }
 };
 
-const createUISchema = (
-  fieldSchema,
-  formDisplaySchema,
-  widgets,
-  secondaryColumnFields,
-) =>
+const createUISchema = (fieldSchema, formDisplaySchema, widgets) =>
   Array.from(
     new Set([...Object.keys(fieldSchema), ...Object.keys(formDisplaySchema)]),
   )
