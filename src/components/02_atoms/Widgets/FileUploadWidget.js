@@ -53,6 +53,7 @@ const FileUploadWidget = ({
   fieldName,
   inputProps,
   entityTypeId,
+  required,
   schema: { properties, maxItems },
 }) => {
   // If array then allow for multiple uploads.
@@ -66,11 +67,9 @@ const FileUploadWidget = ({
   const maxItemsCount = multiple ? maxItems || 100000000000 : 1;
 
   return (
-    <FormControl margin="normal">
+    <FormControl margin="normal" required={required}>
       <Element>
-        <FormLabel component="legend" required={inputProps.required}>
-          {label}
-        </FormLabel>
+        <FormLabel component="legend">{label}</FormLabel>
         <div
           style={{
             display:

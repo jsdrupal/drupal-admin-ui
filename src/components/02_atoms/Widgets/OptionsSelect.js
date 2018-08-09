@@ -19,11 +19,11 @@ const OptionsSelect = ({
   onChange,
   helpText,
   fieldName,
+  required,
   schema: { enum: options, default: defaultValue },
-  inputProps,
 }) => (
   <FormControl margin="normal">
-    <InputLabel htmlFor={fieldName} required={inputProps.required}>
+    <InputLabel htmlFor={fieldName} required={required}>
       {label}
     </InputLabel>
     <NativeSelect

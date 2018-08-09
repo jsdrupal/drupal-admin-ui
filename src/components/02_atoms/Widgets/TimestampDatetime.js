@@ -8,7 +8,7 @@ const TimestampDatetime = ({
   label,
   value,
   onChange,
-  inputProps,
+  required,
 }) => (
   <TextField
     id={fieldName}
@@ -20,7 +20,7 @@ const TimestampDatetime = ({
     InputLabelProps={{
       shrink: true,
     }}
-    required={inputProps.required}
+    required={required}
   />
 );
 

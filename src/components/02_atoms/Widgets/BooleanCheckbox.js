@@ -19,7 +19,7 @@ const BooleanCheckbox = props => {
         />
       }
       label={label}
-      required={props.inputProps.required}
+      required={props.required}
     />
   );
 };

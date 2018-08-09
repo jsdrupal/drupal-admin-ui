@@ -10,7 +10,7 @@ const StringTextfield = props => (
     onChange={event => props.onChange(event.target.value)}
     margin="normal"
     label={props.label}
-    required={props.inputProps.required}
+    required={props.required}
   />
 );
 
