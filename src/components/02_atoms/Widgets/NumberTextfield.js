@@ -4,7 +4,14 @@ import TextField from '@material-ui/core/TextField';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import WidgetPropTypes from '../../05_pages/NodeForm/WidgetPropTypes';
 
-const NumberTextfield = ({ label, value, onChange, fieldName, inputProps }) => (
+const NumberTextfield = ({
+  classes,
+  label,
+  value,
+  onChange,
+  fieldName,
+  inputProps,
+}) => (
   <TextField
     id={fieldName}
     value={value}
@@ -21,6 +28,7 @@ const NumberTextfield = ({ label, value, onChange, fieldName, inputProps }) => (
     type="number"
     margin="normal"
     label={label}
+    classes={classes}
   />
 );
 

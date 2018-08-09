@@ -165,6 +165,9 @@ class NodeForm extends React.Component {
       entityTypeId: this.props.entityTypeId,
       bundle: this.props.bundle,
       fieldName,
+      classes: {
+        root: styles.widgetRoot,
+      },
       value: this.state.entity.data[propType][fieldName],
       label: fieldSchema && fieldSchema.title,
       schema: fieldSchema,
@@ -189,8 +192,12 @@ class NodeForm extends React.Component {
           <div className={styles.container}>
             <FormControl margin="normal" fullWidth>
               <div className={styles.gridRoot}>
-                <Paper>{left.map(this.createField)}</Paper>
-                <Paper>{right.map(this.createField)}</Paper>
+                <Paper classes={{ root: styles.fieldContainer }}>
+                  {left.map(this.createField)}
+                </Paper>
+                <Paper classes={{ root: styles.fieldContainer }}>
+                  {right.map(this.createField)}
+                </Paper>
               </div>
               <Divider classes={{ root: styles.divider }} />
               <Button variant="contained" color="primary" onClick={this.onSave}>
@@ -214,6 +221,9 @@ styles = {
   container: css`
     padding: 5px 50px 40px;
   `,
+  fieldContainer: css`
+    padding: 10px 20px;
+  `,
   divider: css`
     margin: 30px 0;
   `,
@@ -222,6 +232,10 @@ styles = {
     width: 100%;
     grid-gap: 20px;
     grid-template-columns: 75% 25%;
+  `,
+  widgetRoot: css`
+    display: flex;
+    align-items: start;
   `,
 };
 
