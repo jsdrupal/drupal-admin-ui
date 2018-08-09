@@ -60,7 +60,7 @@ class EntityReferenceAutocomplete extends React.Component {
     );
 
   handleInputChange = event => {
-    if (this.isSingleAndHasSelectedItem()) {
+    if (this.cannotAddMoreEntities()) {
       return;
     }
 
@@ -151,13 +151,17 @@ class EntityReferenceAutocomplete extends React.Component {
       );
   };
 
-  isSingleAndHasSelectedItem = () => {
+  cannotAddMoreEntities = () => {
     const {
       props: { schema },
       state: { selectedItems },
     } = this;
     const isSingle = schema.properties.data.type !== 'array';
-    return isSingle && !!Object.keys(selectedItems).length;
+    const selectedItemsLength = Object.keys(selectedItems).length;
+    return (
+      (isSingle && !!selectedItemsLength) ||
+      (schema.maxItems && selectedItemsLength === schema.maxItems)
+    );
   };
 
   renderSuggestion = ({
@@ -167,7 +171,7 @@ class EntityReferenceAutocomplete extends React.Component {
     highlightedIndex,
     selectedItem: selectedItems,
   }) => {
-    if (this.isSingleAndHasSelectedItem()) {
+    if (this.cannotAddMoreEntities()) {
       return null;
     }
 
