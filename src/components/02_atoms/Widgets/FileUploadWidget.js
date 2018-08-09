@@ -14,7 +14,11 @@ import DeleteIcon from '@material-ui/icons/Delete';
 
 import WidgetPropTypes from '../../05_pages/NodeForm/WidgetPropTypes';
 import FileUpload from '../FileUpload/FileUpload';
-import { getItemsAsArray, setItemById } from '../../../utils/api/fieldItem';
+import {
+  deleteItemById,
+  getItemsAsArray,
+  setItemById,
+} from '../../../utils/api/fieldItem';
 
 const CardWrapper = styled('div')`
   margin-top: 15px;
@@ -54,7 +58,9 @@ const FileUploadWidget = ({
   // If array then allow for multiple uploads.
   const multiple = properties.data.type === 'array';
 
-  const items = getItemsAsArray(multiple, value.data);
+  const items = getItemsAsArray(multiple, value.data)
+    // Default schema creates stub entries, which we don't need here.
+    .filter(item => item.id);
   const length = (items && items.length) || 0;
   // maxItems is only set if array, so set to 1 as default.
   const maxItemsCount = multiple ? maxItems || 100000000000 : 1;
@@ -92,7 +98,7 @@ const FileUploadWidget = ({
                   type: 'file--file',
                 };
                 return setItemById(multiple, item, itemsAgg);
-              }, value.data);
+              }, items);
 
               onChange({
                 data: newItems,
@@ -154,7 +160,11 @@ const FileUploadWidget = ({
                             aria-label="Remove Image"
                             onClick={event => {
                               onChange({
-                                data: deleteItemById(multiple, event.currentTarget.id, items),
+                                data: deleteItemById(
+                                  multiple,
+                                  event.currentTarget.id,
+                                  items,
+                                ),
                               });
                             }}
                           >

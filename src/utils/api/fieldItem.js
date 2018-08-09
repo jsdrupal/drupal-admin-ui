@@ -1,19 +1,14 @@
-export const setItemById = (multiple, item, itemList) => {
+export const setItemById = (multiple, item, items) => {
   if (multiple) {
-    const id = item.id;
-    const index = itemList.findIndex(i => i.id === item.id);
+    const index = items.findIndex(i => i.id === item.id);
     if (index === -1) {
-      return [...itemList, item];
+      return [...items, item];
     } else {
-      itemList[index] = item;
-      return itemList;
+      items[index] = item;
+      return items;
     }
-  } else {
-    return {
-      ...itemList,
-      item,
-    };
   }
+  return item;
 };
 
 export const getItemsAsArray = (multiple, items) => {
@@ -21,6 +16,14 @@ export const getItemsAsArray = (multiple, items) => {
     return items;
   }
   return [items];
+};
+
+export const deleteItemById = (multiple, id, items) => {
+  if (!multiple) {
+    return {};
+  }
+
+  return items.filter(i => i.id !== id);
 };
 
 export default {};
