@@ -14,7 +14,11 @@ import PageTitle from '../../02_atoms/PageTitle';
 import { contentAdd } from '../../../actions/content';
 import { requestSchema, requestUiSchema } from '../../../actions/schema';
 
-import { createEntity, createUISchema } from '../../../utils/api/schema';
+import {
+  createEntity,
+  createUISchema,
+  sortUISchemaFields,
+} from '../../../utils/api/schema';
 
 let styles;
 
@@ -181,10 +185,12 @@ class NodeForm extends React.Component {
   render() {
     let result = null;
     if (this.props.schema && this.props.uiSchema) {
-      const { right, left } = createUISchema(
-        this.props.uiSchema.fieldSchema,
-        this.props.uiSchema.formDisplaySchema,
-        this.props.widgets,
+      const { right, left } = sortUISchemaFields(
+        createUISchema(
+          this.props.uiSchema.fieldSchema,
+          this.props.uiSchema.formDisplaySchema,
+          this.props.widgets,
+        ),
         ['promote', 'status', 'sticky'],
       );
       result = (
