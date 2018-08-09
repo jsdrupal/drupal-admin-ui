@@ -23,5 +23,11 @@ storiesOf('FileUpload', module).addWithJSX('Default', () => (
     bundle="Article"
     fieldName="upload"
     onFileUpload={onFileUploadAction}
+    multiple={false}
+    remainingUploads={1}
+    inputProps={{
+      file_extensions: 'txt',
+      max_filesize: '1000',
+    }}
   />
 ));

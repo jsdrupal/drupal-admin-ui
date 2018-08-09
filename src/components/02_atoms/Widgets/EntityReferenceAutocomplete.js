@@ -7,14 +7,17 @@ import Paper from '@material-ui/core/Paper';
 import TextField from '@material-ui/core/TextField';
 import Chip from '@material-ui/core/Chip';
 import MenuItem from '@material-ui/core/MenuItem';
+import FormControl from '@material-ui/core/FormControl';
 
 import WidgetPropTypes from '../../05_pages/NodeForm/WidgetPropTypes';
+import SchemaPropType from '../../05_pages/NodeForm/SchemaPropType';
 
 import api from './../../../utils/api/api';
 
 class EntityReferenceAutocomplete extends React.Component {
   static propTypes = {
     ...WidgetPropTypes,
+    schema: SchemaPropType.isRequired,
     inputProps: PropTypes.shape({
       bundle: PropTypes.string,
       type: PropTypes.string,
@@ -202,60 +205,62 @@ class EntityReferenceAutocomplete extends React.Component {
     const { inputValue, selectedItems } = this.state;
 
     return (
-      <Downshift
-        inputValue={inputValue}
-        onChange={this.handleChange}
-        selectedItem={selectedItems}
-        itemToString={item => (item ? item.label : '')}
-      >
-        {({
-          getInputProps,
-          getItemProps,
-          isOpen,
-          selectedItem,
-          highlightedIndex,
-        }) => (
-          <div className="container">
-            {this.renderInput({
-              fullWidth: true,
-              label: this.props.label,
-              InputProps: getInputProps({
-                disabled: this.state.loading,
-                startAdornment: Object.entries(selectedItems).map(
-                  ([key, value]) => (
-                    <Chip
-                      key={key}
-                      tabIndex={-1}
-                      label={value.label}
-                      className="chip"
-                      onDelete={this.handleDelete(key)}
-                    />
+      <FormControl margin="normal">
+        <Downshift
+          inputValue={inputValue}
+          onChange={this.handleChange}
+          selectedItem={selectedItems}
+          itemToString={item => (item ? item.label : '')}
+        >
+          {({
+            getInputProps,
+            getItemProps,
+            isOpen,
+            selectedItem,
+            highlightedIndex,
+          }) => (
+            <div className="container">
+              {this.renderInput({
+                fullWidth: true,
+                label: this.props.label,
+                InputProps: getInputProps({
+                  disabled: this.state.loading,
+                  startAdornment: Object.entries(selectedItems).map(
+                    ([key, value]) => (
+                      <Chip
+                        key={key}
+                        tabIndex={-1}
+                        label={value.label}
+                        className="chip"
+                        onDelete={this.handleDelete(key)}
+                      />
+                    ),
                   ),
-                ),
-                onChange: this.handleInputChange,
-                onKeyDown: this.handleKeyDown,
-                placeholder: '',
-                id: 'integration-downshift-multiple',
-              }),
-            })}
-            {isOpen ? (
-              <Paper className="paper" square>
-                {!this.state.loading &&
-                  Array.from(this.state.suggestions.values()).map(
-                    (suggestion, index) =>
-                      this.renderSuggestion({
-                        suggestion,
-                        index,
-                        itemProps: getItemProps({ item: suggestion }),
-                        highlightedIndex,
-                        selectedItem,
-                      }),
-                  )}
-              </Paper>
-            ) : null}
-          </div>
-        )}
-      </Downshift>
+                  onChange: this.handleInputChange,
+                  onKeyDown: this.handleKeyDown,
+                  placeholder: '',
+                  id: 'integration-downshift-multiple',
+                }),
+              })}
+              {isOpen ? (
+                <Paper className="paper" square>
+                  {!this.state.loading &&
+                    Array.from(this.state.suggestions.values()).map(
+                      (suggestion, index) =>
+                        this.renderSuggestion({
+                          suggestion,
+                          index,
+                          itemProps: getItemProps({ item: suggestion }),
+                          highlightedIndex,
+                          selectedItem,
+                        }),
+                    )}
+                </Paper>
+              ) : null}
+            </div>
+          )}
+        </Downshift>
+      </FormControl>
     );
   }
 }

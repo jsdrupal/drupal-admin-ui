@@ -5,7 +5,6 @@ import Permissions from './components/05_pages/Permissions/Permissions';
 import Roles from './components/05_pages/Roles';
 import Dblog from './components/05_pages/Reports/Dblog';
 import NodeForm from './components/05_pages/NodeForm';
-import UiMetadata from './components/05_pages/NodeForm/UiMetadata';
 import widgets from './components/05_pages/NodeForm/Widgets';
 
 // @todo Share this with Drupal
@@ -16,12 +15,7 @@ const routes = {
   '/admin/reports/dblog': Dblog,
   '/node/add': AddContent,
   '/node/add/recipe': () => (
-    <NodeForm
-      entityTypeId="node"
-      bundle="recipe"
-      uiMetadata={UiMetadata}
-      widgets={widgets}
-    />
+    <NodeForm entityTypeId="node" bundle="recipe" widgets={widgets} />
   ),
 };
 

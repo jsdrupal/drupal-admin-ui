@@ -123,8 +123,8 @@ const FileUploadWidget = ({
                     const last = Object.keys(value.data).length - 1 === index;
 
                     return (
-                      <Fragment>
-                        <ListItem key={key}>
+                      <Fragment key={key}>
+                        <ListItem>
                           <Image>
                             <img
                               alt={alt || filename}
@@ -205,7 +205,7 @@ FileUploadWidget.propTypes = {
   }),
   inputProps: PropTypes.shape({
     file_extensions: PropTypes.string,
-    max_filesize: PropTypes.number,
+    max_filesize: PropTypes.string,
   }),
   schema: PropTypes.shape({
     maxItems: PropTypes.number,
@@ -221,7 +221,7 @@ FileUploadWidget.defaultProps = {
   value: {},
   inputProps: {
     file_extensions: 'png gif jpg jpeg',
-    max_filesize: 2000000,
+    max_filesize: '2000000',
   },
 };
 
