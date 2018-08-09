@@ -14,6 +14,11 @@ import DeleteIcon from '@material-ui/icons/Delete';
 
 import WidgetPropTypes from '../../05_pages/NodeForm/WidgetPropTypes';
 import FileUpload from '../FileUpload/FileUpload';
+import {
+  deleteItemById,
+  getItemsAsArray,
+  setItemById,
+} from '../../../utils/api/fieldItem';
 
 const CardWrapper = styled('div')`
   margin-top: 15px;
@@ -50,20 +55,13 @@ const FileUploadWidget = ({
   entityTypeId,
   schema: { properties, maxItems },
 }) => {
-  // Filter out empty values.
-  const filteredData = Object.entries(value.data)
-    .filter(([, value2]) => value2.file && value2.file.id)
-    .reduce(
-      (agg, [key, value2]) => ({
-        ...agg,
-        [key]: value2,
-      }),
-      {},
-    );
-  const length =
-    (value && filteredData && Object.keys(filteredData).length) || 0;
   // If array then allow for multiple uploads.
   const multiple = properties.data.type === 'array';
+
+  const items = getItemsAsArray(multiple, value.data)
+    // Default schema creates stub entries, which we don't need here.
+    .filter(item => item.id);
+  const length = (items && items.length) || 0;
   // maxItems is only set if array, so set to 1 as default.
   const maxItemsCount = multiple ? maxItems || 100000000000 : 1;
 
@@ -87,8 +85,8 @@ const FileUploadWidget = ({
             entityTypeId={entityTypeId}
             remainingUploads={maxItemsCount - length}
             onFileUpload={files => {
-              const data = files.reduce((arr, file) => {
-                arr[file.uuid[0].value] = {
+              const newItems = files.reduce((itemsAgg, file) => {
+                const item = {
                   file: {
                     type: 'file--file',
                     url: file.url[0].value,
@@ -96,15 +94,14 @@ const FileUploadWidget = ({
                     filename: file.filename[0].value,
                   },
                   meta: { alt: '' },
+                  id: file.uuid[0].value,
+                  type: 'file--file',
                 };
-                return arr;
-              }, {});
+                return setItemById(multiple, item, itemsAgg);
+              }, items);
 
               onChange({
-                data: {
-                  ...value.data,
-                  ...data,
-                },
+                data: newItems,
               });
             }}
           />
@@ -115,15 +112,16 @@ const FileUploadWidget = ({
             <Card>
               <CardContent>
                 <List>
-                  {Object.keys(filteredData).map((key, index) => {
+                  {items.map((item, index) => {
                     const {
+                      id,
                       meta: { alt },
                       file: { url, filename },
-                    } = value.data[key];
-                    const last = Object.keys(value.data).length - 1 === index;
+                    } = item;
+                    const last = items.length - 1 === index;
 
                     return (
-                      <Fragment key={key}>
+                      <Fragment key={id}>
                         <ListItem>
                           <Image>
                             <img
@@ -140,34 +138,33 @@ const FileUploadWidget = ({
                             label="Alternative text"
                             onChange={event =>
                               onChange({
-                                data: {
-                                  ...value.data,
-                                  [key]: {
-                                    ...value.data[key],
+                                data: setItemById(
+                                  multiple,
+                                  {
+                                    ...item,
                                     meta: {
                                       alt: event.target.value,
                                     },
                                   },
-                                },
+                                  value.data,
+                                ),
                               })
                             }
                           />
                           <Button
                             mini
-                            id={key}
+                            id={id}
                             variant="fab"
                             color="secondary"
                             className="remove"
                             aria-label="Remove Image"
                             onClick={event => {
-                              const {
-                                data: {
-                                  [event.currentTarget.id]: remove,
-                                  ...data
-                                },
-                              } = value;
                               onChange({
-                                data,
+                                data: deleteItemById(
+                                  multiple,
+                                  event.currentTarget.id,
+                                  items,
+                                ),
                               });
                             }}
                           >
@@ -188,17 +185,18 @@ const FileUploadWidget = ({
   );
 };
 
+const fileItemSchema = PropTypes.shape({
+  file: PropTypes.shape({
+    type: PropTypes.string.isRequired,
+    url: PropTypes.string.isRequired,
+    id: PropTypes.string.isRequired,
+    filename: PropTypes.string.isRequired,
+  }),
+});
 FileUploadWidget.propTypes = {
   ...WidgetPropTypes,
   value: PropTypes.shape({
-    data: PropTypes.shape({
-      file: PropTypes.shape({
-        type: PropTypes.string.isRequired,
-        url: PropTypes.string.isRequired,
-        id: PropTypes.string.isRequired,
-        filename: PropTypes.string.isRequired,
-      }),
-    }),
+    data: PropTypes.oneOf([PropTypes.arrayOf(fileItemSchema), fileItemSchema]),
     meta: PropTypes.shape({
       alt: PropTypes.string,
     }),
