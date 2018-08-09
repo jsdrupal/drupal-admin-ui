@@ -3,10 +3,9 @@ export const setItemById = (multiple, item, items) => {
     const index = items.findIndex(i => i.id === item.id);
     if (index === -1) {
       return [...items, item];
-    } else {
-      items[index] = item;
-      return items;
     }
+    items[index] = item;
+    return items;
   }
   return item;
 };
