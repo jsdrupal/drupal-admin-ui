@@ -115,8 +115,8 @@ const FileUploadWidget = ({
                     const last = items.length - 1 === index;
 
                     return (
-                      <Fragment>
-                        <ListItem key={id}>
+                      <Fragment key={id}>
+                        <ListItem>
                           <Image>
                             <img
                               alt={alt || filename}
