@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import keycode from 'keycode';
 import Downshift from 'downshift';
+import { css } from 'emotion';
 
 import Paper from '@material-ui/core/Paper';
 import TextField from '@material-ui/core/TextField';
@@ -13,6 +14,14 @@ import WidgetPropTypes from '../../05_pages/NodeForm/WidgetPropTypes';
 import SchemaPropType from '../../05_pages/NodeForm/SchemaPropType';
 
 import api from './../../../utils/api/api';
+
+const styles = {
+  results: css`
+    position: absolute;
+    z-index: 900;
+    width: 100%;
+  `,
+};
 
 class EntityReferenceAutocomplete extends React.Component {
   static propTypes = {
@@ -32,7 +41,6 @@ class EntityReferenceAutocomplete extends React.Component {
     inputValue: '',
     selectedItems: {},
     suggestions: new Map(),
-    loading: false,
   };
 
   handleChange = ({ id, label }) =>
@@ -60,32 +68,31 @@ class EntityReferenceAutocomplete extends React.Component {
     );
 
   handleInputChange = event => {
-    if (this.state.loading === false) {
-      this.setState({ loading: true, inputValue: event.target.value }, () => {
-        // @todo Move this call to the mounting component?
-        const [
-          entityTypeId,
-          [bundle],
-        ] = this.determineEntityTypeAndBundlesFromSchema(this.props.schema);
-        this.fetchSuggestedEntities(
-          entityTypeId,
-          bundle,
-          this.state.inputValue,
-        ).then(({ data: items }) => {
-          this.setState({
-            loading: false,
-            suggestions: new Map(
-              items.map(({ id, attributes: { name: label } }) => [
-                id,
-                { id, label },
-              ]),
-            ),
-          });
+    this.setState({ inputValue: event.target.value }, () => {
+      if (!this.state.inputValue.length) {
+        return;
+      }
+
+      // @todo Move this call to the mounting component?
+      const [
+        entityTypeId,
+        [bundle],
+      ] = this.determineEntityTypeAndBundlesFromSchema(this.props.schema);
+      this.fetchSuggestedEntities(
+        entityTypeId,
+        bundle,
+        this.state.inputValue,
+      ).then(({ data: items }) => {
+        this.setState({
+          suggestions: new Map(
+            items.map(({ id, attributes: { name: label } }) => [
+              id,
+              { id, label },
+            ]),
+          ),
         });
       });
-    } else {
-      this.setState({ inputValue: event.target.value });
-    }
+    });
   };
 
   fetchSuggestedEntities = (bundle, type, input) =>
@@ -229,8 +236,8 @@ class EntityReferenceAutocomplete extends React.Component {
                 }),
               })}
               {isOpen ? (
-                <Paper className="paper" square>
-                  {!this.state.loading &&
+                <Paper className={styles.results} square>
+                  {!!this.state.inputValue.length &&
                     Array.from(this.state.suggestions.values()).map(
                       (suggestion, index) =>
                         this.renderSuggestion({
