@@ -179,7 +179,7 @@ jobs:
     steps:
     - add_ssh_keys:
         fingerprints:
-        - "1e:cb:02:bc:68:40:3c:31:40:5f:45:b5:55:c8:02:24"
+          - "1e:cb:02:bc:68:40:3c:31:40:5f:45:b5:55:c8:02:24"
     - run: |
         git clone git@github.com:jsdrupal/drupal-admin-ui-demo.git ~/drupal-admin-ui-demo
         cd ~/drupal-admin-ui-demo
