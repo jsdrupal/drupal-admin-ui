@@ -35,7 +35,6 @@ import {
   clearMessage,
 } from '../../../actions/application';
 import {
-  MESSAGE_SEVERITY_ERROR,
   MESSAGE_INTERFACE_BANNER,
   MESSAGE_INTERFACE_SNACKBAR,
 } from '../../../constants/messages';
@@ -91,17 +90,6 @@ class Default extends React.Component {
         </div>
         <Divider />
         <List data-nightwatch="menu">
-          <button
-            onClick={() =>
-              this.props.setMessage(
-                String(Math.random()),
-                MESSAGE_INTERFACE_SNACKBAR,
-                MESSAGE_SEVERITY_ERROR,
-              )
-            }
-          >
-            SNACKTIME
-          </button>
           {this.props.menuLinks.map(({ link: menuLink }) => (
             <ListItem
               key={menuLink.url.replace(/\//g, '-')}
