@@ -221,6 +221,7 @@ class EntityReferenceAutocomplete extends React.Component {
                         onDelete={this.handleDelete(key)}
                       />
                     ),
+                  ),
                   onChange: this.handleInputChange,
                   onKeyDown: this.handleKeyDown,
                   placeholder: '',
