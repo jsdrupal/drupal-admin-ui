@@ -155,7 +155,7 @@ jobs:
     steps:
       - add_ssh_keys:
           fingerprints:
-            - "6f:17:e5:59:16:41:04:82:3b:ba:fc:76:a7:b2:c8:6b"
+            - "6c:c9:15:82:34:e7:30:e2:91:1b:ea:e2:06:b2:cf:e0"
       - checkout
       - *restore-node-modules
       - *restore-build
@@ -172,6 +172,37 @@ jobs:
               git commit -m "Auto build from master"
               git push origin master
           fi
+
+  dist_demo:
+    docker:
+    - image: circleci/php:7.1-fpm-node-browsers
+    steps:
+    - add_ssh_keys:
+        fingerprints:
+          - "1e:cb:02:bc:68:40:3c:31:40:5f:45:b5:55:c8:02:24"
+    - run: |
+        sudo apt-get update
+        sudo apt-get install -y \
+                libfreetype6-dev \
+                libjpeg62-turbo-dev \
+                libpng-dev
+        sudo docker-php-ext-install -j$(nproc) iconv
+        sudo docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/
+        sudo docker-php-ext-install -j$(nproc) gd
+    # We're not going to use this checkout, but it configures git over ssh.
+    # https://circleci.com/docs/2.0/configuration-reference/#checkout
+    - checkout
+    - run: |
+        git config --global user.name "⬅️✌️➡️"
+        git config --global user.email "no-reply@drupal.org"
+        git clone git@github.com:jsdrupal/drupal-admin-ui-demo.git ~/drupal-admin-ui-demo
+        cd ~/drupal-admin-ui-demo
+        composer update --lock
+        if ! git diff-index --quiet HEAD --; then
+          git add .
+          git commit -m "Auto update composer.lock from admin-ui-support-dist build"
+          git push origin master
+        fi
 
 workflows:
   version: 2
@@ -212,4 +243,11 @@ workflows:
           filters:
            branches:
             only:
+              - master
+      - dist_demo:
+          requires:
+          - dist_support
+          filters:
+            branches:
+              only:
               - master

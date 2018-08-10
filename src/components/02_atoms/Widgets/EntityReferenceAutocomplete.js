@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import keycode from 'keycode';
 import Downshift from 'downshift';
+import { css } from 'emotion';
 
 import Paper from '@material-ui/core/Paper';
 import TextField from '@material-ui/core/TextField';
@@ -13,6 +14,14 @@ import WidgetPropTypes from '../../05_pages/NodeForm/WidgetPropTypes';
 import SchemaPropType from '../../05_pages/NodeForm/SchemaPropType';
 
 import api from './../../../utils/api/api';
+
+const styles = {
+  results: css`
+    position: absolute;
+    z-index: 900;
+    width: 100%;
+  `,
+};
 
 class EntityReferenceAutocomplete extends React.Component {
   static propTypes = {
@@ -32,7 +41,6 @@ class EntityReferenceAutocomplete extends React.Component {
     inputValue: '',
     selectedItems: {},
     suggestions: new Map(),
-    loading: false,
   };
 
   getMaxItems = () => {
@@ -72,7 +80,11 @@ class EntityReferenceAutocomplete extends React.Component {
       return;
     }
 
-    this.setState({ loading: true, inputValue: event.target.value }, () => {
+    this.setState({ inputValue: event.target.value }, () => {
+      if (!this.state.inputValue.length) {
+        return;
+      }
+
       // @todo Move this call to the mounting component?
       const [
         entityTypeId,
@@ -84,7 +96,6 @@ class EntityReferenceAutocomplete extends React.Component {
         this.state.inputValue,
       ).then(({ data: items }) => {
         this.setState({
-          loading: false,
           suggestions: new Map(
             items.map(({ id, attributes: { name: label } }) => [
               id,
@@ -223,7 +234,6 @@ class EntityReferenceAutocomplete extends React.Component {
                 fullWidth: true,
                 label: this.props.label,
                 InputProps: getInputProps({
-                  disabled: this.state.loading,
                   startAdornment: Object.entries(selectedItems).map(
                     ([key, value]) => (
                       <Chip
@@ -242,8 +252,8 @@ class EntityReferenceAutocomplete extends React.Component {
                 }),
               })}
               {isOpen ? (
-                <Paper className="paper" square>
-                  {!this.state.loading &&
+                <Paper className={styles.results} square>
+                  {!!this.state.inputValue.length &&
                     Array.from(this.state.suggestions.values()).map(
                       (suggestion, index) =>
                         this.renderSuggestion({
