@@ -2,20 +2,24 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import TextField from '@material-ui/core/TextField';
 import WidgetPropTypes from '../../05_pages/NodeForm/WidgetPropTypes';
+import MultipleFields from '../MultipleFields/MultipleFields';
 
-const StringTextfield = props => (
-  <TextField
-    id={props.fieldName}
-    value={props.value}
-    onChange={event => props.onChange(event.target.value)}
-    margin="normal"
-    label={props.label}
-  />
+const StringTextfield = ({ value, schema, label, onChange }) => (
+  <MultipleFields
+    value={value}
+    onChange={onChange}
+    isMultiple={schema.type === 'array'}
+  >
+    <TextField margin="normal" value={value} label={label} />
+  </MultipleFields>
 );
 
 StringTextfield.propTypes = {
   ...WidgetPropTypes,
-  value: PropTypes.string,
+  value: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.arrayOf(PropTypes.string),
+  ]),
 };
 
 StringTextfield.defaultProps = {
