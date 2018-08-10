@@ -35,6 +35,14 @@ class EntityReferenceAutocomplete extends React.Component {
     loading: false,
   };
 
+  getMaxItems = () => {
+    const {
+      schema: { maxItems, properties },
+    } = this.props;
+    const multiple = properties.data.type === 'array';
+    return multiple ? maxItems || 100000000000 : 1;
+  };
+
   handleChange = ({ id, label }) =>
     this.setState(
       ({ selectedItems }) => ({
@@ -60,7 +68,7 @@ class EntityReferenceAutocomplete extends React.Component {
     );
 
   handleInputChange = event => {
-    if (this.cannotAddMoreEntities()) {
+    if (this.getMaxItems() === Object.keys(this.state.selectedItems).length) {
       return;
     }
 
@@ -151,19 +159,6 @@ class EntityReferenceAutocomplete extends React.Component {
       );
   };
 
-  cannotAddMoreEntities = () => {
-    const {
-      props: { schema },
-      state: { selectedItems },
-    } = this;
-    const isSingle = schema.properties.data.type !== 'array';
-    const selectedItemsLength = Object.keys(selectedItems).length;
-    return (
-      (isSingle && !!selectedItemsLength) ||
-      (schema.maxItems && selectedItemsLength === schema.maxItems)
-    );
-  };
-
   renderSuggestion = ({
     suggestion,
     index,
@@ -171,7 +166,7 @@ class EntityReferenceAutocomplete extends React.Component {
     highlightedIndex,
     selectedItem: selectedItems,
   }) => {
-    if (this.cannotAddMoreEntities()) {
+    if (this.getMaxItems() === Object.keys(this.state.selectedItems).length) {
       return null;
     }
 
