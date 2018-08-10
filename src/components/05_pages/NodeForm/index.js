@@ -194,24 +194,20 @@ class NodeForm extends React.Component {
         ['promote', 'status', 'sticky'],
       );
       result = (
-        <Paper>
-          <div className={styles.container}>
-            <FormControl margin="normal" fullWidth>
-              <div className={styles.gridRoot}>
-                <Paper classes={{ root: styles.fieldContainer }}>
-                  {left.map(this.createField)}
-                </Paper>
-                <Paper classes={{ root: styles.fieldContainer }}>
-                  {right.map(this.createField)}
-                </Paper>
-              </div>
+        <div className={styles.container}>
+          <div className={styles.gridRoot}>
+            <Paper classes={{ root: styles.fieldContainer }}>
+              {left.map(this.createField)}
               <Divider classes={{ root: styles.divider }} />
               <Button variant="contained" color="primary" onClick={this.onSave}>
                 Save
               </Button>
-            </FormControl>
+            </Paper>
+            <Paper classes={{ root: styles.fieldContainer }}>
+              {right.map(this.createField)}
+            </Paper>
           </div>
-        </Paper>
+        </div>
       );
     }
     return (
@@ -225,10 +221,9 @@ class NodeForm extends React.Component {
 
 styles = {
   container: css`
-    padding: 5px 50px 40px;
   `,
   fieldContainer: css`
-    padding: 10px 20px;
+    padding: 20px 45px 40px;
   `,
   divider: css`
     margin: 30px 0;
