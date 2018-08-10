@@ -9,7 +9,7 @@ import FileUploadWidget from './FileUploadWidget';
 import NumberTextfield from './NumberTextfield';
 import OptionsSelect from './OptionsSelect';
 import StringTextfield from './StringTextfield';
-import TimestampDatetime from './TimestampDatetime';
+import DatetimeTimestamp from './DatetimeTimestamp';
 
 /**
  * There is a known issue with addWithJSX and action() calls.
@@ -127,8 +127,8 @@ storiesOf('Widgets/StringTextfield', module).addWithJSX('Default', () => (
   />
 ));
 
-storiesOf('Widgets/TimestampDatetime', module).addWithJSX('Default', () => (
-  <TimestampDatetime
+storiesOf('Widgets/DatetimeTimestamp', module).addWithJSX('Default', () => (
+  <DatetimeTimestamp
     fieldName="EventStart"
     label="A Simple Label"
     name="startTime"
