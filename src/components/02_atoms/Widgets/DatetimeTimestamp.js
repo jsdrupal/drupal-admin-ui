@@ -3,12 +3,13 @@ import PropTypes from 'prop-types';
 import TextField from '@material-ui/core/TextField';
 import WidgetPropTypes from '../../05_pages/NodeForm/WidgetPropTypes';
 
-const TimestampDatetime = ({ fieldName, label, value, onChange }) => (
+const DatetimeTimestamp = ({ fieldName, label, value, onChange }) => (
   <TextField
     id={fieldName}
     label={label}
     type="datetime-local"
     defaultValue={value}
+    margin="normal"
     onChange={event => onChange(event.target.value)}
     InputLabelProps={{
       shrink: true,
@@ -16,13 +17,13 @@ const TimestampDatetime = ({ fieldName, label, value, onChange }) => (
   />
 );
 
-TimestampDatetime.propTypes = {
+DatetimeTimestamp.propTypes = {
   ...WidgetPropTypes,
   value: PropTypes.string,
 };
 
-TimestampDatetime.defaultProps = {
+DatetimeTimestamp.defaultProps = {
   value: '',
 };
 
-export default TimestampDatetime;
+export default DatetimeTimestamp;

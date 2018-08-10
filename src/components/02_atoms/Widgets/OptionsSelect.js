@@ -21,7 +21,7 @@ const OptionsSelect = ({
   fieldName,
   schema: { enum: options, default: defaultValue },
 }) => (
-  <FormControl>
+  <FormControl margin="normal">
     <InputLabel htmlFor={fieldName}>{label}</InputLabel>
     <NativeSelect
       value={value || defaultValue}
