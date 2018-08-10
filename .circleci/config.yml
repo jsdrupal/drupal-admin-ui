@@ -151,7 +151,8 @@ jobs:
               git push origin master
           fi
   dist_support:
-    <<: *default
+    docker:
+      - image: circleci/php:7.1-fpm-node-browsers
     steps:
       - add_ssh_keys:
           fingerprints:
@@ -171,6 +172,14 @@ jobs:
           if ! git diff-index --quiet HEAD --; then
               git commit -m "Auto build from master"
               git push origin master
+          fi
+          git clone git@github.com:jsdrupal/drupal-admin-ui-demo.git ~/drupal-admin-ui-demo
+          cd ~/drupal-admin-ui-demo
+          composer update --lock
+          if ! git diff-index --quiet HEAD --; then
+            git add .
+            git commit -m "Auto update composer.lock from admin-ui-support-dist build"
+            git push origin master
           fi
 
 workflows:
