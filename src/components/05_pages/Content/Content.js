@@ -1,8 +1,10 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { css } from 'emotion';
+
+import LoadingBar from 'react-redux-loading-bar';
 
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
@@ -184,288 +186,308 @@ class Content extends Component {
     return (
       <div className={styles.root}>
         <PageTitle>Content</PageTitle>
+        <LoadingBar style={{ position: 'relative', marginBottom: '5px' }} />
         <Paper>
-          <div className={styles.filters}>
-            <TextField
-              inputProps={{ 'aria-label': 'Title' }}
-              label="Title"
-              placeholder="Title"
-              onChange={e => {
-                this.setState({ title: e.target.value }, () => {
-                  this.props.requestContent(this.state);
-                });
-              }}
-              margin="normal"
-            />
-
-            <FormControl className={styles.formControl}>
-              <InputLabel htmlFor="select-multiple-checkbox">
-                Content Type
-              </InputLabel>
-              <Select
-                multiple
-                value={this.state.contentTypes}
-                onChange={e => {
-                  this.setState({ contentTypes: e.target.value }, () => {
-                    this.props.requestContent(this.state);
-                  });
-                }}
-                input={<Input id="select-multiple-checkbox" />}
-                renderValue={selected => (
-                  <div className={styles.chips}>
-                    {selected.map(value => (
-                      <Chip
-                        key={value}
-                        label={this.props.contentTypes[value].name}
-                        className={styles.chip}
-                      />
-                    ))}
-                  </div>
-                )}
-              >
-                {Object.keys(this.props.contentTypes).map(type => (
-                  <MenuItem key={type} value={type}>
-                    <Checkbox
-                      checked={this.state.contentTypes.indexOf(type) > -1}
-                    />
-                    <ListItemText
-                      primary={this.props.contentTypes[type].name}
-                    />
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-
-            <FormControl className={styles.formControl}>
-              <InputLabel htmlFor="status">Status</InputLabel>
-              <Select
-                value={this.state.status || ''}
-                onChange={e => {
-                  this.setState({ status: e.target.value }, () => {
-                    this.props.requestContent(this.state);
-                  });
-                }}
-                input={<Input name="status" id="status" />}
-                autoWidth
-              >
-                <MenuItem value="">
-                  <em>Any</em>
-                </MenuItem>
-                <MenuItem value="published">Published</MenuItem>
-                <MenuItem value="unpublished">Unpublished</MenuItem>
-              </Select>
-            </FormControl>
-
-            <Button
-              variant="fab"
-              color="primary"
-              aria-label="add"
-              className={styles.addButton}
-              component={Link}
-              to="/node/add"
-            >
-              <AddIcon />
-            </Button>
-          </div>
-          <div className={styles.filters}>
-            {this.props.actions && (
-              <FormControl
-                className={styles.action}
-                disabled={
-                  Object.values(this.state.checked).filter(Boolean).length ===
-                    0 || false
-                }
-              >
-                <InputLabel htmlFor="action">Actions</InputLabel>
-                <Select
-                  value={this.state.action || ''}
+          {this.props.contentList.length >= 1 && (
+            <Fragment>
+              <div className={styles.filters}>
+                <TextField
+                  inputProps={{ 'aria-label': 'Title' }}
+                  label="Title"
+                  placeholder="Title"
                   onChange={e => {
-                    this.setState({ action: e.target.value });
+                    this.setState({ title: e.target.value }, () => {
+                      this.props.requestContent(this.state);
+                    });
                   }}
-                  input={<Input name="action" id="action" />}
-                  autoWidth
-                >
-                  <MenuItem value="">
-                    <em>None</em>
-                  </MenuItem>
-                  {this.props.actions.map(action => (
-                    <MenuItem key={action.id} value={action.attributes.id}>
-                      {action.attributes.label}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-            )}
-            {this.state.action && (
-              <Button
-                onClick={this.executeAction}
-                color="primary"
-                variant="contained"
-              >
-                Apply
-              </Button>
-            )}
-          </div>
-          <div
-            ref={node => {
-              this.table = node;
-            }}
-          >
-            <Table>
-              <TableHead>
-                <TableRow>
-                  {<TableCell padding="checkbox" />}
-                  {[
-                    { key: 'title', label: 'Title', sortable: true },
-                    { key: 'type', label: 'Content Type', sortable: true },
-                    this.props.includes['user--user']
-                      ? { key: 'author', label: 'Author', sortable: false }
-                      : undefined,
-                    { key: 'status', label: 'Status', sortable: true },
-                    { key: 'changed', label: 'Updated', sortable: true },
-                    { key: 'operations', label: 'Operations', sortable: false },
-                  ]
-                    .filter(x => x)
-                    .map(
-                      ({ key, label, sortable }) =>
-                        sortable ? (
-                          <TableCell key={key}>
-                            <TableSortLabel
-                              direction={
-                                this.state.sort.path === key
-                                  ? this.state.sort.direction.toLowerCase()
-                                  : undefined
-                              }
-                              active={this.state.sort.path === key}
-                              onClick={this.tableSortHandler(
-                                key,
-                                (this.state.sort.path !== key && 'DESC') ||
-                                  ((this.state.sort.direction === 'DESC' &&
-                                    'ASC') ||
-                                    'DESC'),
-                              )}
-                            >
-                              {label}
-                            </TableSortLabel>
-                          </TableCell>
-                        ) : (
-                          <TableCell key={key}>{label}</TableCell>
-                        ),
-                    )}
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {this.props.contentList.map(node => {
-                  const {
-                    type,
-                    attributes: { changed, nid, status, title },
-                    relationships,
-                  } = node;
-                  const rowSelectId = `row-select-for-${String(nid)}`;
-                  return (
-                    <TableRow key={nid}>
-                      {
-                        <TableCell padding="checkbox">
-                          <Checkbox
-                            id={rowSelectId}
-                            value={String(nid)}
-                            onChange={(event, checked) => {
-                              this.setState(prevState => {
-                                prevState.checked[nid] = checked;
-                                return prevState;
-                              });
-                            }}
-                            checked={this.state.checked[nid] || false}
+                  margin="normal"
+                />
+
+                <FormControl className={styles.formControl}>
+                  <InputLabel htmlFor="select-multiple-checkbox">
+                    Content Type
+                  </InputLabel>
+                  <Select
+                    multiple
+                    value={this.state.contentTypes}
+                    onChange={e => {
+                      this.setState({ contentTypes: e.target.value }, () => {
+                        this.props.requestContent(this.state);
+                      });
+                    }}
+                    input={<Input id="select-multiple-checkbox" />}
+                    renderValue={selected => (
+                      <div className={styles.chips}>
+                        {selected.map(value => (
+                          <Chip
+                            key={value}
+                            label={this.props.contentTypes[value].name}
+                            className={styles.chip}
                           />
-                        </TableCell>
-                      }
-                      <TableCell>
-                        <label htmlFor={rowSelectId}>{title}</label>
-                      </TableCell>
-                      <TableCell>
-                        {this.props.contentTypes[type].name}
-                      </TableCell>
-                      {this.props.includes['user--user'] && (
-                        <TableCell>
-                          {this.props.includes['user--user'][
-                            relationships.uid.data.id
-                          ] ? (
-                            <Link
-                              to={`/user/${
-                                this.props.includes['user--user'][
-                                  relationships.uid.data.id
-                                ].attributes.uid
-                              }`}
-                            >
-                              {
-                                this.props.includes['user--user'][
-                                  relationships.uid.data.id
-                                ].attributes.name
-                              }
-                            </Link>
-                          ) : (
-                            'Anonymous (not verified)'
-                          )}
-                        </TableCell>
-                      )}
-                      <TableCell>
-                        {(status && 'Published') || 'Unpublished'}
-                      </TableCell>
-                      <TableCell>
-                        {new Intl.DateTimeFormat(navigator.language, {
-                          weekday: 'long',
-                          year: 'numeric',
-                          month: 'long',
-                          day: 'numeric',
-                          hour: 'numeric',
-                          minute: 'numeric',
-                        }).format(new Date(changed * 1000))}
-                      </TableCell>
-                      <TableCell style={{ whiteSpace: 'nowrap' }}>
-                        <IconButton
-                          aria-label="edit"
-                          className={styles.button}
-                          component={Link}
-                          to={`/node/${nid}/edit`}
-                        >
-                          <EditIcon />
-                        </IconButton>
-                        <OpsModalButton
-                          aria-label="delete"
-                          className={styles.button}
-                          title={`Are you sure that you want to delete this content ${title}?`}
-                          text="This action cannot be undone."
-                          cancelText="Cancel"
-                          confirmText="Delete"
-                          enterAction={() => {
-                            this.props.contentDelete(node);
-                          }}
-                        >
-                          <DeleteIcon />
-                        </OpsModalButton>
-                      </TableCell>
+                        ))}
+                      </div>
+                    )}
+                  >
+                    {Object.keys(this.props.contentTypes).map(type => (
+                      <MenuItem key={type} value={type}>
+                        <Checkbox
+                          checked={this.state.contentTypes.indexOf(type) > -1}
+                        />
+                        <ListItemText
+                          primary={this.props.contentTypes[type].name}
+                        />
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+
+                <FormControl className={styles.formControl}>
+                  <InputLabel htmlFor="status">Status</InputLabel>
+                  <Select
+                    value={this.state.status || ''}
+                    onChange={e => {
+                      this.setState({ status: e.target.value }, () => {
+                        this.props.requestContent(this.state);
+                      });
+                    }}
+                    input={<Input name="status" id="status" />}
+                    autoWidth
+                  >
+                    <MenuItem value="">
+                      <em>Any</em>
+                    </MenuItem>
+                    <MenuItem value="published">Published</MenuItem>
+                    <MenuItem value="unpublished">Unpublished</MenuItem>
+                  </Select>
+                </FormControl>
+
+                <Button
+                  variant="fab"
+                  color="primary"
+                  aria-label="add"
+                  className={styles.addButton}
+                  component={Link}
+                  to="/node/add"
+                >
+                  <AddIcon />
+                </Button>
+              </div>
+              <div className={styles.filters}>
+                {this.props.actions && (
+                  <FormControl
+                    className={styles.action}
+                    disabled={
+                      Object.values(this.state.checked).filter(Boolean)
+                        .length === 0 || false
+                    }
+                  >
+                    <InputLabel htmlFor="action">Actions</InputLabel>
+                    <Select
+                      value={this.state.action || ''}
+                      onChange={e => {
+                        this.setState({ action: e.target.value });
+                      }}
+                      input={<Input name="action" id="action" />}
+                      autoWidth
+                    >
+                      <MenuItem value="">
+                        <em>None</em>
+                      </MenuItem>
+                      {this.props.actions.map(action => (
+                        <MenuItem key={action.id} value={action.attributes.id}>
+                          {action.attributes.label}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+                )}
+                {this.state.action && (
+                  <Button
+                    onClick={this.executeAction}
+                    color="primary"
+                    variant="contained"
+                  >
+                    Apply
+                  </Button>
+                )}
+              </div>
+              <div
+                ref={node => {
+                  this.table = node;
+                }}
+              >
+                <Table>
+                  <TableHead>
+                    <TableRow>
+                      {<TableCell padding="checkbox" />}
+                      {[
+                        { key: 'title', label: 'Title', sortable: true },
+                        {
+                          key: 'type',
+                          label: 'Content Type',
+                          sortable: true,
+                        },
+                        this.props.includes['user--user']
+                          ? {
+                              key: 'author',
+                              label: 'Author',
+                              sortable: false,
+                            }
+                          : undefined,
+                        { key: 'status', label: 'Status', sortable: true },
+                        { key: 'changed', label: 'Updated', sortable: true },
+                        {
+                          key: 'operations',
+                          label: 'Operations',
+                          sortable: false,
+                        },
+                      ]
+                        .filter(x => x)
+                        .map(
+                          ({ key, label, sortable }) =>
+                            sortable ? (
+                              <TableCell key={key}>
+                                <TableSortLabel
+                                  direction={
+                                    this.state.sort.path === key
+                                      ? this.state.sort.direction.toLowerCase()
+                                      : undefined
+                                  }
+                                  active={this.state.sort.path === key}
+                                  onClick={this.tableSortHandler(
+                                    key,
+                                    (this.state.sort.path !== key && 'DESC') ||
+                                      ((this.state.sort.direction === 'DESC' &&
+                                        'ASC') ||
+                                        'DESC'),
+                                  )}
+                                >
+                                  {label}
+                                </TableSortLabel>
+                              </TableCell>
+                            ) : (
+                              <TableCell key={key}>{label}</TableCell>
+                            ),
+                        )}
                     </TableRow>
-                  );
-                })}
-              </TableBody>
-            </Table>
-            <TablePagination
-              component="div"
-              count={count}
-              rowsPerPage={limit}
-              page={offset / limit}
-              onChangePage={this.pageChangeHandler}
-              rowsPerPageOptions={[limit]}
-              labelDisplayedRows={({ page }) => `Page: ${page + 1}`}
-              nextIconButtonProps={{ 'aria-label': 'Next content page.' }}
-              backIconButtonProps={{ 'aria-label': 'Previous content page.' }}
-            />
-            {!this.props.contentList.length && (
-              <Typography className={styles.noContentMessage}>
-                There is no content yet. {<Link to="/node/add">Add one</Link>}.
-              </Typography>
-            )}
-          </div>
+                  </TableHead>
+                  <TableBody>
+                    {this.props.contentList.map(node => {
+                      const {
+                        type,
+                        attributes: { changed, nid, status, title },
+                        relationships,
+                      } = node;
+                      const rowSelectId = `row-select-for-${String(nid)}`;
+                      return (
+                        <TableRow key={nid}>
+                          {
+                            <TableCell padding="checkbox">
+                              <Checkbox
+                                id={rowSelectId}
+                                value={String(nid)}
+                                onChange={(event, checked) => {
+                                  this.setState(prevState => {
+                                    prevState.checked[nid] = checked;
+                                    return prevState;
+                                  });
+                                }}
+                                checked={this.state.checked[nid] || false}
+                              />
+                            </TableCell>
+                          }
+                          <TableCell>
+                            <label htmlFor={rowSelectId}>{title}</label>
+                          </TableCell>
+                          <TableCell>
+                            {this.props.contentTypes[type].name}
+                          </TableCell>
+                          {this.props.includes['user--user'] && (
+                            <TableCell>
+                              {this.props.includes['user--user'][
+                                relationships.uid.data.id
+                              ] ? (
+                                <Link
+                                  to={`/user/${
+                                    this.props.includes['user--user'][
+                                      relationships.uid.data.id
+                                    ].attributes.uid
+                                  }`}
+                                >
+                                  {
+                                    this.props.includes['user--user'][
+                                      relationships.uid.data.id
+                                    ].attributes.name
+                                  }
+                                </Link>
+                              ) : (
+                                'Anonymous (not verified)'
+                              )}
+                            </TableCell>
+                          )}
+                          <TableCell>
+                            {(status && 'Published') || 'Unpublished'}
+                          </TableCell>
+                          <TableCell>
+                            {new Intl.DateTimeFormat(navigator.language, {
+                              weekday: 'long',
+                              year: 'numeric',
+                              month: 'long',
+                              day: 'numeric',
+                              hour: 'numeric',
+                              minute: 'numeric',
+                            }).format(new Date(changed * 1000))}
+                          </TableCell>
+                          <TableCell style={{ whiteSpace: 'nowrap' }}>
+                            <IconButton
+                              aria-label="edit"
+                              className={styles.button}
+                              component={Link}
+                              to={`/node/${nid}/edit`}
+                            >
+                              <EditIcon />
+                            </IconButton>
+                            <OpsModalButton
+                              aria-label="delete"
+                              className={styles.button}
+                              title={`Are you sure that you want to delete this content ${title}?`}
+                              text="This action cannot be undone."
+                              cancelText="Cancel"
+                              confirmText="Delete"
+                              enterAction={() => {
+                                this.props.contentDelete(node);
+                              }}
+                            >
+                              <DeleteIcon />
+                            </OpsModalButton>
+                          </TableCell>
+                        </TableRow>
+                      );
+                    })}
+                  </TableBody>
+                </Table>
+                <TablePagination
+                  component="div"
+                  count={count}
+                  rowsPerPage={limit}
+                  page={offset / limit}
+                  onChangePage={this.pageChangeHandler}
+                  rowsPerPageOptions={[limit]}
+                  labelDisplayedRows={({ page }) => `Page: ${page + 1}`}
+                  nextIconButtonProps={{ 'aria-label': 'Next content page.' }}
+                  backIconButtonProps={{
+                    'aria-label': 'Previous content page.',
+                  }}
+                />
+                {!this.props.contentList.length && (
+                  <Typography className={styles.noContentMessage}>
+                    There is no content yet.{' '}
+                    {<Link to="/node/add">Add one</Link>}.
+                  </Typography>
+                )}
+              </div>
+            </Fragment>
+          )}
         </Paper>
       </div>
     );

@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { css } from 'emotion';
 
+import LoadingBar from 'react-redux-loading-bar';
+
 import FormControl from '@material-ui/core/FormControl';
 import Paper from '@material-ui/core/Paper';
 import Divider from '@material-ui/core/Divider';
@@ -149,6 +151,7 @@ class NodeForm extends React.Component {
     return (
       <Fragment>
         <PageTitle>Create {this.props.bundle}</PageTitle>
+        <LoadingBar style={{ position: 'relative', marginBottom: '5px' }} />
         {this.props.schema &&
           this.props.uiSchema && (
             <Paper>
