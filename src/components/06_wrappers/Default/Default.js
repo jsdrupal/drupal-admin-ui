@@ -23,17 +23,22 @@ import HelpIcon from '@material-ui/icons/Help';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 
-import Message from '../../02_atoms/Message/Message';
-import Snackbar from '../../02_atoms/Snackbar/SnackbarMessage';
+import BannerMessage from '../../02_atoms/BannerMessage/BannerMessage';
+import Snackbar from '../../02_atoms/SnackbarMessage/SnackbarMessage';
 import ErrorBoundary from '../ErrorBoundary/ErrorBoundary';
 
 import {
   requestMenu,
   closeDrawer,
   openDrawer,
+  setMessage,
+  clearMessage,
 } from '../../../actions/application';
-import { summonSnackbar, dismissSnackbar } from '../../../actions/snackbar';
-import { MESSAGE_ERROR } from '../../../constants/messages';
+import {
+  MESSAGE_SEVERITY_ERROR,
+  MESSAGE_INTERFACE_BANNER,
+  MESSAGE_INTERFACE_SNACKBAR,
+} from '../../../constants/messages';
 
 let styles;
 
@@ -86,6 +91,17 @@ class Default extends React.Component {
         </div>
         <Divider />
         <List data-nightwatch="menu">
+          <button
+            onClick={() =>
+              this.props.setMessage(
+                String(Math.random()),
+                MESSAGE_INTERFACE_SNACKBAR,
+                MESSAGE_SEVERITY_ERROR,
+              )
+            }
+          >
+            SNACKTIME
+          </button>
           {this.props.menuLinks.map(({ link: menuLink }) => (
             <ListItem
               key={menuLink.url.replace(/\//g, '-')}
@@ -108,15 +124,27 @@ class Default extends React.Component {
 
       <main className={styles.main} id={styles.main}>
         <ErrorBoundary>
-          {this.props.messages.map(message => (
-            <Message {...message} key={message.key} type={MESSAGE_ERROR} />
-          ))}
+          {this.props.messages.map(
+            message =>
+              message.messageInterface === MESSAGE_INTERFACE_BANNER ? (
+                <BannerMessage
+                  {...message}
+                  key={message.key}
+                  type={message.messageSeverity}
+                />
+              ) : null,
+          )}
           {this.props.children}
         </ErrorBoundary>
-        <Snackbar
-          {...this.props.snackbar}
-          onClose={this.props.dismissSnackbar}
-        />
+        {this.props.messages.map(
+          message =>
+            message.messageInterface === MESSAGE_INTERFACE_SNACKBAR ? (
+              <Snackbar
+                {...message}
+                onClose={() => this.props.clearMessage(message.key)}
+              />
+            ) : null,
+        )}
       </main>
     </div>
   );
@@ -172,15 +200,11 @@ Default.propTypes = {
       }),
     }),
   ).isRequired,
-  snackbar: PropTypes.shape({
-    message: PropTypes.string,
-    open: PropTypes.bool,
-  }).isRequired,
   requestMenu: PropTypes.func.isRequired,
   openDrawer: PropTypes.func.isRequired,
   closeDrawer: PropTypes.func.isRequired,
-  summonSnackbar: PropTypes.func.isRequired,
-  dismissSnackbar: PropTypes.func.isRequired,
+  setMessage: PropTypes.func.isRequired,
+  clearMessage: PropTypes.func.isRequired,
   drawerOpen: PropTypes.bool,
 };
 
@@ -193,7 +217,6 @@ const mapStateToProps = state => ({
   messages: state.application.messages || [],
   menuLinks: state.application.menuLinks || [],
   drawerOpen: state.application.drawerOpen,
-  snackbar: state.snackbar,
 });
 
 export default connect(
@@ -202,7 +225,7 @@ export default connect(
     requestMenu,
     openDrawer,
     closeDrawer,
-    summonSnackbar,
-    dismissSnackbar,
+    setMessage,
+    clearMessage,
   },
 )(Default);

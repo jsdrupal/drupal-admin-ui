@@ -6,7 +6,10 @@ import {
 } from 'react-redux-loading-bar';
 import api from '../utils/api/api';
 import { setMessage } from './application';
-import { MESSAGE_ERROR } from '../constants/messages';
+import {
+  MESSAGE_INTERFACE_BANNER,
+  MESSAGE_SEVERITY_ERROR,
+} from '../constants/messages';
 
 export const DBLOG_COLLECTION_REQUEST = 'DBLOG_COLLECTION_REQUEST';
 export const requestDblogCollection = options => ({
@@ -86,7 +89,13 @@ export function* loadDblog({ payload: { options } }) {
       },
     });
   } catch (error) {
-    yield put(setMessage(error.toString(), MESSAGE_ERROR));
+    yield put(
+      setMessage(
+        error.toString(),
+        MESSAGE_INTERFACE_BANNER,
+        MESSAGE_SEVERITY_ERROR,
+      ),
+    );
   } finally {
     yield put(hideLoading());
   }

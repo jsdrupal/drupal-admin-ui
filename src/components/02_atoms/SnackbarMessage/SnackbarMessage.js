@@ -7,16 +7,20 @@ const SnackbarMessage = props => (
   <Snackbar
     open={props.open}
     message={props.message}
-    autoHideDuration={props.duration || 5000}
+    autoHideDuration={props.duration}
     onClose={props.onClose}
   />
 );
 
+SnackbarMessage.defaultProps = {
+  duration: 5000,
+};
+
 SnackbarMessage.propTypes = {
   open: PropTypes.bool.isRequired,
   message: PropTypes.string.isRequired,
-  duration: PropTypes.number.isRequired,
   onClose: PropTypes.func.isRequired,
+  duration: PropTypes.number,
 };
 
 export default SnackbarMessage;
