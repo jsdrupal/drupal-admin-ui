@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { css } from 'emotion';
 
-import FormControl from '@material-ui/core/FormControl';
 import Paper from '@material-ui/core/Paper';
 import Divider from '@material-ui/core/Divider';
 import Button from '@material-ui/core/Button';
@@ -194,19 +193,17 @@ class NodeForm extends React.Component {
         ['promote', 'status', 'sticky'],
       );
       result = (
-        <div className={styles.container}>
-          <div className={styles.gridRoot}>
-            <Paper classes={{ root: styles.fieldContainer }}>
-              {left.map(this.createField)}
-              <Divider classes={{ root: styles.divider }} />
-              <Button variant="contained" color="primary" onClick={this.onSave}>
-                Save
-              </Button>
-            </Paper>
-            <Paper classes={{ root: styles.fieldContainer }}>
-              {right.map(this.createField)}
-            </Paper>
-          </div>
+        <div className={styles.gridRoot}>
+          <Paper classes={{ root: styles.fieldContainer }}>
+            {left.map(this.createField)}
+            <Divider classes={{ root: styles.divider }} />
+            <Button variant="contained" color="primary" onClick={this.onSave}>
+              Save
+            </Button>
+          </Paper>
+          <Paper classes={{ root: styles.fieldContainer }}>
+            {right.map(this.createField)}
+          </Paper>
         </div>
       );
     }
@@ -220,8 +217,6 @@ class NodeForm extends React.Component {
 }
 
 styles = {
-  container: css`
-  `,
   fieldContainer: css`
     padding: 20px 45px 40px;
   `,
