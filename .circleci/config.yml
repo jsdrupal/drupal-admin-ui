@@ -21,7 +21,7 @@ aliases:
         - *node-modules-key
 
   - &restore-vendor
-    return_cache:
+    restore_cache:
       keys:
         - *vendor-key
 
