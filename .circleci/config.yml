@@ -193,6 +193,8 @@ jobs:
     # https://circleci.com/docs/2.0/configuration-reference/#checkout
     - checkout
     - run: |
+        git config --global user.name "⬅️✌️➡️"
+        git config --global user.email "no-reply@drupal.org"
         git clone git@github.com:jsdrupal/drupal-admin-ui-demo.git ~/drupal-admin-ui-demo
         cd ~/drupal-admin-ui-demo
         composer update --lock
