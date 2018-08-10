@@ -147,7 +147,15 @@ async function api(
     case 'schema': {
       url = `/schemata/${[parameters.entityTypeId, parameters.bundle].join(
         '/',
-      )}?_describes=api_json&_format=schema_json`;
+      )}`;
+      break;
+    }
+    case 'field_schema': {
+      url = '/jsonapi/field_config';
+      break;
+    }
+    case 'form_display': {
+      url = '/jsonapi/entity_form_display';
       break;
     }
     default:
@@ -162,7 +170,7 @@ async function api(
     }`,
     options,
   ).then(res => {
-    if (![200, 201].includes(res.status)) {
+    if (![200, 201, 204].includes(res.status)) {
       throw new ApiError(res.status, res.statusText, res.body);
     }
 

@@ -147,6 +147,7 @@ class Content extends Component {
       action => action.attributes.id === this.state.action,
     )[0];
     this.props.actionExecute(matchingAction, Object.keys(this.state.checked));
+    this.setState({ checked: {}, action: null });
   };
   tableSortHandler = (path, direction) => () => {
     this.setState(

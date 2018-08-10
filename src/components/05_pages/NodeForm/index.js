@@ -1,7 +1,6 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-
 import { css } from 'emotion';
 
 import FormControl from '@material-ui/core/FormControl';
@@ -9,36 +8,19 @@ import Paper from '@material-ui/core/Paper';
 import Divider from '@material-ui/core/Divider';
 import Button from '@material-ui/core/Button';
 
-import Widgets from './Widgets';
+import SchemaPropType from './SchemaPropType';
 import PageTitle from '../../02_atoms/PageTitle';
 
-import { requestSchema, contentAdd } from '../../../actions/content';
-import { createEntity } from '../../../utils/api/schema';
+import { contentAdd } from '../../../actions/content';
+import { requestSchema, requestUiSchema } from '../../../actions/schema';
 
-const lazyFunction = f => (props, propName, componentName, ...rest) =>
-  f(props, propName, componentName, ...rest);
-
-let schemaType;
-const lazySchemaType = lazyFunction(() => schemaType);
-
-schemaType = PropTypes.shape({
-  type: PropTypes.string.isRequired,
-  title: PropTypes.string,
-  description: PropTypes.string,
-  properties: PropTypes.objectOf(lazyFunction(lazySchemaType)),
-}).isRequired;
+import { createEntity, createUISchema } from '../../../utils/api/schema';
 
 let styles;
 
 class NodeForm extends React.Component {
   static propTypes = {
-    uiMetadata: PropTypes.objectOf(
-      PropTypes.shape({
-        widget: PropTypes.string.isRequired,
-        constraints: PropTypes.array,
-      }),
-    ).isRequired,
-    schema: PropTypes.oneOfType([schemaType, PropTypes.bool]),
+    schema: PropTypes.oneOfType([SchemaPropType, PropTypes.bool]),
     widgets: PropTypes.objectOf(
       PropTypes.oneOfType([
         PropTypes.func,
@@ -49,10 +31,19 @@ class NodeForm extends React.Component {
     entityTypeId: PropTypes.string.isRequired,
     bundle: PropTypes.string.isRequired,
     requestSchema: PropTypes.func.isRequired,
+    requestUiSchema: PropTypes.func.isRequired,
+    uiSchema: PropTypes.oneOfType([
+      PropTypes.shape({
+        fieldSchema: PropTypes.shape({}),
+        formDisplaySchema: PropTypes.shape({}),
+      }),
+      PropTypes.bool,
+    ]),
   };
 
   static defaultProps = {
     schema: false,
+    uiSchema: false,
   };
 
   static getDerivedStateFromProps(props, prevState) {
@@ -73,7 +64,7 @@ class NodeForm extends React.Component {
     // Just contain values which are in the ui metadata.
     state.entity.data.attributes = Object.entries(state.entity.data.attributes)
       .filter(([key]) =>
-        Object.keys(props.uiMetadata)
+        Object.keys(props.uiSchema)
           .concat(['type'])
           .includes(key),
       )
@@ -83,6 +74,10 @@ class NodeForm extends React.Component {
 
   componentDidMount() {
     this.props.requestSchema({
+      entityTypeId: this.props.entityTypeId,
+      bundle: this.props.bundle,
+    });
+    this.props.requestUiSchema({
       entityTypeId: this.props.entityTypeId,
       bundle: this.props.bundle,
     });
@@ -105,13 +100,10 @@ class NodeForm extends React.Component {
   onRelationshipChange = fieldName => data => {
     // Support widgets with multiple cardinality.
     let fieldData;
-    let isMultiple;
     if (typeof data.data !== 'undefined') {
       fieldData = data.data;
-      isMultiple = false;
     } else {
       fieldData = Object.values(data);
-      isMultiple = true;
     }
     this.setState(prevState => ({
       entity: {
@@ -120,12 +112,7 @@ class NodeForm extends React.Component {
           relationships: {
             ...prevState.entity.data.relationships,
             [fieldName]: {
-              data: isMultiple
-                ? fieldData
-                : {
-                    ...prevState.entity.data.relationships[fieldName].data,
-                    ...fieldData,
-                  },
+              data: fieldData,
             },
           },
         },
@@ -162,13 +149,17 @@ class NodeForm extends React.Component {
     return (
       <Fragment>
         <PageTitle>Create {this.props.bundle}</PageTitle>
-        {this.props.schema && (
-          <Paper>
-            <div className={styles.container}>
-              <FormControl margin="normal" fullWidth>
-                {Object.entries(this.props.uiMetadata)
-                  .map(([fieldName, { widget, inputProps }]) => {
-                    if (Widgets[widget]) {
+        {this.props.schema &&
+          this.props.uiSchema && (
+            <Paper>
+              <div className={styles.container}>
+                <FormControl margin="normal" fullWidth>
+                  {createUISchema(
+                    this.props.uiSchema.fieldSchema,
+                    this.props.uiSchema.formDisplaySchema,
+                    this.props.widgets,
+                  )
+                    .map(({ fieldName, widget, inputProps }) => {
                       // @todo We need to pass along props.
                       // @todo How do we handle cardinality together with jsonapi
                       // making a distinction between single value fields and multi value fields.
@@ -187,7 +178,7 @@ class NodeForm extends React.Component {
                         (relationships.properties[fieldName] &&
                           'relationships');
 
-                      return React.createElement(this.props.widgets[widget], {
+                      return React.createElement(widget, {
                         key: fieldName,
                         entityTypeId: this.props.entityTypeId,
                         bundle: this.props.bundle,
@@ -195,25 +186,25 @@ class NodeForm extends React.Component {
                         value: this.state.entity.data[propType][fieldName],
                         label: fieldSchema && fieldSchema.title,
                         schema: fieldSchema,
-                        onChange: this[
-                          propType === 'attributes'
-                            ? 'onAttributeChange'
-                            : 'onRelationshipChange'
-                        ](fieldName),
+                        onChange: (propType === 'attributes'
+                          ? this.onAttributeChange
+                          : this.onRelationshipChange)(fieldName),
                         inputProps,
                       });
-                    }
-                    return null;
-                  })
-                  .filter(x => x)}
-              </FormControl>
-              <Divider classes={{ root: styles.divider }} />
-              <Button variant="contained" color="primary" onClick={this.onSave}>
-                Save
-              </Button>
-            </div>
-          </Paper>
-        )}
+                    })
+                    .filter(x => x)}
+                </FormControl>
+                <Divider classes={{ root: styles.divider }} />
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={this.onSave}
+                >
+                  Save
+                </Button>
+              </div>
+            </Paper>
+          )}
       </Fragment>
     );
   }
@@ -229,13 +220,15 @@ styles = {
 };
 
 const mapStateToProps = (state, { bundle, entityTypeId }) => ({
-  schema: state.content.schema[`${entityTypeId}--${bundle}`],
+  schema: state.schema.schema[`${entityTypeId}--${bundle}`],
+  uiSchema: state.schema.uiSchema[`${entityTypeId}--${bundle}`],
 });
 
 export default connect(
   mapStateToProps,
   {
     requestSchema,
+    requestUiSchema,
     contentAdd,
   },
 )(NodeForm);
