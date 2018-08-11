@@ -7,7 +7,7 @@ aliases:
     v3-yarn-dependencies-{{ checksum "yarn.lock" }}
 
   - &vendor-key
-    v3-composer-dependencies-{{ checksum "composer.lock" }}
+    v3-composer-dependencies-{{ checksum "~/drupal-admin-ui-demo/composer.lock" }}
 
   - &build-key
     v3-build-{{ .Branch }}-{{ .Revision }}
