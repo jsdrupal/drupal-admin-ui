@@ -19,8 +19,8 @@ This is an admin UI for Drupal, built with JavaScript and based on [create-react
 
 ### Requirements
 
-- PHP 5.5.9 or greater
-- PHP's pdo_sqlite extension installed. You can use `php -m` to check.
+- PHP 7.1 or greater
+- PHP's gd and pdo_sqlite extensions installed. You can use `php -m` to check.
 - SQLite 3 CLI package
   * For ubuntu users, `sudo apt install sqlite3`. You can use `sqlite3 --version` to check that the CLI is available.
 
