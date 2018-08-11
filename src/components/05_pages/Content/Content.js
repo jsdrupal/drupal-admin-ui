@@ -205,12 +205,15 @@ class Content extends Component {
               <Select
                 multiple
                 value={this.state.contentTypes}
+                data-nightwatch="content-type-select"
                 onChange={e => {
                   this.setState({ contentTypes: e.target.value }, () => {
                     this.props.requestContent(this.state);
                   });
                 }}
-                input={<Input id="select-multiple-checkbox" />}
+                input={
+                  <Input name="content-type" id="select-multiple-checkbox" />
+                }
                 renderValue={selected => (
                   <div className={styles.chips}>
                     {selected.map(value => (
