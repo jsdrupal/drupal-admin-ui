@@ -60,7 +60,7 @@ const FileUploadWidget = ({
 
   const items = getItemsAsArray(multiple, value.data)
     // Default schema creates stub entries, which we don't need here.
-    .filter(item => item.id);
+    .filter(item => item.file.id);
   const length = (items && items.length) || 0;
   // maxItems is only set if array, so set to 1 as default.
   const maxItemsCount = multiple ? maxItems || 100000000000 : 1;
@@ -112,12 +112,12 @@ const FileUploadWidget = ({
             <Card>
               <CardContent>
                 <List>
-                  {items.map((item, index) => {
+                  {items.map((data, index) => {
                     const {
-                      id,
+                      file,
                       meta: { alt },
-                      file: { url, filename },
-                    } = item;
+                    } = data;
+                    const { id, url, filename } = file;
                     const last = items.length - 1 === index;
 
                     return (
@@ -141,7 +141,7 @@ const FileUploadWidget = ({
                                 data: setItemById(
                                   multiple,
                                   {
-                                    ...item,
+                                    ...file,
                                     meta: {
                                       alt: event.target.value,
                                     },
@@ -192,14 +192,15 @@ const fileItemSchema = PropTypes.shape({
     id: PropTypes.string.isRequired,
     filename: PropTypes.string.isRequired,
   }),
+  meta: PropTypes.shape({
+    alt: PropTypes.string,
+  }),
 });
+
 FileUploadWidget.propTypes = {
   ...WidgetPropTypes,
   value: PropTypes.shape({
     data: PropTypes.oneOf([PropTypes.arrayOf(fileItemSchema), fileItemSchema]),
-    meta: PropTypes.shape({
-      alt: PropTypes.string,
-    }),
   }),
   inputProps: PropTypes.shape({
     file_extensions: PropTypes.string,
@@ -216,7 +217,7 @@ FileUploadWidget.propTypes = {
 };
 
 FileUploadWidget.defaultProps = {
-  value: {},
+  value: { data: { file: {}, meta: {} } },
   inputProps: {
     file_extensions: 'png gif jpg jpeg',
     max_filesize: '2000000',

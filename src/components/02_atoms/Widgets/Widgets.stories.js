@@ -22,15 +22,15 @@ import DatetimeTimestamp from './DatetimeTimestamp';
 const onChangeAction = action('onChange');
 onChangeAction.toString = () => "action('onChange')";
 
-const fileData = {
+const fileData = i => ({
   file: {
     type: 'file--file',
-    url: 'url',
-    id: 'id',
-    filename: 'filename',
+    url: `url-${i}`,
+    id: `id-${i}`,
+    filename: `filename-${i}`,
   },
-  meta: { alt: 'This is an alternative.' },
-};
+  meta: { alt: `This is an alternative(${i}).` },
+});
 
 storiesOf('Widgets/BooleanCheckbox', module).addWithJSX('Default', () => (
   <BooleanCheckbox
@@ -39,6 +39,7 @@ storiesOf('Widgets/BooleanCheckbox', module).addWithJSX('Default', () => (
     onChange={onChangeAction}
   />
 ));
+
 storiesOf('Widgets/FileUploadWidget/Single File', module).addWithJSX(
   'Default',
   () => (
@@ -49,9 +50,7 @@ storiesOf('Widgets/FileUploadWidget/Single File', module).addWithJSX(
       label="File to be uploaded"
       onChange={onChangeAction}
       value={{
-        data: {
-          0: fileData,
-        },
+        data: fileData(1),
       }}
       schema={{
         properties: {
@@ -74,11 +73,7 @@ storiesOf('Widgets/FileUploadWidget/Multiple File', module).addWithJSX(
       label="Files to be uploaded"
       onChange={onChangeAction}
       value={{
-        data: {
-          0: fileData,
-          1: fileData,
-          2: fileData,
-        },
+        data: [fileData(10), fileData(20), fileData(30)],
       }}
       schema={{
         maxItems: 10,
