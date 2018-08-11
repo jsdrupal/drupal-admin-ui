@@ -80,6 +80,7 @@ admin_ui_support.node.add:
     _node_add_access: 'node:{node_type}'
   options:
     _node_operation_route: TRUE
+    _admin_related_route: 'node.add'
     parameters:
       node_type:
         with_config_overrides: TRUE
