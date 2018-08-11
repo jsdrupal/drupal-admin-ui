@@ -78,7 +78,7 @@ jobs:
         - save_cache:
             key: *vendor-key
             paths:
-            - ~/project/vendor
+            - ~/drupal-admin-ui-demo/vendor
         - save_cache:
             key: *integration-build-key
             paths:
