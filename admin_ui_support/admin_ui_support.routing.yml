@@ -71,3 +71,16 @@ admin_ui_support.node.add_page:
     _node_operation_route: TRUE
   requirements:
     _node_add_access: 'node'
+
+admin_ui_support.node.add:
+  path: '/vfancy/node/add/{node_type}'
+  defaults:
+    _controller: '\Drupal\admin_ui_support\Controller\EmptyController::noop'
+  requirements:
+    _node_add_access: 'node:{node_type}'
+  options:
+    _node_operation_route: TRUE
+    _admin_related_route: 'node.add'
+    parameters:
+      node_type:
+        with_config_overrides: TRUE
