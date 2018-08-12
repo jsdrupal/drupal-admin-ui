@@ -100,6 +100,16 @@
     lodash "^4.17.5"
     to-fast-properties "^2.0.0"
 
+"@ckeditor/ckeditor5-build-classic@^11.0.1":
+  version "11.0.1"
+  resolved "https://registry.npmjs.org/@ckeditor/ckeditor5-build-classic/-/ckeditor5-build-classic-11.0.1.tgz#e73203424ca59f254e9ba1f6224d2d6f8793c4b7"
+
+"@ckeditor/ckeditor5-react@^1.0.0-beta.1":
+  version "1.0.0-beta.1"
+  resolved "https://registry.npmjs.org/@ckeditor/ckeditor5-react/-/ckeditor5-react-1.0.0-beta.1.tgz#e0f4061236b66aeec2b5821bec83d42e12e72f03"
+  dependencies:
+    prop-types "^15.6.1"
+
 "@emotion/babel-utils@^0.6.4":
   version "0.6.5"
   resolved "https://registry.yarnpkg.com/@emotion/babel-utils/-/babel-utils-0.6.5.tgz#34d7844eb532d1175c8fc70175beb74d071bfbeb"
