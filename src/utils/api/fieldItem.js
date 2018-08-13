@@ -12,7 +12,7 @@ export const setItemById = (multiple, item, items) => {
 
 export const getItemsAsArray = (multiple, items) => {
   if (multiple) {
-    return items;
+    return Object.values(items);
   }
   return [items];
 };

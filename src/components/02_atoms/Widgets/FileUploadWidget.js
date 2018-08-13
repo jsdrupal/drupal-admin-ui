@@ -60,7 +60,7 @@ const FileUploadWidget = ({
 
   const items = getItemsAsArray(multiple, value.data)
     // Default schema creates stub entries, which we don't need here.
-    .filter(item => item.file.id);
+    .filter(item => item.id);
   const length = (items && items.length) || 0;
   // maxItems is only set if array, so set to 1 as default.
   const maxItemsCount = multiple ? maxItems || 100000000000 : 1;
@@ -112,12 +112,12 @@ const FileUploadWidget = ({
             <Card>
               <CardContent>
                 <List>
-                  {items.map((data, index) => {
+                  {items.map((item, index) => {
                     const {
-                      file,
+                      id,
                       meta: { alt },
-                    } = data;
-                    const { id, url, filename } = file;
+                      file: { url, filename },
+                    } = item;
                     const last = items.length - 1 === index;
 
                     return (
@@ -141,7 +141,7 @@ const FileUploadWidget = ({
                                 data: setItemById(
                                   multiple,
                                   {
-                                    ...file,
+                                    ...item,
                                     meta: {
                                       alt: event.target.value,
                                     },
@@ -192,15 +192,14 @@ const fileItemSchema = PropTypes.shape({
     id: PropTypes.string.isRequired,
     filename: PropTypes.string.isRequired,
   }),
-  meta: PropTypes.shape({
-    alt: PropTypes.string,
-  }),
 });
-
 FileUploadWidget.propTypes = {
   ...WidgetPropTypes,
   value: PropTypes.shape({
     data: PropTypes.oneOf([PropTypes.arrayOf(fileItemSchema), fileItemSchema]),
+    meta: PropTypes.shape({
+      alt: PropTypes.string,
+    }),
   }),
   inputProps: PropTypes.shape({
     file_extensions: PropTypes.string,
