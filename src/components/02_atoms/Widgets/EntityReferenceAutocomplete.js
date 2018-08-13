@@ -43,6 +43,14 @@ class EntityReferenceAutocomplete extends React.Component {
     suggestions: new Map(),
   };
 
+  getMaxItems = () => {
+    const {
+      schema: { maxItems, properties },
+    } = this.props;
+    const multiple = properties.data.type === 'array';
+    return multiple ? maxItems || 100000000000 : 1;
+  };
+
   handleChange = ({ id, label }) =>
     this.setState(
       ({ selectedItems }) => ({
@@ -68,6 +76,10 @@ class EntityReferenceAutocomplete extends React.Component {
     );
 
   handleInputChange = event => {
+    if (this.getMaxItems() === Object.keys(this.state.selectedItems).length) {
+      return;
+    }
+
     this.setState({ inputValue: event.target.value }, () => {
       if (!this.state.inputValue.length) {
         return;
@@ -165,6 +177,10 @@ class EntityReferenceAutocomplete extends React.Component {
     highlightedIndex,
     selectedItem: selectedItems,
   }) => {
+    if (this.getMaxItems() === Object.keys(this.state.selectedItems).length) {
+      return null;
+    }
+
     const isHighlighted = highlightedIndex === index;
     const isSelected = Object.keys(selectedItems).includes(suggestion.id);
 
