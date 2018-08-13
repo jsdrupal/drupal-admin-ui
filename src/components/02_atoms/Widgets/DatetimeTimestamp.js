@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import TextField from '@material-ui/core/TextField';
 import WidgetPropTypes from '../../05_pages/NodeForm/WidgetPropTypes';
 
-const TimestampDatetime = ({ fieldName, label, value, onChange, required }) => (
+const DatetimeTimestamp = ({ fieldName, label, value, onChange, required }) => (
   <TextField
     id={fieldName}
     label={label}
@@ -18,13 +18,13 @@ const TimestampDatetime = ({ fieldName, label, value, onChange, required }) => (
   />
 );
 
-TimestampDatetime.propTypes = {
+DatetimeTimestamp.propTypes = {
   ...WidgetPropTypes,
   value: PropTypes.string,
 };
 
-TimestampDatetime.defaultProps = {
+DatetimeTimestamp.defaultProps = {
   value: '',
 };
 
-export default TimestampDatetime;
+export default DatetimeTimestamp;

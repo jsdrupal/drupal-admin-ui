@@ -6,16 +6,31 @@ aliases:
   - &node-modules-key
     v3-yarn-dependencies-{{ checksum "yarn.lock" }}
 
+  - &vendor-key
+    v3-composer-dependencies-
+
   - &build-key
     v3-build-{{ .Branch }}-{{ .Revision }}
 
   - &integration-build-key
     v3-integration-build-{{ .Branch }}-{{ .Revision }}
 
+  - &restore-source
+    restore_cache:
+      keys:
+      - source-v1-{{ .Branch }}-{{ .Revision }}
+      - source-v1-{{ .Branch }}-
+      - source-v1-
+
   - &restore-node-modules
     restore_cache:
       keys:
         - *node-modules-key
+
+  - &restore-vendor
+    restore_cache:
+      keys:
+        - *vendor-key
 
   - &restore-build
     restore_cache:
@@ -36,6 +51,7 @@ jobs:
   build:
     <<: *default
     steps:
+      - *restore-source
       - checkout
       - *restore-node-modules
       - run: yarn install
@@ -48,13 +64,19 @@ jobs:
           key: *build-key
           paths:
             - build
+      - save_cache:
+          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          paths:
+            - .git
   integration_build:
       docker:
         - image: circleci/php:7.1-fpm-node-browsers
       steps:
         - *fix-php-env
+        - *restore-source
         - checkout
         - *restore-node-modules
+        - *restore-vendor
         - *restore-build
         - run:
             name: Install Drupal
@@ -66,6 +88,10 @@ jobs:
                 composer config repositories.repo-name path "./drupal-admin-ui/admin_ui_support"
                 composer require justafish/drupal-admin-ui-support
                 composer setup
+        - save_cache:
+            key: *vendor-key
+            paths:
+            - ~/.composer/cache
         - save_cache:
             key: *integration-build-key
             paths:
@@ -111,6 +137,7 @@ jobs:
   lint:
     <<: *default
     steps:
+      - *restore-source
       - checkout
       - *restore-node-modules
       - *restore-build
@@ -121,6 +148,7 @@ jobs:
   unit:
     <<: *default
     steps:
+      - *restore-source
       - checkout
       - *restore-node-modules
       - *restore-build
@@ -134,6 +162,7 @@ jobs:
       - add_ssh_keys:
           fingerprints:
             - "82:b8:cc:fe:02:24:17:b1:31:ba:dc:30:e1:01:7a:df"
+      - *restore-source
       - checkout
       - *restore-node-modules
       - *restore-build
@@ -155,7 +184,8 @@ jobs:
     steps:
       - add_ssh_keys:
           fingerprints:
-            - "6f:17:e5:59:16:41:04:82:3b:ba:fc:76:a7:b2:c8:6b"
+            - "6c:c9:15:82:34:e7:30:e2:91:1b:ea:e2:06:b2:cf:e0"
+      - *restore-source
       - checkout
       - *restore-node-modules
       - *restore-build
@@ -172,6 +202,38 @@ jobs:
               git commit -m "Auto build from master"
               git push origin master
           fi
+
+  dist_demo:
+    docker:
+    - image: circleci/php:7.1-fpm-node-browsers
+    steps:
+    - add_ssh_keys:
+        fingerprints:
+          - "1e:cb:02:bc:68:40:3c:31:40:5f:45:b5:55:c8:02:24"
+    - run: |
+        sudo apt-get update
+        sudo apt-get install -y \
+                libfreetype6-dev \
+                libjpeg62-turbo-dev \
+                libpng-dev
+        sudo docker-php-ext-install -j$(nproc) iconv
+        sudo docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/
+        sudo docker-php-ext-install -j$(nproc) gd
+    # We're not going to use this checkout, but it configures git over ssh.
+    # https://circleci.com/docs/2.0/configuration-reference/#checkout
+    - *restore-source
+    - checkout
+    - run: |
+        git config --global user.name "⬅️✌️➡️"
+        git config --global user.email "no-reply@drupal.org"
+        git clone git@github.com:jsdrupal/drupal-admin-ui-demo.git ~/drupal-admin-ui-demo
+        cd ~/drupal-admin-ui-demo
+        composer update --lock
+        if ! git diff-index --quiet HEAD --; then
+          git add .
+          git commit -m "Auto update composer.lock from admin-ui-support-dist build"
+          git push origin master
+        fi
 
 workflows:
   version: 2
@@ -212,4 +274,11 @@ workflows:
           filters:
            branches:
             only:
+              - master
+      - dist_demo:
+          requires:
+          - dist_support
+          filters:
+            branches:
+              only:
               - master

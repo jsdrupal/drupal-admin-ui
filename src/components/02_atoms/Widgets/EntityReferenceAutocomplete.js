@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import keycode from 'keycode';
 import Downshift from 'downshift';
+import { css } from 'emotion';
 
 import Paper from '@material-ui/core/Paper';
 import TextField from '@material-ui/core/TextField';
@@ -13,6 +14,14 @@ import WidgetPropTypes from '../../05_pages/NodeForm/WidgetPropTypes';
 import SchemaPropType from '../../05_pages/NodeForm/SchemaPropType';
 
 import api from './../../../utils/api/api';
+
+const styles = {
+  results: css`
+    position: absolute;
+    z-index: 900;
+    width: 100%;
+  `,
+};
 
 class EntityReferenceAutocomplete extends React.Component {
   static propTypes = {
@@ -33,7 +42,14 @@ class EntityReferenceAutocomplete extends React.Component {
     inputValue: '',
     selectedItems: {},
     suggestions: new Map(),
-    loading: false,
+  };
+
+  getMaxItems = () => {
+    const {
+      schema: { maxItems, properties },
+    } = this.props;
+    const multiple = properties.data.type === 'array';
+    return multiple ? maxItems || 100000000000 : 1;
   };
 
   handleChange = ({ id, label }) =>
@@ -61,7 +77,15 @@ class EntityReferenceAutocomplete extends React.Component {
     );
 
   handleInputChange = event => {
-    this.setState({ loading: true, inputValue: event.target.value }, () => {
+    if (this.getMaxItems() === Object.keys(this.state.selectedItems).length) {
+      return;
+    }
+
+    this.setState({ inputValue: event.target.value }, () => {
+      if (!this.state.inputValue.length) {
+        return;
+      }
+
       // @todo Move this call to the mounting component?
       const [
         entityTypeId,
@@ -73,7 +97,6 @@ class EntityReferenceAutocomplete extends React.Component {
         this.state.inputValue,
       ).then(({ data: items }) => {
         this.setState({
-          loading: false,
           suggestions: new Map(
             items.map(({ id, attributes: { name: label } }) => [
               id,
@@ -155,6 +178,10 @@ class EntityReferenceAutocomplete extends React.Component {
     highlightedIndex,
     selectedItem: selectedItems,
   }) => {
+    if (this.getMaxItems() === Object.keys(this.state.selectedItems).length) {
+      return null;
+    }
+
     const isHighlighted = highlightedIndex === index;
     const isSelected = Object.keys(selectedItems).includes(suggestion.id);
 
@@ -208,7 +235,6 @@ class EntityReferenceAutocomplete extends React.Component {
                 fullWidth: true,
                 label: this.props.label,
                 InputProps: getInputProps({
-                  disabled: this.state.loading,
                   startAdornment: Object.entries(selectedItems).map(
                     ([key, value]) => (
                       <Chip
@@ -227,8 +253,8 @@ class EntityReferenceAutocomplete extends React.Component {
                 }),
               })}
               {isOpen ? (
-                <Paper className="paper" square>
-                  {!this.state.loading &&
+                <Paper className={styles.results} square>
+                  {!!this.state.inputValue.length &&
                     Array.from(this.state.suggestions.values()).map(
                       (suggestion, index) =>
                         this.renderSuggestion({
