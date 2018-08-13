@@ -21,6 +21,7 @@ const DatetimeTimestamp = ({ fieldName, label, value, onChange, required }) => (
 DatetimeTimestamp.propTypes = {
   ...WidgetPropTypes,
   value: PropTypes.string,
+  required: PropTypes.bool.isRequired,
 };
 
 DatetimeTimestamp.defaultProps = {
