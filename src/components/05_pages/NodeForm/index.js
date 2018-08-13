@@ -46,6 +46,11 @@ class NodeForm extends React.Component {
     uiSchema: false,
   };
 
+  constructor(props) {
+    super(props);
+    this.state = {};
+  }
+
   static getDerivedStateFromProps(props, prevState) {
     if (!props.schema) {
       return prevState;
