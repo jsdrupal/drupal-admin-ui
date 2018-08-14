@@ -10,19 +10,13 @@ import api from './../../../utils/api/api';
 const Element = styled('div')`
   border: 2px dashed grey;
   border-radius: 3px;
-  padding: 80px;
-  width: 100%;
-  position: relative;
+  display: flex;
+  padding: 25px;
 `;
 
 const Text = styled('div')`
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
   margin: 0;
   text-align: center;
-
   .icon {
     margin-left: 10px;
   }
