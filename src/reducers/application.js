@@ -9,6 +9,7 @@ import {
   OPEN_DRAWER,
   SET_MESSAGE,
   CLEAR_MESSAGE,
+  CLEAR_ALL_MESSAGES,
   MENU_LOADED,
   CONTENT_TYPES_LOADED,
   ACTIONS_LOADED,
@@ -56,6 +57,13 @@ export default (state = initialState, action) => {
     case CLEAR_MESSAGE: {
       const messages = [...state.messages];
       messages.pop(messages.map(message => message.key === action.payload.key));
+      return {
+        ...state,
+        messages,
+      };
+    }
+    case CLEAR_ALL_MESSAGES: {
+      const messages = [];
       return {
         ...state,
         messages,

@@ -25,11 +25,11 @@ export const SET_MESSAGE = 'SET_MESSAGE';
 /**
  *
  * @param {string} message - the message content
- * @param {string} renderedBy - which of the renderable message areas –
+ * @param {string} messageInterface - which of the renderable message areas –
  *  listed at constants/messages.js
  * @param {string} severity - the severity level of the message, one of the levels
  *  listed at constants/messages.js
- * @returns {{type: string, payload: {message: *, type: *}}}
+ * @returns {{type: string, payload: {message: *, messageInterface: *, messageSeverity: *}}}
  */
 export const setMessage = (message, messageInterface, messageSeverity) => ({
   type: SET_MESSAGE,
@@ -46,6 +46,12 @@ export const clearMessage = key => ({
   payload: {
     key,
   },
+});
+
+export const CLEAR_ALL_MESSAGES = 'CLEAR_MESSAGES';
+export const clearAllMessages = () => ({
+  type: CLEAR_ALL_MESSAGES,
+  payload: {},
 });
 
 export const MENU_REQUESTED = 'MENU_REQUESTED';
