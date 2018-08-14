@@ -223,7 +223,7 @@ FileUploadWidget.propTypes = {
 };
 
 FileUploadWidget.defaultProps = {
-  value: {},
+  value: { data: { file: {}, meta: {} } },
   inputProps: {
     file_extensions: 'png gif jpg jpeg',
     max_filesize: '2000000',
