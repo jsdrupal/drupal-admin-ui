@@ -218,16 +218,17 @@ class NodeForm extends React.Component {
 
 styles = {
   fieldContainer: css`
-    padding: 20px 45px 40px;
+    padding: 50px 90px 40px;
   `,
   divider: css`
-    margin: 30px 0;
+    margin: 40px 0;
   `,
   gridRoot: css`
     display: grid;
     width: 100%;
     grid-gap: 20px;
     grid-template-columns: 75% 25%;
+    padding-right: 50px;
   `,
   widgetRoot: css`
     display: flex;

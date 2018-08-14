@@ -3,9 +3,17 @@ import PropTypes from 'prop-types';
 import TextField from '@material-ui/core/TextField';
 import WidgetPropTypes from '../../05_pages/NodeForm/WidgetPropTypes';
 
-const DatetimeTimestamp = ({ classes, fieldName, label, value, onChange }) => (
+const DatetimeTimestamp = ({
+  classes,
+  fieldName,
+  label,
+  value,
+  onChange,
+  fullWidth,
+}) => (
   <TextField
     id={fieldName}
+    fullWidth
     label={label}
     type="datetime-local"
     defaultValue={value}

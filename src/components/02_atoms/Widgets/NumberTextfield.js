@@ -15,6 +15,7 @@ const NumberTextfield = ({
   <TextField
     id={fieldName}
     value={value}
+    fullWidth
     onChange={event => onChange(event.target.value)}
     InputProps={{
       inputProps,
