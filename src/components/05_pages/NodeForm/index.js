@@ -56,6 +56,10 @@ class NodeForm extends React.Component {
       return prevState;
     }
 
+    if (!props.uiSchema) {
+      return prevState;
+    }
+
     if (Object.prototype.hasOwnProperty.call(prevState || {}, 'entity')) {
       return prevState;
     }
