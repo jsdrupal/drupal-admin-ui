@@ -120,7 +120,7 @@ const FileUploadWidget = ({
           />
         </div>
 
-        {length > 0 && (
+        {false && length > 0 && (
           <CardWrapper>
             <Card>
               <CardContent>

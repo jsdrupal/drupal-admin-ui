@@ -4,9 +4,9 @@ import Content from './components/05_pages/Content/Content';
 import Permissions from './components/05_pages/Permissions/Permissions';
 import Roles from './components/05_pages/Roles';
 import Dblog from './components/05_pages/Reports/Dblog';
-import NodeForm from './components/05_pages/NodeForm';
 import NodeEditForm from './components/05_pages/NodeEditForm';
 import widgets from './components/05_pages/NodeForm/Widgets';
+import NodeAddForm from './components/05_pages/NodeAddForm';
 
 // @todo Share this with Drupal
 const routes = {
@@ -16,7 +16,7 @@ const routes = {
   '/admin/reports/dblog': Dblog,
   '/node/add': AddContent,
   '/node/add/recipe': () => (
-    <NodeForm entityTypeId="node" bundle="recipe" widgets={widgets} />
+    <NodeAddForm entityTypeId="node" bundle="recipe" widgets={widgets} />
   ),
   '/node/:bundle/:id/edit': ({ match }) => (
     <NodeEditForm

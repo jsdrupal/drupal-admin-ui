@@ -212,12 +212,7 @@ class NodeForm extends React.Component {
         </div>
       );
     }
-    return (
-      <Fragment>
-        <PageTitle>Create {this.props.bundle}</PageTitle>
-        {result}
-      </Fragment>
-    );
+    return result;
   }
 }
 
