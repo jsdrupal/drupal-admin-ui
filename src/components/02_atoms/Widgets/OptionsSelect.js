@@ -19,11 +19,14 @@ const OptionsSelect = ({
   onChange,
   helpText,
   fieldName,
+  required,
   schema: { enum: options, default: defaultValue },
   classes,
 }) => (
   <FormControl margin="normal" classes={classes}>
-    <InputLabel htmlFor={fieldName}>{label}</InputLabel>
+    <InputLabel htmlFor={fieldName} required={required}>
+      {label}
+    </InputLabel>
     <NativeSelect
       value={value || defaultValue}
       fullWidth

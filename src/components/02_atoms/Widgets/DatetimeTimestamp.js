@@ -3,7 +3,14 @@ import PropTypes from 'prop-types';
 import TextField from '@material-ui/core/TextField';
 import WidgetPropTypes from '../../05_pages/NodeForm/WidgetPropTypes';
 
-const DatetimeTimestamp = ({ classes, fieldName, label, value, onChange }) => (
+const DatetimeTimestamp = ({
+  classes,
+  fieldName,
+  label,
+  value,
+  onChange,
+  required,
+}) => (
   <TextField
     id={fieldName}
     fullWidth
@@ -16,12 +23,14 @@ const DatetimeTimestamp = ({ classes, fieldName, label, value, onChange }) => (
       shrink: true,
     }}
     classes={classes}
+    required={required}
   />
 );
 
 DatetimeTimestamp.propTypes = {
   ...WidgetPropTypes,
   value: PropTypes.string,
+  required: PropTypes.bool.isRequired,
 };
 
 DatetimeTimestamp.defaultProps = {

@@ -58,6 +58,7 @@ const FileUploadWidget = ({
   fieldName,
   inputProps,
   entityTypeId,
+  required,
   schema: { properties, maxItems },
   classes,
 }) => {
@@ -72,7 +73,12 @@ const FileUploadWidget = ({
   const maxItemsCount = multiple ? maxItems || 100000000000 : 1;
 
   return (
-    <FormControl margin="normal" classes={classes} fullWidth>
+    <FormControl
+      margin="normal"
+      required={required}
+      classes={classes}
+      fullWidth
+    >
       <Element>
         <FormLabel component="legend">{label}</FormLabel>
         <div
