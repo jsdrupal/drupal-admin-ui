@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { css } from 'emotion';
 import RichTextEditor from 'react-rte';
-import './TextTextarea.css';
 import WidgetPropTypes from '../../05_pages/NodeForm/WidgetPropTypes';
+
+let styles;
 
 /**
  * Some basic wysiwyg editor based upon react-rte which is based upon draft.js.
@@ -42,9 +44,23 @@ class TextTextarea extends Component {
   };
 
   render() {
-    return <RichTextEditor value={this.state.value} onChange={this.onChange} />;
+    return (
+      <RichTextEditor
+        className={styles.container}
+        value={this.state.value}
+        onChange={this.onChange}
+      />
+    );
   }
 }
+
+styles = {
+  container: css`
+    .public-DraftEditor-content {
+      min-height: 110px;
+    }
+  `,
+};
 
 TextTextarea.defaultProps = {
   value: {
