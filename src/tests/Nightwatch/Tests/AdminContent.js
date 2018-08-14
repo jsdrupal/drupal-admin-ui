@@ -8,8 +8,6 @@ module.exports = {
 
     browser.click('[data-nightwatch="content-type-select"]');
 
-    browser.waitForElementVisible('ul[role="listbox"]');
-
     browser.expect
       .element('#menu-content-type ul>li:nth-child(1)')
       .to.have.attribute('data-value')
