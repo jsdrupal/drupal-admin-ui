@@ -193,7 +193,8 @@ class Content extends Component {
               <Fragment>
                 <div className={styles.filters}>
                   {this.props.contentTypes &&
-                    this.props.actions && (
+                    this.props.actions &&
+                    this.props.contentList.length >= 1 && (
                       <Fragment>
                         <TextField
                           inputProps={{ 'aria-label': 'Title' }}
@@ -278,6 +279,48 @@ class Content extends Component {
                             <MenuItem value="unpublished">Unpublished</MenuItem>
                           </Select>
                         </FormControl>
+
+                        <FormControl
+                          className={styles.action}
+                          disabled={
+                            Object.values(this.state.checked).filter(Boolean)
+                              .length === 0 || false
+                          }
+                        >
+                          <InputLabel htmlFor="action">Actions</InputLabel>
+                          <Select
+                            value={this.state.action || ''}
+                            onChange={e => {
+                              this.setState({ action: e.target.value });
+                            }}
+                            input={<Input name="action" id="action" />}
+                            autoWidth
+                          >
+                            <MenuItem value="">
+                              <em>None</em>
+                            </MenuItem>
+                            {this.props.actions.map(action => (
+                              <MenuItem
+                                key={action.id}
+                                value={action.attributes.id}
+                              >
+                                {action.attributes.label}
+                              </MenuItem>
+                            ))}
+                          </Select>
+                        </FormControl>
+
+                        {this.state.action &&
+                          Object.values(this.state.checked).filter(Boolean)
+                            .length !== 0 && (
+                            <Button
+                              onClick={this.executeAction}
+                              color="primary"
+                              variant="contained"
+                            >
+                              Apply
+                            </Button>
+                          )}
                       </Fragment>
                     )}
 
@@ -292,48 +335,7 @@ class Content extends Component {
                     <AddIcon />
                   </Button>
                 </div>
-                <div className={styles.filters}>
-                  {this.props.actions && (
-                    <FormControl
-                      className={styles.action}
-                      disabled={
-                        Object.values(this.state.checked).filter(Boolean)
-                          .length === 0 || false
-                      }
-                    >
-                      <InputLabel htmlFor="action">Actions</InputLabel>
-                      <Select
-                        value={this.state.action || ''}
-                        onChange={e => {
-                          this.setState({ action: e.target.value });
-                        }}
-                        input={<Input name="action" id="action" />}
-                        autoWidth
-                      >
-                        <MenuItem value="">
-                          <em>None</em>
-                        </MenuItem>
-                        {this.props.actions.map(action => (
-                          <MenuItem
-                            key={action.id}
-                            value={action.attributes.id}
-                          >
-                            {action.attributes.label}
-                          </MenuItem>
-                        ))}
-                      </Select>
-                    </FormControl>
-                  )}
-                  {this.state.action && (
-                    <Button
-                      onClick={this.executeAction}
-                      color="primary"
-                      variant="contained"
-                    >
-                      Apply
-                    </Button>
-                  )}
-                </div>
+
                 <div
                   ref={node => {
                     this.table = node;
