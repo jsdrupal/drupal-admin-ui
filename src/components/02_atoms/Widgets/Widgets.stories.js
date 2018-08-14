@@ -10,6 +10,7 @@ import NumberTextfield from './NumberTextfield';
 import OptionsSelect from './OptionsSelect';
 import StringTextfield from './StringTextfield';
 import DatetimeTimestamp from './DatetimeTimestamp';
+import TextTextarea from './TextTextarea';
 
 /**
  * There is a known issue with addWithJSX and action() calls.
@@ -138,5 +139,15 @@ storiesOf('Widgets/DatetimeTimestamp', module).addWithJSX('Default', () => (
     name="startTime"
     onChange={onChangeAction}
     value="0"
+  />
+));
+
+storiesOf('Widgets/TextTextarea', module).addWithJSX('Default', () => (
+  <TextTextarea
+    fieldName="SummaryText"
+    label="A Simple wysiwyg editor"
+    name="summaryText"
+    onChange={onChangeAction}
+    value={{ value: 'This is some initial <b>html</b>' }}
   />
 ));
