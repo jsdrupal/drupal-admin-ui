@@ -11,6 +11,7 @@ const StringTextfield = props => (
     margin="normal"
     label={props.label}
     classes={props.classes}
+    required={props.required}
   />
 );
 

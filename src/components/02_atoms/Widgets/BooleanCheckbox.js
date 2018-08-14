@@ -25,6 +25,7 @@ const BooleanCheckbox = props => {
       classes={css`
         ${props.classes} ${styles.widgetRoot};
       `}
+      required={props.required}
     />
   );
 };

@@ -10,6 +10,7 @@ const NumberTextfield = ({
   value,
   onChange,
   fieldName,
+  required,
   inputProps,
 }) => (
   <TextField
@@ -29,6 +30,7 @@ const NumberTextfield = ({
     margin="normal"
     label={label}
     classes={classes}
+    required={required}
   />
 );
 

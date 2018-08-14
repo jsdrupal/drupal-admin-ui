@@ -27,6 +27,7 @@ class EntityReferenceAutocomplete extends React.Component {
   static propTypes = {
     ...WidgetPropTypes,
     schema: SchemaPropType.isRequired,
+    required: PropTypes.bool.isRequired,
     inputProps: PropTypes.shape({
       bundle: PropTypes.string,
       type: PropTypes.string,
@@ -215,7 +216,7 @@ class EntityReferenceAutocomplete extends React.Component {
     const { inputValue, selectedItems } = this.state;
 
     return (
-      <FormControl margin="normal" classes={this.props.classes}>
+      <FormControl margin="normal" required={this.props.required} classes={this.props.classes}>
         <Downshift
           inputValue={inputValue}
           onChange={this.handleChange}
