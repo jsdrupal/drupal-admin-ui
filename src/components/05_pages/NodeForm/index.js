@@ -73,7 +73,7 @@ class NodeForm extends React.Component {
     // Just contain values which are in the ui metadata.
     state.entity.data.attributes = Object.entries(state.entity.data.attributes)
       .filter(([key]) =>
-        Object.keys(props.uiSchema)
+        Object.keys(props.uiSchema.formDisplaySchema)
           .concat(['type'])
           .includes(key),
       )
