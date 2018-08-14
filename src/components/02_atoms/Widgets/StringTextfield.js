@@ -10,6 +10,8 @@ const StringTextfield = props => (
     onChange={event => props.onChange(event.target.value)}
     margin="normal"
     label={props.label}
+    classes={props.classes}
+    fullWidth
   />
 );
 

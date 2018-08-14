@@ -16,7 +16,11 @@ import PageTitle from '../../02_atoms/PageTitle';
 import { contentAdd } from '../../../actions/content';
 import { requestSchema, requestUiSchema } from '../../../actions/schema';
 
-import { createEntity, createUISchema } from '../../../utils/api/schema';
+import {
+  createEntity,
+  createUISchema,
+  sortUISchemaFields,
+} from '../../../utils/api/schema';
 
 let styles;
 
@@ -47,6 +51,8 @@ class NodeForm extends React.Component {
     schema: false,
     uiSchema: false,
   };
+
+  state = {};
 
   static getDerivedStateFromProps(props, prevState) {
     if (!props.schema) {
@@ -147,78 +153,92 @@ class NodeForm extends React.Component {
     schema.properties.data.properties.attributes.properties[fieldName] ||
     schema.properties.data.properties.relationships.properties[fieldName];
 
+  createField = ({ fieldName, widget, inputProps }) => {
+    // @todo We need to pass along props.
+    // @todo How do we handle cardinality together with jsonapi
+    // making a distinction between single value fields and multi value fields.
+    const fieldSchema = this.getSchemaInfo(this.props.schema, fieldName);
+
+    const {
+      attributes,
+      relationships,
+    } = this.props.schema.properties.data.properties;
+
+    const propType =
+      (attributes.properties[fieldName] && 'attributes') ||
+      (relationships.properties[fieldName] && 'relationships');
+
+    return React.createElement(widget, {
+      key: fieldName,
+      entityTypeId: this.props.entityTypeId,
+      bundle: this.props.bundle,
+      fieldName,
+      classes: {
+        root: styles.widgetRoot,
+      },
+      value: this.state.entity.data[propType][fieldName],
+      label: fieldSchema && fieldSchema.title,
+      schema: fieldSchema,
+      onChange: (propType === 'attributes'
+        ? this.onAttributeChange
+        : this.onRelationshipChange)(fieldName),
+      inputProps,
+    });
+  };
+
   render() {
+    let result = null;
+    if (this.props.schema && this.props.uiSchema) {
+      const { right, left } = sortUISchemaFields(
+        createUISchema(
+          this.props.uiSchema.fieldSchema,
+          this.props.uiSchema.formDisplaySchema,
+          this.props.widgets,
+        ),
+        ['promote', 'status', 'sticky'],
+      );
+      result = (
+        <div className={styles.gridRoot}>
+          <Paper classes={{ root: styles.fieldContainer }}>
+            {left.map(this.createField)}
+            <Divider classes={{ root: styles.divider }} />
+            <Button variant="contained" color="primary" onClick={this.onSave}>
+              Save
+            </Button>
+          </Paper>
+          <Paper classes={{ root: styles.fieldContainer }}>
+            {right.map(this.createField)}
+          </Paper>
+        </div>
+      );
+    }
     return (
       <Fragment>
         <PageTitle>Create {this.props.bundle}</PageTitle>
         <LoadingBar style={{ position: 'relative', marginBottom: '5px' }} />
-        {this.props.schema &&
-          this.props.uiSchema && (
-            <Paper>
-              <div className={styles.container}>
-                <FormControl margin="normal" fullWidth>
-                  {createUISchema(
-                    this.props.uiSchema.fieldSchema,
-                    this.props.uiSchema.formDisplaySchema,
-                    this.props.widgets,
-                  )
-                    .map(({ fieldName, widget, inputProps }) => {
-                      // @todo We need to pass along props.
-                      // @todo How do we handle cardinality together with jsonapi
-                      // making a distinction between single value fields and multi value fields.
-                      const fieldSchema = this.getSchemaInfo(
-                        this.props.schema,
-                        fieldName,
-                      );
-
-                      const {
-                        attributes,
-                        relationships,
-                      } = this.props.schema.properties.data.properties;
-
-                      const propType =
-                        (attributes.properties[fieldName] && 'attributes') ||
-                        (relationships.properties[fieldName] &&
-                          'relationships');
-
-                      return React.createElement(widget, {
-                        key: fieldName,
-                        entityTypeId: this.props.entityTypeId,
-                        bundle: this.props.bundle,
-                        fieldName,
-                        value: this.state.entity.data[propType][fieldName],
-                        label: fieldSchema && fieldSchema.title,
-                        schema: fieldSchema,
-                        onChange: (propType === 'attributes'
-                          ? this.onAttributeChange
-                          : this.onRelationshipChange)(fieldName),
-                        inputProps,
-                      });
-                    })
-                    .filter(x => x)}
-                </FormControl>
-                <Divider classes={{ root: styles.divider }} />
-                <Button
-                  variant="contained"
-                  color="primary"
-                  onClick={this.onSave}
-                >
-                  Save
-                </Button>
-              </div>
-            </Paper>
-          )}
+        {result}
       </Fragment>
     );
   }
 }
 
 styles = {
-  container: css`
-    padding: 5px 50px 40px;
+  fieldContainer: css`
+    padding: 50px 90px 40px;
   `,
   divider: css`
-    margin: 30px 0;
+    margin: 40px 0;
+  `,
+  gridRoot: css`
+    display: grid;
+    width: 100%;
+    grid-gap: 20px;
+    grid-template-columns: 75% 25%;
+    padding-right: 50px;
+  `,
+  widgetRoot: css`
+    display: flex;
+    align-items: start;
   `,
 };
 

@@ -7,22 +7,25 @@ import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import api from './../../../utils/api/api';
 
+const Container = styled('div')`
+  width: 100%;
+`;
+
 const Element = styled('div')`
   border: 2px dashed grey;
   border-radius: 3px;
-  padding: 80px;
+  display: flex;
+  padding: 25px;
   width: 100%;
-  position: relative;
+
+  > div {
+    width: 100%;
+  }
 `;
 
 const Text = styled('div')`
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
   margin: 0;
   text-align: center;
-
   .icon {
     margin-left: 10px;
   }
@@ -320,7 +323,7 @@ class FileUpload extends Component {
     } = this;
 
     return (
-      <div>
+      <Container>
         <Element
           onDrop={isEnabled(onDrop)}
           onClick={isEnabled(onClick)}
@@ -400,7 +403,7 @@ class FileUpload extends Component {
             </Typography>
           </div>
         )}
-      </div>
+      </Container>
     );
   };
 }
