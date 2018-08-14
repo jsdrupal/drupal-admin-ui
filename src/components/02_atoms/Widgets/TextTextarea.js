@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { css } from 'emotion';
 import RichTextEditor from 'react-rte';
@@ -12,7 +12,7 @@ let styles;
  *
  * On the longrun we might want to switch back to ckeditor.
  */
-class TextTextarea extends Component {
+class TextTextarea extends React.Component {
   static propTypes = {
     ...WidgetPropTypes,
     value: PropTypes.shape({
@@ -20,27 +20,29 @@ class TextTextarea extends Component {
     }),
   };
 
-  constructor(props) {
-    super(props);
+  static defaultProps = {
+    value: {
+      value: '',
+      format: 'basic_html',
+    },
+  };
 
-    this.state = {
-      value: RichTextEditor.createValueFromString(
-        (this.props.value && this.props.value.value) || '',
-        'html',
-      ),
-    };
-  }
+  state = {
+    value: RichTextEditor.createValueFromString(
+      (this.props.value && this.props.value.value) || '',
+      'html',
+    ),
+  };
 
   onChange = value => {
-    this.setState({ value });
-    if (this.props.onChange) {
+    this.setState({ value }, () => {
       // Send the changes up to the parent component as an HTML string.
       // This is here to demonstrate using `.toString()` but in a real app it
       // would be better to avoid generating a string on each change.
       this.props.onChange({
         value: value.toString('html'),
       });
-    }
+    });
   };
 
   render() {
@@ -60,13 +62,6 @@ styles = {
       min-height: 110px;
     }
   `,
-};
-
-TextTextarea.defaultProps = {
-  value: {
-    value: '',
-    format: 'basic_html',
-  },
 };
 
 export default TextTextarea;
