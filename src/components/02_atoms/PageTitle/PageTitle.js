@@ -7,13 +7,12 @@ import Typography from '@material-ui/core/Typography';
 
 const styles = {
   title: css`
-    margin-bottom: 15px;
-    margin-left: 3px;
+    margin: 10px 3px 40px;
   `,
 };
 
 const PageTitle = ({ children }) => (
-  <Typography variant="headline" classes={{ root: styles.title }}>
+  <Typography variant="display1" classes={{ root: styles.title }}>
     {children}
   </Typography>
 );

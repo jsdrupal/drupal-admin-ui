@@ -6,6 +6,7 @@ import WidgetPropTypes from '../../05_pages/NodeForm/WidgetPropTypes';
 const DatetimeTimestamp = ({ classes, fieldName, label, value, onChange }) => (
   <TextField
     id={fieldName}
+    fullWidth
     label={label}
     type="datetime-local"
     defaultValue={value}

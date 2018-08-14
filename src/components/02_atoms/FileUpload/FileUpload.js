@@ -7,11 +7,20 @@ import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import api from './../../../utils/api/api';
 
+const Container = styled('div')`
+  width: 100%;
+`;
+
 const Element = styled('div')`
   border: 2px dashed grey;
   border-radius: 3px;
   display: flex;
   padding: 25px;
+  width: 100%;
+
+  > div {
+    width: 100%;
+  }
 `;
 
 const Text = styled('div')`
@@ -314,7 +323,7 @@ class FileUpload extends Component {
     } = this;
 
     return (
-      <div>
+      <Container>
         <Element
           onDrop={isEnabled(onDrop)}
           onClick={isEnabled(onClick)}
@@ -394,7 +403,7 @@ class FileUpload extends Component {
             </Typography>
           </div>
         )}
-      </div>
+      </Container>
     );
   };
 }

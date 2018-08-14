@@ -16,6 +16,7 @@ const BooleanCheckbox = props => {
       control={
         <CheckBox
           id={`${props.fieldName}-cb`}
+          fullWidth
           onChange={event => onChange(event.target.checked)}
           margin="normal"
           value={String(value)}
