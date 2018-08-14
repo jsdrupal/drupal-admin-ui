@@ -73,7 +73,12 @@ const FileUploadWidget = ({
   const maxItemsCount = multiple ? maxItems || 100000000000 : 1;
 
   return (
-    <FormControl margin="normal" required={required} classes={classes} fullWidth>
+    <FormControl
+      margin="normal"
+      required={required}
+      classes={classes}
+      fullWidth
+    >
       <Element>
         <FormLabel component="legend">{label}</FormLabel>
         <div
