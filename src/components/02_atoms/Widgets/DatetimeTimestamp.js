@@ -13,6 +13,7 @@ const DatetimeTimestamp = ({
 }) => (
   <TextField
     id={fieldName}
+    fullWidth
     label={label}
     type="datetime-local"
     defaultValue={value}

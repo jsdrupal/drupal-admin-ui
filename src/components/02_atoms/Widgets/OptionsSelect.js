@@ -29,6 +29,7 @@ const OptionsSelect = ({
     </InputLabel>
     <NativeSelect
       value={value || defaultValue}
+      fullWidth
       onChange={event => onChange(event.target.value)}
       inputProps={{
         name: fieldName,

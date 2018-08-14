@@ -1,6 +1,7 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'react-emotion';
+import { css } from 'emotion';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import Divider from '@material-ui/core/Divider';
@@ -25,9 +26,7 @@ const CardWrapper = styled('div')`
 `;
 
 const Element = styled('div')`
-  > div {
-    width: 100%;
-  }
+  width: 100%;
 
   legend {
     margin-bottom: 10px;
@@ -44,6 +43,12 @@ const Image = styled('div')`
     margin-right: 20px;
   }
 `;
+
+const styles = {
+  fullWidth: css`
+    width: 100%;
+  `,
+};
 
 const FileUploadWidget = ({
   value,
@@ -68,10 +73,11 @@ const FileUploadWidget = ({
   const maxItemsCount = multiple ? maxItems || 100000000000 : 1;
 
   return (
-    <FormControl margin="normal" required={required} classes={classes}>
+    <FormControl margin="normal" required={required} classes={classes} fullWidth>
       <Element>
         <FormLabel component="legend">{label}</FormLabel>
         <div
+          className={styles.fullWidth}
           style={{
             display:
               (!multiple && length) || length === maxItemsCount
@@ -218,7 +224,7 @@ FileUploadWidget.propTypes = {
 };
 
 FileUploadWidget.defaultProps = {
-  value: {},
+  value: { data: { file: {}, meta: {} } },
   inputProps: {
     file_extensions: 'png gif jpg jpeg',
     max_filesize: '2000000',

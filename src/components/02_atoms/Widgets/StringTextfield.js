@@ -12,6 +12,7 @@ const StringTextfield = props => (
     label={props.label}
     classes={props.classes}
     required={props.required}
+    fullWidth
   />
 );
 

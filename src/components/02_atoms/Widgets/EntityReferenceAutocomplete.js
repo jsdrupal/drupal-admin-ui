@@ -19,6 +19,8 @@ const styles = {
   results: css`
     position: absolute;
     z-index: 900;
+  `,
+  fullWidth: css`
     width: 100%;
   `,
 };
@@ -220,6 +222,7 @@ class EntityReferenceAutocomplete extends React.Component {
         margin="normal"
         required={this.props.required}
         classes={this.props.classes}
+        fullWidth
       >
         <Downshift
           inputValue={inputValue}
@@ -234,7 +237,7 @@ class EntityReferenceAutocomplete extends React.Component {
             selectedItem,
             highlightedIndex,
           }) => (
-            <div className="container">
+            <div className={styles.fullWidth}>
               {this.renderInput({
                 fullWidth: true,
                 label: this.props.label,
@@ -257,7 +260,10 @@ class EntityReferenceAutocomplete extends React.Component {
                 }),
               })}
               {isOpen ? (
-                <Paper className={styles.results} square>
+                <Paper
+                  className={`${styles.results} ${styles.fullWidth}`}
+                  square
+                >
                   {!!this.state.inputValue.length &&
                     Array.from(this.state.suggestions.values()).map(
                       (suggestion, index) =>
