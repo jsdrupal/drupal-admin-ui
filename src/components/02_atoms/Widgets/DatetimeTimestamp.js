@@ -9,7 +9,6 @@ const DatetimeTimestamp = ({
   label,
   value,
   onChange,
-  fullWidth,
 }) => (
   <TextField
     id={fieldName}
