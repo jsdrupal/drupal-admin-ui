@@ -51,18 +51,20 @@ const styles = {
 };
 
 class FileUploadWidget extends React.Component {
-  render({
-    value,
-    label,
-    bundle,
-    onChange,
-    fieldName,
-    inputProps,
-    entityTypeId,
-    required,
-    schema: { properties, maxItems },
-    classes,
-  }) {
+  render() {
+    const {
+      value,
+      label,
+      bundle,
+      onChange,
+      fieldName,
+      inputProps,
+      entityTypeId,
+      required,
+      schema: { properties, maxItems },
+      classes,
+    } = this.props;
+
     // If array then allow for multiple uploads.
     const multiple = properties.data.type === 'array';
 
