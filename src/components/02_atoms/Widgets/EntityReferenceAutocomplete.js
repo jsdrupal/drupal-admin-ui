@@ -139,8 +139,8 @@ class EntityReferenceAutocomplete extends React.Component {
     });
   };
 
-  fetchEntitites = (bundle, type, ids) =>
-    api(bundle, {
+  fetchEntitites = (entityTypeId, bundle, ids) =>
+    api(entityTypeId, {
       queryString: {
         filter: {
           id: {
@@ -153,7 +153,7 @@ class EntityReferenceAutocomplete extends React.Component {
         },
       },
       parameters: {
-        type,
+        type: bundle,
       },
     });
 
