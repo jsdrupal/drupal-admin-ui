@@ -42,7 +42,7 @@ class EntityReferenceAutocomplete extends React.Component {
 
   state = {
     inputValue: '',
-    selectedItems: {},
+    selectedItems: null,
     suggestions: new Map(),
   };
 
@@ -53,6 +53,29 @@ class EntityReferenceAutocomplete extends React.Component {
     const multiple = properties.data.type === 'array';
     return multiple ? maxItems || 100000000000 : 1;
   };
+
+  componentDidMount() {
+    if (!this.state.selectedItems && this.props.value) {
+      const [
+        entityTypeId,
+        [bundle],
+      ] = this.determineEntityTypeAndBundlesFromSchema(this.props.schema);
+
+      let ids;
+      if (Array.isArray(this.props.value.data)) {
+        ids = this.props.value.data.map(entity => {
+          return entity.id;
+        });
+      } else {
+        ids = [this.props.value.data.id];
+      }
+      this.fetchEntitites(entityTypeId, bundle, ids).then(({ data: items }) => {
+        this.setState({
+          selectedItems: items.map(({ id, attributes: { name: label } }) => ({ id, label })),
+        });
+      });
+    }
+  }
 
   handleChange = ({ id, label }) =>
     this.setState(
@@ -79,7 +102,7 @@ class EntityReferenceAutocomplete extends React.Component {
     );
 
   handleInputChange = event => {
-    if (this.getMaxItems() === Object.keys(this.state.selectedItems).length) {
+    if (this.state.selectedItems && this.getMaxItems() === Object.keys(this.state.selectedItems).length) {
       return;
     }
 
@@ -110,6 +133,24 @@ class EntityReferenceAutocomplete extends React.Component {
     });
   };
 
+  fetchEntitites = (bundle, type, ids) =>
+    api(bundle, {
+      queryString: {
+        filter: {
+          id: {
+            condition: {
+              operator: 'IN',
+              path: 'uuid',
+              value: ids,
+            },
+          },
+        },
+      },
+      parameters: {
+        type,
+      },
+    });
+
   fetchSuggestedEntities = (bundle, type, input) =>
     api(bundle, {
       queryString: {
@@ -133,7 +174,7 @@ class EntityReferenceAutocomplete extends React.Component {
   handleKeyDown = event => {
     const { inputValue, selectedItems } = this.state;
     if (
-      selectedItems.length &&
+      (selectedItems && selectedItems.length) &&
       !inputValue.length &&
       keycode(event) === 'backspace'
     ) {
@@ -180,12 +221,12 @@ class EntityReferenceAutocomplete extends React.Component {
     highlightedIndex,
     selectedItem: selectedItems,
   }) => {
-    if (this.getMaxItems() === Object.keys(this.state.selectedItems).length) {
+    if (this.state.selectedItems && this.getMaxItems() === Object.keys(this.state.selectedItems).length) {
       return null;
     }
 
     const isHighlighted = highlightedIndex === index;
-    const isSelected = Object.keys(selectedItems).includes(suggestion.id);
+    const isSelected = this.state.selectedItems && Object.keys(selectedItems).includes(suggestion.id);
 
     return (
       <MenuItem
@@ -242,7 +283,7 @@ class EntityReferenceAutocomplete extends React.Component {
                 fullWidth: true,
                 label: this.props.label,
                 InputProps: getInputProps({
-                  startAdornment: Object.entries(selectedItems).map(
+                  startAdornment: selectedItems ? Object.entries(selectedItems).map(
                     ([key, value]) => (
                       <Chip
                         key={key}
@@ -252,7 +293,7 @@ class EntityReferenceAutocomplete extends React.Component {
                         onDelete={this.handleDelete(key)}
                       />
                     ),
-                  ),
+                  ) : null,
                   onChange: this.handleInputChange,
                   onKeyDown: this.handleKeyDown,
                   placeholder: '',
