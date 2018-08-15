@@ -1,6 +1,8 @@
 import React from 'react';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { storiesOf } from '@storybook/react';
+// eslint-disable-next-line import/no-extraneous-dependencies
+import { text } from '@storybook/addon-knobs/react';
 
 import EditIcon from '@material-ui/icons/Edit';
 import Table from '@material-ui/core/Table';
@@ -15,10 +17,10 @@ storiesOf('OpsModalButton', module)
   .add('Default', () => (
     <OpsModalButton
       aria-label="edit"
-      title="Are you sure that you want to edit this element?"
-      text="This action cannot be undone."
-      cancelText="Cancel"
-      confirmText="Edit"
+      title={text('title', 'Are you sure that you want to edit this element?')}
+      text={text('text', 'This action cannot be undone.')}
+      cancelText={text('cancelText', 'Cancel')}
+      confirmText={text('confirmText', 'Edit')}
       enterAction={() => {}}
     >
       <EditIcon />
@@ -43,10 +45,10 @@ storiesOf('OpsModalButton', module)
   .addWithJSX('Inside a table column', () => (
     <OpsModalButton
       aria-label="edit"
-      title="Are you sure that you want to edit this element?"
-      text="This action cannot be undone."
-      cancelText="Cancel"
-      confirmText="Edit"
+      title={text('title', 'Are you sure that you want to edit this element?')}
+      text={text('text', 'This action cannot be undone.')}
+      cancelText={text('cancelText', 'Cancel')}
+      confirmText={text('confirmText', 'Edit')}
       enterAction={() => {}}
     >
       <EditIcon />
