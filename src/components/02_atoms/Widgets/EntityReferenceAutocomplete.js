@@ -221,12 +221,12 @@ class EntityReferenceAutocomplete extends React.Component {
     highlightedIndex,
     selectedItem: selectedItems,
   }) => {
-    if (this.state.selectedItems && this.getMaxItems() === Object.keys(this.state.selectedItems).length) {
+    if (selectedItems && this.getMaxItems() === Object.keys(selectedItems).length) {
       return null;
     }
 
     const isHighlighted = highlightedIndex === index;
-    const isSelected = this.state.selectedItems && Object.keys(selectedItems).includes(suggestion.id);
+    const isSelected = selectedItems && Object.keys(selectedItems).includes(suggestion.id);
 
     return (
       <MenuItem
@@ -293,7 +293,7 @@ class EntityReferenceAutocomplete extends React.Component {
                         onDelete={this.handleDelete(key)}
                       />
                     ),
-                  ) : null,
+                  ) : [],
                   onChange: this.handleInputChange,
                   onKeyDown: this.handleKeyDown,
                   placeholder: '',
