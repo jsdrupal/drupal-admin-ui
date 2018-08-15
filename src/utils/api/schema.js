@@ -53,12 +53,12 @@ const createUISchema = (
             )
             .shift()
         ];
-      const fieldStorageSettings = (
-        fieldStorageConfig.filter(
+      const fieldStorageSettings = fieldStorageConfig
+        .filter(
           ({ attributes: { field_name: fieldName } }) =>
             fieldName === currentFieldName,
-        ) || []
-      ).shift();
+        )
+        .shift();
       const inputProps = {
         ...(Object.prototype.hasOwnProperty.call(fieldSchema, currentFieldName)
           ? fieldSchema[currentFieldName].attributes.settings
