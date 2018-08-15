@@ -209,7 +209,10 @@ const fileItemSchema = PropTypes.shape({
 FileUploadWidget.propTypes = {
   ...WidgetPropTypes,
   value: PropTypes.shape({
-    data: PropTypes.oneOf([PropTypes.arrayOf(fileItemSchema), fileItemSchema]),
+    data: PropTypes.oneOfType([
+      PropTypes.arrayOf(fileItemSchema),
+      fileItemSchema,
+    ]),
     meta: PropTypes.shape({
       alt: PropTypes.string,
     }),
