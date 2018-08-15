@@ -20,6 +20,7 @@ import {
   getItemsAsArray,
   setItemById,
 } from '../../../utils/api/fieldItem';
+import api from '../../../utils/api/api';
 
 const CardWrapper = styled('div')`
   margin-top: 15px;
@@ -51,6 +52,67 @@ const styles = {
 };
 
 class FileUploadWidget extends React.Component {
+  state = {
+    selectedItems: null,
+  };
+
+  componentDidMount() {
+    if (!this.state.selectedItems && this.props.value) {
+      const entityTypeId = 'file';
+      const bundle = 'file';
+
+      let ids;
+      if (Array.isArray(this.props.value.data)) {
+        ids = this.props.value.data.map(entity => {
+          return entity.id;
+        });
+      } else {
+        ids = [this.props.value.data.id];
+      }
+      this.fetchEntitites(entityTypeId, bundle, ids).then(({ data: items }) => {
+        this.setState({
+          selectedItems: items.map(({ id, attributes }, index) => ({
+            id,
+            type: 'file--file',
+            [entityTypeId]: attributes,
+            meta: this.props.value.data[index].meta,
+          })),
+        });
+      });
+    }
+  }
+
+  fetchEntitites = (entityTypeId, bundle, ids) =>
+    api(entityTypeId, {
+      queryString: {
+        filter: {
+          id: {
+            condition: {
+              operator: 'IN',
+              path: 'uuid',
+              value: ids,
+            },
+          },
+        },
+      },
+      parameters: {
+        bundle,
+      },
+    });
+
+  setSelectedItems = items => {
+    this.setState(
+      {
+        selectedItems: items,
+      },
+      () => {
+        this.props.onChange({
+          data: this.state.selectedItems,
+        });
+      },
+    );
+  };
+
   render() {
     const {
       value,
@@ -65,10 +127,14 @@ class FileUploadWidget extends React.Component {
       classes,
     } = this.props;
 
+    if (this.state.selectedItems === null) {
+      return null;
+    }
+
     // If array then allow for multiple uploads.
     const multiple = properties.data.type === 'array';
 
-    const items = getItemsAsArray(multiple, value.data)
+    const items = getItemsAsArray(multiple, this.state.selectedItems)
       // Default schema creates stub entries, which we don't need here.
       .filter(item => item.id);
     const length = (items && items.length) || 0;
@@ -116,9 +182,7 @@ class FileUploadWidget extends React.Component {
                   return setItemById(multiple, item, itemsAgg);
                 }, items);
 
-                onChange({
-                  data: newItems,
-                });
+                this.setSelectedItems(newItems);
               }}
             />
           </div>
@@ -153,8 +217,8 @@ class FileUploadWidget extends React.Component {
                               margin="normal"
                               label="Alternative text"
                               onChange={event =>
-                                onChange({
-                                  data: setItemById(
+                                this.setSelectedItems(
+                                  setItemById(
                                     multiple,
                                     {
                                       ...item,
@@ -164,7 +228,7 @@ class FileUploadWidget extends React.Component {
                                     },
                                     value.data,
                                   ),
-                                })
+                                )
                               }
                             />
                             <Button
@@ -175,13 +239,13 @@ class FileUploadWidget extends React.Component {
                               className="remove"
                               aria-label="Remove Image"
                               onClick={event => {
-                                onChange({
-                                  data: deleteItemById(
+                                this.setSelectedItems(
+                                  deleteItemById(
                                     multiple,
                                     event.currentTarget.id,
                                     items,
                                   ),
-                                });
+                                );
                               }}
                             >
                               <DeleteIcon />
