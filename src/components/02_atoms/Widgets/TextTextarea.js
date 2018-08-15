@@ -50,7 +50,7 @@ class TextTextarea extends React.Component {
 
   render() {
     return (
-      <FormControl margin="normal" fullWidth>
+      <FormControl margin="normal" fullWidth required={this.props.required}>
         <FormLabel classes={{ root: styles.label }}>
           {this.props.label}
         </FormLabel>
