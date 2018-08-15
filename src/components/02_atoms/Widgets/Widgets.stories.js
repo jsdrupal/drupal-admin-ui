@@ -118,8 +118,8 @@ storiesOf('Widgets/NumberTextfield', module).addWithJSX('Default', () => (
 storiesOf('Widgets/OptionsSelect', module).addWithJSX('Default', () => (
   <OptionsSelect
     fieldName="option"
-    helpText={text('helpText(OptionsSelect)', 'Help text.')}
-    label={text('label(OptionsSelect)', 'A Simple Label')}
+    helpText={text('OptionsSelect:helpText', 'Help text.')}
+    label={text('OptionsSelect:label', 'A Simple Label')}
     onChange={onChangeAction}
     schema={object('OptionsSelect: schema', {
       enum: ['One', 'Two', 'Three', 'Four'],
