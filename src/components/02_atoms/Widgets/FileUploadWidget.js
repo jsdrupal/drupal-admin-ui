@@ -1,9 +1,11 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'react-emotion';
 import { css } from 'emotion';
 import Card from '@material-ui/core/Card';
+import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
+import CardMedia from '@material-ui/core/CardMedia';
 import Divider from '@material-ui/core/Divider';
 import FormControl from '@material-ui/core/FormControl';
 import FormLabel from '@material-ui/core/FormLabel';
@@ -37,11 +39,10 @@ const Element = styled('div')`
   }
 `;
 
-const Image = styled('div')`
-  > img {
-    max-width: 100px;
-    margin-right: 20px;
-  }
+const CardThumbnail = styled(CardMedia)`
+  height: 100px;
+  max-width: 100px;
+  margin-right: 20px;
 `;
 
 const styles = {
@@ -122,75 +123,72 @@ const FileUploadWidget = ({
 
         {length > 0 && (
           <CardWrapper>
-            <Card>
-              <CardContent>
-                <List>
-                  {items.map((item, index) => {
-                    const {
-                      id,
-                      meta: { alt },
-                      file: { url, filename },
-                    } = item;
-                    const last = items.length - 1 === index;
+            <List>
+              {items.map((item, index) => {
+                const {
+                  id,
+                  meta: { alt },
+                  file: { url, filename },
+                } = item;
 
-                    return (
-                      <Fragment key={id}>
-                        <ListItem>
-                          <Image>
-                            <img
-                              alt={alt || filename}
-                              src={`${
-                                process.env.REACT_APP_DRUPAL_BASE_URL
-                              }${url}`}
-                            />
-                          </Image>
-                          <TextField
-                            required
-                            value={alt}
-                            margin="normal"
-                            label="Alternative text"
-                            onChange={event =>
-                              onChange({
-                                data: setItemById(
-                                  multiple,
-                                  {
-                                    ...item,
-                                    meta: {
-                                      alt: event.target.value,
-                                    },
+                const last = items.length - 1 === index;
+
+                return (
+                  <ListItem key={id}>
+                    <Card>
+                      <CardThumbnail
+                        alt={alt || filename}
+                        image={`${process.env.REACT_APP_DRUPAL_BASE_URL}${url}`}
+                      />
+                      <CardContent>
+                        <TextField
+                          required
+                          value={alt}
+                          margin="normal"
+                          label="Alternative text"
+                          onChange={event =>
+                            onChange({
+                              data: setItemById(
+                                multiple,
+                                {
+                                  ...item,
+                                  meta: {
+                                    alt: event.target.value,
                                   },
-                                  value.data,
-                                ),
-                              })
-                            }
-                          />
-                          <Button
-                            mini
-                            id={id}
-                            variant="fab"
-                            color="secondary"
-                            className="remove"
-                            aria-label="Remove Image"
-                            onClick={event => {
-                              onChange({
-                                data: deleteItemById(
-                                  multiple,
-                                  event.currentTarget.id,
-                                  items,
-                                ),
-                              });
-                            }}
-                          >
-                            <DeleteIcon />
-                          </Button>
-                        </ListItem>
-                        {!last && <Divider />}
-                      </Fragment>
-                    );
-                  })}
-                </List>
-              </CardContent>
-            </Card>
+                                },
+                                value.data,
+                              ),
+                            })
+                          }
+                        />
+                      </CardContent>
+                      <CardActions>
+                        <Button
+                          mini
+                          id={id}
+                          variant="fab"
+                          color="secondary"
+                          className="remove"
+                          aria-label="Remove Image"
+                          onClick={event => {
+                            onChange({
+                              data: deleteItemById(
+                                multiple,
+                                event.currentTarget.id,
+                                items,
+                              ),
+                            });
+                          }}
+                        >
+                          <DeleteIcon />
+                        </Button>
+                      </CardActions>
+                    </Card>
+                    {!last && <Divider />}
+                  </ListItem>
+                );
+              })}
+            </List>
           </CardWrapper>
         )}
       </Element>
