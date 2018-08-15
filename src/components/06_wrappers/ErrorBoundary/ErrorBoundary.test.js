@@ -2,7 +2,7 @@ import React from 'react';
 import { mount } from 'enzyme';
 
 import ErrorBoundary from './ErrorBoundary';
-import Message from '../../02_atoms/Message/Message';
+import BannerMessage from '../../02_atoms/BannerMessage/BannerMessage';
 
 describe('ErrorBoundary', () => {
   // Prevent errors from being printed in the test console output since we are
@@ -31,6 +31,6 @@ describe('ErrorBoundary', () => {
         <ComponentWithError />
       </ErrorBoundary>,
     );
-    expect(root.find(Message).length).toEqual(1);
+    expect(root.find(BannerMessage).length).toEqual(1);
   });
 });

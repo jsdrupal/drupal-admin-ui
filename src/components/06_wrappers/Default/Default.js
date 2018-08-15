@@ -23,15 +23,21 @@ import HelpIcon from '@material-ui/icons/Help';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 
-import Message from '../../02_atoms/Message/Message';
+import BannerMessage from '../../02_atoms/BannerMessage/BannerMessage';
+import Snackbar from '../../02_atoms/SnackbarMessage/SnackbarMessage';
 import ErrorBoundary from '../ErrorBoundary/ErrorBoundary';
 
 import {
   requestMenu,
   closeDrawer,
   openDrawer,
+  setMessage,
+  clearMessage,
 } from '../../../actions/application';
-import { MESSAGE_ERROR } from '../../../constants/messages';
+import {
+  MESSAGE_INTERFACE_BANNER,
+  MESSAGE_INTERFACE_SNACKBAR,
+} from '../../../constants/messages';
 
 let styles;
 
@@ -106,11 +112,27 @@ class Default extends React.Component {
 
       <main className={styles.main} id={styles.main}>
         <ErrorBoundary>
-          {this.props.messages.map(message => (
-            <Message {...message} key={message.key} type={MESSAGE_ERROR} />
-          ))}
+          {this.props.messages.map(
+            message =>
+              message.messageInterface === MESSAGE_INTERFACE_BANNER ? (
+                <BannerMessage
+                  {...message}
+                  key={message.key}
+                  type={message.messageSeverity}
+                />
+              ) : null,
+          )}
           {this.props.children}
         </ErrorBoundary>
+        {this.props.messages.map(
+          message =>
+            message.messageInterface === MESSAGE_INTERFACE_SNACKBAR ? (
+              <Snackbar
+                {...message}
+                onClose={() => this.props.clearMessage(message.key)}
+              />
+            ) : null,
+        )}
       </main>
     </div>
   );
@@ -169,6 +191,8 @@ Default.propTypes = {
   requestMenu: PropTypes.func.isRequired,
   openDrawer: PropTypes.func.isRequired,
   closeDrawer: PropTypes.func.isRequired,
+  setMessage: PropTypes.func.isRequired,
+  clearMessage: PropTypes.func.isRequired,
   drawerOpen: PropTypes.bool,
 };
 
@@ -189,5 +213,7 @@ export default connect(
     requestMenu,
     openDrawer,
     closeDrawer,
+    setMessage,
+    clearMessage,
   },
 )(Default);
