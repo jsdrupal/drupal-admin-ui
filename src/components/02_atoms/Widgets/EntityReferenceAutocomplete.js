@@ -14,6 +14,7 @@ import WidgetPropTypes from '../../05_pages/NodeForm/WidgetPropTypes';
 import SchemaPropType from '../../05_pages/NodeForm/SchemaPropType';
 
 import api from './../../../utils/api/api';
+import { getItemsAsArray } from '../../../utils/api/fieldItem';
 
 const styles = {
   results: css`
@@ -61,22 +62,21 @@ class EntityReferenceAutocomplete extends React.Component {
         [bundle],
       ] = this.determineEntityTypeAndBundlesFromSchema(this.props.schema);
 
-      let ids;
-      if (Array.isArray(this.props.value.data)) {
-        ids = this.props.value.data.map(entity => {
-          return entity.id;
-        });
-      } else {
-        ids = [this.props.value.data.id];
-      }
-      this.fetchEntitites(entityTypeId, bundle, ids).then(({ data: items }) => {
-        this.setState({
-          selectedItems: items.map(({ id, attributes: { name: label } }) => ({
-            id,
-            label,
-          })),
-        });
-      });
+      const multiple = this.props.schema.properties.data.type === 'array';
+      const items = getItemsAsArray(multiple, this.props.value.data);
+      const ids = items.map(({ id }) => id);
+      this.fetchEntitites(entityTypeId, bundle, ids).then(
+        ({ data: entities }) => {
+          this.setState({
+            selectedItems: entities.map(
+              ({ id, attributes: { name: label } }) => ({
+                id,
+                label,
+              }),
+            ),
+          });
+        },
+      );
     }
   }
 

@@ -61,24 +61,21 @@ class FileUploadWidget extends React.Component {
       const entityTypeId = 'file';
       const bundle = 'file';
 
-      let ids;
-      if (Array.isArray(this.props.value.data)) {
-        ids = this.props.value.data.map(entity => {
-          return entity.id;
-        });
-      } else {
-        ids = [this.props.value.data.id];
-      }
-      this.fetchEntitites(entityTypeId, bundle, ids).then(({ data: items }) => {
-        this.setState({
-          selectedItems: items.map(({ id, attributes }, index) => ({
-            id,
-            type: 'file--file',
-            [entityTypeId]: attributes,
-            meta: this.props.value.data[index].meta,
-          })),
-        });
-      });
+      const multiple = this.props.schema.properties.data.type === 'array';
+      const items = getItemsAsArray(multiple, this.props.value.data);
+      const ids = items.map(({ id }) => id);
+      this.fetchEntitites(entityTypeId, bundle, ids).then(
+        ({ data: entities }) => {
+          this.setState({
+            selectedItems: entities.map(({ id, attributes }, index) => ({
+              id,
+              type: 'file--file',
+              [entityTypeId]: attributes,
+              meta: items[index].meta,
+            })),
+          });
+        },
+      );
     }
   }
 
