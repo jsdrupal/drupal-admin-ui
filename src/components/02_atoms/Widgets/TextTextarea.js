@@ -2,6 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { css } from 'emotion';
 import RichTextEditor from 'react-rte';
+import FormLabel from '@material-ui/core/FormLabel';
+import FormControl from '@material-ui/core/FormControl';
+
 import WidgetPropTypes from '../../05_pages/NodeForm/WidgetPropTypes';
 
 let styles;
@@ -47,11 +50,16 @@ class TextTextarea extends React.Component {
 
   render() {
     return (
-      <RichTextEditor
-        className={styles.container}
-        value={this.state.value}
-        onChange={this.onChange}
-      />
+      <FormControl margin="normal" fullWidth required={this.props.required}>
+        <FormLabel classes={{ root: styles.label }}>
+          {this.props.label}
+        </FormLabel>
+        <RichTextEditor
+          className={styles.container}
+          value={this.state.value}
+          onChange={this.onChange}
+        />
+      </FormControl>
     );
   }
 }
@@ -61,6 +69,9 @@ styles = {
     .public-DraftEditor-content {
       min-height: 110px;
     }
+  `,
+  label: css`
+    margin-bottom: 10px;
   `,
 };
 
