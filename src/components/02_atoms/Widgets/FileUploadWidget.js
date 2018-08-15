@@ -118,7 +118,6 @@ class FileUploadWidget extends React.Component {
       value,
       label,
       bundle,
-      onChange,
       fieldName,
       inputProps,
       entityTypeId,
