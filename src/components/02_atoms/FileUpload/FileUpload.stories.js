@@ -3,6 +3,8 @@ import React from 'react';
 import { storiesOf } from '@storybook/react';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { action } from '@storybook/addon-actions';
+// eslint-disable-next-line import/no-extraneous-dependencies
+import { boolean, number, object } from '@storybook/addon-knobs/react';
 
 import FileUpload from './FileUpload';
 
@@ -23,11 +25,11 @@ storiesOf('FileUpload', module).addWithJSX('Default', () => (
     bundle="Article"
     fieldName="upload"
     onFileUpload={onFileUploadAction}
-    multiple={false}
-    remainingUploads={1}
-    inputProps={{
+    multiple={boolean('multiple', false)}
+    remainingUploads={number('remainingUploads', 1)}
+    inputProps={object('inputProps', {
       file_extensions: 'txt',
       max_filesize: '1000',
-    }}
+    })}
   />
 ));
