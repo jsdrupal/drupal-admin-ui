@@ -28,7 +28,12 @@ const createEntity = schema => {
   }
 };
 
-const createUISchema = (fieldSchema, formDisplaySchema, widgets) =>
+const createUISchema = (
+  fieldSchema,
+  formDisplaySchema,
+  fieldStorageConfig,
+  widgets,
+) =>
   Array.from(
     new Set([...Object.keys(fieldSchema), ...Object.keys(formDisplaySchema)]),
   )
@@ -48,6 +53,12 @@ const createUISchema = (fieldSchema, formDisplaySchema, widgets) =>
             )
             .shift()
         ];
+      const fieldStorageSettings = (
+        fieldStorageConfig.filter(
+          ({ attributes: { field_name: fieldName } }) =>
+            fieldName === currentFieldName,
+        ) || []
+      ).shift();
       const inputProps = {
         ...(Object.prototype.hasOwnProperty.call(fieldSchema, currentFieldName)
           ? fieldSchema[currentFieldName].attributes.settings
@@ -57,6 +68,9 @@ const createUISchema = (fieldSchema, formDisplaySchema, widgets) =>
           currentFieldName,
         )
           ? formDisplaySchema[currentFieldName].settings
+          : {}),
+        ...(fieldStorageSettings
+          ? fieldStorageSettings.attributes.settings
           : {}),
       };
       acc.push({

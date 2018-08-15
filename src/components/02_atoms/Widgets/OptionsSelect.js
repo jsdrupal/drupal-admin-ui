@@ -20,8 +20,9 @@ const OptionsSelect = ({
   helpText,
   fieldName,
   required,
-  schema: { enum: options, default: defaultValue },
+  schema: { default: defaultValue },
   classes,
+  inputProps: { allowed_values: allowedValues },
 }) => (
   <FormControl margin="normal" classes={classes}>
     <InputLabel htmlFor={fieldName} required={required}>
@@ -37,9 +38,9 @@ const OptionsSelect = ({
       }}
       className={styles.select}
     >
-      {options.map(option => (
-        <option key={option} value={option}>
-          {option}
+      {Object.entries(allowedValues).map(([machineName, humanName]) => (
+        <option key={machineName} value={machineName}>
+          {humanName}
         </option>
       ))}
     </NativeSelect>
