@@ -42,8 +42,8 @@ class TextTextarea extends React.Component {
       // @todo This should not be needed after https://github.com/jsdrupal/drupal-admin-ui/issues/195
       (Array.isArray(this.props.value) &&
         this.props.value.length &&
-        this.props.value[0]) ||
-        this.props.value ||
+        this.props.value[0].value) ||
+        this.props.value.value ||
         '',
       'html',
     ),
