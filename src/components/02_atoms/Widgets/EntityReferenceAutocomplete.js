@@ -71,7 +71,10 @@ class EntityReferenceAutocomplete extends React.Component {
       }
       this.fetchEntitites(entityTypeId, bundle, ids).then(({ data: items }) => {
         this.setState({
-          selectedItems: items.map(({ id, attributes: { name: label } }) => ({ id, label })),
+          selectedItems: items.map(({ id, attributes: { name: label } }) => ({
+            id,
+            label,
+          })),
         });
       });
     }
@@ -102,7 +105,10 @@ class EntityReferenceAutocomplete extends React.Component {
     );
 
   handleInputChange = event => {
-    if (this.state.selectedItems && this.getMaxItems() === Object.keys(this.state.selectedItems).length) {
+    if (
+      this.state.selectedItems &&
+      this.getMaxItems() === Object.keys(this.state.selectedItems).length
+    ) {
       return;
     }
 
@@ -174,7 +180,8 @@ class EntityReferenceAutocomplete extends React.Component {
   handleKeyDown = event => {
     const { inputValue, selectedItems } = this.state;
     if (
-      (selectedItems && selectedItems.length) &&
+      selectedItems &&
+      selectedItems.length &&
       !inputValue.length &&
       keycode(event) === 'backspace'
     ) {
@@ -221,12 +228,16 @@ class EntityReferenceAutocomplete extends React.Component {
     highlightedIndex,
     selectedItem: selectedItems,
   }) => {
-    if (selectedItems && this.getMaxItems() === Object.keys(selectedItems).length) {
+    if (
+      selectedItems &&
+      this.getMaxItems() === Object.keys(selectedItems).length
+    ) {
       return null;
     }
 
     const isHighlighted = highlightedIndex === index;
-    const isSelected = selectedItems && Object.keys(selectedItems).includes(suggestion.id);
+    const isSelected =
+      selectedItems && Object.keys(selectedItems).includes(suggestion.id);
 
     return (
       <MenuItem
@@ -283,17 +294,17 @@ class EntityReferenceAutocomplete extends React.Component {
                 fullWidth: true,
                 label: this.props.label,
                 InputProps: getInputProps({
-                  startAdornment: selectedItems ? Object.entries(selectedItems).map(
-                    ([key, value]) => (
-                      <Chip
-                        key={key}
-                        tabIndex={-1}
-                        label={value.label}
-                        className="chip"
-                        onDelete={this.handleDelete(key)}
-                      />
-                    ),
-                  ) : [],
+                  startAdornment: selectedItems
+                    ? Object.entries(selectedItems).map(([key, value]) => (
+                        <Chip
+                          key={key}
+                          tabIndex={-1}
+                          label={value.label}
+                          className="chip"
+                          onDelete={this.handleDelete(key)}
+                        />
+                      ))
+                    : [],
                   onChange: this.handleInputChange,
                   onKeyDown: this.handleKeyDown,
                   placeholder: '',

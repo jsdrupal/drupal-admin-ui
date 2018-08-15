@@ -115,14 +115,17 @@ export const requestSingleContent = (bundle, id) => ({
 
 export const CONTENT_SINGLE_LOADED = 'CONTENT_SINGLE_LOADED';
 function* loadSingleContent(action) {
-  const { payload: { bundle, id } } = action;
+  const {
+    payload: { bundle, id },
+  } = action;
   try {
     yield put(resetLoading());
     yield put(showLoading());
 
-    const content = yield call(api, 'content_single', { parameters: { bundle, id }, queryString: {
-
-      }});
+    const content = yield call(api, 'content_single', {
+      parameters: { bundle, id },
+      queryString: {},
+    });
     yield put({
       type: CONTENT_SINGLE_LOADED,
       payload: {

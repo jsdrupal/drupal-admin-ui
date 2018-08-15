@@ -14,7 +14,11 @@ class NodeEditForm extends React.Component {
     const { entity, bundle } = this.props;
     return (
       <Fragment>
-        {entity && <PageTitle>Edit {bundle} {entity.data.attributes.title}</PageTitle>}
+        {entity && (
+          <PageTitle>
+            Edit {bundle} {entity.data.attributes.title}
+          </PageTitle>
+        )}
         <LoadingBar />
         {entity && <NodeForm {...this.props} />}
       </Fragment>
