@@ -50,153 +50,155 @@ const styles = {
   `,
 };
 
-const FileUploadWidget = ({
-  value,
-  label,
-  bundle,
-  onChange,
-  fieldName,
-  inputProps,
-  entityTypeId,
-  required,
-  schema: { properties, maxItems },
-  classes,
-}) => {
-  // If array then allow for multiple uploads.
-  const multiple = properties.data.type === 'array';
+class FileUploadWidget extends React.Component {
+  render({
+    value,
+    label,
+    bundle,
+    onChange,
+    fieldName,
+    inputProps,
+    entityTypeId,
+    required,
+    schema: { properties, maxItems },
+    classes,
+  }) {
+    // If array then allow for multiple uploads.
+    const multiple = properties.data.type === 'array';
 
-  const items = getItemsAsArray(multiple, value.data)
-    // Default schema creates stub entries, which we don't need here.
-    .filter(item => item.id);
-  const length = (items && items.length) || 0;
-  // maxItems is only set if array, so set to 1 as default.
-  const maxItemsCount = multiple ? maxItems || 100000000000 : 1;
+    const items = getItemsAsArray(multiple, value.data)
+      // Default schema creates stub entries, which we don't need here.
+      .filter(item => item.id);
+    const length = (items && items.length) || 0;
+    // maxItems is only set if array, so set to 1 as default.
+    const maxItemsCount = multiple ? maxItems || 100000000000 : 1;
 
-  return (
-    <FormControl
-      margin="normal"
-      required={required}
-      classes={classes}
-      fullWidth
-    >
-      <Element>
-        <FormLabel component="legend">{label}</FormLabel>
-        <div
-          className={styles.fullWidth}
-          style={{
-            display:
-              (!multiple && length) || length === maxItemsCount
-                ? 'none'
-                : 'block',
-          }}
-        >
-          <FileUpload
-            bundle={bundle}
-            multiple={multiple}
-            fieldName={fieldName}
-            inputProps={inputProps}
-            entityTypeId={entityTypeId}
-            remainingUploads={maxItemsCount - length}
-            onFileUpload={files => {
-              const newItems = files.reduce((itemsAgg, file) => {
-                const item = {
-                  file: {
-                    type: 'file--file',
-                    url: file.url[0].value,
-                    id: file.uuid[0].value,
-                    filename: file.filename[0].value,
-                  },
-                  meta: { alt: '' },
-                  id: file.uuid[0].value,
-                  type: 'file--file',
-                };
-                return setItemById(multiple, item, itemsAgg);
-              }, items);
-
-              onChange({
-                data: newItems,
-              });
+    return (
+      <FormControl
+        margin="normal"
+        required={required}
+        classes={classes}
+        fullWidth
+      >
+        <Element>
+          <FormLabel component="legend">{label}</FormLabel>
+          <div
+            className={styles.fullWidth}
+            style={{
+              display:
+                (!multiple && length) || length === maxItemsCount
+                  ? 'none'
+                  : 'block',
             }}
-          />
-        </div>
+          >
+            <FileUpload
+              bundle={bundle}
+              multiple={multiple}
+              fieldName={fieldName}
+              inputProps={inputProps}
+              entityTypeId={entityTypeId}
+              remainingUploads={maxItemsCount - length}
+              onFileUpload={files => {
+                const newItems = files.reduce((itemsAgg, file) => {
+                  const item = {
+                    file: {
+                      type: 'file--file',
+                      url: file.url[0].value,
+                      id: file.uuid[0].value,
+                      filename: file.filename[0].value,
+                    },
+                    meta: { alt: '' },
+                    id: file.uuid[0].value,
+                    type: 'file--file',
+                  };
+                  return setItemById(multiple, item, itemsAgg);
+                }, items);
 
-        {false && length > 0 && (
-          <CardWrapper>
-            <Card>
-              <CardContent>
-                <List>
-                  {items.map((item, index) => {
-                    const {
-                      id,
-                      meta: { alt },
-                      file: { url, filename },
-                    } = item;
-                    const last = items.length - 1 === index;
+                onChange({
+                  data: newItems,
+                });
+              }}
+            />
+          </div>
 
-                    return (
-                      <Fragment key={id}>
-                        <ListItem>
-                          <Image>
-                            <img
-                              alt={alt || filename}
-                              src={`${
-                                process.env.REACT_APP_DRUPAL_BASE_URL
-                              }${url}`}
-                            />
-                          </Image>
-                          <TextField
-                            required
-                            value={alt}
-                            margin="normal"
-                            label="Alternative text"
-                            onChange={event =>
-                              onChange({
-                                data: setItemById(
-                                  multiple,
-                                  {
-                                    ...item,
-                                    meta: {
-                                      alt: event.target.value,
+          {length > 0 && (
+            <CardWrapper>
+              <Card>
+                <CardContent>
+                  <List>
+                    {items.map((item, index) => {
+                      const {
+                        id,
+                        meta: { alt },
+                        file: { url, filename },
+                      } = item;
+                      const last = items.length - 1 === index;
+
+                      return (
+                        <Fragment key={id}>
+                          <ListItem>
+                            <Image>
+                              <img
+                                alt={alt || filename}
+                                src={`${
+                                  process.env.REACT_APP_DRUPAL_BASE_URL
+                                }${url}`}
+                              />
+                            </Image>
+                            <TextField
+                              required
+                              value={alt}
+                              margin="normal"
+                              label="Alternative text"
+                              onChange={event =>
+                                onChange({
+                                  data: setItemById(
+                                    multiple,
+                                    {
+                                      ...item,
+                                      meta: {
+                                        alt: event.target.value,
+                                      },
                                     },
-                                  },
-                                  value.data,
-                                ),
-                              })
-                            }
-                          />
-                          <Button
-                            mini
-                            id={id}
-                            variant="fab"
-                            color="secondary"
-                            className="remove"
-                            aria-label="Remove Image"
-                            onClick={event => {
-                              onChange({
-                                data: deleteItemById(
-                                  multiple,
-                                  event.currentTarget.id,
-                                  items,
-                                ),
-                              });
-                            }}
-                          >
-                            <DeleteIcon />
-                          </Button>
-                        </ListItem>
-                        {!last && <Divider />}
-                      </Fragment>
-                    );
-                  })}
-                </List>
-              </CardContent>
-            </Card>
-          </CardWrapper>
-        )}
-      </Element>
-    </FormControl>
-  );
-};
+                                    value.data,
+                                  ),
+                                })
+                              }
+                            />
+                            <Button
+                              mini
+                              id={id}
+                              variant="fab"
+                              color="secondary"
+                              className="remove"
+                              aria-label="Remove Image"
+                              onClick={event => {
+                                onChange({
+                                  data: deleteItemById(
+                                    multiple,
+                                    event.currentTarget.id,
+                                    items,
+                                  ),
+                                });
+                              }}
+                            >
+                              <DeleteIcon />
+                            </Button>
+                          </ListItem>
+                          {!last && <Divider />}
+                        </Fragment>
+                      );
+                    })}
+                  </List>
+                </CardContent>
+              </Card>
+            </CardWrapper>
+          )}
+        </Element>
+      </FormControl>
+    );
+  }
+}
 
 const fileItemSchema = PropTypes.shape({
   file: PropTypes.shape({
