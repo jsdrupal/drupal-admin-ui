@@ -2,9 +2,12 @@ import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
 import LoadingBar from 'react-redux-loading-bar';
 import PropTypes from 'prop-types';
+import { css } from 'emotion';
 import NodeForm from '../NodeForm';
 import { requestSingleContent } from '../../../actions/content';
 import PageTitle from '../../02_atoms/PageTitle/PageTitle';
+
+let styles;
 
 class NodeEditForm extends React.Component {
   componentDidMount() {
@@ -13,23 +16,31 @@ class NodeEditForm extends React.Component {
 
   render() {
     const { entity } = this.props;
-    return (
-      <Fragment>
-        {entity && (
-          <PageTitle>
-            Edit {entity.type.replace('node--', '')} {entity.attributes.title}
-          </PageTitle>
-        )}
-        <LoadingBar />
-        {entity && (
-          <NodeForm
-            {...this.props}
-            bundle={entity.type.replace('node--', '')}
-            entity={{ data: entity }}
-          />
-        )}
-      </Fragment>
-    );
+    let result = null;
+    if (entity) {
+      const bundle = entity.type.replace('node--', '');
+      result = (
+        <Fragment>
+          {entity && (
+            <PageTitle>
+              <em>
+                Edit <span className={styles.bundle}>{bundle}</span>
+              </em>{' '}
+              {entity.attributes.title}
+            </PageTitle>
+          )}
+          <LoadingBar />
+          {entity && (
+            <NodeForm
+              {...this.props}
+              bundle={bundle}
+              entity={{ data: entity }}
+            />
+          )}
+        </Fragment>
+      );
+    }
+    return result;
   }
 }
 
@@ -45,6 +56,12 @@ NodeEditForm.propTypes = {
       title: PropTypes.string.isRequired,
     }).isRequired,
   }),
+};
+
+styles = {
+  bundle: css`
+    text-transform: capitalize;
+  `,
 };
 
 export default connect(

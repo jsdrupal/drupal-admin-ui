@@ -124,7 +124,7 @@ function* loadSingleContent(action) {
 
     const {
       data: [content],
-    } = yield call(api, 'content_single', {
+    } = yield call(api, 'content', {
       queryString: {
         filter: { condition: { path: 'nid', value: nid } },
       },
