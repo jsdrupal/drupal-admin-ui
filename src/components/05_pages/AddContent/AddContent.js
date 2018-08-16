@@ -35,20 +35,17 @@ export default class extends Component {
       <Paper>
         <List data-nightwatch="node-type-list">
           {Object.keys(this.props.contentTypes).map(contentType => (
-            <ListItem
-              button
-              component={Link}
-              to={`/node/add/${contentType}`}
-              key={`node-add-${contentType}`}
-            >
-              <ListItemText
-                primary={this.props.contentTypes[contentType].name}
-                secondary={
-                  <Markup
-                    content={this.props.contentTypes[contentType].description}
-                  />
-                }
-              />
+            <ListItem button component="li" key={`node-add-${contentType}`}>
+              <Link to={`/node/add/${contentType}`}>
+                <ListItemText
+                  primary={this.props.contentTypes[contentType].name}
+                  secondary={
+                    <Markup
+                      content={this.props.contentTypes[contentType].description}
+                    />
+                  }
+                />
+              </Link>
             </ListItem>
           ))}
         </List>
