@@ -6,6 +6,7 @@ import { css } from 'emotion';
 import Paper from '@material-ui/core/Paper';
 import Divider from '@material-ui/core/Divider';
 import Button from '@material-ui/core/Button';
+import Snackbar from '@material-ui/core/Snackbar';
 
 import SchemaPropType from './SchemaPropType';
 
@@ -48,7 +49,10 @@ class NodeForm extends React.Component {
     uiSchema: false,
   };
 
-  state = {};
+  state = {
+    entity: null,
+    restorableEntity: null,
+  };
 
   static getDerivedStateFromProps(props, prevState) {
     if (!props.schema) {
@@ -65,6 +69,7 @@ class NodeForm extends React.Component {
 
     const state = {
       ...prevState,
+      restorableEntity: props.restorableEntity,
       entity: props.entity || {
         ...createEntity(props.schema),
       },
@@ -179,6 +184,32 @@ class NodeForm extends React.Component {
     });
   };
 
+  renderRestoreSnackbar() {
+    return (
+      this.state.restorableEntity && (
+        <Snackbar
+          open={Boolean(this.state.restorableEntity)}
+          ContentProps={{
+            'aria-describedby': 'message-id',
+          }}
+          message={<span id="message-id">Unsaved content found</span>}
+          action={[
+            <Button
+              key="undo"
+              color="secondary"
+              size="small"
+              onClick={this.setState({
+                entity: this.state.restorableEntity,
+              })}
+            >
+              Restore
+            </Button>,
+          ]}
+        />
+      )
+    );
+  }
+
   render() {
     let result = null;
     if (this.props.schema && this.props.uiSchema) {
@@ -192,6 +223,7 @@ class NodeForm extends React.Component {
       );
       result = (
         <div className={styles.gridRoot}>
+          {this.renderRestoreSnackbar()}
           <Paper classes={{ root: styles.fieldContainer }}>
             {left.map(this.createField)}
             <Divider classes={{ root: styles.divider }} />
@@ -229,9 +261,14 @@ styles = {
   `,
 };
 
+const extractRestorableEntity = (state, bundle) => {
+  return state.content.restorableContentByBundle[bundle];
+};
+
 const mapStateToProps = (state, { bundle, entityTypeId }) => ({
   schema: state.schema.schema[`${entityTypeId}--${bundle}`],
   uiSchema: state.schema.uiSchema[`${entityTypeId}--${bundle}`],
+  restorableEntity: extractRestorableEntity(state, bundle),
 });
 
 export default connect(

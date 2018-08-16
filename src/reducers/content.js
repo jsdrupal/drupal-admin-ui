@@ -8,6 +8,7 @@ export const initialState = {
   contentList: [],
   contentById: {},
   links: {},
+  restorableContentByBundle: {},
 };
 
 export default (state = initialState, action) => {
