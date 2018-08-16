@@ -4,7 +4,7 @@ import {
   takeLatest,
   takeEvery,
   select,
-  all
+  all,
 } from 'redux-saga/effects';
 import {
   showLoading,
