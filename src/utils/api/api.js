@@ -58,7 +58,7 @@ async function api(
       options.headers.Accept = 'application/vnd.api+json';
       break;
     case 'content_single':
-      url = `/jsonapi/node/${parameters.bundle}/${parameters.id}`;
+      url = `/jsonapi/node`;
       options.headers.Accept = 'application/vnd.api+json';
       break;
     case 'file':

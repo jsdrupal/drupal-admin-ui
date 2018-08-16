@@ -108,24 +108,28 @@ function* loadContent(action) {
 }
 
 export const CONTENT_SINGLE_REQUESTED = 'CONTENT_SINGLE_REQUESTED';
-export const requestSingleContent = (bundle, id) => ({
+export const requestSingleContent = nid => ({
   type: CONTENT_SINGLE_REQUESTED,
-  payload: { bundle, id },
+  payload: { nid },
 });
 
 export const CONTENT_SINGLE_LOADED = 'CONTENT_SINGLE_LOADED';
 function* loadSingleContent(action) {
   const {
-    payload: { bundle, id },
+    payload: { nid },
   } = action;
   try {
     yield put(resetLoading());
     yield put(showLoading());
 
-    const content = yield call(api, 'content_single', {
-      parameters: { bundle, id },
-      queryString: {},
+    const {
+      data: [content],
+    } = yield call(api, 'content_single', {
+      queryString: {
+        filter: { condition: { path: 'nid', value: nid } },
+      },
     });
+
     yield put({
       type: CONTENT_SINGLE_LOADED,
       payload: {

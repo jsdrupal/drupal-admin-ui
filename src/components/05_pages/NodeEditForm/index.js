@@ -8,20 +8,26 @@ import PageTitle from '../../02_atoms/PageTitle/PageTitle';
 
 class NodeEditForm extends React.Component {
   componentDidMount() {
-    this.props.requestSingleContent(this.props.bundle, this.props.id);
+    this.props.requestSingleContent(this.props.nid);
   }
 
   render() {
-    const { entity, bundle } = this.props;
+    const { entity } = this.props;
     return (
       <Fragment>
         {entity && (
           <PageTitle>
-            Edit {bundle} {entity.data.attributes.title}
+            Edit {entity.type.replace('node--', '')} {entity.attributes.title}
           </PageTitle>
         )}
         <LoadingBar />
-        {entity && <NodeForm {...this.props} />}
+        {entity && (
+          <NodeForm
+            {...this.props}
+            bundle={entity.type.replace('node--', '')}
+            entity={{ data: entity }}
+          />
+        )}
       </Fragment>
     );
   }
@@ -32,21 +38,18 @@ NodeEditForm.defaultProps = {
 };
 
 NodeEditForm.propTypes = {
-  bundle: PropTypes.string.isRequired,
-  id: PropTypes.string.isRequired,
+  nid: PropTypes.string.isRequired,
   requestSingleContent: PropTypes.func.isRequired,
   entity: PropTypes.shape({
-    data: PropTypes.shape({
-      attributes: PropTypes.shape({
-        title: PropTypes.string.isRequired,
-      }).isRequired,
+    attributes: PropTypes.shape({
+      title: PropTypes.string.isRequired,
     }).isRequired,
   }),
 };
 
 export default connect(
   (state, props) => ({
-    entity: state.content.contentById[props.id],
+    entity: state.content.contentByNid[props.nid],
   }),
   {
     requestSingleContent,
