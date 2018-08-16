@@ -158,7 +158,7 @@ async function api(
       url = '/jsonapi/entity_form_display';
       break;
     }
-    case 'field_storage': {
+    case 'field_storage_config': {
       url = '/jsonapi/field_storage_config';
       break;
     }

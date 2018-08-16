@@ -54,7 +54,9 @@ OptionsSelect.propTypes = {
   helpText: PropTypes.string,
   schema: PropTypes.shape({
     default: PropTypes.string.isRequired,
-    enum: PropTypes.arrayOf(PropTypes.string).isRequired,
+  }).isRequired,
+  inputProps: PropTypes.shape({
+    allowed_values: PropTypes.object.isRequired,
   }).isRequired,
 };
 

@@ -37,7 +37,7 @@ function* loadUiSchema(action) {
           filter: { targetEntityType: entityTypeId, bundle, mode: 'default' },
         },
       }),
-      api('field_storage', {
+      api('field_storage_config', {
         queryString: {
           filter: { condition: { path: 'entity_type', value: entityTypeId } },
         },
