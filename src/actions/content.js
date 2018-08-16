@@ -1,4 +1,11 @@
-import { put, call, takeLatest, select, all } from 'redux-saga/effects';
+import {
+  put,
+  call,
+  takeLatest,
+  takeEvery,
+  select,
+  all
+} from 'redux-saga/effects';
 import {
   showLoading,
   hideLoading,
@@ -290,9 +297,9 @@ function* deleteContent({ payload: { content } }) {
 }
 
 export default function* rootSaga() {
-  yield takeLatest(CONTENT_REQUESTED, loadContent);
-  yield takeLatest(ACTION_EXECUTE, executeAction);
-  yield takeLatest(CONTENT_SAVE, saveContent);
+  yield takeEvery(CONTENT_REQUESTED, loadContent);
+  yield takeEvery(ACTION_EXECUTE, executeAction);
+  yield takeEvery(CONTENT_SAVE, saveContent);
   yield takeLatest(CONTENT_ADD, addContent);
-  yield takeLatest(CONTENT_DELETE, deleteContent);
+  yield takeEvery(CONTENT_DELETE, deleteContent);
 }
