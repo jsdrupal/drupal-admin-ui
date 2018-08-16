@@ -18,6 +18,7 @@ const routes = {
   '/node/add/recipe': () => (
     <NodeAddForm entityTypeId="node" bundle="recipe" widgets={widgets} />
   ),
+  // eslint-disable-next-line react/prop-types
   '/node/:bundle/:id/edit': ({ match }) => (
     <NodeEditForm
       entityTypeId="node"

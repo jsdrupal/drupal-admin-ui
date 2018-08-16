@@ -79,6 +79,19 @@ class FileUploadWidget extends React.Component {
     }
   }
 
+  setSelectedItems = items => {
+    this.setState(
+      {
+        selectedItems: items,
+      },
+      () => {
+        this.props.onChange({
+          data: this.state.selectedItems,
+        });
+      },
+    );
+  };
+
   fetchEntitites = (entityTypeId, bundle, ids) =>
     api(entityTypeId, {
       queryString: {
@@ -96,19 +109,6 @@ class FileUploadWidget extends React.Component {
         bundle,
       },
     });
-
-  setSelectedItems = items => {
-    this.setState(
-      {
-        selectedItems: items,
-      },
-      () => {
-        this.props.onChange({
-          data: this.state.selectedItems,
-        });
-      },
-    );
-  };
 
   render() {
     const {

@@ -1,6 +1,7 @@
 import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
 import LoadingBar from 'react-redux-loading-bar';
+import PropTypes from 'prop-types';
 import NodeForm from '../NodeForm';
 import { requestSingleContent } from '../../../actions/content';
 import PageTitle from '../../02_atoms/PageTitle/PageTitle';
@@ -26,12 +27,27 @@ class NodeEditForm extends React.Component {
   }
 }
 
+NodeEditForm.defaultProps = {
+  entity: null,
+};
+
+NodeEditForm.propTypes = {
+  bundle: PropTypes.string.isRequired,
+  id: PropTypes.string.isRequired,
+  requestSingleContent: PropTypes.func.isRequired,
+  entity: PropTypes.shape({
+    data: PropTypes.shape({
+      attributes: PropTypes.shape({
+        title: PropTypes.string.isRequired,
+      }).isRequired,
+    }).isRequired,
+  }),
+};
+
 export default connect(
-  (state, props) => {
-    return {
-      entity: state.content.contentById[props.id],
-    };
-  },
+  (state, props) => ({
+    entity: state.content.contentById[props.id],
+  }),
   {
     requestSingleContent,
   },

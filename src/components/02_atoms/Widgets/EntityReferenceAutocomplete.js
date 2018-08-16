@@ -47,14 +47,6 @@ class EntityReferenceAutocomplete extends React.Component {
     suggestions: new Map(),
   };
 
-  getMaxItems = () => {
-    const {
-      schema: { maxItems, properties },
-    } = this.props;
-    const multiple = properties.data.type === 'array';
-    return multiple ? maxItems || 100000000000 : 1;
-  };
-
   componentDidMount() {
     if (!this.state.selectedItems && this.props.value) {
       const [
@@ -79,6 +71,14 @@ class EntityReferenceAutocomplete extends React.Component {
       );
     }
   }
+
+  getMaxItems = () => {
+    const {
+      schema: { maxItems, properties },
+    } = this.props;
+    const multiple = properties.data.type === 'array';
+    return multiple ? maxItems || 100000000000 : 1;
+  };
 
   handleChange = ({ id, label }) =>
     this.setState(
@@ -295,16 +295,18 @@ class EntityReferenceAutocomplete extends React.Component {
                 label: this.props.label,
                 InputProps: getInputProps({
                   startAdornment: selectedItems
+                    /* eslint-disable prettier/prettier */
                     ? Object.entries(selectedItems).map(([key, value]) => (
-                        <Chip
-                          key={key}
-                          tabIndex={-1}
-                          label={value.label}
-                          className="chip"
-                          onDelete={this.handleDelete(key)}
-                        />
+                      <Chip
+                        key={key}
+                        tabIndex={-1}
+                        label={value.label}
+                        className="chip"
+                        onDelete={this.handleDelete(key)}
+                      />
                       ))
                     : [],
+                  /* eslint-enable prettier/prettier */
                   onChange: this.handleInputChange,
                   onKeyDown: this.handleKeyDown,
                   placeholder: '',
