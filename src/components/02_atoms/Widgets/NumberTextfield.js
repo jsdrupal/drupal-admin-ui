@@ -17,7 +17,7 @@ const NumberTextfield = ({
     id={fieldName}
     value={value}
     fullWidth
-    onChange={event => onChange(event.target.value)}
+    onChange={event => onChange(Number(event.target.value))}
     InputProps={{
       inputProps,
       endAdornment: inputProps.suffix && (
@@ -44,7 +44,7 @@ NumberTextfield.propTypes = {
     suffix: PropTypes.string,
     prefix: PropTypes.string,
   }),
-  value: PropTypes.string,
+  value: PropTypes.number,
 };
 
 NumberTextfield.defaultProps = {

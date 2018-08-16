@@ -18,9 +18,16 @@ let styles;
 class TextTextarea extends React.Component {
   static propTypes = {
     ...WidgetPropTypes,
-    value: PropTypes.shape({
-      value: PropTypes.string.isRequired,
-    }),
+    value: PropTypes.oneOfType([
+      PropTypes.shape({
+        value: PropTypes.string.isRequired,
+      }),
+      PropTypes.arrayOf(
+        PropTypes.shape({
+          value: PropTypes.string.isRequired,
+        }),
+      ),
+    ]),
   };
 
   static defaultProps = {
@@ -32,7 +39,12 @@ class TextTextarea extends React.Component {
 
   state = {
     value: RichTextEditor.createValueFromString(
-      (this.props.value && this.props.value.value) || '',
+      // @todo This should not be needed after https://github.com/jsdrupal/drupal-admin-ui/issues/195
+      (Array.isArray(this.props.value) &&
+        this.props.value.length &&
+        this.props.value[0].value) ||
+        this.props.value.value ||
+        '',
       'html',
     ),
   };
