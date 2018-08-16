@@ -22,9 +22,11 @@ const routes = {
       bundle={match.params.bundle}
       widgets={widgets}
       id={match.params.id}
+    />
+  ),
   // eslint-disable-next-line react/prop-types
   '/node/add/:bundle': ({ match }) => (
-    <NodeForm
+    <NodeAddForm
       entityTypeId="node"
       bundle={match.params.bundle}
       widgets={widgets}
