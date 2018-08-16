@@ -14,8 +14,13 @@ const routes = {
   '/admin/people/roles': Roles,
   '/admin/reports/dblog': Dblog,
   '/node/add': AddContent,
-  '/node/add/recipe': () => (
-    <NodeForm entityTypeId="node" bundle="recipe" widgets={widgets} />
+  // eslint-disable-next-line react/prop-types
+  '/node/add/:bundle': ({ match }) => (
+    <NodeForm
+      entityTypeId="node"
+      bundle={match.params.bundle}
+      widgets={widgets}
+    />
   ),
 };
 
