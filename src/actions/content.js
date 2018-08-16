@@ -107,6 +107,38 @@ function* loadContent(action) {
   }
 }
 
+export const CONTENT_SINGLE_REQUESTED = 'CONTENT_SINGLE_REQUESTED';
+export const requestSingleContent = (bundle, id) => ({
+  type: CONTENT_SINGLE_REQUESTED,
+  payload: { bundle, id },
+});
+
+export const CONTENT_SINGLE_LOADED = 'CONTENT_SINGLE_LOADED';
+function* loadSingleContent(action) {
+  const {
+    payload: { bundle, id },
+  } = action;
+  try {
+    yield put(resetLoading());
+    yield put(showLoading());
+
+    const content = yield call(api, 'content_single', {
+      parameters: { bundle, id },
+      queryString: {},
+    });
+    yield put({
+      type: CONTENT_SINGLE_LOADED,
+      payload: {
+        content,
+      },
+    });
+  } catch (error) {
+    yield put(setMessage(error.toString(), MESSAGE_ERROR));
+  } finally {
+    yield put(hideLoading());
+  }
+}
+
 export const CONTENT_SAVE = 'CONTENT_SAVE';
 export const contentSave = content => ({
   type: CONTENT_SAVE,
@@ -291,6 +323,7 @@ function* deleteContent({ payload: { content } }) {
 
 export default function* rootSaga() {
   yield takeLatest(CONTENT_REQUESTED, loadContent);
+  yield takeLatest(CONTENT_SINGLE_REQUESTED, loadSingleContent);
   yield takeLatest(ACTION_EXECUTE, executeAction);
   yield takeLatest(CONTENT_SAVE, saveContent);
   yield takeLatest(CONTENT_ADD, addContent);

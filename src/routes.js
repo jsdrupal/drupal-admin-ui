@@ -4,8 +4,9 @@ import Content from './components/05_pages/Content/Content';
 import Permissions from './components/05_pages/Permissions/Permissions';
 import Roles from './components/05_pages/Roles';
 import Dblog from './components/05_pages/Reports/Dblog';
-import NodeForm from './components/05_pages/NodeForm';
+import NodeEditForm from './components/05_pages/NodeEditForm';
 import widgets from './components/05_pages/NodeForm/Widgets';
+import NodeAddForm from './components/05_pages/NodeAddForm';
 
 // @todo Share this with Drupal
 const routes = {
@@ -15,8 +16,17 @@ const routes = {
   '/admin/reports/dblog': Dblog,
   '/node/add': AddContent,
   // eslint-disable-next-line react/prop-types
+  '/node/:bundle/:id/edit': ({ match }) => (
+    <NodeEditForm
+      entityTypeId="node"
+      bundle={match.params.bundle}
+      widgets={widgets}
+      id={match.params.id}
+    />
+  ),
+  // eslint-disable-next-line react/prop-types
   '/node/add/:bundle': ({ match }) => (
-    <NodeForm
+    <NodeAddForm
       entityTypeId="node"
       bundle={match.params.bundle}
       widgets={widgets}
