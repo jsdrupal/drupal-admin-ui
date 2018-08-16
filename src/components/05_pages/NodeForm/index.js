@@ -131,16 +131,6 @@ class NodeForm extends React.Component {
     // @todo Remove in https://github.com/jsdrupal/drupal-admin-ui/issues/245
     const { data: entity } = this.state.entity;
 
-    entity.attributes.field_summary = entity.attributes.field_summary || {
-      value: 'Empty',
-      format: 'basic_html',
-    };
-    entity.attributes.field_recipe_instruction = entity.attributes
-      .field_recipe_instruction || {
-      value: 'Empty',
-      format: 'basic_html',
-    };
-
     const data = {
       ...entity,
       type: `${this.props.entityTypeId}--${this.props.bundle}`,
