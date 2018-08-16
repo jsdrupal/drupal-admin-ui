@@ -42,15 +42,16 @@ class NodeForm extends React.Component {
       }),
       PropTypes.bool,
     ]),
+    onChange: PropTypes.func,
   };
 
   static defaultProps = {
     schema: false,
     uiSchema: false,
+    onChange: () => {},
   };
 
   state = {
-    entity: null,
     restorableEntity: null,
   };
 
@@ -97,17 +98,20 @@ class NodeForm extends React.Component {
   }
 
   onAttributeChange = fieldName => data => {
-    this.setState(prevState => ({
-      entity: {
-        data: {
-          ...prevState.entity.data,
-          attributes: {
-            ...prevState.entity.data.attributes,
-            [fieldName]: data,
+    this.setState(
+      prevState => ({
+        entity: {
+          data: {
+            ...prevState.entity.data,
+            attributes: {
+              ...prevState.entity.data.attributes,
+              [fieldName]: data,
+            },
           },
         },
-      },
-    }));
+      }),
+      () => {debugger; return this.props.onChange(this.state.entity);},
+    );
   };
 
   onRelationshipChange = fieldName => data => {
@@ -118,19 +122,22 @@ class NodeForm extends React.Component {
     } else {
       fieldData = Object.values(data);
     }
-    this.setState(prevState => ({
-      entity: {
-        data: {
-          ...prevState.entity.data,
-          relationships: {
-            ...prevState.entity.data.relationships,
-            [fieldName]: {
-              data: fieldData,
+    this.setState(
+      prevState => ({
+        entity: {
+          data: {
+            ...prevState.entity.data,
+            relationships: {
+              ...prevState.entity.data.relationships,
+              [fieldName]: {
+                data: fieldData,
+              },
             },
           },
         },
-      },
-    }));
+      }),
+      () => this.props.onChange(this.state.entity),
+    );
   };
 
   onSave = () => {
@@ -212,7 +219,7 @@ class NodeForm extends React.Component {
 
   render() {
     let result = null;
-    if (this.props.schema && this.props.uiSchema) {
+    if (this.props.schema && this.props.uiSchema && this.state.entity) {
       const { right, left } = sortUISchemaFields(
         createUISchema(
           this.props.uiSchema.fieldSchema,
@@ -262,7 +269,7 @@ styles = {
 };
 
 const extractRestorableEntity = (state, bundle) => {
-  return state.content.restorableContentByBundle[bundle];
+  return state.content.contentAddByBundle[bundle];
 };
 
 const mapStateToProps = (state, { bundle, entityTypeId }) => ({

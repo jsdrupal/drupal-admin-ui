@@ -2,13 +2,14 @@ import {
   CONTENT_LOADED,
   CONTENT_SINGLE_LOADED,
   CONTENT_DELETE,
+  CONTENT_ADD_CHANGE,
 } from '../actions/content';
 
 export const initialState = {
   contentList: [],
   contentById: {},
   links: {},
-  restorableContentByBundle: {},
+  contentAddByBundle: {},
 };
 
 export default (state = initialState, action) => {
@@ -18,6 +19,14 @@ export default (state = initialState, action) => {
         ...state,
         contentById: {
           [action.payload.content.data.id]: action.payload.content,
+        },
+      };
+    case CONTENT_ADD_CHANGE:
+      return {
+        ...state,
+        contentAddByBundle: {
+          ...state.contentAddByBundle,
+          [action.payload.bundle]: action.payload.entity,
         },
       };
     case CONTENT_LOADED: {
