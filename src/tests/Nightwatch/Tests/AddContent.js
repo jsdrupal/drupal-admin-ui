@@ -8,19 +8,19 @@ module.exports = {
 
     browser.expect
       .element(
-        '[data-nightwatch="node-type-list"] a:nth-child(1) span:first-child',
+        '[data-nightwatch="node-type-list"] li:nth-child(1) a span:first-child',
       )
       .text.to.equal('Article');
 
     browser.expect
       .element(
-        '[data-nightwatch="node-type-list"] a:nth-child(2) span:first-child',
+        '[data-nightwatch="node-type-list"] li:nth-child(2) a span:first-child',
       )
       .text.to.equal('Basic page');
 
     browser.expect
       .element(
-        '[data-nightwatch="node-type-list"] a:nth-child(3) span:first-child',
+        '[data-nightwatch="node-type-list"] li:nth-child(3) a span:first-child',
       )
       .text.to.equal('Recipe');
 

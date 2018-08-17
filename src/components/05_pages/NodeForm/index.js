@@ -1,20 +1,22 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { css } from 'emotion';
 
-import FormControl from '@material-ui/core/FormControl';
 import Paper from '@material-ui/core/Paper';
 import Divider from '@material-ui/core/Divider';
 import Button from '@material-ui/core/Button';
 
 import SchemaPropType from './SchemaPropType';
-import PageTitle from '../../02_atoms/PageTitle';
 
 import { contentAdd } from '../../../actions/content';
 import { requestSchema, requestUiSchema } from '../../../actions/schema';
 
-import { createEntity, createUISchema } from '../../../utils/api/schema';
+import {
+  createEntity,
+  createUISchema,
+  sortUISchemaFields,
+} from '../../../utils/api/schema';
 
 let styles;
 
@@ -46,8 +48,14 @@ class NodeForm extends React.Component {
     uiSchema: false,
   };
 
+  state = {};
+
   static getDerivedStateFromProps(props, prevState) {
     if (!props.schema) {
+      return prevState;
+    }
+
+    if (!props.uiSchema) {
       return prevState;
     }
 
@@ -64,7 +72,7 @@ class NodeForm extends React.Component {
     // Just contain values which are in the ui metadata.
     state.entity.data.attributes = Object.entries(state.entity.data.attributes)
       .filter(([key]) =>
-        Object.keys(props.uiSchema)
+        Object.keys(props.uiSchema.formDisplaySchema)
           .concat(['type'])
           .includes(key),
       )
@@ -124,16 +132,6 @@ class NodeForm extends React.Component {
     // @todo Remove in https://github.com/jsdrupal/drupal-admin-ui/issues/245
     const { data: entity } = this.state.entity;
 
-    entity.attributes.field_summary = entity.attributes.field_summary || {
-      value: 'Empty',
-      format: 'basic_html',
-    };
-    entity.attributes.field_recipe_instruction = entity.attributes
-      .field_recipe_instruction || {
-      value: 'Empty',
-      format: 'basic_html',
-    };
-
     const data = {
       ...entity,
       type: `${this.props.entityTypeId}--${this.props.bundle}`,
@@ -145,77 +143,89 @@ class NodeForm extends React.Component {
     schema.properties.data.properties.attributes.properties[fieldName] ||
     schema.properties.data.properties.relationships.properties[fieldName];
 
+  createField = ({ fieldName, widget, inputProps }) => {
+    // @todo We need to pass along props.
+    // @todo How do we handle cardinality together with jsonapi
+    // making a distinction between single value fields and multi value fields.
+    const fieldSchema = this.getSchemaInfo(this.props.schema, fieldName);
+
+    const {
+      attributes,
+      relationships,
+    } = this.props.schema.properties.data.properties;
+
+    const propType =
+      (attributes.properties[fieldName] && 'attributes') ||
+      (relationships.properties[fieldName] && 'relationships');
+
+    return React.createElement(widget, {
+      key: fieldName,
+      entityTypeId: this.props.entityTypeId,
+      bundle: this.props.bundle,
+      fieldName,
+      classes: {
+        root: styles.widgetRoot,
+      },
+      value: this.state.entity.data[propType][fieldName],
+      label: fieldSchema && fieldSchema.title,
+      schema: fieldSchema,
+      onChange: (propType === 'attributes'
+        ? this.onAttributeChange
+        : this.onRelationshipChange)(fieldName),
+      required: this.props.schema.properties.data.properties.attributes.required.includes(
+        fieldName,
+      ),
+      inputProps,
+    });
+  };
+
   render() {
-    return (
-      <Fragment>
-        <PageTitle>Create {this.props.bundle}</PageTitle>
-        {this.props.schema &&
-          this.props.uiSchema && (
-            <Paper>
-              <div className={styles.container}>
-                <FormControl margin="normal" fullWidth>
-                  {createUISchema(
-                    this.props.uiSchema.fieldSchema,
-                    this.props.uiSchema.formDisplaySchema,
-                    this.props.widgets,
-                  )
-                    .map(({ fieldName, widget, inputProps }) => {
-                      // @todo We need to pass along props.
-                      // @todo How do we handle cardinality together with jsonapi
-                      // making a distinction between single value fields and multi value fields.
-                      const fieldSchema = this.getSchemaInfo(
-                        this.props.schema,
-                        fieldName,
-                      );
-
-                      const {
-                        attributes,
-                        relationships,
-                      } = this.props.schema.properties.data.properties;
-
-                      const propType =
-                        (attributes.properties[fieldName] && 'attributes') ||
-                        (relationships.properties[fieldName] &&
-                          'relationships');
-
-                      return React.createElement(widget, {
-                        key: fieldName,
-                        entityTypeId: this.props.entityTypeId,
-                        bundle: this.props.bundle,
-                        fieldName,
-                        value: this.state.entity.data[propType][fieldName],
-                        label: fieldSchema && fieldSchema.title,
-                        schema: fieldSchema,
-                        onChange: (propType === 'attributes'
-                          ? this.onAttributeChange
-                          : this.onRelationshipChange)(fieldName),
-                        inputProps,
-                      });
-                    })
-                    .filter(x => x)}
-                </FormControl>
-                <Divider classes={{ root: styles.divider }} />
-                <Button
-                  variant="contained"
-                  color="primary"
-                  onClick={this.onSave}
-                >
-                  Save
-                </Button>
-              </div>
-            </Paper>
-          )}
-      </Fragment>
-    );
+    let result = null;
+    if (this.props.schema && this.props.uiSchema) {
+      const { right, left } = sortUISchemaFields(
+        createUISchema(
+          this.props.uiSchema.fieldSchema,
+          this.props.uiSchema.formDisplaySchema,
+          this.props.widgets,
+        ),
+        ['promote', 'status', 'sticky'],
+      );
+      result = (
+        <div className={styles.gridRoot}>
+          <Paper classes={{ root: styles.fieldContainer }}>
+            {left.map(this.createField)}
+            <Divider classes={{ root: styles.divider }} />
+            <Button variant="contained" color="primary" onClick={this.onSave}>
+              Save
+            </Button>
+          </Paper>
+          <Paper classes={{ root: styles.fieldContainer }}>
+            {right.map(this.createField)}
+          </Paper>
+        </div>
+      );
+    }
+    return result;
   }
 }
 
 styles = {
-  container: css`
-    padding: 5px 50px 40px;
+  fieldContainer: css`
+    padding: 50px 90px 40px;
   `,
   divider: css`
-    margin: 30px 0;
+    margin: 40px 0;
+  `,
+  gridRoot: css`
+    display: grid;
+    width: 100%;
+    grid-gap: 20px;
+    grid-template-columns: 75% 25%;
+    padding-right: 50px;
+  `,
+  widgetRoot: css`
+    display: flex;
+    align-items: start;
   `,
 };
 

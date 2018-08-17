@@ -4,11 +4,20 @@ import TextField from '@material-ui/core/TextField';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import WidgetPropTypes from '../../05_pages/NodeForm/WidgetPropTypes';
 
-const NumberTextfield = ({ label, value, onChange, fieldName, inputProps }) => (
+const NumberTextfield = ({
+  classes,
+  label,
+  value,
+  onChange,
+  fieldName,
+  required,
+  inputProps,
+}) => (
   <TextField
     id={fieldName}
     value={value}
-    onChange={event => onChange(event.target.value)}
+    fullWidth
+    onChange={event => onChange(Number(event.target.value))}
     InputProps={{
       inputProps,
       endAdornment: inputProps.suffix && (
@@ -21,6 +30,8 @@ const NumberTextfield = ({ label, value, onChange, fieldName, inputProps }) => (
     type="number"
     margin="normal"
     label={label}
+    classes={classes}
+    required={required}
   />
 );
 
@@ -33,7 +44,7 @@ NumberTextfield.propTypes = {
     suffix: PropTypes.string,
     prefix: PropTypes.string,
   }),
-  value: PropTypes.string,
+  value: PropTypes.number,
 };
 
 NumberTextfield.defaultProps = {

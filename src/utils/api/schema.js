@@ -68,4 +68,15 @@ const createUISchema = (fieldSchema, formDisplaySchema, widgets) =>
       return acc;
     }, []);
 
-export { createEntity, createUISchema };
+const sortUISchemaFields = (schema, secondaryColumnFields) =>
+  schema.reduce(
+    (acc, curr) => {
+      acc[
+        (secondaryColumnFields.includes(curr.fieldName) && 'right') || 'left'
+      ].push(curr);
+      return acc;
+    },
+    { right: [], left: [] },
+  );
+
+export { createEntity, createUISchema, sortUISchemaFields };

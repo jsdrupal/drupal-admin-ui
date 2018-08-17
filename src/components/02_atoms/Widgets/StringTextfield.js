@@ -2,23 +2,29 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import TextField from '@material-ui/core/TextField';
 import WidgetPropTypes from '../../05_pages/NodeForm/WidgetPropTypes';
-import MultipleFields from '../MultipleFields/MultipleFields';
 
-const StringTextfield = ({ value, schema, label, onChange }) => (
-  <MultipleFields
-    value={value}
-    onChange={onChange}
-    isMultiple={schema.type === 'array'}
-  >
-    <TextField margin="normal" value={value} label={label} />
-  </MultipleFields>
+const StringTextfield = props => (
+  <TextField
+    id={props.fieldName}
+    value={
+      (Array.isArray(props.value) && props.value.length && props.value[0]) ||
+      props.value
+    }
+    onChange={event => props.onChange(event.target.value)}
+    margin="normal"
+    label={props.label}
+    classes={props.classes}
+    required={props.required}
+    fullWidth
+  />
 );
 
 StringTextfield.propTypes = {
   ...WidgetPropTypes,
+  // @todo This should not be needed after https://github.com/jsdrupal/drupal-admin-ui/issues/195
   value: PropTypes.oneOfType([
-    PropTypes.string,
     PropTypes.arrayOf(PropTypes.string),
+    PropTypes.string,
   ]),
 };
 

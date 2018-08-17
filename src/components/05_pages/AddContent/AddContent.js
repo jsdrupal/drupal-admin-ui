@@ -11,6 +11,10 @@ import ListItemText from '@material-ui/core/ListItemText';
 import PageTitle from '../../02_atoms/PageTitle';
 
 const styles = {
+  menuLink: css`
+    display: inherit;
+    text-decoration: inherit;
+  `,
   root: css`
     margin-bottom: 50px;
   `,
@@ -35,20 +39,17 @@ export default class extends Component {
       <Paper>
         <List data-nightwatch="node-type-list">
           {Object.keys(this.props.contentTypes).map(contentType => (
-            <ListItem
-              button
-              component={Link}
-              to={`/node/add/${contentType}`}
-              key={`node-add-${contentType}`}
-            >
-              <ListItemText
-                primary={this.props.contentTypes[contentType].name}
-                secondary={
-                  <Markup
-                    content={this.props.contentTypes[contentType].description}
-                  />
-                }
-              />
+            <ListItem component="li" key={`node-add-${contentType}`}>
+              <Link className={styles.menuLink} to={`/node/add/${contentType}`}>
+                <ListItemText
+                  primary={this.props.contentTypes[contentType].name}
+                  secondary={
+                    <Markup
+                      content={this.props.contentTypes[contentType].description}
+                    />
+                  }
+                />
+              </Link>
             </ListItem>
           ))}
         </List>

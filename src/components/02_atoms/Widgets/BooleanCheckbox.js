@@ -2,7 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import CheckBox from '@material-ui/core/Checkbox';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
+import { css } from 'emotion';
 import WidgetPropTypes from '../../05_pages/NodeForm/WidgetPropTypes';
+
+let styles;
 
 const BooleanCheckbox = props => {
   const { onChange, label, value } = props;
@@ -19,6 +22,8 @@ const BooleanCheckbox = props => {
         />
       }
       label={label}
+      classes={styles}
+      required={props.required}
     />
   );
 };
@@ -30,6 +35,12 @@ BooleanCheckbox.propTypes = {
 
 BooleanCheckbox.defaultProps = {
   value: false,
+};
+
+styles = {
+  root: css`
+    align-items: center;
+  `,
 };
 
 export default BooleanCheckbox;

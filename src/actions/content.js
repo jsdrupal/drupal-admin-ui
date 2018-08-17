@@ -1,4 +1,11 @@
-import { put, call, takeLatest, select, all } from 'redux-saga/effects';
+import {
+  put,
+  call,
+  takeLatest,
+  takeEvery,
+  select,
+  all,
+} from 'redux-saga/effects';
 import {
   showLoading,
   hideLoading,
@@ -98,6 +105,38 @@ function* loadContent(action) {
       type: CONTENT_LOADED,
       payload: {
         contentList,
+      },
+    });
+  } catch (error) {
+    yield put(setMessage(error.toString(), MESSAGE_ERROR));
+  } finally {
+    yield put(hideLoading());
+  }
+}
+
+export const CONTENT_SINGLE_REQUESTED = 'CONTENT_SINGLE_REQUESTED';
+export const requestSingleContent = (bundle, id) => ({
+  type: CONTENT_SINGLE_REQUESTED,
+  payload: { bundle, id },
+});
+
+export const CONTENT_SINGLE_LOADED = 'CONTENT_SINGLE_LOADED';
+function* loadSingleContent(action) {
+  const {
+    payload: { bundle, id },
+  } = action;
+  try {
+    yield put(resetLoading());
+    yield put(showLoading());
+
+    const content = yield call(api, 'content_single', {
+      parameters: { bundle, id },
+      queryString: {},
+    });
+    yield put({
+      type: CONTENT_SINGLE_LOADED,
+      payload: {
+        content,
       },
     });
   } catch (error) {
@@ -290,9 +329,11 @@ function* deleteContent({ payload: { content } }) {
 }
 
 export default function* rootSaga() {
-  yield takeLatest(CONTENT_REQUESTED, loadContent);
-  yield takeLatest(ACTION_EXECUTE, executeAction);
+  yield takeEvery(CONTENT_REQUESTED, loadContent);
+  yield takeEvery(CONTENT_SAVE, saveContent);
+  yield takeLatest(CONTENT_SINGLE_REQUESTED, loadSingleContent);
+  yield takeEvery(ACTION_EXECUTE, executeAction);
   yield takeLatest(CONTENT_SAVE, saveContent);
   yield takeLatest(CONTENT_ADD, addContent);
-  yield takeLatest(CONTENT_DELETE, deleteContent);
+  yield takeEvery(CONTENT_DELETE, deleteContent);
 }

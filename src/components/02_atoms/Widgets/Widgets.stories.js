@@ -3,6 +3,8 @@ import React from 'react';
 import { storiesOf } from '@storybook/react';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { action } from '@storybook/addon-actions';
+// eslint-disable-next-line import/no-extraneous-dependencies
+import { boolean, number, object, text } from '@storybook/addon-knobs/react';
 
 import BooleanCheckbox from './BooleanCheckbox';
 import FileUploadWidget from './FileUploadWidget';
@@ -10,6 +12,7 @@ import NumberTextfield from './NumberTextfield';
 import OptionsSelect from './OptionsSelect';
 import StringTextfield from './StringTextfield';
 import DatetimeTimestamp from './DatetimeTimestamp';
+import TextTextarea from './TextTextarea';
 
 /**
  * There is a known issue with addWithJSX and action() calls.
@@ -22,23 +25,29 @@ import DatetimeTimestamp from './DatetimeTimestamp';
 const onChangeAction = action('onChange');
 onChangeAction.toString = () => "action('onChange')";
 
-const fileData = {
-  file: {
-    type: 'file--file',
-    url: 'url',
-    id: 'id',
-    filename: 'filename',
-  },
-  meta: { alt: 'This is an alternative.' },
+const item = i => {
+  const id = `id-${i}`;
+  return {
+    id: { id },
+    file: {
+      type: 'file--file',
+      url: `url-${i}`,
+      id: { id },
+    },
+    meta: {
+      alt: text(`alt-${i}`, `This is an alternative(${i}).`),
+    },
+  };
 };
 
 storiesOf('Widgets/BooleanCheckbox', module).addWithJSX('Default', () => (
   <BooleanCheckbox
     fieldName="ControlOne"
-    label="CheckBox"
+    label={text('BooleanCheckbox: label', 'CheckBox')}
     onChange={onChangeAction}
   />
 ));
+
 storiesOf('Widgets/FileUploadWidget/Single File', module).addWithJSX(
   'Default',
   () => (
@@ -46,20 +55,18 @@ storiesOf('Widgets/FileUploadWidget/Single File', module).addWithJSX(
       bundle="node"
       entityTypeId="Article"
       fieldName="image-file"
-      label="File to be uploaded"
+      label={text('FileUploadWidget: label(Single)', 'File to be uploaded')}
       onChange={onChangeAction}
       value={{
-        data: {
-          0: fileData,
-        },
+        data: item(1),
       }}
-      schema={{
+      schema={object('FileUploadWidget: schema(Single)', {
         properties: {
           data: {
             type: 'object',
           },
         },
-      }}
+      })}
     />
   ),
 );
@@ -71,23 +78,23 @@ storiesOf('Widgets/FileUploadWidget/Multiple File', module).addWithJSX(
       bundle="node"
       entityTypeId="Article"
       fieldName="image-file"
-      label="Files to be uploaded"
+      label={text('FileUploadWidget: label(Multiple)', 'Files to be uploaded')}
       onChange={onChangeAction}
       value={{
         data: {
-          0: fileData,
-          1: fileData,
-          2: fileData,
+          0: item(10),
+          1: item(20),
+          2: item(30),
         },
       }}
-      schema={{
+      schema={object('FileUploadWidget: schema(Multiple)', {
         maxItems: 10,
         properties: {
           data: {
             type: 'array',
           },
         },
-      }}
+      })}
     />
   ),
 );
@@ -95,44 +102,61 @@ storiesOf('Widgets/FileUploadWidget/Multiple File', module).addWithJSX(
 storiesOf('Widgets/NumberTextfield', module).addWithJSX('Default', () => (
   <NumberTextfield
     fieldName="textField"
-    label="0-9 in steps of 1"
+    label={text('NumberTextfield: label', '0-9 in steps of 1')}
     inputProps={{
-      min: 0,
-      max: 9,
-      step: 1,
-      suffix: ' for a storybook.',
-      prefix: 'interger range',
+      min: number('min', 0),
+      max: number('max', 9),
+      step: number('step', 1),
+      prefix: text('prefix', 'interger range'),
+      suffix: text('suffix', ' for a storybook.'),
     }}
     onChange={onChangeAction}
-    value="5"
+    value={text('value', '5')}
   />
 ));
 
 storiesOf('Widgets/OptionsSelect', module).addWithJSX('Default', () => (
   <OptionsSelect
     fieldName="option"
-    helpText="Help text."
-    label="A Simple Label"
+    helpText={text('OptionsSelect:helpText', 'Help text.')}
+    label={text('OptionsSelect:label', 'A Simple Label')}
     onChange={onChangeAction}
-    schema={{ enum: ['One', 'Two', 'Three', 'Four'], default: 'Two' }}
-    value="Entered text."
+    schema={object('OptionsSelect: schema', {
+      enum: ['One', 'Two', 'Three', 'Four'],
+      default: 'Two',
+    })}
+    value={text('OptionsSelect: value', 'Entered text.')}
   />
 ));
 storiesOf('Widgets/StringTextfield', module).addWithJSX('Default', () => (
   <StringTextfield
     fieldName="userBio"
-    label="A Simple Label"
+    label={text('StringTextfield: label', 'A Simple Label')}
     onChange={onChangeAction}
-    value="Entered text."
+    value={text('StringTextfield: value', 'Entered text.')}
   />
 ));
 
 storiesOf('Widgets/DatetimeTimestamp', module).addWithJSX('Default', () => (
   <DatetimeTimestamp
     fieldName="EventStart"
-    label="A Simple Label"
+    label={text('DateTimestamp: label', 'A Simple Label')}
     name="startTime"
     onChange={onChangeAction}
-    value="0"
+    required={boolean('DatetimeTimestamp: required', true)}
+    value={text('DateTimestamp: value', '2000-01-01T00:00:00')}
+  />
+));
+
+storiesOf('Widgets/TextTextarea', module).addWithJSX('Default', () => (
+  <TextTextarea
+    fieldName="SummaryText"
+    label={text('TextTextarea: label', 'A Simple wysiwyg editor')}
+    name="summaryText"
+    onChange={onChangeAction}
+    value={object('TextTextarea: value', {
+      value:
+        'Lorem ipsum dolor sit amet, <b>consectetur adipiscing elit</b>, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
+    })}
   />
 ));
