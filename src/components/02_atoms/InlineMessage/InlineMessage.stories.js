@@ -3,7 +3,7 @@ import React from 'react';
 import { storiesOf } from '@storybook/react';
 import { text } from '@storybook/addon-knobs/react';
 /* eslint-enable import/no-extraneous-dependencies */
-import BannerMessage from './InlineMessage';
+import InlineMessage from './InlineMessage';
 import {
   MESSAGE_SEVERITY_ERROR,
   MESSAGE_SEVERITY_SUCCESS,
@@ -13,13 +13,13 @@ const message = "I'm the operator with my pocket calculator.";
 
 storiesOf('BannerMessage', module)
   .addWithJSX('Error', () => (
-    <BannerMessage
+    <InlineMessage
       message={text('Message', message)}
       type={MESSAGE_SEVERITY_ERROR}
     />
   ))
   .addWithJSX('Success', () => (
-    <BannerMessage
+    <InlineMessage
       message={text('Message', message)}
       messageSeverity={MESSAGE_SEVERITY_SUCCESS}
     />
