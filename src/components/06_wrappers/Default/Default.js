@@ -23,7 +23,6 @@ import HelpIcon from '@material-ui/icons/Help';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 
-import BannerMessage from '../../02_atoms/BannerMessage/BannerMessage';
 import Snackbar from '../../02_atoms/SnackbarMessage/SnackbarMessage';
 import ErrorBoundary from '../ErrorBoundary/ErrorBoundary';
 
@@ -34,10 +33,6 @@ import {
   setMessage,
   clearMessage,
 } from '../../../actions/application';
-import {
-  MESSAGE_INTERFACE_BANNER,
-  MESSAGE_INTERFACE_SNACKBAR,
-} from '../../../constants/messages';
 
 let styles;
 
@@ -112,27 +107,14 @@ class Default extends React.Component {
 
       <main className={styles.main} id={styles.main}>
         <ErrorBoundary>
-          {this.props.messages.map(
-            message =>
-              message.messageInterface === MESSAGE_INTERFACE_BANNER ? (
-                <BannerMessage
-                  {...message}
-                  key={message.key}
-                  type={message.messageSeverity}
-                />
-              ) : null,
-          )}
           {this.props.children}
+          {this.props.messages.map(message => (
+            <Snackbar
+              {...message}
+              onClose={() => this.props.clearMessage(message.key)}
+            />
+          ))}
         </ErrorBoundary>
-        {this.props.messages.map(
-          message =>
-            message.messageInterface === MESSAGE_INTERFACE_SNACKBAR ? (
-              <Snackbar
-                {...message}
-                onClose={() => this.props.clearMessage(message.key)}
-              />
-            ) : null,
-        )}
       </main>
     </div>
   );

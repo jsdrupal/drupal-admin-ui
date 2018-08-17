@@ -44,7 +44,6 @@ export default (state = initialState, action) => {
       const messages = [...state.messages];
       messages.push({
         message: action.payload.message,
-        messageInterface: action.payload.messageInterface,
         messageSeverity: action.payload.messageSeverity,
         key: Date.now() + Math.random(),
         open: true,

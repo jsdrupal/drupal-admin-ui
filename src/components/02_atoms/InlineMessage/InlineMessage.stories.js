@@ -3,7 +3,7 @@ import React from 'react';
 import { storiesOf } from '@storybook/react';
 import { text } from '@storybook/addon-knobs/react';
 /* eslint-enable import/no-extraneous-dependencies */
-import BannerMessage from './BannerMessage';
+import BannerMessage from './InlineMessage';
 import {
   MESSAGE_SEVERITY_ERROR,
   MESSAGE_SEVERITY_SUCCESS,

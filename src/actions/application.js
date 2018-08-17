@@ -5,10 +5,7 @@ import {
   resetLoading,
 } from 'react-redux-loading-bar';
 import api from '../utils/api/api';
-import {
-  MESSAGE_SEVERITY_ERROR,
-  MESSAGE_INTERFACE_BANNER,
-} from '../constants/messages';
+import { MESSAGE_SEVERITY_ERROR } from '../constants/messages';
 
 export const OPEN_DRAWER = 'OPEN_DRAWER';
 export const openDrawer = () => ({
@@ -25,17 +22,14 @@ export const SET_MESSAGE = 'SET_MESSAGE';
 /**
  *
  * @param {string} message - the message content
- * @param {string} messageInterface - which of the renderable message areas –
- *  listed at constants/messages.js
  * @param {string} severity - the severity level of the message, one of the levels
  *  listed at constants/messages.js
  * @returns {{type: string, payload: {message: *, messageInterface: *, messageSeverity: *}}}
  */
-export const setMessage = (message, messageInterface, messageSeverity) => ({
+export const setMessage = (message, messageSeverity) => ({
   type: SET_MESSAGE,
   payload: {
     message,
-    messageInterface,
     messageSeverity,
   },
 });
@@ -78,18 +72,11 @@ function* loadMenu() {
       yield put(
         setMessage(
           'Unable to access data from Drupal. Did you set REACT_APP_DRUPAL_BASE_URL to localhost instead of 127.0.0.1?',
-          MESSAGE_INTERFACE_BANNER,
           MESSAGE_SEVERITY_ERROR,
         ),
       );
     }
-    yield put(
-      setMessage(
-        error.toString(),
-        MESSAGE_INTERFACE_BANNER,
-        MESSAGE_SEVERITY_ERROR,
-      ),
-    );
+    yield put(setMessage(error.toString(), MESSAGE_SEVERITY_ERROR));
   } finally {
     yield put(hideLoading());
   }

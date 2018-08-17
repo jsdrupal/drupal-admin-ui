@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import BannerMessage from '../../02_atoms/BannerMessage/BannerMessage';
+import InlineMessage from '../../02_atoms/InlineMessage/InlineMessage';
 
 import { MESSAGE_SEVERITY_ERROR } from '../../../constants/messages';
 
@@ -23,7 +23,7 @@ class ErrorBoundary extends React.Component {
   render() {
     if (this.state.error) {
       return (
-        <BannerMessage
+        <InlineMessage
           message={this.state.error.toString()}
           messageSeverity={MESSAGE_SEVERITY_ERROR}
         />
