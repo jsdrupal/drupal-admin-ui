@@ -188,7 +188,7 @@ class NodeForm extends React.Component {
           this.props.uiSchema.formDisplaySchema,
           this.props.widgets,
         ),
-        ['promote', 'status', 'sticky'],
+        ['promote', 'status', 'sticky', 'uid', 'created'],
       );
       result = (
         <div className={styles.gridRoot}>
