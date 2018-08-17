@@ -186,6 +186,7 @@ class NodeForm extends React.Component {
         createUISchema(
           this.props.uiSchema.fieldSchema,
           this.props.uiSchema.formDisplaySchema,
+          this.props.uiSchema.fieldStorageConfig,
           this.props.widgets,
         ),
         ['promote', 'status', 'sticky'],
