@@ -110,7 +110,7 @@ class NodeForm extends React.Component {
           },
         },
       }),
-      () => {debugger; return this.props.onChange(this.state.entity);},
+      () => this.props.onChange(this.props.bundle, this.state.entity),
     );
   };
 
@@ -136,7 +136,7 @@ class NodeForm extends React.Component {
           },
         },
       }),
-      () => this.props.onChange(this.state.entity),
+      () => this.props.onChange(this.props.bundle, this.state.entity),
     );
   };
 
