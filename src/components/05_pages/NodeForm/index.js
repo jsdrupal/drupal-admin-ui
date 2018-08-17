@@ -12,6 +12,8 @@ import SchemaPropType from './SchemaPropType';
 import { contentAdd } from '../../../actions/content';
 import { requestSchema, requestUiSchema } from '../../../actions/schema';
 
+import MultipleFields from '../../02_atoms/MultipleFields/MultipleFields';
+
 import {
   createEntity,
   createUISchema,
@@ -158,7 +160,7 @@ class NodeForm extends React.Component {
       (attributes.properties[fieldName] && 'attributes') ||
       (relationships.properties[fieldName] && 'relationships');
 
-    return React.createElement(widget, {
+    const widgetProps = {
       key: fieldName,
       entityTypeId: this.props.entityTypeId,
       bundle: this.props.bundle,
@@ -176,7 +178,13 @@ class NodeForm extends React.Component {
         fieldName,
       ),
       inputProps,
-    });
+    };
+
+    return widget.multiple ? (
+      <MultipleFields component={widget} {...widgetProps} />
+    ) : (
+      React.createElement(widget, widgetProps)
+    );
   };
 
   render() {

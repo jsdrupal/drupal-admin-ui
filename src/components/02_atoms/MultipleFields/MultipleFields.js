@@ -15,20 +15,20 @@ const Add = styled('div')`
 class MultipleFields extends Component {
   static propTypes = {
     // TODO: Fix PropTypes for other options
-    value: PropTypes.oneOfType([
-      PropTypes.string,
-      PropTypes.arrayOf(PropTypes.string),
-    ]).isRequired,
-    isMultiple: PropTypes.bool.isRequired,
+    value: PropTypes.arrayOf(PropTypes.string).isRequired,
     onChange: PropTypes.func.isRequired,
-    children: PropTypes.oneOfType([
-      PropTypes.arrayOf(PropTypes.node),
-      PropTypes.node,
-    ]).isRequired,
+    component: PropTypes.objectOf({
+      component: PropTypes.objectOf(
+        PropTypes.oneOfType([
+          PropTypes.func,
+          PropTypes.instanceOf(React.Component),
+        ]).isRequired,
+      ).isRequired,
+    }).isRequired,
   };
 
   componentDidMount() {
-    if (!this.props.value && this.props.isMultiple) {
+    if (!this.props.value.length) {
       this.props.onChange(['']);
     }
   }
@@ -37,64 +37,47 @@ class MultipleFields extends Component {
     this.props.onChange([...this.props.value, '']);
   };
 
-  render = () => {
-    if (!this.props.isMultiple) {
-      return React.cloneElement(this.props.children, {
-        value: this.props.value,
-        onChange: event => {
-          this.props.onChange(event.target.value);
-        },
-      });
-    }
-
-    return (
-      <div>
-        <FormLabel component="legend">
-          {this.props.children.props.label}
-        </FormLabel>
-        {this.props.value &&
-          this.props.value.map((value, index) => (
-            // TODO: fix index issue if possible
-            <div key={index}>
-              {React.cloneElement(this.props.children, {
-                value,
-                label: '',
-                onChange: event => {
-                  this.props.value[index] = event.target.value;
+  render = () => (
+    <div>
+      <FormLabel component="legend">{this.props.label}</FormLabel>
+      {this.props.value &&
+        this.props.value.map((value, index) => (
+          // TODO: fix index issue if possible
+          <div key={index}>
+            {React.createElement(this.props.component.component, {
+              ...this.props,
+              value,
+            })}
+            <Button
+              mini
+              variant="fab"
+              color="secondary"
+              className="remove"
+              aria-label="Remove Image"
+              onClick={() => {
+                if (this.props.value.length > 1) {
+                  this.props.value.splice(index, 1);
                   this.props.onChange(this.props.value);
-                },
-              })}
-              <Button
-                mini
-                variant="fab"
-                color="secondary"
-                className="remove"
-                aria-label="Remove Image"
-                onClick={() => {
-                  if (this.props.value.length > 1) {
-                    this.props.value.splice(index, 1);
-                    this.props.onChange(this.props.value);
-                  }
-                }}
-              >
-                <DeleteIcon />
-              </Button>
-            </div>
-          ))}
-        <Add>
-          <Button
-            color="primary"
-            variant="contained"
-            aria-label="Add another item"
-            onClick={this.addAnotherItem}
-          >
-            Add another item
-            <AddIcon />
-          </Button>
-        </Add>
-      </div>
-    );
-  };
+                }
+              }}
+            >
+              <DeleteIcon />
+            </Button>
+          </div>
+        ))}
+      <Add>
+        <Button
+          color="primary"
+          variant="contained"
+          aria-label="Add another item"
+          onClick={this.addAnotherItem}
+        >
+          Add another item
+          <AddIcon />
+        </Button>
+      </Add>
+    </div>
+  );
 }
 
 export default MultipleFields;

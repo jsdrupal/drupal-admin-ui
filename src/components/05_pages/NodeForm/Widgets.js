@@ -11,7 +11,10 @@ import TextTextarea from '../../02_atoms/Widgets/TextTextarea';
 const widgets = {
   options_select: OptionsSelect,
   number: NumberTextfield,
-  string: StringTextfield,
+  string: {
+    component: StringTextfield,
+    multiple: true,
+  },
   boolean_checkbox: BooleanCheckbox,
   datetime_timestamp: DatetimeTimestamp,
   image_image: FileUploadWidget,
