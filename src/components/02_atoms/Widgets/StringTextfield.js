@@ -6,7 +6,10 @@ import WidgetPropTypes from '../../05_pages/NodeForm/WidgetPropTypes';
 const StringTextfield = props => (
   <TextField
     id={props.fieldName}
-    value={props.value}
+    value={
+      (Array.isArray(props.value) && props.value.length && props.value[0]) ||
+      props.value
+    }
     onChange={event => props.onChange(event.target.value)}
     margin="normal"
     label={props.label}
@@ -18,7 +21,11 @@ const StringTextfield = props => (
 
 StringTextfield.propTypes = {
   ...WidgetPropTypes,
-  value: PropTypes.string,
+  // @todo This should not be needed after https://github.com/jsdrupal/drupal-admin-ui/issues/195
+  value: PropTypes.oneOfType([
+    PropTypes.arrayOf(PropTypes.string),
+    PropTypes.string,
+  ]),
 };
 
 StringTextfield.defaultProps = {

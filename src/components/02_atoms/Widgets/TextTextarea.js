@@ -2,6 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { css } from 'emotion';
 import RichTextEditor from 'react-rte';
+import FormLabel from '@material-ui/core/FormLabel';
+import FormControl from '@material-ui/core/FormControl';
+
 import WidgetPropTypes from '../../05_pages/NodeForm/WidgetPropTypes';
 
 let styles;
@@ -15,9 +18,16 @@ let styles;
 class TextTextarea extends React.Component {
   static propTypes = {
     ...WidgetPropTypes,
-    value: PropTypes.shape({
-      value: PropTypes.string.isRequired,
-    }),
+    value: PropTypes.oneOfType([
+      PropTypes.shape({
+        value: PropTypes.string.isRequired,
+      }),
+      PropTypes.arrayOf(
+        PropTypes.shape({
+          value: PropTypes.string.isRequired,
+        }),
+      ),
+    ]),
   };
 
   static defaultProps = {
@@ -29,7 +39,12 @@ class TextTextarea extends React.Component {
 
   state = {
     value: RichTextEditor.createValueFromString(
-      (this.props.value && this.props.value.value) || '',
+      // @todo This should not be needed after https://github.com/jsdrupal/drupal-admin-ui/issues/195
+      (Array.isArray(this.props.value) &&
+        this.props.value.length &&
+        this.props.value[0].value) ||
+        this.props.value.value ||
+        '',
       'html',
     ),
   };
@@ -47,11 +62,16 @@ class TextTextarea extends React.Component {
 
   render() {
     return (
-      <RichTextEditor
-        className={styles.container}
-        value={this.state.value}
-        onChange={this.onChange}
-      />
+      <FormControl margin="normal" fullWidth required={this.props.required}>
+        <FormLabel classes={{ root: styles.label }}>
+          {this.props.label}
+        </FormLabel>
+        <RichTextEditor
+          className={styles.container}
+          value={this.state.value}
+          onChange={this.onChange}
+        />
+      </FormControl>
     );
   }
 }
@@ -61,6 +81,9 @@ styles = {
     .public-DraftEditor-content {
       min-height: 110px;
     }
+  `,
+  label: css`
+    margin-bottom: 10px;
   `,
 };
 

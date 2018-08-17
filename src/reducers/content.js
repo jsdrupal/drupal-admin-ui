@@ -1,12 +1,24 @@
-import { CONTENT_LOADED, CONTENT_DELETE } from '../actions/content';
+import {
+  CONTENT_LOADED,
+  CONTENT_SINGLE_LOADED,
+  CONTENT_DELETE,
+} from '../actions/content';
 
 export const initialState = {
   contentList: [],
+  contentById: {},
   links: {},
 };
 
 export default (state = initialState, action) => {
   switch (action.type) {
+    case CONTENT_SINGLE_LOADED:
+      return {
+        ...state,
+        contentById: {
+          [action.payload.content.data.id]: action.payload.content,
+        },
+      };
     case CONTENT_LOADED: {
       return {
         ...state,

@@ -16,16 +16,13 @@ const BooleanCheckbox = props => {
       control={
         <CheckBox
           id={`${props.fieldName}-cb`}
-          fullWidth
           onChange={event => onChange(event.target.checked)}
           margin="normal"
           value={String(value)}
         />
       }
       label={label}
-      classes={css`
-        ${props.classes} ${styles.widgetRoot};
-      `}
+      classes={styles}
       required={props.required}
     />
   );
@@ -41,7 +38,7 @@ BooleanCheckbox.defaultProps = {
 };
 
 styles = {
-  widgetRoot: css`
+  root: css`
     align-items: center;
   `,
 };

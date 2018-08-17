@@ -14,6 +14,7 @@ import WidgetPropTypes from '../../05_pages/NodeForm/WidgetPropTypes';
 import SchemaPropType from '../../05_pages/NodeForm/SchemaPropType';
 
 import api from './../../../utils/api/api';
+import { getItemsAsArray } from '../../../utils/api/fieldItem';
 
 const styles = {
   results: css`
@@ -42,9 +43,34 @@ class EntityReferenceAutocomplete extends React.Component {
 
   state = {
     inputValue: '',
-    selectedItems: {},
+    selectedItems: null,
     suggestions: new Map(),
   };
+
+  componentDidMount() {
+    if (!this.state.selectedItems && this.props.value) {
+      const [
+        entityTypeId,
+        [bundle],
+      ] = this.determineEntityTypeAndBundlesFromSchema(this.props.schema);
+
+      const multiple = this.props.schema.properties.data.type === 'array';
+      const items = getItemsAsArray(multiple, this.props.value.data);
+      const ids = items.map(({ id }) => id);
+      this.fetchEntitites(entityTypeId, bundle, ids).then(
+        ({ data: entities }) => {
+          this.setState({
+            selectedItems: entities.map(
+              ({ id, attributes: { name: label } }) => ({
+                id,
+                label,
+              }),
+            ),
+          });
+        },
+      );
+    }
+  }
 
   getMaxItems = () => {
     const {
@@ -79,7 +105,10 @@ class EntityReferenceAutocomplete extends React.Component {
     );
 
   handleInputChange = event => {
-    if (this.getMaxItems() === Object.keys(this.state.selectedItems).length) {
+    if (
+      this.state.selectedItems &&
+      this.getMaxItems() === Object.keys(this.state.selectedItems).length
+    ) {
       return;
     }
 
@@ -110,6 +139,24 @@ class EntityReferenceAutocomplete extends React.Component {
     });
   };
 
+  fetchEntitites = (entityTypeId, bundle, ids) =>
+    api(entityTypeId, {
+      queryString: {
+        filter: {
+          id: {
+            condition: {
+              operator: 'IN',
+              path: 'uuid',
+              value: ids,
+            },
+          },
+        },
+      },
+      parameters: {
+        type: bundle,
+      },
+    });
+
   fetchSuggestedEntities = (bundle, type, input) =>
     api(bundle, {
       queryString: {
@@ -133,6 +180,7 @@ class EntityReferenceAutocomplete extends React.Component {
   handleKeyDown = event => {
     const { inputValue, selectedItems } = this.state;
     if (
+      selectedItems &&
       selectedItems.length &&
       !inputValue.length &&
       keycode(event) === 'backspace'
@@ -180,12 +228,16 @@ class EntityReferenceAutocomplete extends React.Component {
     highlightedIndex,
     selectedItem: selectedItems,
   }) => {
-    if (this.getMaxItems() === Object.keys(this.state.selectedItems).length) {
+    if (
+      selectedItems &&
+      this.getMaxItems() === Object.keys(selectedItems).length
+    ) {
       return null;
     }
 
     const isHighlighted = highlightedIndex === index;
-    const isSelected = Object.keys(selectedItems).includes(suggestion.id);
+    const isSelected =
+      selectedItems && Object.keys(selectedItems).includes(suggestion.id);
 
     return (
       <MenuItem
@@ -242,8 +294,9 @@ class EntityReferenceAutocomplete extends React.Component {
                 fullWidth: true,
                 label: this.props.label,
                 InputProps: getInputProps({
-                  startAdornment: Object.entries(selectedItems).map(
-                    ([key, value]) => (
+                  startAdornment: selectedItems
+                    /* eslint-disable prettier/prettier */
+                    ? Object.entries(selectedItems).map(([key, value]) => (
                       <Chip
                         key={key}
                         tabIndex={-1}
@@ -251,8 +304,9 @@ class EntityReferenceAutocomplete extends React.Component {
                         className="chip"
                         onDelete={this.handleDelete(key)}
                       />
-                    ),
-                  ),
+                      ))
+                    : [],
+                  /* eslint-enable prettier/prettier */
                   onChange: this.handleInputChange,
                   onKeyDown: this.handleKeyDown,
                   placeholder: '',
