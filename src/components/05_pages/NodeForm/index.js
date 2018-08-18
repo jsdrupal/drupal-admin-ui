@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { css } from 'emotion';
@@ -52,39 +52,8 @@ class NodeForm extends React.Component {
   };
 
   state = {
-    restorableEntity: null,
+    restored: false,
   };
-
-  static getDerivedStateFromProps(props, prevState) {
-    if (!props.schema) {
-      return prevState;
-    }
-
-    if (!props.uiSchema) {
-      return prevState;
-    }
-
-    if (Object.prototype.hasOwnProperty.call(prevState || {}, 'entity')) {
-      return prevState;
-    }
-
-    const state = {
-      ...prevState,
-      restorableEntity: props.restorableEntity,
-      entity: props.entity || {
-        ...createEntity(props.schema),
-      },
-    };
-    // Just contain values which are in the ui metadata.
-    state.entity.data.attributes = Object.entries(state.entity.data.attributes)
-      .filter(([key]) =>
-        Object.keys(props.uiSchema.formDisplaySchema)
-          .concat(['type'])
-          .includes(key),
-      )
-      .reduce((agg, [key, value]) => ({ ...agg, [key]: value }), {});
-    return state;
-  }
 
   componentDidMount() {
     this.props.requestSchema({
@@ -95,6 +64,12 @@ class NodeForm extends React.Component {
       entityTypeId: this.props.entityTypeId,
       bundle: this.props.bundle,
     });
+
+    this.calculateState(this.props, this.state, state => this.setState(state));
+  }
+
+  componentDidUpdate() {
+    this.calculateState(this.props, this.state, state => this.setState(state));
   }
 
   onAttributeChange = fieldName => data => {
@@ -155,6 +130,39 @@ class NodeForm extends React.Component {
     schema.properties.data.properties.attributes.properties[fieldName] ||
     schema.properties.data.properties.relationships.properties[fieldName];
 
+  calculateState(prevProps, prevState, setState) {
+    if (!prevProps.schema) {
+      return;
+    }
+
+    if (!prevProps.uiSchema) {
+      return;
+    }
+
+    if (prevState.entity) {
+      return;
+    }
+
+    const state = {
+      ...prevState,
+      restorableEntity: prevState.restorableEntity,
+      entity: prevProps.entity || {
+        ...createEntity(prevProps.schema),
+      },
+    };
+
+    // Just contain values which are in the ui metadata.
+    state.entity.data.attributes = Object.entries(state.entity.data.attributes)
+      .filter(([key]) =>
+        Object.keys(prevProps.uiSchema.formDisplaySchema)
+          .concat(['type'])
+          .includes(key),
+      )
+      .reduce((agg, [key, value]) => ({ ...agg, [key]: value }), {});
+
+    setState(state);
+  }
+
   createField = ({ fieldName, widget, inputProps }) => {
     // @todo We need to pass along props.
     // @todo How do we handle cardinality together with jsonapi
@@ -193,9 +201,12 @@ class NodeForm extends React.Component {
 
   renderRestoreSnackbar() {
     return (
-      this.state.restorableEntity && (
+      // Ensure that there was some previously stored entity
+      this.props.restorableEntity &&
+      // Hide thie restore form once the content got restored.
+      !this.state.restored && (
         <Snackbar
-          open={Boolean(this.state.restorableEntity)}
+          open
           ContentProps={{
             'aria-describedby': 'message-id',
           }}
@@ -205,9 +216,12 @@ class NodeForm extends React.Component {
               key="undo"
               color="secondary"
               size="small"
-              onClick={this.setState({
-                entity: this.state.restorableEntity,
-              })}
+              onClick={() =>
+                this.setState({
+                  entity: this.props.restorableEntity,
+                  restored: true,
+                })
+              }
             >
               Restore
             </Button>,
@@ -268,14 +282,9 @@ styles = {
   `,
 };
 
-const extractRestorableEntity = (state, bundle) => {
-  return state.content.contentAddByBundle[bundle];
-};
-
 const mapStateToProps = (state, { bundle, entityTypeId }) => ({
   schema: state.schema.schema[`${entityTypeId}--${bundle}`],
   uiSchema: state.schema.uiSchema[`${entityTypeId}--${bundle}`],
-  restorableEntity: extractRestorableEntity(state, bundle),
 });
 
 export default connect(

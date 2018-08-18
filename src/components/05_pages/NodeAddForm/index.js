@@ -18,8 +18,14 @@ NodeAddForm.propTypes = {
   bundle: PropTypes.string.isRequired,
 };
 
+const extractRestorableEntity = (state, bundle) => {
+  return state.content.contentAddByBundle[bundle];
+};
+
 export default connect(
-  () => ({}),
+  (state, { bundle }) => ({
+    restorableEntity: extractRestorableEntity(state, bundle),
+  }),
   {
     onChange: contentAddChange,
   },
