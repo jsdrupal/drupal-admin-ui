@@ -149,7 +149,7 @@ function* loadSingleContent(action) {
 export const CONTENT_ADD_CHANGE = 'CONTENT_ADD_CHANGE';
 export const contentAddChange = (bundle, entity) => ({
   type: CONTENT_ADD_CHANGE,
-  payload: {bundle, entity},
+  payload: { bundle, entity },
 });
 
 export const CONTENT_SAVE = 'CONTENT_SAVE';
