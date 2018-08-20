@@ -428,7 +428,9 @@ class Content extends Component {
                               </TableCell>
                             }
                             <TableCell>
-                              <label htmlFor={rowSelectId}>{title}</label>
+                              <Link to={`/node/${nid}`}>
+                                <label htmlFor={rowSelectId}>{title}</label>
+                              </Link>
                             </TableCell>
                             <TableCell>
                               {this.props.contentTypes[type].name}
