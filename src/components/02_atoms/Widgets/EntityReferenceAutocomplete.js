@@ -257,6 +257,7 @@ class EntityReferenceAutocomplete extends React.Component {
   renderInput = ({ InputProps, ref, label, ...other }) => (
     <TextField
       label={label}
+      id={InputProps.id}
       // @todo Disable the browser built in autocompletion.
       InputProps={{
         inputRef: ref,
@@ -268,7 +269,7 @@ class EntityReferenceAutocomplete extends React.Component {
 
   render() {
     const { inputValue, selectedItems } = this.state;
-
+    const {fieldName} = this.props
     return (
       <FormControl
         margin="normal"
@@ -310,7 +311,7 @@ class EntityReferenceAutocomplete extends React.Component {
                   onChange: this.handleInputChange,
                   onKeyDown: this.handleKeyDown,
                   placeholder: '',
-                  id: 'integration-downshift-multiple',
+                  id: fieldName,
                 }),
               })}
               {isOpen ? (
