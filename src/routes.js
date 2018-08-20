@@ -16,12 +16,11 @@ const routes = {
   '/admin/reports/dblog': Dblog,
   '/node/add': AddContent,
   // eslint-disable-next-line react/prop-types
-  '/node/:bundle/:id/edit': ({ match }) => (
+  '/node/:nid/edit': ({ match }) => (
     <NodeEditForm
       entityTypeId="node"
-      bundle={match.params.bundle}
       widgets={widgets}
-      id={match.params.id}
+      nid={match.params.nid}
     />
   ),
   // eslint-disable-next-line react/prop-types
