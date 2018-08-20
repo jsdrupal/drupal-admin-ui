@@ -4,7 +4,7 @@ import { resetLoading, showLoading } from 'react-redux-loading-bar';
 import { loadDblog, DBLOG_FILTER_UPDATED } from './reports';
 import api from '../utils/api/api';
 import { setMessage } from './application';
-import { MESSAGE_ERROR } from '../constants/messages';
+import { MESSAGE_SEVERITY_ERROR } from '../constants/messages';
 
 it('test empty options', () => {
   testSaga(loadDblog, { payload: {} })
@@ -12,7 +12,7 @@ it('test empty options', () => {
     .put(
       setMessage(
         "TypeError: Cannot read property 'sort' of undefined",
-        MESSAGE_ERROR,
+        MESSAGE_SEVERITY_ERROR,
       ),
     )
     .next()

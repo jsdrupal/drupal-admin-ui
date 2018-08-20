@@ -12,7 +12,7 @@ import {
   resetLoading,
 } from 'react-redux-loading-bar';
 import api from '../utils/api/api';
-import { MESSAGE_ERROR } from '../constants/messages';
+import { MESSAGE_SEVERITY_ERROR } from '../constants/messages';
 
 import { setMessage } from './application';
 
@@ -35,7 +35,7 @@ function* loadRoles() {
       },
     });
   } catch (error) {
-    yield put(setMessage(error.toString(), MESSAGE_ERROR));
+    yield put(setMessage(error.toString(), MESSAGE_SEVERITY_ERROR));
   } finally {
     yield put(hideLoading());
     if (yield cancelled()) {

@@ -123,7 +123,7 @@ If someone has made a pull request and you would like to add code to their branc
 
 - First, ping them in #javascript to discuss the addition/changes!
 - Once agreed, you can make a pull request to their fork/branch, which once accepted will appear in the pull request to the main jsdrupal/drupal-admin-ui repo
-- Alternatively, they could give you access to modify their branch directly at https://github.com/<username>/drupal-admin-ui/settings/collaboration (although bear in mind this will give access to their entire repository fork)
+- Alternatively, they could give you access to modify their branch directly at `https://github.com/<username>/drupal-admin-ui/settings/collaboration` (although bear in mind this will give access to their entire repository fork)
 - If you're unable to agree, or unable to get in touch with the author, you could create a new pull request that incorporates the work from their branch
 
   ```

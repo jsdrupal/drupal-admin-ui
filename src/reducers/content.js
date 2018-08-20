@@ -6,7 +6,7 @@ import {
 
 export const initialState = {
   contentList: [],
-  contentById: {},
+  contentByNid: {},
   links: {},
 };
 
@@ -15,8 +15,8 @@ export default (state = initialState, action) => {
     case CONTENT_SINGLE_LOADED:
       return {
         ...state,
-        contentById: {
-          [action.payload.content.data.id]: action.payload.content,
+        contentByNid: {
+          [action.payload.content.attributes.nid]: action.payload.content,
         },
       };
     case CONTENT_LOADED: {

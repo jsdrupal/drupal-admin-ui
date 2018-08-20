@@ -6,7 +6,7 @@ import {
 } from 'react-redux-loading-bar';
 
 import api from '../utils/api/api';
-import { MESSAGE_ERROR } from '../constants/messages';
+import { MESSAGE_SEVERITY_ERROR } from '../constants/messages';
 import { setMessage } from './application';
 
 export const UI_SCHEMA_REQUESTED = 'UI_SCHEMA_REQUESTED';
@@ -25,6 +25,7 @@ function* loadUiSchema(action) {
     const [
       { data: fieldSchema },
       { data: formDisplaySchema },
+      { data: fieldStorageConfig },
     ] = yield Promise.all([
       api('field_schema', {
         queryString: {
@@ -36,6 +37,11 @@ function* loadUiSchema(action) {
           filter: { targetEntityType: entityTypeId, bundle, mode: 'default' },
         },
       }),
+      api('field_storage_config', {
+        queryString: {
+          filter: { condition: { path: 'entity_type', value: entityTypeId } },
+        },
+      }),
     ]);
 
     yield put({
@@ -45,10 +51,11 @@ function* loadUiSchema(action) {
         bundle,
         fieldSchema,
         formDisplaySchema,
+        fieldStorageConfig,
       },
     });
   } catch (error) {
-    yield put(setMessage(error.toString(), MESSAGE_ERROR));
+    yield put(setMessage(error.toString(), MESSAGE_SEVERITY_ERROR));
   } finally {
     yield put(hideLoading());
   }
@@ -81,7 +88,7 @@ function* loadSchema(action) {
       },
     });
   } catch (error) {
-    yield put(setMessage(error.toString(), MESSAGE_ERROR));
+    yield put(setMessage(error.toString(), MESSAGE_SEVERITY_ERROR));
   } finally {
     yield put(hideLoading());
   }

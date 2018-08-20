@@ -186,9 +186,10 @@ class NodeForm extends React.Component {
         createUISchema(
           this.props.uiSchema.fieldSchema,
           this.props.uiSchema.formDisplaySchema,
+          this.props.uiSchema.fieldStorageConfig,
           this.props.widgets,
         ),
-        ['promote', 'status', 'sticky'],
+        ['promote', 'status', 'sticky', 'uid', 'created'],
       );
       result = (
         <div className={styles.gridRoot}>

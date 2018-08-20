@@ -33,6 +33,7 @@ export default (state = initialState, action) => {
           [`${action.payload.entityTypeId}--${action.payload.bundle}`]: {
             fieldSchema,
             formDisplaySchema,
+            fieldStorageConfig: action.payload.fieldStorageConfig,
           },
         },
       };
