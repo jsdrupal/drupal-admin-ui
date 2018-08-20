@@ -189,7 +189,7 @@ class NodeForm extends React.Component {
           this.props.uiSchema.fieldStorageConfig,
           this.props.widgets,
         ),
-        ['promote', 'status', 'sticky'],
+        ['promote', 'status', 'sticky', 'uid', 'created'],
       );
       result = (
         <div className={styles.gridRoot}>
