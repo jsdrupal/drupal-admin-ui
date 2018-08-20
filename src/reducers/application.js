@@ -126,18 +126,22 @@ export default (state = initialState, action) => {
       };
     }
     case CONTENT_TYPES_LOADED: {
+      const { data } = action.payload.contentTypes;
       return {
         ...state,
-        contentTypes: action.payload.contentTypes.data.reduce(
-          (accumulator, contentType) => ({
-            ...accumulator,
-            [contentType.attributes.type]: {
-              name: contentType.attributes.name,
-              description: contentType.attributes.description,
-            },
-          }),
-          {},
-        ),
+        contentTypes:
+          data instanceof Array
+            ? data.reduce(
+                (accumulator, contentType) => ({
+                  ...accumulator,
+                  [contentType.attributes.type]: {
+                    name: contentType.attributes.name,
+                    description: contentType.attributes.description,
+                  },
+                }),
+                {},
+              )
+            : data,
       };
     }
     case ACTIONS_LOADED: {
