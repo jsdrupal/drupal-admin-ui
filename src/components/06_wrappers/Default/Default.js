@@ -23,15 +23,16 @@ import HelpIcon from '@material-ui/icons/Help';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 
-import Message from '../../02_atoms/Message/Message';
+import Snackbar from '../../02_atoms/SnackbarMessage/SnackbarMessage';
 import ErrorBoundary from '../ErrorBoundary/ErrorBoundary';
 
 import {
   requestMenu,
   closeDrawer,
   openDrawer,
+  setMessage,
+  clearMessage,
 } from '../../../actions/application';
-import { MESSAGE_ERROR } from '../../../constants/messages';
 
 let styles;
 
@@ -106,10 +107,13 @@ class Default extends React.Component {
 
       <main className={styles.main} id={styles.main}>
         <ErrorBoundary>
-          {this.props.messages.map(message => (
-            <Message {...message} key={message.key} type={MESSAGE_ERROR} />
-          ))}
           {this.props.children}
+          {this.props.messages.map(message => (
+            <Snackbar
+              {...message}
+              onClose={() => this.props.clearMessage(message.key)}
+            />
+          ))}
         </ErrorBoundary>
       </main>
     </div>
@@ -169,6 +173,8 @@ Default.propTypes = {
   requestMenu: PropTypes.func.isRequired,
   openDrawer: PropTypes.func.isRequired,
   closeDrawer: PropTypes.func.isRequired,
+  setMessage: PropTypes.func.isRequired,
+  clearMessage: PropTypes.func.isRequired,
   drawerOpen: PropTypes.bool,
 };
 
@@ -189,5 +195,7 @@ export default connect(
     requestMenu,
     openDrawer,
     closeDrawer,
+    setMessage,
+    clearMessage,
   },
 )(Default);
