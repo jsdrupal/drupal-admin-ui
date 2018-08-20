@@ -259,18 +259,19 @@ workflows:
       - unit:
           requires:
             - build
-      - phpunit:
-          requires:
-            - integration_build
-      - nightwatch:
-          requires:
-            - integration_build
+#      - phpunit:
+#          requires:
+#            - integration_build
+#      - nightwatch:
+#          requires:
+#            - integration_build
       - dist:
           requires:
             - lint
             - unit
-            - phpunit
-            - nightwatch
+            - integration_build
+#            - phpunit
+#            - nightwatch
           filters:
            branches:
             only:
@@ -279,8 +280,9 @@ workflows:
           requires:
             - lint
             - unit
-            - phpunit
-            - nightwatch
+            - integration_build
+#            - phpunit
+#            - nightwatch
           filters:
            branches:
             only:
