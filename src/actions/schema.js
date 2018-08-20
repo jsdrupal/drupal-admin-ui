@@ -25,6 +25,7 @@ function* loadUiSchema(action) {
     const [
       { data: fieldSchema },
       { data: formDisplaySchema },
+      { data: fieldStorageConfig },
     ] = yield Promise.all([
       api('field_schema', {
         queryString: {
@@ -36,6 +37,11 @@ function* loadUiSchema(action) {
           filter: { targetEntityType: entityTypeId, bundle, mode: 'default' },
         },
       }),
+      api('field_storage_config', {
+        queryString: {
+          filter: { condition: { path: 'entity_type', value: entityTypeId } },
+        },
+      }),
     ]);
 
     yield put({
@@ -45,6 +51,7 @@ function* loadUiSchema(action) {
         bundle,
         fieldSchema,
         formDisplaySchema,
+        fieldStorageConfig,
       },
     });
   } catch (error) {
