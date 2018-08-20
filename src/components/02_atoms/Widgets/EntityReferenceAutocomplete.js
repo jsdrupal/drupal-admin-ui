@@ -269,7 +269,7 @@ class EntityReferenceAutocomplete extends React.Component {
 
   render() {
     const { inputValue, selectedItems } = this.state;
-    const {fieldName} = this.props
+    const { fieldName } = this.props;
     return (
       <FormControl
         margin="normal"
