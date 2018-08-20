@@ -1,4 +1,4 @@
-import { call, put, select, takeLatest } from 'redux-saga/effects';
+import { call, put, select, takeLatest, takeEvery } from 'redux-saga/effects';
 import {
   showLoading,
   hideLoading,
@@ -133,5 +133,5 @@ function* loadActions() {
 export default function* watchRequestedMenu() {
   yield takeLatest(MENU_REQUESTED, loadMenu);
   yield takeLatest(CONTENT_TYPES_REQUESTED, loadContentTypes);
-  yield takeLatest(ACTIONS_REQUESTED, loadActions);
+  yield takeEvery(ACTIONS_REQUESTED, loadActions);
 }

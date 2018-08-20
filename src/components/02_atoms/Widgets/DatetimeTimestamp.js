@@ -18,7 +18,7 @@ const DatetimeTimestamp = ({
     type="datetime-local"
     defaultValue={value}
     margin="normal"
-    onChange={event => onChange(event.target.value)}
+    onChange={event => onChange(Number(event.target.value))}
     InputLabelProps={{
       shrink: true,
     }}
@@ -29,7 +29,7 @@ const DatetimeTimestamp = ({
 
 DatetimeTimestamp.propTypes = {
   ...WidgetPropTypes,
-  value: PropTypes.string,
+  value: PropTypes.number,
   required: PropTypes.bool.isRequired,
 };
 

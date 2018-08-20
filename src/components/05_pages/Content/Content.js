@@ -86,6 +86,9 @@ const styles = {
   noContentMessage: css`
     padding: 0 1.5rem 1.5rem;
   `,
+  textField: css`
+    width: 300px;
+  `,
 };
 
 class Content extends Component {
@@ -193,20 +196,19 @@ class Content extends Component {
               <Fragment>
                 <div className={styles.filters}>
                   {this.props.contentTypes &&
-                    this.props.actions &&
-                    this.props.contentList.length >= 1 && (
+                    this.props.actions && (
                       <Fragment>
                         <TextField
                           inputProps={{ 'aria-label': 'Title' }}
                           label="Title"
                           placeholder="Title"
+                          className={styles.textField}
                           onChange={e => {
                             this.setState({ title: e.target.value }, () => {
                               this.props.requestContent(this.state);
                             });
                           }}
                           margin="normal"
-                          disabled={!this.props.contentList.length || false}
                         />
 
                         <FormControl className={styles.formControl}>
@@ -242,7 +244,6 @@ class Content extends Component {
                                 ))}
                               </div>
                             )}
-                            disabled={!this.props.contentList.length || false}
                           >
                             {Object.keys(this.props.contentTypes).map(type => (
                               <MenuItem key={type} value={type}>
@@ -270,7 +271,6 @@ class Content extends Component {
                             }}
                             input={<Input name="status" id="status" />}
                             autoWidth
-                            disabled={!this.props.contentList.length || false}
                           >
                             <MenuItem value="">
                               <em>Any</em>
@@ -280,47 +280,49 @@ class Content extends Component {
                           </Select>
                         </FormControl>
 
-                        <FormControl
-                          className={styles.action}
-                          disabled={
-                            Object.values(this.state.checked).filter(Boolean)
-                              .length === 0 || false
-                          }
-                        >
-                          <InputLabel htmlFor="action">Actions</InputLabel>
-                          <Select
-                            value={this.state.action || ''}
-                            onChange={e => {
-                              this.setState({ action: e.target.value });
-                            }}
-                            input={<Input name="action" id="action" />}
-                            autoWidth
+                        <div>
+                          <FormControl
+                            className={styles.action}
+                            disabled={
+                              Object.values(this.state.checked).filter(Boolean)
+                                .length === 0 || false
+                            }
                           >
-                            <MenuItem value="">
-                              <em>None</em>
-                            </MenuItem>
-                            {this.props.actions.map(action => (
-                              <MenuItem
-                                key={action.id}
-                                value={action.attributes.id}
-                              >
-                                {action.attributes.label}
-                              </MenuItem>
-                            ))}
-                          </Select>
-                        </FormControl>
-
-                        {this.state.action &&
-                          Object.values(this.state.checked).filter(Boolean)
-                            .length !== 0 && (
-                            <Button
-                              onClick={this.executeAction}
-                              color="primary"
-                              variant="contained"
+                            <InputLabel htmlFor="action">Actions</InputLabel>
+                            <Select
+                              value={this.state.action || ''}
+                              onChange={e => {
+                                this.setState({ action: e.target.value });
+                              }}
+                              input={<Input name="action" id="action" />}
+                              autoWidth
                             >
-                              Apply
-                            </Button>
-                          )}
+                              <MenuItem value="">
+                                <em>None</em>
+                              </MenuItem>
+                              {this.props.actions.map(action => (
+                                <MenuItem
+                                  key={action.id}
+                                  value={action.attributes.id}
+                                >
+                                  {action.attributes.label}
+                                </MenuItem>
+                              ))}
+                            </Select>
+                          </FormControl>
+
+                          {this.state.action &&
+                            Object.values(this.state.checked).filter(Boolean)
+                              .length !== 0 && (
+                              <Button
+                                onClick={this.executeAction}
+                                color="primary"
+                                variant="contained"
+                              >
+                                Apply
+                              </Button>
+                            )}
+                        </div>
                       </Fragment>
                     )}
 
@@ -401,10 +403,12 @@ class Content extends Component {
                     <TableBody>
                       {this.props.contentList.map(node => {
                         const {
+                          id,
                           type,
                           attributes: { changed, nid, status, title },
                           relationships,
                         } = node;
+                        const bundle = node.type.replace('node--', '');
                         const rowSelectId = `row-select-for-${String(nid)}`;
                         return (
                           <TableRow key={nid}>
@@ -470,7 +474,7 @@ class Content extends Component {
                                 aria-label="edit"
                                 className={styles.button}
                                 component={Link}
-                                to={`/node/${nid}/edit`}
+                                to={`/node/${bundle}/${id}/edit`}
                               >
                                 <EditIcon />
                               </IconButton>

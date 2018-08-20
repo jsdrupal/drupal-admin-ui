@@ -1,16 +1,13 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { css } from 'emotion';
-
-import LoadingBar from 'react-redux-loading-bar';
 
 import Paper from '@material-ui/core/Paper';
 import Divider from '@material-ui/core/Divider';
 import Button from '@material-ui/core/Button';
 
 import SchemaPropType from './SchemaPropType';
-import PageTitle from '../../02_atoms/PageTitle';
 
 import { contentAdd } from '../../../actions/content';
 import { requestSchema, requestUiSchema } from '../../../actions/schema';
@@ -58,6 +55,10 @@ class NodeForm extends React.Component {
       return prevState;
     }
 
+    if (!props.uiSchema) {
+      return prevState;
+    }
+
     if (Object.prototype.hasOwnProperty.call(prevState || {}, 'entity')) {
       return prevState;
     }
@@ -71,7 +72,7 @@ class NodeForm extends React.Component {
     // Just contain values which are in the ui metadata.
     state.entity.data.attributes = Object.entries(state.entity.data.attributes)
       .filter(([key]) =>
-        Object.keys(props.uiSchema)
+        Object.keys(props.uiSchema.formDisplaySchema)
           .concat(['type'])
           .includes(key),
       )
@@ -130,16 +131,6 @@ class NodeForm extends React.Component {
   onSave = () => {
     // @todo Remove in https://github.com/jsdrupal/drupal-admin-ui/issues/245
     const { data: entity } = this.state.entity;
-
-    entity.attributes.field_summary = entity.attributes.field_summary || {
-      value: 'Empty',
-      format: 'basic_html',
-    };
-    entity.attributes.field_recipe_instruction = entity.attributes
-      .field_recipe_instruction || {
-      value: 'Empty',
-      format: 'basic_html',
-    };
 
     const data = {
       ...entity,
@@ -215,13 +206,7 @@ class NodeForm extends React.Component {
         </div>
       );
     }
-    return (
-      <Fragment>
-        <PageTitle>Create {this.props.bundle}</PageTitle>
-        <LoadingBar style={{ position: 'relative', marginBottom: '5px' }} />
-        {result}
-      </Fragment>
-    );
+    return result;
   }
 }
 
