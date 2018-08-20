@@ -13,7 +13,7 @@ import {
 } from 'react-redux-loading-bar';
 
 import api from '../utils/api/api';
-import { MESSAGE_ERROR } from '../constants/messages';
+import { MESSAGE_SEVERITY_ERROR } from '../constants/messages';
 import { setMessage } from './application';
 
 export const CONTENT_REQUESTED = 'CONTENT_REQUESTED';
@@ -108,31 +108,35 @@ function* loadContent(action) {
       },
     });
   } catch (error) {
-    yield put(setMessage(error.toString(), MESSAGE_ERROR));
+    yield put(setMessage(error.toString(), MESSAGE_SEVERITY_ERROR));
   } finally {
     yield put(hideLoading());
   }
 }
 
 export const CONTENT_SINGLE_REQUESTED = 'CONTENT_SINGLE_REQUESTED';
-export const requestSingleContent = (bundle, id) => ({
+export const requestSingleContent = nid => ({
   type: CONTENT_SINGLE_REQUESTED,
-  payload: { bundle, id },
+  payload: { nid },
 });
 
 export const CONTENT_SINGLE_LOADED = 'CONTENT_SINGLE_LOADED';
 function* loadSingleContent(action) {
   const {
-    payload: { bundle, id },
+    payload: { nid },
   } = action;
   try {
     yield put(resetLoading());
     yield put(showLoading());
 
-    const content = yield call(api, 'content_single', {
-      parameters: { bundle, id },
-      queryString: {},
+    const {
+      data: [content],
+    } = yield call(api, 'content', {
+      queryString: {
+        filter: { condition: { path: 'nid', value: nid } },
+      },
     });
+
     yield put({
       type: CONTENT_SINGLE_LOADED,
       payload: {
@@ -140,7 +144,7 @@ function* loadSingleContent(action) {
       },
     });
   } catch (error) {
-    yield put(setMessage(error.toString(), MESSAGE_ERROR));
+    yield put(setMessage(error.toString(), MESSAGE_SEVERITY_ERROR));
   } finally {
     yield put(hideLoading());
   }
@@ -286,7 +290,7 @@ export function* executeAction({ payload: { action, nids } }) {
       .filter(x => x);
     yield all(actions);
   } catch (error) {
-    yield put(setMessage(error.toString(), MESSAGE_ERROR));
+    yield put(setMessage(error.toString(), MESSAGE_SEVERITY_ERROR));
   } finally {
     yield put(hideLoading());
   }
@@ -298,7 +302,7 @@ function* saveContent({ payload: { content } }) {
     yield put(showLoading());
     yield call(api, 'node:save', { parameters: { node: content } });
   } catch (error) {
-    yield put(setMessage(error.toString(), MESSAGE_ERROR));
+    yield put(setMessage(error.toString(), MESSAGE_SEVERITY_ERROR));
   } finally {
     yield put(hideLoading());
   }
@@ -322,7 +326,7 @@ function* deleteContent({ payload: { content } }) {
     yield put(showLoading());
     yield call(api, 'node:delete', { parameters: { node: content } });
   } catch (error) {
-    yield put(setMessage(error.toString(), MESSAGE_ERROR));
+    yield put(setMessage(error.toString(), MESSAGE_SEVERITY_ERROR));
   } finally {
     yield put(hideLoading());
   }
