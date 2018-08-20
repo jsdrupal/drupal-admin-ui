@@ -82,28 +82,26 @@ jobs:
             paths:
             - ~/.composer/cache
         - run:
-            name: Start Drupal and run PHPUnit tests
+            name: Start Drupal and run Nightwatch tests
+            command: |
+              cd ~/drupal-admin-ui-demo/drupal-admin-ui
+              export REACT_APP_DRUPAL_BASE_URL="http://127.0.0.1:8888"
+              yarn start &
+              sleep 20
+              yarn test:functional
+        - store_test_results:
+            path: ~/drupal-admin-ui-demo/drupal-admin-ui/reports/nightwatch
+        - store_artifacts:
+            path: ~/drupal-admin-ui-demo/drupal-admin-ui/reports/nightwatch
+        - run:
+            name: Run PHPUnit tests
             command: |
                 cd ~/drupal-admin-ui-demo
-                composer start &
-                sleep 10
                 export SIMPLETEST_BASE_URL=http://localhost:8888
                 export SYMFONY_DEPRECATIONS_HELPER=disabled
                 ./vendor/bin/phpunit -c docroot/core --log-junit reports/phpunit.xml docroot/modules/contrib/drupal-admin-ui-support
         - store_test_results:
             path: ~/drupal-admin-ui-demo/reports
-        - run:
-            name: Start Drupal and run Nightwatch tests
-            command: |
-                cd ~/drupal-admin-ui-demo/drupal-admin-ui
-                export REACT_APP_DRUPAL_BASE_URL="http://127.0.0.1:8888"
-                yarn start &
-                sleep 20
-                yarn test:functional
-        - store_test_results:
-            path: ~/drupal-admin-ui-demo/drupal-admin-ui/reports/nightwatch
-        - store_artifacts:
-            path: ~/drupal-admin-ui-demo/drupal-admin-ui/reports/nightwatch
   dist:
     <<: *default
     steps:
@@ -113,7 +111,6 @@ jobs:
       - *restore-source
       - checkout
       - *restore-node-modules
-#     - *restore-build
       - *step-build
       - run: |
           mv ~/project/build ~
@@ -137,7 +134,6 @@ jobs:
       - *restore-source
       - checkout
       - *restore-node-modules
-#     - *restore-build
       - *step-build
       - run: |
           mv ~/project/admin_ui_support ~
