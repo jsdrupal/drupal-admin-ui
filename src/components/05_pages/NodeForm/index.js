@@ -9,7 +9,7 @@ import Button from '@material-ui/core/Button';
 
 import SchemaPropType from './SchemaPropType';
 
-import { contentAdd } from '../../../actions/content';
+import { contentAdd, contentSave } from '../../../actions/content';
 import { requestSchema, requestUiSchema } from '../../../actions/schema';
 
 import {
@@ -17,6 +17,8 @@ import {
   createUISchema,
   sortUISchemaFields,
 } from '../../../utils/api/schema';
+
+import { POST, PATCH } from '../../../constants/methods';
 
 let styles;
 
@@ -30,6 +32,7 @@ class NodeForm extends React.Component {
       ]).isRequired,
     ).isRequired,
     contentAdd: PropTypes.func.isRequired,
+    contentSave: PropTypes.func.isRequired,
     entityTypeId: PropTypes.string.isRequired,
     bundle: PropTypes.string.isRequired,
     requestSchema: PropTypes.func.isRequired,
@@ -41,6 +44,7 @@ class NodeForm extends React.Component {
       }),
       PropTypes.bool,
     ]),
+    method: PropTypes.oneOf([POST, PATCH]).isRequired,
   };
 
   static defaultProps = {
@@ -136,7 +140,9 @@ class NodeForm extends React.Component {
       ...entity,
       type: `${this.props.entityTypeId}--${this.props.bundle}`,
     };
-    this.props.contentAdd(data);
+    (this.props.method === PATCH
+      ? this.props.contentSave
+      : this.props.contentAdd)(data);
   };
 
   getSchemaInfo = (schema, fieldName) =>
@@ -241,5 +247,6 @@ export default connect(
     requestSchema,
     requestUiSchema,
     contentAdd,
+    contentSave,
   },
 )(NodeForm);
