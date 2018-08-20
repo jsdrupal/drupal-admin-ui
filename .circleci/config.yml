@@ -84,6 +84,9 @@ jobs:
         - run:
             name: Start Drupal and run Nightwatch tests
             command: |
+              cd ~/drupal-admin-ui-demo
+              composer start &
+              sleep 10
               cd ~/drupal-admin-ui-demo/drupal-admin-ui
               export REACT_APP_DRUPAL_BASE_URL="http://127.0.0.1:8888"
               yarn start &
