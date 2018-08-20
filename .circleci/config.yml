@@ -82,7 +82,7 @@ jobs:
             paths:
             - ~/.composer/cache
         - run:
-            name: Start Drupal and run Nightwatch tests
+            name: Start Drupal and run Nightwatch and PHPUnit tests
             command: |
               cd ~/drupal-admin-ui-demo
               composer start &
@@ -92,17 +92,14 @@ jobs:
               yarn start &
               sleep 20
               yarn test:functional
+              cd ~/drupal-admin-ui-demo
+              export SIMPLETEST_BASE_URL=http://localhost:8888
+              export SYMFONY_DEPRECATIONS_HELPER=disabled
+              ./vendor/bin/phpunit -c docroot/core --log-junit reports/phpunit.xml docroot/modules/contrib/drupal-admin-ui-support
         - store_test_results:
             path: ~/drupal-admin-ui-demo/drupal-admin-ui/reports/nightwatch
         - store_artifacts:
             path: ~/drupal-admin-ui-demo/drupal-admin-ui/reports/nightwatch
-        - run:
-            name: Run PHPUnit tests
-            command: |
-                cd ~/drupal-admin-ui-demo
-                export SIMPLETEST_BASE_URL=http://localhost:8888
-                export SYMFONY_DEPRECATIONS_HELPER=disabled
-                ./vendor/bin/phpunit -c docroot/core --log-junit reports/phpunit.xml docroot/modules/contrib/drupal-admin-ui-support
         - store_test_results:
             path: ~/drupal-admin-ui-demo/reports
   dist:
