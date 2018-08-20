@@ -295,15 +295,15 @@ class EntityReferenceAutocomplete extends React.Component {
                 label: this.props.label,
                 InputProps: getInputProps({
                   startAdornment: selectedItems
-                    /* eslint-disable prettier/prettier */
-                    ? Object.entries(selectedItems).map(([key, value]) => (
-                      <Chip
-                        key={key}
-                        tabIndex={-1}
-                        label={value.label}
-                        className="chip"
-                        onDelete={this.handleDelete(key)}
-                      />
+                    ? /* eslint-disable prettier/prettier */
+                      Object.entries(selectedItems).map(([key, value]) => (
+                        <Chip
+                          key={key}
+                          tabIndex={-1}
+                          label={value.label}
+                          className="chip"
+                          onDelete={this.handleDelete(key)}
+                        />
                       ))
                     : [],
                   /* eslint-enable prettier/prettier */
