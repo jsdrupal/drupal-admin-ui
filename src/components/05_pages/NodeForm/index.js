@@ -80,6 +80,9 @@ class NodeForm extends React.Component {
       )
       .reduce((agg, [key, value]) => ({ ...agg, [key]: value }), {});
 
+    // @TODO Remove this when we create the entity scaffolding at the NodeEdit
+    // or NodeAdd component level.
+    // https://github.com/jsdrupal/drupal-admin-ui/issues/378
     // Set default `Authored By` relationship.
     if (!Object.prototype.hasOwnProperty.call(props, 'entity')) {
       state.entity.data.relationships.uid.data = { ...props.user };
