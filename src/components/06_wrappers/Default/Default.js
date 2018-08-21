@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { css } from 'emotion';
 import { Link } from 'react-router-dom';
+import { withRouter } from 'react-router';
 
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Drawer from '@material-ui/core/Drawer';
@@ -33,7 +34,6 @@ import {
   setMessage,
   clearMessage,
 } from '../../../actions/application';
-import { withRouter } from 'react-router';
 
 let styles;
 
