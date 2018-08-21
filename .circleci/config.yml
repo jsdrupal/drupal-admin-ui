@@ -9,12 +9,6 @@ aliases:
   - &vendor-key
     v3-composer-dependencies-
 
-  - &build-key
-    v3-build-{{ .Branch }}-{{ .Revision }}
-
-  - &integration-build-key
-    v3-integration-build-{{ .Branch }}-{{ .Revision }}
-
   - &restore-source
     restore_cache:
       keys:
@@ -32,43 +26,38 @@ aliases:
       keys:
         - *vendor-key
 
-  - &restore-build
-    restore_cache:
-      keys:
-        - *build-key
-
-  - &restore-integration-build
-    restore_cache:
-      keys:
-        - *integration-build-key
-
   - &fix-php-env
       run: |
           sudo apt-get install -y libpng-dev sqlite3
           sudo docker-php-ext-install gd
+
+  - &step-build
+      run: |
+          yarn install
+          yarn build
+
 version: 2
 jobs:
-  build:
+  lint_unit:
     <<: *default
     steps:
-      - *restore-source
-      - checkout
-      - *restore-node-modules
-      - run: yarn install
-      - run: yarn build
-      - save_cache:
-          key: *node-modules-key
-          paths:
-            - node_modules
-      - save_cache:
-          key: *build-key
-          paths:
-            - build
-      - save_cache:
-          key: source-v1-{{ .Branch }}-{{ .Revision }}
-          paths:
-            - .git
-  integration_build:
+    - *restore-source
+    - checkout
+    - *restore-node-modules
+    - *step-build
+    - run: yarn test:lint
+    - run: yarn test:unit
+    - store_test_results:
+        path: reports
+    - save_cache:
+        key: *node-modules-key
+        paths:
+        - node_modules
+    - save_cache:
+        key: source-v1-{{ .Branch }}-{{ .Revision }}
+        paths:
+        - .git
+  integration_phpunit_nightwatch:
       docker:
         - image: circleci/php:7.1-fpm-node-browsers
       steps:
@@ -76,8 +65,8 @@ jobs:
         - *restore-source
         - checkout
         - *restore-node-modules
+        - *step-build
         - *restore-vendor
-        - *restore-build
         - run:
             name: Install Drupal
             command: |
@@ -92,70 +81,27 @@ jobs:
             key: *vendor-key
             paths:
             - ~/.composer/cache
-        - save_cache:
-            key: *integration-build-key
-            paths:
-              - ~/drupal-admin-ui-demo
-  phpunit:
-      docker:
-        - image: circleci/php:7.1-fpm-node-browsers
-      steps:
-        - *fix-php-env
-        - *restore-integration-build
         - run:
-            name: Start Drupal and run PHPUnit tests
+            name: Start Drupal and run Nightwatch and PHPUnit tests
             command: |
-                cd ~/drupal-admin-ui-demo
-                composer start &
-                sleep 10
-                export SIMPLETEST_BASE_URL=http://localhost:8888
-                export SYMFONY_DEPRECATIONS_HELPER=disabled
-                ./vendor/bin/phpunit -c docroot/core --log-junit reports/phpunit.xml docroot/modules/contrib/drupal-admin-ui-support
-        - store_test_results:
-            path: ~/drupal-admin-ui-demo/reports
-  nightwatch:
-      docker:
-        - image: circleci/php:7.1-fpm-node-browsers
-      steps:
-        - *fix-php-env
-        - *restore-integration-build
-        - run:
-            name: Start Drupal and run Nightwatch tests
-            command: |
-                cd ~/drupal-admin-ui-demo
-                composer start &
-                sleep 10
-                cd drupal-admin-ui
-                export REACT_APP_DRUPAL_BASE_URL="http://127.0.0.1:8888"
-                yarn start &
-                sleep 20
-                yarn test:functional
+              cd ~/drupal-admin-ui-demo
+              composer start &
+              sleep 10
+              cd ~/drupal-admin-ui-demo/drupal-admin-ui
+              export REACT_APP_DRUPAL_BASE_URL="http://127.0.0.1:8888"
+              yarn start &
+              sleep 20
+              yarn test:functional
+              cd ~/drupal-admin-ui-demo
+              export SIMPLETEST_BASE_URL=http://localhost:8888
+              export SYMFONY_DEPRECATIONS_HELPER=disabled
+              ./vendor/bin/phpunit -c docroot/core --log-junit reports/phpunit.xml docroot/modules/contrib/drupal-admin-ui-support
         - store_test_results:
             path: ~/drupal-admin-ui-demo/drupal-admin-ui/reports/nightwatch
         - store_artifacts:
             path: ~/drupal-admin-ui-demo/drupal-admin-ui/reports/nightwatch
-  lint:
-    <<: *default
-    steps:
-      - *restore-source
-      - checkout
-      - *restore-node-modules
-      - *restore-build
-      - run: yarn test:lint
-      - store_test_results:
-          path: reports
-
-  unit:
-    <<: *default
-    steps:
-      - *restore-source
-      - checkout
-      - *restore-node-modules
-      - *restore-build
-      - run: yarn test:unit
-      - store_test_results:
-          path: reports
-
+        - store_test_results:
+            path: ~/drupal-admin-ui-demo/reports
   dist:
     <<: *default
     steps:
@@ -165,7 +111,7 @@ jobs:
       - *restore-source
       - checkout
       - *restore-node-modules
-      - *restore-build
+      - *step-build
       - run: |
           mv ~/project/build ~
           git config --global user.name "⬅️✌️➡️"
@@ -188,7 +134,7 @@ jobs:
       - *restore-source
       - checkout
       - *restore-node-modules
-      - *restore-build
+      - *step-build
       - run: |
           mv ~/project/admin_ui_support ~
           git config --global user.name "⬅️✌️➡️"
@@ -229,8 +175,8 @@ jobs:
         git clone git@github.com:jsdrupal/drupal-admin-ui-demo.git ~/drupal-admin-ui-demo
         cd ~/drupal-admin-ui-demo
         composer update --lock
+        git add .
         if ! git diff-index --quiet HEAD --; then
-          git add .
           git commit -m "Auto update composer.lock from admin-ui-support-dist build"
           git push origin master
         fi
@@ -239,38 +185,20 @@ workflows:
   version: 2
   test:
     jobs:
-      - build
-      - integration_build:
-          requires:
-            - build
-      - lint:
-          requires:
-            - build
-      - unit:
-          requires:
-            - build
-      - phpunit:
-          requires:
-            - integration_build
-      - nightwatch:
-          requires:
-            - integration_build
+      - integration_phpunit_nightwatch
+      - lint_unit
       - dist:
           requires:
-            - lint
-            - unit
-            - phpunit
-            - nightwatch
+            - lint_unit
+            - integration_phpunit_nightwatch
           filters:
            branches:
             only:
               - master
       - dist_support:
           requires:
-            - lint
-            - unit
-            - phpunit
-            - nightwatch
+            - lint_unit
+            - integration_phpunit_nightwatch
           filters:
            branches:
             only:

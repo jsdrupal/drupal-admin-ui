@@ -403,12 +403,10 @@ class Content extends Component {
                     <TableBody>
                       {this.props.contentList.map(node => {
                         const {
-                          id,
                           type,
                           attributes: { changed, nid, status, title },
                           relationships,
                         } = node;
-                        const bundle = node.type.replace('node--', '');
                         const rowSelectId = `row-select-for-${String(nid)}`;
                         return (
                           <TableRow key={nid}>
@@ -428,7 +426,9 @@ class Content extends Component {
                               </TableCell>
                             }
                             <TableCell>
-                              <label htmlFor={rowSelectId}>{title}</label>
+                              <Link to={`/node/${nid}`}>
+                                <label htmlFor={rowSelectId}>{title}</label>
+                              </Link>
                             </TableCell>
                             <TableCell>
                               {this.props.contentTypes[type].name}
@@ -474,7 +474,7 @@ class Content extends Component {
                                 aria-label="edit"
                                 className={styles.button}
                                 component={Link}
-                                to={`/node/${bundle}/${id}/edit`}
+                                to={`/node/${nid}/edit`}
                               >
                                 <EditIcon />
                               </IconButton>

@@ -10,7 +10,7 @@ import Snackbar from '@material-ui/core/Snackbar';
 
 import SchemaPropType from './SchemaPropType';
 
-import { contentAdd } from '../../../actions/content';
+import { contentAdd, requestUser } from '../../../actions/content';
 import { requestSchema, requestUiSchema } from '../../../actions/schema';
 
 import {
@@ -30,7 +30,7 @@ class NodeForm extends React.Component {
         PropTypes.instanceOf(React.Component),
       ]).isRequired,
     ).isRequired,
-    contentAdd: PropTypes.func.isRequired,
+    onSave: PropTypes.func.isRequired,
     entityTypeId: PropTypes.string.isRequired,
     bundle: PropTypes.string.isRequired,
     requestSchema: PropTypes.func.isRequired,
@@ -42,6 +42,7 @@ class NodeForm extends React.Component {
       }),
       PropTypes.bool,
     ]),
+    requestUser: PropTypes.func.isRequired,
     onChange: PropTypes.func,
   };
 
@@ -56,6 +57,7 @@ class NodeForm extends React.Component {
   };
 
   componentDidMount() {
+    this.props.requestUser(1);
     this.props.requestSchema({
       entityTypeId: this.props.entityTypeId,
       bundle: this.props.bundle,
@@ -89,6 +91,10 @@ class NodeForm extends React.Component {
     );
   };
 
+  onSave = () => {
+    this.props.onSave(this.state.entity.data);
+  };
+
   onRelationshipChange = fieldName => data => {
     // Support widgets with multiple cardinality.
     let fieldData;
@@ -113,17 +119,6 @@ class NodeForm extends React.Component {
       }),
       () => this.props.onChange(this.props.bundle, this.state.entity),
     );
-  };
-
-  onSave = () => {
-    // @todo Remove in https://github.com/jsdrupal/drupal-admin-ui/issues/245
-    const { data: entity } = this.state.entity;
-
-    const data = {
-      ...entity,
-      type: `${this.props.entityTypeId}--${this.props.bundle}`,
-    };
-    this.props.contentAdd(data);
   };
 
   getSchemaInfo = (schema, fieldName) =>
@@ -159,6 +154,14 @@ class NodeForm extends React.Component {
           .includes(key),
       )
       .reduce((agg, [key, value]) => ({ ...agg, [key]: value }), {});
+
+    // @TODO Remove this when we create the entity scaffolding at the NodeEdit
+    // or NodeAdd component level.
+    // https://github.com/jsdrupal/drupal-admin-ui/issues/378
+    // Set default `Authored By` relationship.
+    if (!Object.prototype.hasOwnProperty.call(props, 'entity')) {
+      state.entity.data.relationships.uid.data = { ...props.user };
+    }
 
     setState(state);
   }
@@ -238,9 +241,10 @@ class NodeForm extends React.Component {
         createUISchema(
           this.props.uiSchema.fieldSchema,
           this.props.uiSchema.formDisplaySchema,
+          this.props.uiSchema.fieldStorageConfig,
           this.props.widgets,
         ),
-        ['promote', 'status', 'sticky'],
+        ['promote', 'status', 'sticky', 'uid', 'created'],
       );
       result = (
         <div className={styles.gridRoot}>
@@ -285,6 +289,7 @@ styles = {
 const mapStateToProps = (state, { bundle, entityTypeId }) => ({
   schema: state.schema.schema[`${entityTypeId}--${bundle}`],
   uiSchema: state.schema.uiSchema[`${entityTypeId}--${bundle}`],
+  user: state.content.user,
 });
 
 export default connect(
@@ -293,5 +298,6 @@ export default connect(
     requestSchema,
     requestUiSchema,
     contentAdd,
+    requestUser,
   },
 )(NodeForm);
