@@ -4,7 +4,7 @@ import LoadingBar from 'react-redux-loading-bar';
 import PropTypes from 'prop-types';
 import { css } from 'emotion';
 import NodeForm from '../NodeForm';
-import { requestSingleContent } from '../../../actions/content';
+import { contentSave, requestSingleContent } from '../../../actions/content';
 import PageTitle from '../../02_atoms/PageTitle/PageTitle';
 
 let styles;
@@ -13,6 +13,14 @@ class NodeEditForm extends React.Component {
   componentDidMount() {
     this.props.requestSingleContent(this.props.nid);
   }
+
+  onSave = bundle => entity => {
+    const data = {
+      ...entity,
+      type: `${this.props.entityTypeId}--${bundle}`,
+    };
+    this.props.contentSave(data);
+  };
 
   render() {
     const { entity } = this.props;
@@ -35,6 +43,7 @@ class NodeEditForm extends React.Component {
               {...this.props}
               bundle={bundle}
               entity={{ data: entity }}
+              onSave={this.onSave(bundle)}
             />
           )}
         </Fragment>
@@ -51,6 +60,8 @@ NodeEditForm.defaultProps = {
 NodeEditForm.propTypes = {
   nid: PropTypes.string.isRequired,
   requestSingleContent: PropTypes.func.isRequired,
+  contentSave: PropTypes.func.isRequired,
+  entityTypeId: PropTypes.string.isRequired,
   entity: PropTypes.shape({
     attributes: PropTypes.shape({
       title: PropTypes.string.isRequired,
@@ -70,5 +81,6 @@ export default connect(
   }),
   {
     requestSingleContent,
+    contentSave,
   },
 )(NodeEditForm);

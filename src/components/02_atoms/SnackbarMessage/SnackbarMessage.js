@@ -48,6 +48,10 @@ const styles = {
   message: css`
     display: flex;
     align-items: center;
+
+    a {
+      color: #fff;
+    }
   `,
 };
 
@@ -102,7 +106,7 @@ SnackbarMessage.defaultProps = {
 
 SnackbarMessage.propTypes = {
   open: PropTypes.bool.isRequired,
-  message: PropTypes.string.isRequired,
+  message: PropTypes.node.isRequired,
   messageSeverity: PropTypes.oneOf([
     MESSAGE_SEVERITY_ERROR,
     MESSAGE_SEVERITY_SUCCESS,
