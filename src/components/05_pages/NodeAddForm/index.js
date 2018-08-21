@@ -2,6 +2,7 @@ import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import LoadingBar from 'react-redux-loading-bar';
+import { push } from 'react-router-redux';
 import NodeForm from '../NodeForm';
 import PageTitle from '../../02_atoms/PageTitle/PageTitle';
 import { contentAdd } from '../../../actions/content';
@@ -34,7 +35,10 @@ NodeAddForm.propTypes = {
 
 export default connect(
   null,
-  {
-    contentAdd,
-  },
+  dispatch => ({
+    contentAdd: content => {
+      dispatch(contentAdd(content));
+      dispatch(push('/admin/content'));
+    },
+  }),
 )(NodeAddForm);

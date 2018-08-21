@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { css } from 'emotion';
 import { Link } from 'react-router-dom';
+import { withRouter } from 'react-router';
 
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Drawer from '@material-ui/core/Drawer';
@@ -189,13 +190,15 @@ const mapStateToProps = state => ({
   drawerOpen: state.application.drawerOpen,
 });
 
-export default connect(
-  mapStateToProps,
-  {
-    requestMenu,
-    openDrawer,
-    closeDrawer,
-    setMessage,
-    clearMessage,
-  },
-)(Default);
+export default withRouter(
+  connect(
+    mapStateToProps,
+    {
+      requestMenu,
+      openDrawer,
+      closeDrawer,
+      setMessage,
+      clearMessage,
+    },
+  )(Default),
+);
