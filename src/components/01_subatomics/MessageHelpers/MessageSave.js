@@ -9,9 +9,7 @@ const MessageSave = ({ bundle, title, nid }) => (
   <Fragment>
     <p>
       <span className={styles.MessageSave.bundle}>{bundle}</span>{' '}
-      <Link to={`/node/${nid}`}>{title}</Link>
-      {' '}
-      has been updated
+      <Link to={`/node/${nid}`}>{title}</Link> has been updated
     </p>
   </Fragment>
 );
