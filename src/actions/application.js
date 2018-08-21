@@ -91,14 +91,10 @@ export const requestContentTypes = () => ({
   payload: {},
 });
 
-export const getContentTypeCache = state => state.application.contentTypes;
 export const CONTENT_TYPES_LOADED = 'CONTENT_TYPES_LOADED';
 function* loadContentTypes() {
   try {
-    let contentTypes = { data: yield select(getContentTypeCache) };
-    if (!Object.keys(contentTypes.data).length) {
-      contentTypes = yield call(api, 'contentTypes');
-    }
+    const contentTypes = yield call(api, 'contentTypes');
     yield put({
       type: CONTENT_TYPES_LOADED,
       payload: {
