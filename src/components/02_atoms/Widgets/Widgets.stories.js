@@ -117,8 +117,17 @@ storiesOf('Widgets/NumberTextfield', module).addWithJSX('Default', () => (
 
 storiesOf('Widgets/OptionsSelect', module).addWithJSX('Default', () => (
   <OptionsSelect
-    fieldName="option"
     helpText={text('OptionsSelect:helpText', 'Help text.')}
+    fieldName="option"
+    inputProps={object('OptionsSelect:inputProps', {
+      allowed_values: {
+        one: 'One',
+        two: 'Two',
+        three: 'Three',
+        four: 'Four',
+      },
+      allowed_values_function: '',
+    })}
     label={text('OptionsSelect:label', 'A Simple Label')}
     onChange={onChangeAction}
     schema={object('OptionsSelect: schema', {
