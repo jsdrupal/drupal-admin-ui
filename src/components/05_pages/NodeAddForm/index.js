@@ -2,11 +2,9 @@ import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import LoadingBar from 'react-redux-loading-bar';
-import { connect } from 'react-redux';
 import NodeForm from '../NodeForm';
-import { contentAddChange } from '../../../actions/content';
+import { contentAddChange, contentAdd } from '../../../actions/content';
 import PageTitle from '../../02_atoms/PageTitle/PageTitle';
-import { contentAdd } from '../../../actions/content';
 
 class NodeAddForm extends React.Component {
   onSave = entity => {

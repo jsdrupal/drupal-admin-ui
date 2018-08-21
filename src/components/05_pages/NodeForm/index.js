@@ -140,7 +140,10 @@ class NodeForm extends React.Component {
 
     const state = {
       ...prevState,
-      restorableEntity: prevState.restorableEntity,
+      // Mark the entity as restored when we don't have a restoreable entity,
+      // as we don't want to ask the user.
+      restored: prevState.restored || !prevProps.restorableEntity,
+      restorableEntity: !prevState.restored && prevProps.restorableEntity,
       entity: prevProps.entity || {
         ...createEntity(prevProps.schema),
       },
@@ -159,8 +162,8 @@ class NodeForm extends React.Component {
     // or NodeAdd component level.
     // https://github.com/jsdrupal/drupal-admin-ui/issues/378
     // Set default `Authored By` relationship.
-    if (!Object.prototype.hasOwnProperty.call(props, 'entity')) {
-      state.entity.data.relationships.uid.data = { ...props.user };
+    if (!Object.prototype.hasOwnProperty.call(prevProps, 'entity')) {
+      state.entity.data.relationships.uid.data = { ...prevProps.user };
     }
 
     setState(state);
