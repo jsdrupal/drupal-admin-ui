@@ -314,7 +314,7 @@ function* addContent({ payload: { content } }) {
     yield put(showLoading());
     yield call(api, 'node:add', { parameters: { node: content } });
   } catch (error) {
-    yield put(setMessage(error.toString()));
+    yield put(setMessage(error.toString(), MESSAGE_SEVERITY_ERROR));
   } finally {
     yield put(hideLoading());
   }
