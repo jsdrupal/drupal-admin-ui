@@ -48,6 +48,10 @@ const styles = {
   message: css`
     display: flex;
     align-items: center;
+
+    a {
+      color: #fff;
+    }
   `,
 };
 

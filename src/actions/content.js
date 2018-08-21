@@ -20,7 +20,7 @@ import {
 } from '../constants/messages';
 import { setMessage } from './application';
 
-import { MessageSave } from '../components/02_atoms/SnackbarMessage/MessageHelpers';
+import MessageSave from '../components/01_subatomics/MessageHelpers/MessageSave';
 
 export const CONTENT_REQUESTED = 'CONTENT_REQUESTED';
 export const requestContent = (

@@ -9,9 +9,8 @@ const MessageSave = ({ bundle, title, nid }) => (
   <Fragment>
     <p>
       <span className={styles.MessageSave.bundle}>{bundle}</span>{' '}
-      <em>
-        <Link to={`/node/${nid}`}>{title}</Link>
-      </em>{' '}
+      <Link to={`/node/${nid}`}>{title}</Link>
+      {' '}
       has been updated
     </p>
   </Fragment>
@@ -31,5 +30,4 @@ styles = {
   },
 };
 
-// eslint-disable-next-line
-export { MessageSave };
+export default MessageSave;
