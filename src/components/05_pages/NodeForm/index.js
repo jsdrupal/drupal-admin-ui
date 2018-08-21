@@ -129,7 +129,7 @@ class NodeForm extends React.Component {
     schema.properties.data.properties.attributes.properties[fieldName] ||
     schema.properties.data.properties.relationships.properties[fieldName];
 
-  calculateState(prevProps, prevState, setState) {
+  calculateState = (prevProps, prevState, setState) => {
     if (!prevProps.schema) {
       return;
     }
@@ -171,7 +171,7 @@ class NodeForm extends React.Component {
     }
 
     setState(state);
-  }
+  };
 
   createField = ({ fieldName, widget, inputProps }) => {
     // @todo We need to pass along props.

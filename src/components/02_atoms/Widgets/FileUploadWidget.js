@@ -102,7 +102,6 @@ class FileUploadWidget extends React.Component {
     );
   };
 
-
   fetchEntitites = (entityTypeId, bundle, ids) =>
     api(entityTypeId, {
       queryString: {

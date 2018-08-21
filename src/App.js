@@ -57,13 +57,11 @@ const restoreState = () => {
   return storedState;
 };
 
-export const localStorageStore = state => {
-  return {
-    content: {
-      contentAddByBundle: state.content.contentAddByBundle,
-    },
-  };
-};
+export const localStorageStore = state => ({
+  content: {
+    contentAddByBundle: state.content.contentAddByBundle,
+  },
+});
 
 const storeState = store => {
   // Persist state.

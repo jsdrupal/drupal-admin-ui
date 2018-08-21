@@ -90,7 +90,6 @@ class EntityReferenceAutocomplete extends React.Component {
     );
   };
 
-
   handleChange = ({ id, label }) =>
     this.setState(
       ({ selectedItems }) => ({
