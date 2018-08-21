@@ -332,6 +332,42 @@ function* deleteContent({ payload: { content } }) {
   }
 }
 
+export const USER_REQUESTED = 'USER_REQUESTED';
+export const requestUser = uid => ({
+  type: USER_REQUESTED,
+  payload: { uid },
+});
+
+export const USER_LOADED = 'USER_LOADED';
+function* loadUser(action) {
+  const {
+    payload: { uid },
+  } = action;
+  try {
+    yield put(resetLoading());
+    yield put(showLoading());
+
+    const {
+      data: [user],
+    } = yield call(api, 'user', {
+      queryString: {
+        filter: { condition: { path: 'uid', value: uid } },
+      },
+    });
+
+    yield put({
+      type: USER_LOADED,
+      payload: {
+        user,
+      },
+    });
+  } catch (error) {
+    yield put(setMessage(error.toString(), MESSAGE_SEVERITY_ERROR));
+  } finally {
+    yield put(hideLoading());
+  }
+}
+
 export default function* rootSaga() {
   yield takeEvery(CONTENT_REQUESTED, loadContent);
   yield takeEvery(CONTENT_SAVE, saveContent);
@@ -340,4 +376,5 @@ export default function* rootSaga() {
   yield takeLatest(CONTENT_SAVE, saveContent);
   yield takeLatest(CONTENT_ADD, addContent);
   yield takeEvery(CONTENT_DELETE, deleteContent);
+  yield takeLatest(USER_REQUESTED, loadUser);
 }
