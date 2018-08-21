@@ -31,6 +31,7 @@ styles = {
   message: css`
     padding: 20px 25px;
     margin-bottom: 30px;
+    color: #fff;
   `,
   success: css`
     background-color: #43a047;
