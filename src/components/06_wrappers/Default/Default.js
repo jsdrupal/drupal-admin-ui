@@ -33,6 +33,7 @@ import {
   setMessage,
   clearMessage,
 } from '../../../actions/application';
+import { withRouter } from 'react-router';
 
 let styles;
 
@@ -189,13 +190,15 @@ const mapStateToProps = state => ({
   drawerOpen: state.application.drawerOpen,
 });
 
-export default connect(
-  mapStateToProps,
-  {
-    requestMenu,
-    openDrawer,
-    closeDrawer,
-    setMessage,
-    clearMessage,
-  },
-)(Default);
+export default withRouter(
+  connect(
+    mapStateToProps,
+    {
+      requestMenu,
+      openDrawer,
+      closeDrawer,
+      setMessage,
+      clearMessage,
+    },
+  )(Default),
+);
