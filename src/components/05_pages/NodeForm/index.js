@@ -28,7 +28,7 @@ class NodeForm extends React.Component {
         PropTypes.instanceOf(React.Component),
       ]).isRequired,
     ).isRequired,
-    contentAdd: PropTypes.func.isRequired,
+    onSave: PropTypes.func.isRequired,
     entityTypeId: PropTypes.string.isRequired,
     bundle: PropTypes.string.isRequired,
     requestSchema: PropTypes.func.isRequired,
@@ -106,7 +106,7 @@ class NodeForm extends React.Component {
 
   onSave = () => {
     this.props.onSave(this.state.entity.data);
-  }
+  };
 
   onRelationshipChange = fieldName => data => {
     // Support widgets with multiple cardinality.

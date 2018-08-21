@@ -4,9 +4,8 @@ import LoadingBar from 'react-redux-loading-bar';
 import PropTypes from 'prop-types';
 import { css } from 'emotion';
 import NodeForm from '../NodeForm';
-import { requestSingleContent } from '../../../actions/content';
+import { contentAdd, requestSingleContent } from '../../../actions/content';
 import PageTitle from '../../02_atoms/PageTitle/PageTitle';
-import { contentAdd } from '../../../actions/content';
 
 let styles;
 
@@ -22,7 +21,7 @@ class NodeEditForm extends React.Component {
     };
     // @todo this should be changed to edit specific action.
     this.props.contentAdd(data);
-  };
+  }
 
   render() {
     const { entity } = this.props;
@@ -62,6 +61,9 @@ NodeEditForm.defaultProps = {
 NodeEditForm.propTypes = {
   nid: PropTypes.string.isRequired,
   requestSingleContent: PropTypes.func.isRequired,
+  contentAdd: PropTypes.func.isRequired,
+  entityTypeId: PropTypes.string.isRequired,
+  bundle: PropTypes.string.isRequired,
   entity: PropTypes.shape({
     attributes: PropTypes.shape({
       title: PropTypes.string.isRequired,

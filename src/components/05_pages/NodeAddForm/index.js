@@ -18,13 +18,13 @@ class NodeAddForm extends React.Component {
       type: `${this.props.entityTypeId}--${this.props.bundle}`,
     };
     this.props.contentAdd(data);
-  };
+  }
 
   render() {
     return (
       <Fragment>
         <PageTitle>Create {this.props.bundle}</PageTitle>
-        <LoadingBar/>
+        <LoadingBar />
         <NodeForm {...this.props} onSave={this.onSave} />
       </Fragment>
     );
@@ -33,6 +33,8 @@ class NodeAddForm extends React.Component {
 
 NodeAddForm.propTypes = {
   bundle: PropTypes.string.isRequired,
+  contentAdd: PropTypes.func.isRequired,
+  entityTypeId: PropTypes.string.isRequired,
 };
 
 export default connect(
