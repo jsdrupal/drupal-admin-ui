@@ -9,7 +9,6 @@ import Button from '@material-ui/core/Button';
 
 import SchemaPropType from './SchemaPropType';
 
-import { contentAdd } from '../../../actions/content';
 import { requestSchema, requestUiSchema } from '../../../actions/schema';
 
 import {
@@ -29,7 +28,7 @@ class NodeForm extends React.Component {
         PropTypes.instanceOf(React.Component),
       ]).isRequired,
     ).isRequired,
-    contentAdd: PropTypes.func.isRequired,
+    onSave: PropTypes.func.isRequired,
     entityTypeId: PropTypes.string.isRequired,
     bundle: PropTypes.string.isRequired,
     requestSchema: PropTypes.func.isRequired,
@@ -105,6 +104,10 @@ class NodeForm extends React.Component {
     }));
   };
 
+  onSave = () => {
+    this.props.onSave(this.state.entity.data);
+  };
+
   onRelationshipChange = fieldName => data => {
     // Support widgets with multiple cardinality.
     let fieldData;
@@ -126,17 +129,6 @@ class NodeForm extends React.Component {
         },
       },
     }));
-  };
-
-  onSave = () => {
-    // @todo Remove in https://github.com/jsdrupal/drupal-admin-ui/issues/245
-    const { data: entity } = this.state.entity;
-
-    const data = {
-      ...entity,
-      type: `${this.props.entityTypeId}--${this.props.bundle}`,
-    };
-    this.props.contentAdd(data);
   };
 
   getSchemaInfo = (schema, fieldName) =>
@@ -240,6 +232,5 @@ export default connect(
   {
     requestSchema,
     requestUiSchema,
-    contentAdd,
   },
 )(NodeForm);
