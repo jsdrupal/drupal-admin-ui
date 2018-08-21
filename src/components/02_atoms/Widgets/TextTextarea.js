@@ -37,16 +37,28 @@ class TextTextarea extends React.Component {
     },
   };
 
-  state = {
-    value: RichTextEditor.createValueFromString(
+  // eslint-disable-next-line react/sort-comp
+  createValueFromString = props =>
+    RichTextEditor.createValueFromString(
       // @todo This should not be needed after https://github.com/jsdrupal/drupal-admin-ui/issues/195
-      (Array.isArray(this.props.value) &&
-        this.props.value.length &&
-        this.props.value[0].value) ||
-        this.props.value.value ||
+      (Array.isArray(props.value) &&
+        props.value.length &&
+        props.value[0].value) ||
+        props.value.value ||
         '',
       'html',
-    ),
+    );
+
+  state = {
+    value: this.createValueFromString(this.props),
+  };
+
+  componentDidUpdate = prevProps => {
+    if (this.props.value.value !== prevProps.value.value) {
+      this.setState({
+        value: this.createValueFromString(this.props),
+      });
+    }
   };
 
   onChange = value => {

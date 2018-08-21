@@ -58,24 +58,13 @@ class FileUploadWidget extends React.Component {
 
   componentDidMount() {
     if (!this.state.selectedItems && this.props.value) {
-      const entityTypeId = 'file';
-      const bundle = 'file';
+      this.recalculateSelectedItems();
+    }
+  }
 
-      const multiple = this.props.schema.properties.data.type === 'array';
-      const items = getItemsAsArray(multiple, this.props.value.data);
-      const ids = items.map(({ id }) => id);
-      this.fetchEntitites(entityTypeId, bundle, ids).then(
-        ({ data: entities }) => {
-          this.setState({
-            selectedItems: entities.map(({ id, attributes }, index) => ({
-              id,
-              type: 'file--file',
-              [entityTypeId]: attributes,
-              meta: items[index].meta,
-            })),
-          });
-        },
-      );
+  componentDidUpdate(prevProps) {
+    if (prevProps.value !== this.props.value) {
+      this.recalculateSelectedItems();
     }
   }
 
@@ -91,6 +80,28 @@ class FileUploadWidget extends React.Component {
       },
     );
   };
+
+  recalculateSelectedItems = () => {
+    const entityTypeId = 'file';
+    const bundle = 'file';
+
+    const multiple = this.props.schema.properties.data.type === 'array';
+    const items = getItemsAsArray(multiple, this.props.value.data);
+    const ids = items.map(({ id }) => id);
+    this.fetchEntitites(entityTypeId, bundle, ids).then(
+      ({ data: entities }) => {
+        this.setState({
+          selectedItems: entities.map(({ id, attributes }, index) => ({
+            id,
+            type: 'file--file',
+            [entityTypeId]: attributes,
+            meta: items[index].meta,
+          })),
+        });
+      },
+    );
+  };
+
 
   fetchEntitites = (entityTypeId, bundle, ids) =>
     api(entityTypeId, {
