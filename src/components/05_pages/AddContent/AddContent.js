@@ -12,7 +12,6 @@ import PageTitle from '../../02_atoms/PageTitle';
 
 const styles = {
   menuLink: css`
-    display: inherit;
     text-decoration: inherit;
   `,
   root: css`
