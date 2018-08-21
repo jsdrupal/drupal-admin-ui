@@ -6,6 +6,7 @@ import { css } from 'emotion';
 import NodeForm from '../NodeForm';
 import { requestSingleContent } from '../../../actions/content';
 import PageTitle from '../../02_atoms/PageTitle/PageTitle';
+import { contentAdd } from '../../../actions/content';
 
 let styles;
 
@@ -13,6 +14,15 @@ class NodeEditForm extends React.Component {
   componentDidMount() {
     this.props.requestSingleContent(this.props.nid);
   }
+
+  onSave(entity) {
+    const data = {
+      ...entity,
+      type: `${this.props.entityTypeId}--${this.props.bundle}`,
+    };
+    // @todo this should be changed to edit specific action.
+    this.props.contentAdd(data);
+  };
 
   render() {
     const { entity } = this.props;
@@ -35,6 +45,7 @@ class NodeEditForm extends React.Component {
               {...this.props}
               bundle={bundle}
               entity={{ data: entity }}
+              onSave={this.onSave}
             />
           )}
         </Fragment>
@@ -70,5 +81,6 @@ export default connect(
   }),
   {
     requestSingleContent,
+    contentAdd,
   },
 )(NodeEditForm);
