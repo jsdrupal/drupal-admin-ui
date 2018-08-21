@@ -32,9 +32,8 @@ NodeAddForm.propTypes = {
   entityTypeId: PropTypes.string.isRequired,
 };
 
-const extractRestorableEntity = (state, bundle) => {
-  return state.content.contentAddByBundle[bundle];
-};
+const extractRestorableEntity = (state, bundle) =>
+  state.content.contentAddByBundle[bundle];
 
 export default connect(
   (state, { bundle }) => ({

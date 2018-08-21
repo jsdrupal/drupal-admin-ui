@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { css } from 'emotion';
@@ -42,6 +42,9 @@ class NodeForm extends React.Component {
       }),
       PropTypes.bool,
     ]),
+    restorableEntity: PropTypes.shape({
+      data: PropTypes.array,
+    }),
     requestUser: PropTypes.func.isRequired,
     onChange: PropTypes.func,
   };
@@ -49,6 +52,7 @@ class NodeForm extends React.Component {
   static defaultProps = {
     schema: false,
     uiSchema: false,
+    restorableEntity: null,
     onChange: () => {},
   };
 
@@ -67,11 +71,15 @@ class NodeForm extends React.Component {
       bundle: this.props.bundle,
     });
 
-    this.calculateState(this.props, this.state, state => this.setState(state));
+    this.calculateState(this.props, this.state, state =>
+      this.setState(state),
+    );
   }
 
   componentDidUpdate() {
-    this.calculateState(this.props, this.state, state => this.setState(state));
+    this.calculateState(this.props, this.state, state =>
+      this.setState(state),
+    );
   }
 
   onAttributeChange = fieldName => data => {
