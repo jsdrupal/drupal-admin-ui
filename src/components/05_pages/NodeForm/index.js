@@ -71,15 +71,11 @@ class NodeForm extends React.Component {
       bundle: this.props.bundle,
     });
 
-    this.calculateState(this.props, this.state, state =>
-      this.setState(state),
-    );
+    this.calculateState(this.props, this.state, state => this.setState(state));
   }
 
   componentDidUpdate() {
-    this.calculateState(this.props, this.state, state =>
-      this.setState(state),
-    );
+    this.calculateState(this.props, this.state, state => this.setState(state));
   }
 
   onAttributeChange = fieldName => data => {
