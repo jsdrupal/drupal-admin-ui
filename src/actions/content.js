@@ -1,3 +1,4 @@
+import React from 'react';
 import {
   put,
   call,
@@ -13,8 +14,13 @@ import {
 } from 'react-redux-loading-bar';
 
 import api from '../utils/api/api';
-import { MESSAGE_SEVERITY_ERROR } from '../constants/messages';
+import {
+  MESSAGE_SEVERITY_ERROR,
+  MESSAGE_SEVERITY_SUCCESS,
+} from '../constants/messages';
 import { setMessage } from './application';
+
+import MessageSave from '../components/01_subatomics/MessageHelpers/MessageSave';
 
 export const CONTENT_REQUESTED = 'CONTENT_REQUESTED';
 export const requestContent = (
@@ -300,7 +306,18 @@ function* saveContent({ payload: { content } }) {
   try {
     yield put(resetLoading());
     yield put(showLoading());
-    yield call(api, 'node:save', { parameters: { node: content } });
+    const {
+      data: {
+        attributes: { title, nid },
+        type,
+      },
+    } = yield call(api, 'node:save', { parameters: { node: content } });
+    yield put(
+      setMessage(
+        <MessageSave bundle={type.split('--')[1]} title={title} nid={nid} />,
+        MESSAGE_SEVERITY_SUCCESS,
+      ),
+    );
   } catch (error) {
     yield put(setMessage(error.toString(), MESSAGE_SEVERITY_ERROR));
   } finally {
@@ -373,7 +390,6 @@ export default function* rootSaga() {
   yield takeEvery(CONTENT_SAVE, saveContent);
   yield takeLatest(CONTENT_SINGLE_REQUESTED, loadSingleContent);
   yield takeEvery(ACTION_EXECUTE, executeAction);
-  yield takeLatest(CONTENT_SAVE, saveContent);
   yield takeLatest(CONTENT_ADD, addContent);
   yield takeEvery(CONTENT_DELETE, deleteContent);
   yield takeLatest(USER_REQUESTED, loadUser);
