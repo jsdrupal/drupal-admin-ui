@@ -6,6 +6,7 @@ import { css } from 'emotion';
 import NodeForm from '../NodeForm';
 import { requestSingleContent } from '../../../actions/content';
 import PageTitle from '../../02_atoms/PageTitle/PageTitle';
+import { PATCH } from '../../../constants/methods';
 
 let styles;
 
@@ -35,6 +36,7 @@ class NodeEditForm extends React.Component {
               {...this.props}
               bundle={bundle}
               entity={{ data: entity }}
+              method={PATCH}
             />
           )}
         </Fragment>

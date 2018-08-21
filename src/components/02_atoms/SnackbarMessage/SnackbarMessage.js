@@ -51,13 +51,19 @@ const styles = {
   `,
 };
 
-const SnackbarMessage = props => {
-  const Icon = variantIcon[props.messageSeverity];
+const SnackbarMessage = ({
+  messageSeverity = MESSAGE_SEVERITY_WARNING,
+  open,
+  duration,
+  onClose,
+  message,
+}) => {
+  const Icon = variantIcon[messageSeverity];
   return (
     <Snackbar
-      open={props.open}
-      autoHideDuration={props.duration}
-      onClose={props.onClose}
+      open={open}
+      autoHideDuration={duration}
+      onClose={onClose}
       anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
     >
       <SnackbarContent
@@ -74,11 +80,11 @@ const SnackbarMessage = props => {
             default:
               return styles.error;
           }
-        })(props.messageSeverity)}
+        })(messageSeverity)}
         message={
           <span className={styles.message}>
             <Icon className={`${styles.icon} ${styles.iconVariant}`} />
-            {props.message}
+            {message}
           </span>
         }
         action={[
@@ -86,7 +92,7 @@ const SnackbarMessage = props => {
             key="close"
             aria-label="Close"
             color="inherit"
-            onClick={props.onClose}
+            onClick={onClose}
           >
             <CloseIcon className={styles.icon} />
           </IconButton>,
