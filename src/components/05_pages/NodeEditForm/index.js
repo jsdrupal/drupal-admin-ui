@@ -4,7 +4,7 @@ import LoadingBar from 'react-redux-loading-bar';
 import PropTypes from 'prop-types';
 import { css } from 'emotion';
 import NodeForm from '../NodeForm';
-import { contentAdd, requestSingleContent } from '../../../actions/content';
+import { contentSave, requestSingleContent } from '../../../actions/content';
 import PageTitle from '../../02_atoms/PageTitle/PageTitle';
 
 let styles;
@@ -14,13 +14,12 @@ class NodeEditForm extends React.Component {
     this.props.requestSingleContent(this.props.nid);
   }
 
-  onSave = entity => {
+  onSave = bundle => entity => {
     const data = {
       ...entity,
-      type: `${this.props.entityTypeId}--${this.props.bundle}`,
+      type: `${this.props.entityTypeId}--${bundle}`,
     };
-    // @todo this should be changed to edit specific action.
-    this.props.contentAdd(data);
+    this.props.contentSave(data);
   };
 
   render() {
@@ -44,7 +43,7 @@ class NodeEditForm extends React.Component {
               {...this.props}
               bundle={bundle}
               entity={{ data: entity }}
-              onSave={this.onSave}
+              onSave={this.onSave(bundle)}
             />
           )}
         </Fragment>
@@ -61,9 +60,8 @@ NodeEditForm.defaultProps = {
 NodeEditForm.propTypes = {
   nid: PropTypes.string.isRequired,
   requestSingleContent: PropTypes.func.isRequired,
-  contentAdd: PropTypes.func.isRequired,
+  contentSave: PropTypes.func.isRequired,
   entityTypeId: PropTypes.string.isRequired,
-  bundle: PropTypes.string.isRequired,
   entity: PropTypes.shape({
     attributes: PropTypes.shape({
       title: PropTypes.string.isRequired,
@@ -83,6 +81,6 @@ export default connect(
   }),
   {
     requestSingleContent,
-    contentAdd,
+    contentSave,
   },
 )(NodeEditForm);
