@@ -9,6 +9,7 @@ import Button from '@material-ui/core/Button';
 
 import SchemaPropType from './SchemaPropType';
 
+import { contentAdd, requestUser } from '../../../actions/content';
 import { requestSchema, requestUiSchema } from '../../../actions/schema';
 
 import {
@@ -40,6 +41,7 @@ class NodeForm extends React.Component {
       }),
       PropTypes.bool,
     ]),
+    requestUser: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
@@ -68,6 +70,7 @@ class NodeForm extends React.Component {
         ...createEntity(props.schema),
       },
     };
+
     // Just contain values which are in the ui metadata.
     state.entity.data.attributes = Object.entries(state.entity.data.attributes)
       .filter(([key]) =>
@@ -76,10 +79,19 @@ class NodeForm extends React.Component {
           .includes(key),
       )
       .reduce((agg, [key, value]) => ({ ...agg, [key]: value }), {});
+
+    // @TODO Remove this when we create the entity scaffolding at the NodeEdit
+    // or NodeAdd component level.
+    // https://github.com/jsdrupal/drupal-admin-ui/issues/378
+    // Set default `Authored By` relationship.
+    if (!Object.prototype.hasOwnProperty.call(props, 'entity')) {
+      state.entity.data.relationships.uid.data = { ...props.user };
+    }
     return state;
   }
 
   componentDidMount() {
+    this.props.requestUser(1);
     this.props.requestSchema({
       entityTypeId: this.props.entityTypeId,
       bundle: this.props.bundle,
@@ -225,6 +237,7 @@ styles = {
 const mapStateToProps = (state, { bundle, entityTypeId }) => ({
   schema: state.schema.schema[`${entityTypeId}--${bundle}`],
   uiSchema: state.schema.uiSchema[`${entityTypeId}--${bundle}`],
+  user: state.content.user,
 });
 
 export default connect(
@@ -232,5 +245,7 @@ export default connect(
   {
     requestSchema,
     requestUiSchema,
+    contentAdd,
+    requestUser,
   },
 )(NodeForm);
