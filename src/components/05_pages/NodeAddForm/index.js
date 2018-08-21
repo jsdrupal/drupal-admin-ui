@@ -7,18 +7,13 @@ import PageTitle from '../../02_atoms/PageTitle/PageTitle';
 import { contentAdd } from '../../../actions/content';
 
 class NodeAddForm extends React.Component {
-  constructor() {
-    super();
-    this.onSave = this.onSave.bind(this);
-  }
-
-  onSave(entity) {
+  onSave = entity => {
     const data = {
       ...entity,
       type: `${this.props.entityTypeId}--${this.props.bundle}`,
     };
     this.props.contentAdd(data);
-  }
+  };
 
   render() {
     return (

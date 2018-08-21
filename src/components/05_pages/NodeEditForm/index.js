@@ -14,14 +14,14 @@ class NodeEditForm extends React.Component {
     this.props.requestSingleContent(this.props.nid);
   }
 
-  onSave(entity) {
+  onSave = entity => {
     const data = {
       ...entity,
       type: `${this.props.entityTypeId}--${this.props.bundle}`,
     };
     // @todo this should be changed to edit specific action.
     this.props.contentAdd(data);
-  }
+  };
 
   render() {
     const { entity } = this.props;
