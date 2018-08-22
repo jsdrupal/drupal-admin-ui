@@ -55,7 +55,10 @@ export default (state = initialState, action) => {
     }
     case CLEAR_MESSAGE: {
       const messages = [...state.messages];
-      messages.pop(messages.map(message => message.key === action.payload.key));
+      messages.splice(
+        messages.findIndex(message => message.key === action.payload.key),
+        1,
+      );
       return {
         ...state,
         messages,
