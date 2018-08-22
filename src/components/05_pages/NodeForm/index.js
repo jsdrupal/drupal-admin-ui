@@ -12,6 +12,9 @@ import SchemaPropType from './SchemaPropType';
 import { contentAdd, requestUser } from '../../../actions/content';
 import { requestSchema, requestUiSchema } from '../../../actions/schema';
 
+import { setMessage } from '../../../actions/application';
+import { MESSAGE_SEVERITY_ERROR } from '../../../constants/messages';
+
 import {
   createEntity,
   createUISchema,
@@ -42,6 +45,7 @@ class NodeForm extends React.Component {
       PropTypes.bool,
     ]),
     requestUser: PropTypes.func.isRequired,
+    setMessage: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
@@ -117,7 +121,15 @@ class NodeForm extends React.Component {
   };
 
   onSave = () => {
-    this.props.onSave(this.state.entity.data);
+    const missingFields = this.resolveRequiredFiles();
+    if (missingFields.length) {
+      this.props.setMessage(
+        `${missingFields.join(' ')} are missing.`,
+        MESSAGE_SEVERITY_ERROR,
+      );
+    } else {
+      this.props.onSave(this.state.entity.data);
+    }
   };
 
   onRelationshipChange = fieldName => data => {
@@ -146,6 +158,29 @@ class NodeForm extends React.Component {
   getSchemaInfo = (schema, fieldName) =>
     schema.properties.data.properties.attributes.properties[fieldName] ||
     schema.properties.data.properties.relationships.properties[fieldName];
+
+  resolveRequiredFiles = () => {
+    const unavailableFields = ['nid', 'uuid', 'vid', 'path'];
+    const requiredFields = this.props.schema.properties.data.properties.attributes.required.filter(
+      field => !unavailableFields.includes(field),
+    );
+    return Object.entries(this.state.entity.data.attributes)
+      .filter(([fieldName]) => requiredFields.includes(fieldName))
+      .filter(([fieldName, value]) => {
+        if (
+          typeof value === 'object' &&
+          Object.keys(value).length &&
+          value.value === ''
+        ) {
+          return fieldName;
+        }
+        if (typeof value === 'string' && value.length === 0) {
+          return fieldName;
+        }
+        return false;
+      })
+      .map(([fieldName]) => fieldName);
+  };
 
   createField = ({ fieldName, widget, inputProps }) => {
     // @todo We need to pass along props.
@@ -247,5 +282,6 @@ export default connect(
     requestUiSchema,
     contentAdd,
     requestUser,
+    setMessage,
   },
 )(NodeForm);
