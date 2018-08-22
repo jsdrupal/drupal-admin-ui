@@ -262,23 +262,20 @@ class FileUploadWidget extends React.Component {
   }
 }
 
-const fileItemMultiplePropType = PropTypes.shape({
-  id: PropTypes.toString.isRequired,
-  file: PropTypes.shape({
-    type: PropTypes.string.isRequired,
-    url: PropTypes.string.isRequired,
-    id: PropTypes.string,
-    filename: PropTypes.string.isRequired,
-  }),
+const filePropType = PropTypes.shape({
+  type: PropTypes.string.isRequired,
+  url: PropTypes.string.isRequired,
+  id: PropTypes.string,
+  filename: PropTypes.string.isRequired,
 });
 
-const fileItemPropType = PropTypes.shape({
-  file: PropTypes.shape({
-    type: PropTypes.string.isRequired,
-    url: PropTypes.string.isRequired,
-    id: PropTypes.string.isRequired,
-    filename: PropTypes.string.isRequired,
-  }),
+const fileItemMultiplePropType = PropTypes.shape({
+  id: PropTypes.toString.isRequired,
+  file: filePropType.isRequired,
+});
+
+const fileItemSinglePropType = PropTypes.shape({
+  file: filePropType.isRequired,
 });
 
 FileUploadWidget.propTypes = {
@@ -287,7 +284,7 @@ FileUploadWidget.propTypes = {
     data: PropTypes.shape({
       file: PropTypes.oneOfType([
         PropTypes.arrayOf(fileItemMultiplePropType),
-        fileItemPropType,
+        fileItemSinglePropType,
       ]),
       meta: PropTypes.shape({
         alt: PropTypes.string,
