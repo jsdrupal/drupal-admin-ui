@@ -56,7 +56,7 @@ storiesOf('Widgets/DatetimeTimestamp', module).addWithJSX('Default', () => (
     name="startTime"
     onChange={onChangeAction}
     required={boolean('DatetimeTimestamp: required', true)}
-    value={text('DateTimestamp: value', '2000-01-01T00:00:00')}
+    value={number('DateTimestamp: value', 0)}
   />
 ));
 
@@ -186,7 +186,7 @@ storiesOf('Widgets/NumberTextfield', module).addWithJSX('Default', () => (
       suffix: text('suffix', ' for a storybook.'),
     }}
     onChange={onChangeAction}
-    value={text('value', '5')}
+    value={number('NumberTextfield: value', 5)}
   />
 ));
 
