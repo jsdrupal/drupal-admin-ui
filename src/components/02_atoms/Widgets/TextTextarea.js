@@ -44,17 +44,28 @@ class TextTextarea extends React.Component {
       (Array.isArray(props.value) &&
         props.value.length &&
         props.value[0].value) ||
-        props.value.value ||
-        '',
+      props.value.value ||
+      '',
       'html',
     );
 
+  extractValueString = props =>
+    (Array.isArray(props.value) &&
+      props.value.length &&
+      props.value[0].value) ||
+    props.value.value ||
+    '';
+
   state = {
     value: this.createValueFromString(this.props),
+    valueString: this.extractValueString(this.props),
   };
 
   componentDidUpdate = prevProps => {
-    if (this.props.value.value !== prevProps.value.value) {
+    if (
+      this.props.value.value !== prevProps.value.value &&
+      this.extractValueString(this.props) !== this.state.valueString
+    ) {
       this.setState({
         value: this.createValueFromString(this.props),
       });
@@ -62,12 +73,13 @@ class TextTextarea extends React.Component {
   };
 
   onChange = value => {
-    this.setState({ value }, () => {
+    const valueString = value.toString('html');
+    this.setState({ value, valueString }, () => {
       // Send the changes up to the parent component as an HTML string.
       // This is here to demonstrate using `.toString()` but in a real app it
       // would be better to avoid generating a string on each change.
       this.props.onChange({
-        value: value.toString('html'),
+        value: valueString,
       });
     });
   };
