@@ -1,5 +1,6 @@
 import qs from 'qs';
 import { ApiError } from './errors';
+import * as apiConstants from '../../constants/api';
 
 async function api(
   endpoint,
@@ -10,70 +11,70 @@ async function api(
   options.headers = options.headers || {};
 
   switch (endpoint) {
-    case 'menu':
-      url = '/admin-api/menu?_format=json';
+    case apiConstants.CASE_MENU:
+      url = `${apiConstants.URL_MENU}?${apiConstants.FORMAT_JSON}`;
       break;
-    case 'dblog':
-      url = '/jsonapi/watchdog_entity/';
-      options.headers.Accept = 'application/vnd.api+json';
+    case apiConstants.CASE_DBLOG:
+      url = `${apiConstants.URL_DBLOG}`;
+      options.headers.Accept = `${apiConstants.API_HEADERS_JSON}`;
       break;
-    case 'csrf_token':
-      url = '/session/token';
+    case apiConstants.CASE_CSRF_TOKEN:
+      url = `${apiConstants.URL_CSRF_TOKEN}`;
       options.text = true;
       break;
-    case 'dblog:types':
-      url = '/admin-ui-support/dblog-types?_format=json';
+    case apiConstants.CASE_DBLOG_TYPES:
+      url = `${apiConstants.URL_DBLOG_TYPES}?${apiConstants.FORMAT_JSON}`;
       break;
-    case 'roles':
-      url = '/jsonapi/user_role';
-      options.headers.Accept = 'application/vnd.api+json';
+    case apiConstants.CASE_ROLES:
+      url = `${apiConstants.URL_ROLES}`;
+      options.headers.Accept = `${apiConstants.API_HEADERS_JSON}`;
       break;
-    case 'role':
-      url = `/jsonapi/user_role/${parameters.role.id}`;
-      options.headers.Accept = 'application/vnd.api+json';
+    case apiConstants.CASE_ROLE:
+      url = `${apiConstants.URL_ROLES}/${parameters.role.id}`;
+      options.headers.Accept = `${apiConstants.API_HEADERS_JSON}`;
       break;
-    case 'role:patch':
-      url = `/jsonapi/user_role/${parameters.role.id}`;
-      options.headers.Accept = 'application/vnd.api+json';
+    case apiConstants.CASE_ROLE_PATCH:
+      url = `${apiConstants.URL_ROLES}/${parameters.role.id}`;
+      options.headers.Accept = `${apiConstants.API_HEADERS_JSON}`;
       options.method = 'PATCH';
       options.body = JSON.stringify({ data: parameters.role });
-      options.headers['Content-Type'] = 'application/vnd.api+json';
+      options.headers['Content-Type'] = `${apiConstants.API_HEADERS_JSON}`;
       break;
-    case 'file:upload':
-      url = `/file/upload/${parameters.entityTypeId}/${parameters.bundle}/${
-        parameters.fieldName
-      }`;
+    case apiConstants.CASE_FILE_UPLOAD:
+      url = `${apiConstants.URL_FILE_UPLOAD}/${parameters.entityTypeId}/${
+        parameters.bundle
+      }/${parameters.fieldName}`;
       options.method = 'POST';
-      options.headers['Content-Type'] = 'application/octet-stream';
+      options.headers['Content-Type'] = `${apiConstants.APP_OCTET_STREAM}`;
       options.headers['Content-Disposition'] = `file; filename="${
         parameters.fileName
       }"`;
       options.body = parameters.body;
       break;
-    case 'permissions':
-      url = '/admin-api/permissions?_format=json';
+    case apiConstants.CASE_PERMISSIONS:
+      url = `${apiConstants.URL_PERMISSIONS}?${apiConstants.FORMAT_JSON}`;
       break;
-    case 'content':
-      url = '/jsonapi/node';
-      options.headers.Accept = 'application/vnd.api+json';
+    case apiConstants.CASE_CONTENT:
+      url = `${apiConstants.URL_CONTENT}`;
+      options.headers.Accept = `${apiConstants.API_HEADERS_JSON}`;
       break;
-    case 'content_single':
-      url = `/jsonapi/node/${parameters.bundle}/${parameters.id}`;
-      options.headers.Accept = 'application/vnd.api+json';
+    case apiConstants.CASE_CONTENT_SINGLE:
+      url = `${apiConstants.URL_CONTENT}/${parameters.bundle}/${parameters.id}`;
+      options.headers.Accept = `${apiConstants.API_HEADERS_JSON}`;
       break;
-    case 'file':
-      url = `/jsonapi/file`;
-      options.headers.Accept = 'application/vnd.api+json';
+    case apiConstants.CASE_FILE:
+      url = `${apiConstants.URL_FILE}`;
+      options.headers.Accept = `${apiConstants.API_HEADERS_JSON}`;
       break;
-    case 'actions':
-      url = '/jsonapi/action';
-      options.headers.Accept = 'application/vnd.api+json';
+    case apiConstants.CASE_ACTIONS:
+      url = `${apiConstants.URL_ACTIONS}`;
+      options.headers.Accept = `${apiConstants.API_HEADERS_JSON}`;
       break;
-    case 'contentTypes':
-      url = '/jsonapi/node_type';
-      options.headers.Accept = 'application/vnd.api+json';
+    case apiConstants.CASE_CONTENT_TYPES:
+      url = `${apiConstants.URL_CONTENT_TYPES}`;
+      options.headers.Accept = `${apiConstants.API_HEADERS_JSON}`;
       break;
-    case 'node:delete': {
+    case apiConstants.CASE_NODE_DELETE: {
       // Set the type to the right value for jsonapi to process.
       // @todo Ideally this should not be differnet in the first place.
       parameters.node = {
@@ -86,9 +87,9 @@ async function api(
       const deleteToken = await api('csrf_token');
       // @todo Delete requests sadly return non json.
       options.text = true;
-      options.headers.Accept = 'application/vnd.api+json';
+      options.headers.Accept = `${apiConstants.API_HEADERS_JSON}`;
       options.headers['X-CSRF-Token'] = deleteToken;
-      options.headers['Content-Type'] = 'application/vnd.api+json';
+      options.headers['Content-Type'] = `${apiConstants.API_HEADERS_JSON}`;
       options.method = 'DELETE';
       url = parameters.node.links.self.replace(
         process.env.REACT_APP_DRUPAL_BASE_URL,
@@ -96,7 +97,7 @@ async function api(
       );
       break;
     }
-    case 'node:add': {
+    case apiConstants.CASE_NODE_ADD: {
       const { node } = parameters;
       // Set the type to the right value for jsonapi to process.
       // @todo Ideally this should not be differnet in the first place.
@@ -114,14 +115,14 @@ async function api(
       delete node.relationships.uid;
 
       const saveToken = await api('csrf_token');
-      options.headers.Accept = 'application/vnd.api+json';
+      options.headers.Accept = `${apiConstants.API_HEADERS_JSON}`;
       options.headers['X-CSRF-Token'] = saveToken;
       options.method = 'POST';
       options.body = JSON.stringify({ data: node });
       url = `/jsonapi/${node.type.replace('--', '/')}`;
       break;
     }
-    case 'node:save': {
+    case apiConstants.CASE_NODE_SAVE: {
       // Set the type to the right value for jsonapi to process.
       // @todo Ideally this should not be differnet in the first place.
       parameters.node = {
@@ -132,7 +133,7 @@ async function api(
       };
 
       const saveToken = await api('csrf_token');
-      options.headers.Accept = 'application/vnd.api+json';
+      options.headers.Accept = `${apiConstants.API_HEADERS_JSON}`;
       options.headers['X-CSRF-Token'] = saveToken;
       options.method = 'PATCH';
       options.body = JSON.stringify({ data: parameters.node });
@@ -142,32 +143,33 @@ async function api(
       );
       break;
     }
-    case 'taxonomy_term': {
-      url = `/jsonapi/taxonomy_term/${parameters.type}`;
-      options.headers.Accept = 'application/vnd.api+json';
+    case apiConstants.CASE_TAXONOMY_TERM: {
+      url = `${apiConstants.URL_TAXONOMY_TERM}/${parameters.type}`;
+      options.headers.Accept = `${apiConstants.API_HEADERS_JSON}`;
       break;
     }
-    case 'user': {
-      url = `/jsonapi/user`;
-      options.headers.Accept = 'application/vnd.api+json';
+    case apiConstants.CASE_USER: {
+      url = `${apiConstants.URL_USER}`;
+      options.headers.Accept = `${apiConstants.API_HEADERS_JSON}`;
       break;
     }
-    case 'schema': {
-      url = `/schemata/${[parameters.entityTypeId, parameters.bundle].join(
-        '/',
-      )}`;
+    case apiConstants.CASE_SCHEMA: {
+      url = `${apiConstants.URL_SCHEMA}/${[
+        parameters.entityTypeId,
+        parameters.bundle,
+      ].join('/')}`;
       break;
     }
-    case 'field_schema': {
-      url = '/jsonapi/field_config';
+    case apiConstants.CASE_FIELD_SCHEMA: {
+      url = `${apiConstants.URL_FIELD_SCHEMA}`;
       break;
     }
-    case 'form_display': {
-      url = '/jsonapi/entity_form_display';
+    case apiConstants.CASE_FORM_DISPLAY: {
+      url = `${apiConstants.URL_FORM_DISPLAY}`;
       break;
     }
-    case 'field_storage_config': {
-      url = '/jsonapi/field_storage_config';
+    case apiConstants.CASE_FIELD_STORAGE_CONFIG: {
+      url = `${apiConstants.URL_FIELD_STORAGE_CONFIG}`;
       break;
     }
     default:
