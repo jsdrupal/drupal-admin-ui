@@ -34,7 +34,7 @@ DatetimeTimestamp.propTypes = {
 };
 
 DatetimeTimestamp.defaultProps = {
-  value: '',
+  value: 0,
 };
 
 export default DatetimeTimestamp;
