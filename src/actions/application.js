@@ -91,6 +91,7 @@ export const requestContentTypes = () => ({
   payload: {},
 });
 
+export const contentTypesSelector = state => state.application.contentTypes;
 export const CONTENT_TYPES_LOADED = 'CONTENT_TYPES_LOADED';
 function* loadContentTypes() {
   try {
