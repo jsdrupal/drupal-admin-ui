@@ -2,12 +2,14 @@ import {
   CONTENT_LOADED,
   CONTENT_SINGLE_LOADED,
   CONTENT_DELETE,
+  USER_LOADED,
 } from '../actions/content';
 
 export const initialState = {
   contentList: [],
-  contentById: {},
+  contentByNid: {},
   links: {},
+  user: {},
 };
 
 export default (state = initialState, action) => {
@@ -15,8 +17,8 @@ export default (state = initialState, action) => {
     case CONTENT_SINGLE_LOADED:
       return {
         ...state,
-        contentById: {
-          [action.payload.content.data.id]: action.payload.content,
+        contentByNid: {
+          [action.payload.content.attributes.nid]: action.payload.content,
         },
       };
     case CONTENT_LOADED: {
@@ -48,6 +50,13 @@ export default (state = initialState, action) => {
         contentList: state.contentList.filter(
           content => content.id !== action.payload.content.id,
         ),
+      };
+    }
+
+    case USER_LOADED: {
+      return {
+        ...state,
+        user: action.payload.user,
       };
     }
 

@@ -1,3 +1,4 @@
+import React from 'react';
 import {
   put,
   call,
@@ -11,10 +12,17 @@ import {
   hideLoading,
   resetLoading,
 } from 'react-redux-loading-bar';
+import { push } from 'react-router-redux';
 
 import api from '../utils/api/api';
-import { MESSAGE_ERROR } from '../constants/messages';
-import { setMessage } from './application';
+import {
+  MESSAGE_SEVERITY_ERROR,
+  MESSAGE_SEVERITY_SUCCESS,
+} from '../constants/messages';
+import { setMessage, contentTypesSelector } from './application';
+
+import MessageSave from '../components/01_subatomics/MessageHelpers/MessageSave';
+import { extractContentType, mapContentTypeToName } from '../utils/api/content';
 
 export const CONTENT_REQUESTED = 'CONTENT_REQUESTED';
 export const requestContent = (
@@ -108,31 +116,35 @@ function* loadContent(action) {
       },
     });
   } catch (error) {
-    yield put(setMessage(error.toString(), MESSAGE_ERROR));
+    yield put(setMessage(error.toString(), MESSAGE_SEVERITY_ERROR));
   } finally {
     yield put(hideLoading());
   }
 }
 
 export const CONTENT_SINGLE_REQUESTED = 'CONTENT_SINGLE_REQUESTED';
-export const requestSingleContent = (bundle, id) => ({
+export const requestSingleContent = nid => ({
   type: CONTENT_SINGLE_REQUESTED,
-  payload: { bundle, id },
+  payload: { nid },
 });
 
 export const CONTENT_SINGLE_LOADED = 'CONTENT_SINGLE_LOADED';
 function* loadSingleContent(action) {
   const {
-    payload: { bundle, id },
+    payload: { nid },
   } = action;
   try {
     yield put(resetLoading());
     yield put(showLoading());
 
-    const content = yield call(api, 'content_single', {
-      parameters: { bundle, id },
-      queryString: {},
+    const {
+      data: [content],
+    } = yield call(api, 'content', {
+      queryString: {
+        filter: { condition: { path: 'nid', value: nid } },
+      },
     });
+
     yield put({
       type: CONTENT_SINGLE_LOADED,
       payload: {
@@ -140,7 +152,7 @@ function* loadSingleContent(action) {
       },
     });
   } catch (error) {
-    yield put(setMessage(error.toString(), MESSAGE_ERROR));
+    yield put(setMessage(error.toString(), MESSAGE_SEVERITY_ERROR));
   } finally {
     yield put(hideLoading());
   }
@@ -286,7 +298,7 @@ export function* executeAction({ payload: { action, nids } }) {
       .filter(x => x);
     yield all(actions);
   } catch (error) {
-    yield put(setMessage(error.toString(), MESSAGE_ERROR));
+    yield put(setMessage(error.toString(), MESSAGE_SEVERITY_ERROR));
   } finally {
     yield put(hideLoading());
   }
@@ -296,9 +308,20 @@ function* saveContent({ payload: { content } }) {
   try {
     yield put(resetLoading());
     yield put(showLoading());
-    yield call(api, 'node:save', { parameters: { node: content } });
+    const {
+      data: {
+        attributes: { title, nid },
+        type,
+      },
+    } = yield call(api, 'node:save', { parameters: { node: content } });
+    yield put(
+      setMessage(
+        <MessageSave bundle={type.split('--')[1]} title={title} nid={nid} />,
+        MESSAGE_SEVERITY_SUCCESS,
+      ),
+    );
   } catch (error) {
-    yield put(setMessage(error.toString(), MESSAGE_ERROR));
+    yield put(setMessage(error.toString(), MESSAGE_SEVERITY_ERROR));
   } finally {
     yield put(hideLoading());
   }
@@ -306,11 +329,25 @@ function* saveContent({ payload: { content } }) {
 
 function* addContent({ payload: { content } }) {
   try {
+    // Get the content types from the redux state
+    const contentTypes = yield select(contentTypesSelector);
+    // Extract the content type from the content data
+    const contentType = extractContentType(content);
+    // Map the content type to the human-readable name
+    const contentName =
+      mapContentTypeToName(contentTypes, contentType) || 'unknown';
     yield put(resetLoading());
     yield put(showLoading());
     yield call(api, 'node:add', { parameters: { node: content } });
+    yield put(push('/admin/content'));
+    yield put(
+      setMessage(
+        `New ${contentName} added successfully`,
+        MESSAGE_SEVERITY_SUCCESS,
+      ),
+    );
   } catch (error) {
-    yield put(setMessage(error.toString()));
+    yield put(setMessage(error.toString(), MESSAGE_SEVERITY_ERROR));
   } finally {
     yield put(hideLoading());
   }
@@ -322,7 +359,43 @@ function* deleteContent({ payload: { content } }) {
     yield put(showLoading());
     yield call(api, 'node:delete', { parameters: { node: content } });
   } catch (error) {
-    yield put(setMessage(error.toString(), MESSAGE_ERROR));
+    yield put(setMessage(error.toString(), MESSAGE_SEVERITY_ERROR));
+  } finally {
+    yield put(hideLoading());
+  }
+}
+
+export const USER_REQUESTED = 'USER_REQUESTED';
+export const requestUser = uid => ({
+  type: USER_REQUESTED,
+  payload: { uid },
+});
+
+export const USER_LOADED = 'USER_LOADED';
+function* loadUser(action) {
+  const {
+    payload: { uid },
+  } = action;
+  try {
+    yield put(resetLoading());
+    yield put(showLoading());
+
+    const {
+      data: [user],
+    } = yield call(api, 'user', {
+      queryString: {
+        filter: { condition: { path: 'uid', value: uid } },
+      },
+    });
+
+    yield put({
+      type: USER_LOADED,
+      payload: {
+        user,
+      },
+    });
+  } catch (error) {
+    yield put(setMessage(error.toString(), MESSAGE_SEVERITY_ERROR));
   } finally {
     yield put(hideLoading());
   }
@@ -333,7 +406,7 @@ export default function* rootSaga() {
   yield takeEvery(CONTENT_SAVE, saveContent);
   yield takeLatest(CONTENT_SINGLE_REQUESTED, loadSingleContent);
   yield takeEvery(ACTION_EXECUTE, executeAction);
-  yield takeLatest(CONTENT_SAVE, saveContent);
   yield takeLatest(CONTENT_ADD, addContent);
   yield takeEvery(CONTENT_DELETE, deleteContent);
+  yield takeLatest(USER_REQUESTED, loadUser);
 }

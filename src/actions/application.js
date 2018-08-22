@@ -5,7 +5,7 @@ import {
   resetLoading,
 } from 'react-redux-loading-bar';
 import api from '../utils/api/api';
-import { MESSAGE_ERROR } from '../constants/messages';
+import { MESSAGE_SEVERITY_ERROR } from '../constants/messages';
 
 export const OPEN_DRAWER = 'OPEN_DRAWER';
 export const openDrawer = () => ({
@@ -21,21 +21,31 @@ export const SET_MESSAGE = 'SET_MESSAGE';
 
 /**
  *
- * @param {string} message
- * @param type - one of the message constants exported from constants/messages.js
- * @returns {{type: string, payload: {message: *, type: *}}}
+ * @param {string} message - the message content
+ * @param {string} severity - the severity level of the message, one of the levels
+ *  listed at constants/messages.js
+ * @returns {{type: string, payload: {message: *, messageInterface: *, messageSeverity: *}}}
  */
-export const setMessage = (message, type) => ({
+export const setMessage = (message, messageSeverity) => ({
   type: SET_MESSAGE,
   payload: {
     message,
-    type,
+    messageSeverity,
   },
 });
 
 export const CLEAR_MESSAGE = 'CLEAR_MESSAGE';
-export const clearMessage = () => ({
+export const clearMessage = key => ({
   type: CLEAR_MESSAGE,
+  payload: {
+    key,
+  },
+});
+
+export const CLEAR_ALL_MESSAGES = 'CLEAR_MESSAGES';
+export const clearAllMessages = () => ({
+  type: CLEAR_ALL_MESSAGES,
+  payload: {},
 });
 
 export const MENU_REQUESTED = 'MENU_REQUESTED';
@@ -62,11 +72,11 @@ function* loadMenu() {
       yield put(
         setMessage(
           'Unable to access data from Drupal. Did you set REACT_APP_DRUPAL_BASE_URL to localhost instead of 127.0.0.1?',
-          MESSAGE_ERROR,
+          MESSAGE_SEVERITY_ERROR,
         ),
       );
     }
-    yield put(setMessage(error.toString(), MESSAGE_ERROR));
+    yield put(setMessage(error.toString(), MESSAGE_SEVERITY_ERROR));
   } finally {
     yield put(hideLoading());
   }
@@ -81,14 +91,11 @@ export const requestContentTypes = () => ({
   payload: {},
 });
 
-export const getContentTypeCache = state => state.application.contentTypes;
+export const contentTypesSelector = state => state.application.contentTypes;
 export const CONTENT_TYPES_LOADED = 'CONTENT_TYPES_LOADED';
 function* loadContentTypes() {
   try {
-    let contentTypes = { data: yield select(getContentTypeCache) };
-    if (!Object.keys(contentTypes.data).length) {
-      contentTypes = yield call(api, 'contentTypes');
-    }
+    const contentTypes = yield call(api, 'contentTypes');
     yield put({
       type: CONTENT_TYPES_LOADED,
       payload: {
@@ -96,7 +103,7 @@ function* loadContentTypes() {
       },
     });
   } catch (error) {
-    yield put(setMessage(error.toString(), MESSAGE_ERROR));
+    yield put(setMessage(error.toString(), MESSAGE_SEVERITY_ERROR));
   } finally {
     yield put(hideLoading());
   }
@@ -126,7 +133,7 @@ function* loadActions() {
       },
     });
   } catch (error) {
-    yield put(setMessage(error.toString(), MESSAGE_ERROR));
+    yield put(setMessage(error.toString(), MESSAGE_SEVERITY_ERROR));
   }
 }
 

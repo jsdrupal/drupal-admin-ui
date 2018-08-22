@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { css } from 'emotion';
 import { Link } from 'react-router-dom';
+import { withRouter } from 'react-router';
 
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Drawer from '@material-ui/core/Drawer';
@@ -23,15 +24,16 @@ import HelpIcon from '@material-ui/icons/Help';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 
-import Message from '../../02_atoms/Message/Message';
+import Snackbar from '../../02_atoms/SnackbarMessage/SnackbarMessage';
 import ErrorBoundary from '../ErrorBoundary/ErrorBoundary';
 
 import {
   requestMenu,
   closeDrawer,
   openDrawer,
+  setMessage,
+  clearMessage,
 } from '../../../actions/application';
-import { MESSAGE_ERROR } from '../../../constants/messages';
 
 let styles;
 
@@ -106,10 +108,13 @@ class Default extends React.Component {
 
       <main className={styles.main} id={styles.main}>
         <ErrorBoundary>
-          {this.props.messages.map(message => (
-            <Message {...message} key={message.key} type={MESSAGE_ERROR} />
-          ))}
           {this.props.children}
+          {this.props.messages.map(message => (
+            <Snackbar
+              {...message}
+              onClose={() => this.props.clearMessage(message.key)}
+            />
+          ))}
         </ErrorBoundary>
       </main>
     </div>
@@ -169,6 +174,8 @@ Default.propTypes = {
   requestMenu: PropTypes.func.isRequired,
   openDrawer: PropTypes.func.isRequired,
   closeDrawer: PropTypes.func.isRequired,
+  setMessage: PropTypes.func.isRequired,
+  clearMessage: PropTypes.func.isRequired,
   drawerOpen: PropTypes.bool,
 };
 
@@ -183,11 +190,15 @@ const mapStateToProps = state => ({
   drawerOpen: state.application.drawerOpen,
 });
 
-export default connect(
-  mapStateToProps,
-  {
-    requestMenu,
-    openDrawer,
-    closeDrawer,
-  },
-)(Default);
+export default withRouter(
+  connect(
+    mapStateToProps,
+    {
+      requestMenu,
+      openDrawer,
+      closeDrawer,
+      setMessage,
+      clearMessage,
+    },
+  )(Default),
+);

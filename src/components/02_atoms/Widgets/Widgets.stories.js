@@ -7,11 +7,12 @@ import { action } from '@storybook/addon-actions';
 import { boolean, number, object, text } from '@storybook/addon-knobs/react';
 
 import BooleanCheckbox from './BooleanCheckbox';
+import DatetimeTimestamp from './DatetimeTimestamp';
+import EntityReferenceAutocomplete from './EntityReferenceAutocomplete';
 import FileUploadWidget from './FileUploadWidget';
 import NumberTextfield from './NumberTextfield';
 import OptionsSelect from './OptionsSelect';
 import StringTextfield from './StringTextfield';
-import DatetimeTimestamp from './DatetimeTimestamp';
 import TextTextarea from './TextTextarea';
 
 /**
@@ -47,6 +48,80 @@ storiesOf('Widgets/BooleanCheckbox', module).addWithJSX('Default', () => (
     onChange={onChangeAction}
   />
 ));
+
+storiesOf('Widgets/DatetimeTimestamp', module).addWithJSX('Default', () => (
+  <DatetimeTimestamp
+    fieldName="EventStart"
+    label={text('DateTimestamp: label', 'A Simple Label')}
+    name="startTime"
+    onChange={onChangeAction}
+    required={boolean('DatetimeTimestamp: required', true)}
+    value={number('DateTimestamp: value', 0)}
+  />
+));
+
+storiesOf('Widgets/EntityReferenceAutocomplete', module).addWithJSX(
+  'Default',
+  () => (
+    <EntityReferenceAutocomplete
+      bundle="recipe"
+      entityTypeId="node"
+      fieldName="field_author"
+      inputProps={object('EntityReferenceAutocomplete: inputProps', {
+        handler: 'default:user',
+        handler_settings: {
+          auto_create: false,
+          filter: {
+            type: '_none',
+          },
+          include_anonymous: true,
+          sort: {
+            field: '_none',
+          },
+          target_bundles: null,
+        },
+        match_operator: 'CONTAINS',
+        placeholder: '',
+        size: 60,
+      })}
+      label="Author"
+      onChange={onChangeAction}
+      required={false}
+      schema={object('EntityReferenceAutocomplete: schema', {
+        properties: {
+          data: {
+            properties: {
+              id: {
+                format: 'uuid',
+                maxLength: 128,
+                title: 'Resource ID',
+                type: 'string',
+              },
+              type: {
+                enum: ['user--user'],
+                title: 'Referenced resource',
+                type: 'string',
+              },
+              required: ['type', 'id'],
+            },
+            type: 'object',
+          },
+        },
+        title: 'Author',
+        type: 'object',
+      })}
+      value={object('EntityReferenceAutocomplete: data', {
+        data: [
+          {
+            id: 'de67ff47-63de-4d00-9d8a-e39da7de6e95',
+            label: 'admin',
+            type: 'user--user',
+          },
+        ],
+      })}
+    />
+  ),
+);
 
 storiesOf('Widgets/FileUploadWidget/Single File', module).addWithJSX(
   'Default',
@@ -111,14 +186,23 @@ storiesOf('Widgets/NumberTextfield', module).addWithJSX('Default', () => (
       suffix: text('suffix', ' for a storybook.'),
     }}
     onChange={onChangeAction}
-    value={text('value', '5')}
+    value={number('NumberTextfield: value', 5)}
   />
 ));
 
 storiesOf('Widgets/OptionsSelect', module).addWithJSX('Default', () => (
   <OptionsSelect
-    fieldName="option"
     helpText={text('OptionsSelect:helpText', 'Help text.')}
+    fieldName="option"
+    inputProps={object('OptionsSelect:inputProps', {
+      allowed_values: {
+        one: 'One',
+        two: 'Two',
+        three: 'Three',
+        four: 'Four',
+      },
+      allowed_values_function: '',
+    })}
     label={text('OptionsSelect:label', 'A Simple Label')}
     onChange={onChangeAction}
     schema={object('OptionsSelect: schema', {
@@ -134,17 +218,6 @@ storiesOf('Widgets/StringTextfield', module).addWithJSX('Default', () => (
     label={text('StringTextfield: label', 'A Simple Label')}
     onChange={onChangeAction}
     value={text('StringTextfield: value', 'Entered text.')}
-  />
-));
-
-storiesOf('Widgets/DatetimeTimestamp', module).addWithJSX('Default', () => (
-  <DatetimeTimestamp
-    fieldName="EventStart"
-    label={text('DateTimestamp: label', 'A Simple Label')}
-    name="startTime"
-    onChange={onChangeAction}
-    required={boolean('DatetimeTimestamp: required', true)}
-    value={text('DateTimestamp: value', '2000-01-01T00:00:00')}
   />
 ));
 

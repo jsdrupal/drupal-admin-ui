@@ -257,6 +257,7 @@ class EntityReferenceAutocomplete extends React.Component {
   renderInput = ({ InputProps, ref, label, ...other }) => (
     <TextField
       label={label}
+      id={InputProps.id}
       // @todo Disable the browser built in autocompletion.
       InputProps={{
         inputRef: ref,
@@ -268,7 +269,7 @@ class EntityReferenceAutocomplete extends React.Component {
 
   render() {
     const { inputValue, selectedItems } = this.state;
-
+    const { fieldName } = this.props;
     return (
       <FormControl
         margin="normal"
@@ -295,22 +296,22 @@ class EntityReferenceAutocomplete extends React.Component {
                 label: this.props.label,
                 InputProps: getInputProps({
                   startAdornment: selectedItems
-                    /* eslint-disable prettier/prettier */
-                    ? Object.entries(selectedItems).map(([key, value]) => (
-                      <Chip
-                        key={key}
-                        tabIndex={-1}
-                        label={value.label}
-                        className="chip"
-                        onDelete={this.handleDelete(key)}
-                      />
+                    ? /* eslint-disable prettier/prettier */
+                      Object.entries(selectedItems).map(([key, value]) => (
+                        <Chip
+                          key={key}
+                          tabIndex={-1}
+                          label={value.label}
+                          className="chip"
+                          onDelete={this.handleDelete(key)}
+                        />
                       ))
                     : [],
                   /* eslint-enable prettier/prettier */
                   onChange: this.handleInputChange,
                   onKeyDown: this.handleKeyDown,
                   placeholder: '',
-                  id: 'integration-downshift-multiple',
+                  id: fieldName,
                 }),
               })}
               {isOpen ? (

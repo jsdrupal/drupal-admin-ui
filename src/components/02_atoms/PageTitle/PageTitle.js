@@ -38,7 +38,7 @@ const reducePropsToState = propsList => {
  */
 const handleStateChangeOnClient = title => {
   document.title = (Array.isArray(title) ? title : [title])
-    .map(e => (e ? e.trim() : ''))
+    .map(e => (e && typeof e === 'string' ? e.trim() : ''))
     .join(' ');
 };
 
