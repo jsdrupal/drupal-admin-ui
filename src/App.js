@@ -1,6 +1,7 @@
 import React from 'react';
 import { Route, Switch, withRouter } from 'react-router-dom';
 import createBrowserHistory from 'history/createBrowserHistory';
+import deepMerge from 'deepmerge';
 import { createStore, applyMiddleware, combineReducers } from 'redux';
 import {
   ConnectedRouter,
@@ -22,7 +23,7 @@ import Default from './components/06_wrappers/Default/Default';
 import NoMatch from './NoMatch';
 
 import actions from './actions/index';
-import reducers from './reducers/index';
+import reducers, { initialState } from './reducers/index';
 import ErrorBoundary from './components/06_wrappers/ErrorBoundary/ErrorBoundary';
 import InitialRedirect from './InitialRedirect';
 
@@ -78,7 +79,7 @@ const storeState = store => {
 
 const store = createStore(
   combineReducers({ ...reducers, router: routerReducer }),
-  restoreState(),
+  deepMerge(initialState, restoreState()),
   composeWithDevTools(applyMiddleware(sagaMiddleware, middleware)),
 );
 sagaMiddleware.run(actions);
