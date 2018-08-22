@@ -235,6 +235,18 @@ class NodeForm extends React.Component {
             >
               Restore
             </Button>,
+            <Button
+              key="hide"
+              color="primary"
+              size="small"
+              onClick={() =>
+                this.setState({
+                  restored: true,
+                })
+              }
+            >
+              Hide
+            </Button>,
           ]}
         />
       )
