@@ -17,7 +17,7 @@ const MessageSave = ({ bundle, title, nid }) => (
 MessageSave.propTypes = {
   bundle: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
-  nid: PropTypes.string.isRequired,
+  nid: PropTypes.number.isRequired,
 };
 
 styles = {
