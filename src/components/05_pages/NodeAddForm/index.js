@@ -45,6 +45,6 @@ export default connect(
       dispatch(contentAdd(content));
       dispatch(push('/admin/content'));
     },
-    onChange: contentAddChange,
+    onChange: (bundle, content) => dispatch(contentAddChange(bundle, content)),
   }),
 )(NodeAddForm);
