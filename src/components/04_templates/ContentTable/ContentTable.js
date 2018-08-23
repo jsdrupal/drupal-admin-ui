@@ -54,7 +54,7 @@ class ContentTable extends React.Component {
       path: PropTypes.string.isRequired,
       direction: PropTypes.oneOf(['DESC', 'ASC']).isRequired,
     }).isRequired,
-    checked: PropTypes.objectOf(PropTypes.bool).isRequired
+    checked: PropTypes.objectOf(PropTypes.bool).isRequired,
   };
 
   render() {
