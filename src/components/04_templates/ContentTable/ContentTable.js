@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { css } from 'emotion';
 import { connect } from 'react-redux';
@@ -27,8 +28,33 @@ const styles = {
 };
 
 class ContentTable extends React.Component {
-  state = {
-    checked: {},
+  static propTypes = {
+    contentTypes: PropTypes.objectOf(
+      PropTypes.shape({
+        name: PropTypes.string.isRequired,
+        description: PropTypes.string.isRequired,
+      }),
+    ).isRequired,
+    contentList: PropTypes.arrayOf(PropTypes.object).isRequired,
+    contentDelete: PropTypes.func.isRequired,
+    pageChangeHandler: PropTypes.func.isRequired,
+    tableSortHandler: PropTypes.func.isRequired,
+    setChecked: PropTypes.func.isRequired,
+    includes: PropTypes.shape({
+      'user--user': PropTypes.object,
+    }).isRequired,
+    links: PropTypes.shape({
+      next: PropTypes.string,
+    }).isRequired,
+    page: PropTypes.shape({
+      offset: PropTypes.number.isRequired,
+      limit: PropTypes.number.isRequired,
+    }).isRequired,
+    sort: PropTypes.shape({
+      path: PropTypes.string.isRequired,
+      direction: PropTypes.oneOf(['DESC', 'ASC']).isRequired,
+    }).isRequired,
+    checked: PropTypes.objectOf(PropTypes.bool).isRequired
   };
 
   render() {
@@ -207,7 +233,7 @@ class ContentTable extends React.Component {
           count={count}
           rowsPerPage={limit}
           page={offset / limit}
-          onChangePage={this.pageChangeHandler}
+          onChangePage={this.props.pageChangeHandler}
           rowsPerPageOptions={[limit]}
           labelDisplayedRows={({ page }) => `Page: ${page + 1}`}
           nextIconButtonProps={{ 'aria-label': 'Next content page.' }}

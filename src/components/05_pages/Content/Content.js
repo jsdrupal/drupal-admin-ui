@@ -91,7 +91,6 @@ class Content extends Component {
     contentList: PropTypes.arrayOf(PropTypes.object),
     requestActions: PropTypes.func.isRequired,
     actionExecute: PropTypes.func.isRequired,
-    contentDelete: PropTypes.func.isRequired,
     actions: PropTypes.arrayOf(PropTypes.object),
     includes: PropTypes.shape({
       'user--user': PropTypes.object,
@@ -151,178 +150,176 @@ class Content extends Component {
     );
   };
 
-  render = () => {
-    return (
-      <div className={styles.root}>
-        <PageTitle>Content</PageTitle>
-        <LoadingBar style={{ position: 'relative', marginBottom: '5px' }} />
-        <Paper>
-          {this.props.contentTypes &&
-            this.props.actions && (
-              <Fragment>
-                <div className={styles.filters}>
-                  {this.props.contentTypes &&
-                    this.props.actions && (
-                      <Fragment>
-                        <TextField
-                          inputProps={{ 'aria-label': 'Title' }}
-                          label="Title"
-                          placeholder="Title"
-                          className={styles.textField}
+  render = () => (
+    <div className={styles.root}>
+      <PageTitle>Content</PageTitle>
+      <LoadingBar style={{ position: 'relative', marginBottom: '5px' }} />
+      <Paper>
+        {this.props.contentTypes &&
+          this.props.actions && (
+            <Fragment>
+              <div className={styles.filters}>
+                {this.props.contentTypes &&
+                  this.props.actions && (
+                    <Fragment>
+                      <TextField
+                        inputProps={{ 'aria-label': 'Title' }}
+                        label="Title"
+                        placeholder="Title"
+                        className={styles.textField}
+                        onChange={e => {
+                          this.setState({ title: e.target.value }, () => {
+                            this.props.requestContent(this.state);
+                          });
+                        }}
+                        margin="normal"
+                      />
+
+                      <FormControl className={styles.formControl}>
+                        <InputLabel htmlFor="select-multiple-checkbox">
+                          Content Type
+                        </InputLabel>
+                        <Select
+                          multiple
+                          value={this.state.contentTypes}
+                          data-nightwatch="content-type-select"
                           onChange={e => {
-                            this.setState({ title: e.target.value }, () => {
+                            this.setState(
+                              { contentTypes: e.target.value },
+                              () => {
+                                this.props.requestContent(this.state);
+                              },
+                            );
+                          }}
+                          input={
+                            <Input
+                              name="content-type"
+                              id="select-multiple-checkbox"
+                            />
+                          }
+                          renderValue={selected => (
+                            <div className={styles.chips}>
+                              {selected.map(value => (
+                                <Chip
+                                  key={value}
+                                  label={this.props.contentTypes[value].name}
+                                  className={styles.chip}
+                                />
+                              ))}
+                            </div>
+                          )}
+                        >
+                          {Object.keys(this.props.contentTypes).map(type => (
+                            <MenuItem key={type} value={type}>
+                              <Checkbox
+                                checked={
+                                  this.state.contentTypes.indexOf(type) > -1
+                                }
+                              />
+                              <ListItemText
+                                primary={this.props.contentTypes[type].name}
+                              />
+                            </MenuItem>
+                          ))}
+                        </Select>
+                      </FormControl>
+
+                      <FormControl className={styles.formControl}>
+                        <InputLabel htmlFor="status">Status</InputLabel>
+                        <Select
+                          value={this.state.status || ''}
+                          onChange={e => {
+                            this.setState({ status: e.target.value }, () => {
                               this.props.requestContent(this.state);
                             });
                           }}
-                          margin="normal"
-                        />
+                          input={<Input name="status" id="status" />}
+                          autoWidth
+                        >
+                          <MenuItem value="">
+                            <em>Any</em>
+                          </MenuItem>
+                          <MenuItem value="published">Published</MenuItem>
+                          <MenuItem value="unpublished">Unpublished</MenuItem>
+                        </Select>
+                      </FormControl>
 
-                        <FormControl className={styles.formControl}>
-                          <InputLabel htmlFor="select-multiple-checkbox">
-                            Content Type
-                          </InputLabel>
+                      <div>
+                        <FormControl
+                          className={styles.action}
+                          disabled={
+                            Object.values(this.state.checked).filter(Boolean)
+                              .length === 0 || false
+                          }
+                        >
+                          <InputLabel htmlFor="action">Actions</InputLabel>
                           <Select
-                            multiple
-                            value={this.state.contentTypes}
-                            data-nightwatch="content-type-select"
+                            value={this.state.action || ''}
                             onChange={e => {
-                              this.setState(
-                                { contentTypes: e.target.value },
-                                () => {
-                                  this.props.requestContent(this.state);
-                                },
-                              );
+                              this.setState({ action: e.target.value });
                             }}
-                            input={
-                              <Input
-                                name="content-type"
-                                id="select-multiple-checkbox"
-                              />
-                            }
-                            renderValue={selected => (
-                              <div className={styles.chips}>
-                                {selected.map(value => (
-                                  <Chip
-                                    key={value}
-                                    label={this.props.contentTypes[value].name}
-                                    className={styles.chip}
-                                  />
-                                ))}
-                              </div>
-                            )}
+                            input={<Input name="action" id="action" />}
+                            autoWidth
                           >
-                            {Object.keys(this.props.contentTypes).map(type => (
-                              <MenuItem key={type} value={type}>
-                                <Checkbox
-                                  checked={
-                                    this.state.contentTypes.indexOf(type) > -1
-                                  }
-                                />
-                                <ListItemText
-                                  primary={this.props.contentTypes[type].name}
-                                />
+                            <MenuItem value="">
+                              <em>None</em>
+                            </MenuItem>
+                            {this.props.actions.map(action => (
+                              <MenuItem
+                                key={action.id}
+                                value={action.attributes.id}
+                              >
+                                {action.attributes.label}
                               </MenuItem>
                             ))}
                           </Select>
                         </FormControl>
 
-                        <FormControl className={styles.formControl}>
-                          <InputLabel htmlFor="status">Status</InputLabel>
-                          <Select
-                            value={this.state.status || ''}
-                            onChange={e => {
-                              this.setState({ status: e.target.value }, () => {
-                                this.props.requestContent(this.state);
-                              });
-                            }}
-                            input={<Input name="status" id="status" />}
-                            autoWidth
-                          >
-                            <MenuItem value="">
-                              <em>Any</em>
-                            </MenuItem>
-                            <MenuItem value="published">Published</MenuItem>
-                            <MenuItem value="unpublished">Unpublished</MenuItem>
-                          </Select>
-                        </FormControl>
-
-                        <div>
-                          <FormControl
-                            className={styles.action}
-                            disabled={
-                              Object.values(this.state.checked).filter(Boolean)
-                                .length === 0 || false
-                            }
-                          >
-                            <InputLabel htmlFor="action">Actions</InputLabel>
-                            <Select
-                              value={this.state.action || ''}
-                              onChange={e => {
-                                this.setState({ action: e.target.value });
-                              }}
-                              input={<Input name="action" id="action" />}
-                              autoWidth
+                        {this.state.action &&
+                          Object.values(this.state.checked).filter(Boolean)
+                            .length !== 0 && (
+                            <Button
+                              onClick={this.executeAction}
+                              color="primary"
+                              variant="contained"
                             >
-                              <MenuItem value="">
-                                <em>None</em>
-                              </MenuItem>
-                              {this.props.actions.map(action => (
-                                <MenuItem
-                                  key={action.id}
-                                  value={action.attributes.id}
-                                >
-                                  {action.attributes.label}
-                                </MenuItem>
-                              ))}
-                            </Select>
-                          </FormControl>
+                              Apply
+                            </Button>
+                          )}
+                      </div>
+                    </Fragment>
+                  )}
 
-                          {this.state.action &&
-                            Object.values(this.state.checked).filter(Boolean)
-                              .length !== 0 && (
-                              <Button
-                                onClick={this.executeAction}
-                                color="primary"
-                                variant="contained"
-                              >
-                                Apply
-                              </Button>
-                            )}
-                        </div>
-                      </Fragment>
-                    )}
-
-                  <Button
-                    variant="fab"
-                    color="primary"
-                    aria-label="add"
-                    className={styles.addButton}
-                    component={Link}
-                    to="/node/add"
-                  >
-                    <AddIcon />
-                  </Button>
-                </div>
-                <ContentTable
-                  pageChangeHandler={this.pageChangeHandler}
-                  tableSortHandler={this.tableSortHandler}
-                  links={this.props.links}
-                  contentList={this.props.contentList}
-                  page={this.state.page}
-                  includes={this.props.includes}
-                  sort={this.state.sort}
-                  contentTypes={this.props.contentTypes}
-                  checked={this.state.checked}
-                  setChecked={values => {
-                    this.setState({ checked: values });
-                  }}
-                />
-              </Fragment>
-            )}
-        </Paper>
-      </div>
-    );
-  };
+                <Button
+                  variant="fab"
+                  color="primary"
+                  aria-label="add"
+                  className={styles.addButton}
+                  component={Link}
+                  to="/node/add"
+                >
+                  <AddIcon />
+                </Button>
+              </div>
+              <ContentTable
+                pageChangeHandler={this.pageChangeHandler}
+                tableSortHandler={this.tableSortHandler}
+                links={this.props.links}
+                contentList={this.props.contentList}
+                page={this.state.page}
+                includes={this.props.includes}
+                sort={this.state.sort}
+                contentTypes={this.props.contentTypes}
+                checked={this.state.checked}
+                setChecked={values => {
+                  this.setState({ checked: values });
+                }}
+              />
+            </Fragment>
+          )}
+      </Paper>
+    </div>
+  );
 }
 
 const mapStateToProps = state => ({
