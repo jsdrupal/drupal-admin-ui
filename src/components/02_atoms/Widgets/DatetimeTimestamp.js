@@ -16,9 +16,9 @@ const DatetimeTimestamp = ({
     fullWidth
     label={label}
     type="datetime-local"
-    defaultValue={value}
+    defaultValue={new Date(value * 1000).toJSON().slice(0, 19)}
     margin="normal"
-    onChange={event => onChange(Number(event.target.value))}
+    onChange={event => onChange(+new Date(event.target.value) / 1000)}
     InputLabelProps={{
       shrink: true,
     }}
