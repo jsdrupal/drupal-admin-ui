@@ -46,7 +46,8 @@ const restoreState = () => {
       storedState = localStorage.getItem(localStorageName) || '{}';
     } catch (e) {
       // In case like Safari private browing mode we don't support any restoring.
-      storedState = decodeURIComponent(window.Cookie.get(localStorageName));
+      // Also note: enzyme has window but no Cookie set.
+      storedState = window.Cookie && decodeURIComponent(window.Cookie.get(localStorageName)) || {};
     }
   }
 
