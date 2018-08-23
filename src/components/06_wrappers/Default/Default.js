@@ -158,7 +158,7 @@ styles = {
 Default.propTypes = {
   children: PropTypes.node.isRequired,
   message: PropTypes.shape({
-    message: PropTypes.string,
+    message: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
     type: PropTypes.string,
     key: PropTypes.number,
     open: PropTypes.bool,
