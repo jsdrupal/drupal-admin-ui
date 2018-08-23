@@ -125,7 +125,8 @@ class Content extends Component {
     this.props.requestActions();
   }
   dialogOpen = () => this.setState({ dialogVisibility: true });
-  dialogClose = () => this.setState({ dialogVisibility: false, action: null, checked: {} });
+  dialogClose = () =>
+    this.setState({ dialogVisibility: false, action: null, checked: {} });
   executeAction = () => {
     const matchingAction = this.props.actions.filter(
       action => action.attributes.id === this.state.action,
