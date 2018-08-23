@@ -12,15 +12,17 @@ import {
   hideLoading,
   resetLoading,
 } from 'react-redux-loading-bar';
+import { push } from 'react-router-redux';
 
 import api from '../utils/api/api';
 import {
   MESSAGE_SEVERITY_ERROR,
   MESSAGE_SEVERITY_SUCCESS,
 } from '../constants/messages';
-import { setMessage } from './application';
+import { setMessage, contentTypesSelector } from './application';
 
 import MessageSave from '../components/01_subatomics/MessageHelpers/MessageSave';
+import { extractContentType, mapContentTypeToName } from '../utils/api/content';
 
 export const CONTENT_REQUESTED = 'CONTENT_REQUESTED';
 export const requestContent = (
@@ -333,9 +335,23 @@ function* saveContent({ payload: { content } }) {
 
 function* addContent({ payload: { content } }) {
   try {
+    // Get the content types from the redux state
+    const contentTypes = yield select(contentTypesSelector);
+    // Extract the content type from the content data
+    const contentType = extractContentType(content);
+    // Map the content type to the human-readable name
+    const contentName =
+      mapContentTypeToName(contentTypes, contentType) || 'unknown';
     yield put(resetLoading());
     yield put(showLoading());
     yield call(api, 'node:add', { parameters: { node: content } });
+    yield put(push('/admin/content'));
+    yield put(
+      setMessage(
+        `New ${contentName} added successfully`,
+        MESSAGE_SEVERITY_SUCCESS,
+      ),
+    );
   } catch (error) {
     yield put(setMessage(error.toString(), MESSAGE_SEVERITY_ERROR));
   } finally {
