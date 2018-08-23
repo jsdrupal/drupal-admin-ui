@@ -56,6 +56,7 @@ class TextTextarea extends React.Component {
       // would be better to avoid generating a string on each change.
       this.props.onChange({
         value: value.toString('html'),
+        format: 'basic_html',
       });
     });
   };
