@@ -184,10 +184,18 @@ class NodeForm extends React.Component {
       inputProps,
     };
 
-    return widget.multiple ? (
-      <MultipleFields component={widget} {...widgetProps} />
+    const widgetComponent = widget.component;
+    const widgetIsMultiple = widget.multiple || false;
+    const hasMultipleDeltas =
+      (fieldSchema.type && fieldSchema.type === 'array') ||
+      (fieldSchema.properties &&
+        fieldSchema.properties.data &&
+        fieldSchema.properties.data.type === 'array');
+
+    return hasMultipleDeltas && !widgetIsMultiple ? (
+      <MultipleFields component={widgetComponent} {...widgetProps} />
     ) : (
-      React.createElement(widget, widgetProps)
+      React.createElement(widgetComponent, widgetProps)
     );
   };
 

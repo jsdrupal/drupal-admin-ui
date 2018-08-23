@@ -1,10 +1,15 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'react-emotion';
+import List from '@material-ui/core/List';
 import AddIcon from '@material-ui/icons/Add';
 import Button from '@material-ui/core/Button';
+import ListItem from '@material-ui/core/ListItem';
 import DeleteIcon from '@material-ui/icons/Delete';
 import FormLabel from '@material-ui/core/FormLabel';
+import FormControl from '@material-ui/core/FormControl';
+import ListItemText from '@material-ui/core/ListItemText';
+import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 
 const Add = styled('div')`
   .icon {
@@ -12,71 +17,85 @@ const Add = styled('div')`
   }
 `;
 
+const listItemStyles = {
+  paddingLeft: 0,
+};
+
 class MultipleFields extends Component {
   static propTypes = {
-    // TODO: Fix PropTypes for other options
     value: PropTypes.arrayOf(PropTypes.string).isRequired,
+    label: PropTypes.string.isRequired,
     onChange: PropTypes.func.isRequired,
-    component: PropTypes.objectOf({
-      component: PropTypes.objectOf(
-        PropTypes.oneOfType([
-          PropTypes.func,
-          PropTypes.instanceOf(React.Component),
-        ]).isRequired,
-      ).isRequired,
-    }).isRequired,
+    component: PropTypes.func.isRequired,
   };
 
   componentDidMount() {
-    if (!this.props.value.length) {
-      this.props.onChange(['']);
+    const { value, onChange } = this.props;
+    if (!value.length) {
+      onChange(['']);
     }
   }
 
   addAnotherItem = () => {
-    this.props.onChange([...this.props.value, '']);
+    const { value, onChange } = this.props;
+    onChange([...value, '']);
+  };
+
+  changeItem = index => value => {
+    const { value: propsValue, onChange } = this.props;
+    const newValue = [...propsValue];
+    newValue[index] = value;
+    onChange(newValue);
   };
 
   render = () => (
-    <div>
+    <FormControl margin="normal" fullWidth>
       <FormLabel component="legend">{this.props.label}</FormLabel>
-      {this.props.value &&
-        this.props.value.map((value, index) => (
-          // TODO: fix index issue if possible
-          <div key={index}>
-            {React.createElement(this.props.component.component, {
-              ...this.props,
-              value,
-            })}
-            <Button
-              mini
-              variant="fab"
-              color="secondary"
-              className="remove"
-              aria-label="Remove Image"
-              onClick={() => {
-                if (this.props.value.length > 1) {
-                  this.props.value.splice(index, 1);
-                  this.props.onChange(this.props.value);
-                }
-              }}
-            >
-              <DeleteIcon />
-            </Button>
-          </div>
-        ))}
-      <Add>
-        <Button
-          color="primary"
-          variant="contained"
-          aria-label="Add another item"
-          onClick={this.addAnotherItem}
-        >
-          Add another item
-          <AddIcon />
-        </Button>
-      </Add>
-    </div>
+      <List>
+        {this.props.value &&
+          this.props.value.map((value, index) => (
+            // eslint-disable-next-line react/no-array-index-key
+            <ListItem key={index} style={listItemStyles}>
+              <ListItemText>
+                {React.createElement(this.props.component, {
+                  ...this.props,
+                  value,
+                  label: '', // Enforce a hidden label.
+                  onChange: this.changeItem(index),
+                })}
+              </ListItemText>
+              <ListItemSecondaryAction>
+                <Button
+                  mini
+                  variant="fab"
+                  color="secondary"
+                  className="remove"
+                  aria-label="Remove Image"
+                  onClick={() => {
+                    if (this.props.value.length > 1) {
+                      this.props.value.splice(index, 1);
+                      this.props.onChange(this.props.value);
+                    }
+                  }}
+                >
+                  <DeleteIcon />
+                </Button>
+              </ListItemSecondaryAction>
+            </ListItem>
+          ))}
+        <Add>
+          <Button
+            color="primary"
+            variant="contained"
+            aria-label="Add another item"
+            onClick={this.addAnotherItem}
+          >
+            Add another item
+            <AddIcon />
+          </Button>
+        </Add>
+      </List>
+    </FormControl>
   );
 }
 
