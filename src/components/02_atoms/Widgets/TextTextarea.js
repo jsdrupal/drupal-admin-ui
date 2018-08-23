@@ -44,8 +44,8 @@ class TextTextarea extends React.Component {
       (Array.isArray(props.value) &&
         props.value.length &&
         props.value[0].value) ||
-      props.value.value ||
-      '',
+        props.value.value ||
+        '',
       'html',
     );
 
