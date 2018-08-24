@@ -84,10 +84,13 @@ class ContentTable extends React.Component {
                         (checked &&
                           this.props.contentList
                             .map(({ attributes: { nid } }) => nid)
-                            .reduce((acc, cur) => ({
-                              ...acc,
-                              [acc[cur]]: true,
-                            }), {})) ||
+                            .reduce(
+                              (acc, cur) => ({
+                                ...acc,
+                                [acc[cur]]: true,
+                              }),
+                              {},
+                            )) ||
                           {},
                       );
                     }}
