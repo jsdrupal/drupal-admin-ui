@@ -57,6 +57,20 @@ class ContentTable extends React.Component {
     checked: PropTypes.objectOf(PropTypes.bool).isRequired,
   };
 
+  selectAll(checked) {
+    this.props.setChecked(
+      (checked &&
+        this.props.contentList.map(({ attributes: { nid } }) => nid).reduce(
+          (acc, cur) => ({
+            ...acc,
+            [cur]: true,
+          }),
+          {},
+        )) ||
+        {},
+    );
+  }
+
   render() {
     const {
       links,
@@ -79,21 +93,7 @@ class ContentTable extends React.Component {
                 <TableCell padding="checkbox">
                   <Checkbox
                     id="selectAll"
-                    onChange={(event, checked) => {
-                      this.props.setChecked(
-                        (checked &&
-                          this.props.contentList
-                            .map(({ attributes: { nid } }) => nid)
-                            .reduce(
-                              (acc, cur) => ({
-                                ...acc,
-                                [acc[cur]]: true,
-                              }),
-                              {},
-                            )) ||
-                          {},
-                      );
-                    }}
+                    onChange={(event, checked) => this.selectAll(checked)}
                   />
                 </TableCell>
               }
