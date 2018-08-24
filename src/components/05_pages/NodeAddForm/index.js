@@ -12,7 +12,7 @@ class NodeAddForm extends React.Component {
       ...entity,
       type: `${this.props.entityTypeId}--${this.props.bundle}`,
     };
-    this.props.contentAdd(data);
+    this.props.contentAdd(data, this.props.bundle);
   };
 
   render() {

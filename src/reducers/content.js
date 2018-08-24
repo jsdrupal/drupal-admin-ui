@@ -2,6 +2,7 @@ import {
   CONTENT_LOADED,
   CONTENT_SINGLE_LOADED,
   CONTENT_DELETE,
+  CONTENT_ADD,
   CONTENT_ADD_CHANGE,
   USER_LOADED,
 } from '../actions/content';
@@ -29,6 +30,13 @@ export default (state = initialState, action) => {
         contentAddByBundle: {
           ...state.contentAddByBundle,
           [action.payload.bundle]: action.payload.entity,
+        },
+      };
+    case CONTENT_ADD:
+      return {
+        ...state,
+        contentAddByBundle: {
+          [action.payload.bundle]: null,
         },
       };
     case CONTENT_LOADED: {

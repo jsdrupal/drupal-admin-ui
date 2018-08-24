@@ -173,10 +173,11 @@ export const contentSave = content => ({
 });
 
 export const CONTENT_ADD = 'CONTENT_ADD';
-export const contentAdd = content => ({
+export const contentAdd = (content, bundle) => ({
   type: CONTENT_ADD,
   payload: {
     content,
+    bundle,
   },
 });
 
