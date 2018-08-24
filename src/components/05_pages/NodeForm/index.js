@@ -43,7 +43,7 @@ class NodeForm extends React.Component {
       PropTypes.bool,
     ]),
     restorableEntity: PropTypes.shape({
-      data: PropTypes.array,
+      data: PropTypes.object,
     }),
     requestUser: PropTypes.func.isRequired,
     onChange: PropTypes.func,
