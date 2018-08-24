@@ -221,6 +221,7 @@ class NodeForm extends React.Component {
       !this.state.restored && (
         <Snackbar
           open
+          data-nightwatch="restore-content-snackbar"
           ContentProps={{
             'aria-describedby': 'message-id',
           }}
