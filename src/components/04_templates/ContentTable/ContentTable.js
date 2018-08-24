@@ -86,7 +86,7 @@ class ContentTable extends React.Component {
                             .map(({ attributes: { nid } }) => nid)
                             .reduce((acc, cur) => ({
                               ...acc,
-                              acc[cur]: true,
+                              [acc[cur]]: true,
                             }), {})) ||
                           {},
                       );
