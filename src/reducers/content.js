@@ -2,6 +2,8 @@ import {
   CONTENT_LOADED,
   CONTENT_SINGLE_LOADED,
   CONTENT_DELETE,
+  CONTENT_ADD,
+  CONTENT_ADD_CHANGE,
   USER_LOADED,
 } from '../actions/content';
 
@@ -9,6 +11,7 @@ export const initialState = {
   contentList: [],
   contentByNid: {},
   links: {},
+  contentAddByBundle: {},
   user: {},
 };
 
@@ -19,6 +22,21 @@ export default (state = initialState, action) => {
         ...state,
         contentByNid: {
           [action.payload.content.attributes.nid]: action.payload.content,
+        },
+      };
+    case CONTENT_ADD_CHANGE:
+      return {
+        ...state,
+        contentAddByBundle: {
+          ...state.contentAddByBundle,
+          [action.payload.bundle]: action.payload.entity,
+        },
+      };
+    case CONTENT_ADD:
+      return {
+        ...state,
+        contentAddByBundle: {
+          [action.payload.bundle]: null,
         },
       };
     case CONTENT_LOADED: {

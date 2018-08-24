@@ -158,6 +158,12 @@ function* loadSingleContent(action) {
   }
 }
 
+export const CONTENT_ADD_CHANGE = 'CONTENT_ADD_CHANGE';
+export const contentAddChange = (bundle, entity) => ({
+  type: CONTENT_ADD_CHANGE,
+  payload: { bundle, entity },
+});
+
 export const CONTENT_SAVE = 'CONTENT_SAVE';
 export const contentSave = content => ({
   type: CONTENT_SAVE,
@@ -167,10 +173,11 @@ export const contentSave = content => ({
 });
 
 export const CONTENT_ADD = 'CONTENT_ADD';
-export const contentAdd = content => ({
+export const contentAdd = (content, bundle) => ({
   type: CONTENT_ADD,
   payload: {
     content,
+    bundle,
   },
 });
 
