@@ -125,7 +125,7 @@ class NodeForm extends React.Component {
   };
 
   onSave = () => {
-    const missingFields = this.resolveRequiredFiles();
+    const missingFields = this.resolveMissingRequiredFields();
     if (missingFields.length) {
       this.props.setMessage(
         `${missingFields.join(' ')} are missing.`,
@@ -163,7 +163,7 @@ class NodeForm extends React.Component {
     schema.properties.data.properties.attributes.properties[fieldName] ||
     schema.properties.data.properties.relationships.properties[fieldName];
 
-  resolveRequiredFiles = () => {
+  resolveMissingRequiredFields = () => {
     const unavailableFields = ['nid', 'uuid', 'vid', 'path'];
     const requiredFields = this.props.schema.properties.data.properties.attributes.required.filter(
       field => !unavailableFields.includes(field),
@@ -171,6 +171,7 @@ class NodeForm extends React.Component {
     return Object.entries(this.state.entity.data.attributes)
       .filter(([fieldName]) => requiredFields.includes(fieldName))
       .filter(([fieldName, value]) => {
+        // @todo Ideally the schema would identify the main property for us.
         if (
           typeof value === 'object' &&
           Object.keys(value).length &&
