@@ -36,9 +36,9 @@ const ConfirmationDialog = ({
       onClose={handleClose}
     >
       <DialogTitle>
-        Are you sure you want to{' '}
-        <span className={styles.dialogActionName}>{actionLabel}</span> these
-        content items?
+        Are you sure you want to apply the &quot;
+        <span className={styles.dialogActionName}>{actionLabel}</span>&quot;
+        action to these content items?
       </DialogTitle>
       <DialogContent>
         <DialogContentText>
