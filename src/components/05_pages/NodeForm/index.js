@@ -222,6 +222,7 @@ class NodeForm extends React.Component {
       // Hide thie restore form once the content got restored.
       !this.state.restored && (
         <Snackbar
+          anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
           open
           data-nightwatch="restore-content-snackbar"
           ContentProps={{
