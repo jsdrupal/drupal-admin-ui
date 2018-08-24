@@ -48,13 +48,21 @@ class EntityReferenceAutocomplete extends React.Component {
   };
 
   componentDidMount() {
-    if (!this.state.selectedItems && this.props.value) {
+    if (
+      !this.state.selectedItems &&
+      this.props.value &&
+      this.props.value.data
+    ) {
       this.recalculateSelectedItems();
     }
   }
 
   componentDidUpdate(prevProps) {
-    if (prevProps.value !== this.props.value) {
+    if (
+      this.props.value &&
+      this.props.value.data &&
+      prevProps.value.data !== this.props.value.data
+    ) {
       this.recalculateSelectedItems();
     }
   }
