@@ -7,6 +7,8 @@ import Paper from '@material-ui/core/Paper';
 import Divider from '@material-ui/core/Divider';
 import Button from '@material-ui/core/Button';
 import Snackbar from '@material-ui/core/Snackbar';
+import IconButton from '@material-ui/core/IconButton';
+import CloseIcon from '@material-ui/icons/Close';
 
 import SchemaPropType from './SchemaPropType';
 
@@ -240,18 +242,18 @@ class NodeForm extends React.Component {
             >
               Restore
             </Button>,
-            <Button
-              key="hide"
-              color="primary"
-              size="small"
+            <IconButton
+              key="close"
+              aria-label="Close"
+              color="inherit"
               onClick={() =>
                 this.setState({
                   restored: true,
                 })
               }
             >
-              Hide
-            </Button>,
+              <CloseIcon className={styles.icon} />
+            </IconButton>,
           ]}
         />
       )
@@ -307,6 +309,9 @@ styles = {
   widgetRoot: css`
     display: flex;
     align-items: start;
+  `,
+  icon: css`
+    font-size: 20px;
   `,
 };
 
