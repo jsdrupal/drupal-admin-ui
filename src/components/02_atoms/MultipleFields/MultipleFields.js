@@ -143,11 +143,7 @@ class MultipleFields extends Component {
     return (
       <FormControl margin="normal" fullWidth>
         <FormLabel component="legend">{label}</FormLabel>
-        <List
-          ref={element => {
-            this.wrapper = element;
-          }}
-        >
+        <List>
           {values &&
             values.map((value, index) => (
               <ListItem
