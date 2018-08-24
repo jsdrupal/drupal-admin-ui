@@ -86,8 +86,12 @@ class NodeForm extends React.Component {
     // or NodeAdd component level.
     // https://github.com/jsdrupal/drupal-admin-ui/issues/378
     // Set default `Authored By` relationship.
+    // Set default `Created On` attribute.
     if (!Object.prototype.hasOwnProperty.call(props, 'entity')) {
       state.entity.data.relationships.uid.data = { ...props.user };
+      const local = new Date();
+      local.setMinutes(local.getMinutes() - local.getTimezoneOffset());
+      state.entity.data.attributes.created = Math.round(+local / 1000);
     }
     return state;
   }
