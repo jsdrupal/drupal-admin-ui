@@ -23,6 +23,8 @@ import AddIcon from '@material-ui/icons/Add';
 import PageTitle from '../../02_atoms/PageTitle';
 import ContentTable from '../../04_templates/ContentTable/ContentTable';
 
+import ConfirmationDialog from './ConfirmationDialog';
+
 import {
   requestContentTypes,
   requestActions,
@@ -115,12 +117,16 @@ class Content extends Component {
     },
     action: null,
     checked: {},
+    dialogVisibility: false,
   };
   componentDidMount() {
     this.props.requestContentTypes();
     this.props.requestContent(this.state);
     this.props.requestActions();
   }
+  dialogOpen = () => this.setState({ dialogVisibility: true });
+  dialogClose = () =>
+    this.setState({ dialogVisibility: false, action: null, checked: {} });
   executeAction = () => {
     const matchingAction = this.props.actions.filter(
       action => action.attributes.id === this.state.action,
@@ -278,13 +284,25 @@ class Content extends Component {
                         {this.state.action &&
                           Object.values(this.state.checked).filter(Boolean)
                             .length !== 0 && (
-                            <Button
-                              onClick={this.executeAction}
-                              color="primary"
-                              variant="contained"
-                            >
-                              Apply
-                            </Button>
+                            <Fragment>
+                              <Button
+                                // onClick={this.executeAction}
+                                onClick={this.dialogOpen}
+                                color="primary"
+                                variant="contained"
+                              >
+                                Apply
+                              </Button>
+                              <ConfirmationDialog
+                                action={this.state.action}
+                                actions={this.props.actions}
+                                checked={this.state.checked}
+                                contentList={this.props.contentList}
+                                dialogVisibility={this.state.dialogVisibility}
+                                handleClose={this.dialogClose}
+                                executeAction={this.executeAction}
+                              />
+                            </Fragment>
                           )}
                       </div>
                     </Fragment>
