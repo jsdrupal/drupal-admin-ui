@@ -1,6 +1,7 @@
 import React from 'react';
 import { Route, Switch, withRouter } from 'react-router-dom';
 import createBrowserHistory from 'history/createBrowserHistory';
+import deepMerge from 'deepmerge';
 import { createStore, applyMiddleware, combineReducers } from 'redux';
 import {
   ConnectedRouter,
@@ -22,7 +23,7 @@ import Default from './components/06_wrappers/Default/Default';
 import NoMatch from './NoMatch';
 
 import actions from './actions/index';
-import reducers from './reducers/index';
+import reducers, { initialState } from './reducers/index';
 import ErrorBoundary from './components/06_wrappers/ErrorBoundary/ErrorBoundary';
 import InitialRedirect from './InitialRedirect';
 
@@ -31,11 +32,65 @@ const middleware = routerMiddleware(history);
 
 const sagaMiddleware = createSagaMiddleware();
 
+export const localStorageName = 'drupalAdminUiReduxState';
+
+/**
+ * Restore from local storage.
+ */
+const restoreState = () => {
+  let storedState = {};
+  if (typeof window === 'object') {
+    try {
+      // Test for Safari private browsing mode. This will throw an error if it can't set an item.
+      localStorage.setItem('localStorageTest', true);
+      storedState = localStorage.getItem(localStorageName) || '{}';
+    } catch (e) {
+      // In case like Safari private browing mode we don't support any restoring.
+      // Also note: enzyme has window but no Cookie set.
+      storedState =
+        (window.Cookie &&
+          decodeURIComponent(window.Cookie.get(localStorageName))) ||
+        {};
+    }
+  }
+
+  try {
+    storedState = JSON.parse(storedState);
+  } catch (e) {
+    storedState = {};
+  }
+  return storedState;
+};
+
+export const localStorageStore = state => ({
+  content: {
+    contentAddByBundle: state.content.contentAddByBundle,
+  },
+});
+
+const storeState = store => {
+  // Persist state.
+  const state = store.getState();
+
+  // Save to local storage
+  const stringifiedState = JSON.stringify(localStorageStore(state));
+  try {
+    localStorage.setItem(localStorageName, stringifiedState);
+  } catch (e) {
+    // This will happen with Safari in private browsing mode.
+  }
+};
+
 const store = createStore(
   combineReducers({ ...reducers, router: routerReducer }),
+  deepMerge(initialState, restoreState()),
   composeWithDevTools(applyMiddleware(sagaMiddleware, middleware)),
 );
 sagaMiddleware.run(actions);
+
+if (typeof window === 'object') {
+  store.subscribe(() => storeState(store));
+}
 
 const generateClassName = createGenerateClassName();
 const jss = create(jssPreset());
