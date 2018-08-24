@@ -48,27 +48,22 @@ class EntityReferenceAutocomplete extends React.Component {
   };
 
   componentDidMount() {
-    if (!this.state.selectedItems && this.props.value) {
-      const [
-        entityTypeId,
-        [bundle],
-      ] = this.determineEntityTypeAndBundlesFromSchema(this.props.schema);
+    if (
+      !this.state.selectedItems &&
+      this.props.value &&
+      this.props.value.data
+    ) {
+      this.recalculateSelectedItems();
+    }
+  }
 
-      const multiple = this.props.schema.properties.data.type === 'array';
-      const items = getItemsAsArray(multiple, this.props.value.data);
-      const ids = items.map(({ id }) => id);
-      this.fetchEntitites(entityTypeId, bundle, ids).then(
-        ({ data: entities }) => {
-          this.setState({
-            selectedItems: entities.map(
-              ({ id, attributes: { name: label } }) => ({
-                id,
-                label,
-              }),
-            ),
-          });
-        },
-      );
+  componentDidUpdate(prevProps) {
+    if (
+      this.props.value &&
+      this.props.value.data &&
+      prevProps.value.data !== this.props.value.data
+    ) {
+      this.recalculateSelectedItems();
     }
   }
 
@@ -78,6 +73,29 @@ class EntityReferenceAutocomplete extends React.Component {
     } = this.props;
     const multiple = properties.data.type === 'array';
     return multiple ? maxItems || 100000000000 : 1;
+  };
+
+  recalculateSelectedItems = () => {
+    const [
+      entityTypeId,
+      [bundle],
+    ] = this.determineEntityTypeAndBundlesFromSchema(this.props.schema);
+
+    const multiple = this.props.schema.properties.data.type === 'array';
+    const items = getItemsAsArray(multiple, this.props.value.data);
+    const ids = items.map(({ id }) => id);
+    this.fetchEntitites(entityTypeId, bundle, ids).then(
+      ({ data: entities }) => {
+        this.setState({
+          selectedItems: entities.map(
+            ({ id, attributes: { name: label } }) => ({
+              id,
+              label,
+            }),
+          ),
+        });
+      },
+    );
   };
 
   handleChange = ({ id, label }) =>

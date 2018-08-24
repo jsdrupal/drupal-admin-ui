@@ -3,8 +3,8 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import LoadingBar from 'react-redux-loading-bar';
 import NodeForm from '../NodeForm';
+import { contentAddChange, contentAdd } from '../../../actions/content';
 import PageTitle from '../../02_atoms/PageTitle/PageTitle';
-import { contentAdd } from '../../../actions/content';
 
 class NodeAddForm extends React.Component {
   onSave = entity => {
@@ -12,7 +12,7 @@ class NodeAddForm extends React.Component {
       ...entity,
       type: `${this.props.entityTypeId}--${this.props.bundle}`,
     };
-    this.props.contentAdd(data);
+    this.props.contentAdd(data, this.props.bundle);
   };
 
   render() {
@@ -32,9 +32,15 @@ NodeAddForm.propTypes = {
   entityTypeId: PropTypes.string.isRequired,
 };
 
+const extractRestorableEntity = (state, bundle) =>
+  state.content.contentAddByBundle[bundle];
+
 export default connect(
-  null,
+  (state, { bundle }) => ({
+    restorableEntity: extractRestorableEntity(state, bundle),
+  }),
   {
     contentAdd,
+    onChange: contentAddChange,
   },
 )(NodeAddForm);
