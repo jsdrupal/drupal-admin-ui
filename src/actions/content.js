@@ -16,10 +16,10 @@ import { push } from 'react-router-redux';
 
 import api from '../utils/api/api';
 import {
-  MESSAGE_SEVERITY_ERROR,
-  MESSAGE_SEVERITY_SUCCESS,
-} from '../constants/messages';
-import { setMessage, contentTypesSelector } from './application';
+  contentTypesSelector,
+  setErrorMessage,
+  setSuccessMessage,
+} from './application';
 
 import MessageSave from '../components/01_subatomics/MessageHelpers/MessageSave';
 import { extractContentType, mapContentTypeToName } from '../utils/api/content';
@@ -116,7 +116,7 @@ function* loadContent(action) {
       },
     });
   } catch (error) {
-    yield put(setMessage(error.toString(), MESSAGE_SEVERITY_ERROR));
+    yield put(setErrorMessage(error.toString()));
   } finally {
     yield put(hideLoading());
   }
@@ -152,7 +152,7 @@ function* loadSingleContent(action) {
       },
     });
   } catch (error) {
-    yield put(setMessage(error.toString(), MESSAGE_SEVERITY_ERROR));
+    yield put(setErrorMessage(error.toString()));
   } finally {
     yield put(hideLoading());
   }
@@ -305,7 +305,7 @@ export function* executeAction({ payload: { action, nids } }) {
       .filter(x => x);
     yield all(actions);
   } catch (error) {
-    yield put(setMessage(error.toString(), MESSAGE_SEVERITY_ERROR));
+    yield put(setErrorMessage(error.toString()));
   } finally {
     yield put(hideLoading());
   }
@@ -322,13 +322,12 @@ function* saveContent({ payload: { content } }) {
       },
     } = yield call(api, 'node:save', { parameters: { node: content } });
     yield put(
-      setMessage(
+      setSuccessMessage(
         <MessageSave bundle={type.split('--')[1]} title={title} nid={nid} />,
-        MESSAGE_SEVERITY_SUCCESS,
       ),
     );
   } catch (error) {
-    yield put(setMessage(error.toString(), MESSAGE_SEVERITY_ERROR));
+    yield put(setErrorMessage(error.toString()));
   } finally {
     yield put(hideLoading());
   }
@@ -347,14 +346,9 @@ function* addContent({ payload: { content } }) {
     yield put(showLoading());
     yield call(api, 'node:add', { parameters: { node: content } });
     yield put(push('/admin/content'));
-    yield put(
-      setMessage(
-        `New ${contentName} added successfully`,
-        MESSAGE_SEVERITY_SUCCESS,
-      ),
-    );
+    yield put(setSuccessMessage(`New ${contentName} added successfully`));
   } catch (error) {
-    yield put(setMessage(error.toString(), MESSAGE_SEVERITY_ERROR));
+    yield put(setErrorMessage(error.toString()));
   } finally {
     yield put(hideLoading());
   }
@@ -366,7 +360,7 @@ function* deleteContent({ payload: { content } }) {
     yield put(showLoading());
     yield call(api, 'node:delete', { parameters: { node: content } });
   } catch (error) {
-    yield put(setMessage(error.toString(), MESSAGE_SEVERITY_ERROR));
+    yield put(setErrorMessage(error.toString()));
   } finally {
     yield put(hideLoading());
   }
@@ -402,7 +396,7 @@ function* loadUser(action) {
       },
     });
   } catch (error) {
-    yield put(setMessage(error.toString(), MESSAGE_SEVERITY_ERROR));
+    yield put(setErrorMessage(error.toString()));
   } finally {
     yield put(hideLoading());
   }
