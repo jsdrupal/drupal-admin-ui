@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'react-emotion';
 import List from '@material-ui/core/List';
@@ -11,7 +11,6 @@ import ReorderIcon from '@material-ui/icons/Reorder';
 import FormControl from '@material-ui/core/FormControl';
 import ListItemText from '@material-ui/core/ListItemText';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 
 const Add = styled('div')`
   .icon {
@@ -20,11 +19,13 @@ const Add = styled('div')`
 `;
 
 const style = {
-  listItemStyles: {
+  ListItemStyles: {
     paddingLeft: 0,
+    paddingRight: 0,
   },
   ListItemIconStyles: {
     cursor: 'move',
+    margin: '0 0 0 16px',
   },
 };
 
@@ -40,8 +41,9 @@ class MultipleFields extends Component {
    * Initial state
    */
   state = {
+    handle: null,
     currentIndex: -1,
-    selectedValue: null,
+    newItemAdded: false,
   };
 
   componentDidMount() {
@@ -53,10 +55,30 @@ class MultipleFields extends Component {
   }
 
   /**
+   * Sets the state handle with the handle target.
+   * @param {Event} event
+   */
+  onMouseDown = event => {
+    this.setState({
+      handle: event.currentTarget,
+    });
+  };
+
+  /**
    * Sets the state value with the selected element.
    * @param {Event} event
    */
   onDragStart = event => {
+    const {
+      props: { value },
+      state: { handle },
+    } = this;
+
+    // Don't allow dragging if not handle or only one item in props.value
+    if (!event.target.contains(handle) || value.length === 1) {
+      event.preventDefault();
+      return;
+    }
     // setData needed for FireFox, needs to setData to work
     event.dataTransfer.setData('text', '');
     event.dataTransfer.effectAllowed = 'move';
@@ -64,7 +86,6 @@ class MultipleFields extends Component {
 
     this.setState({
       currentIndex,
-      selectedValue: this.props.value[currentIndex],
     });
   };
 
@@ -78,11 +99,12 @@ class MultipleFields extends Component {
     event.preventDefault();
     const {
       props: { value },
-      state: { currentIndex, selectedValue },
+      state: { currentIndex },
     } = this;
 
     const overIndex = parseInt(event.currentTarget.dataset.key, 10);
     if (currentIndex !== overIndex) {
+      const selectedValue = value[currentIndex];
       // Changes the two values with one another
       value[currentIndex] = value[overIndex];
       value[overIndex] = selectedValue;
@@ -101,8 +123,8 @@ class MultipleFields extends Component {
     const { value, onChange } = this.props;
     this.setState(
       {
+        handle: null,
         currentIndex: -1,
-        selectedValue: null,
       },
       () => {
         onChange(value);
@@ -128,7 +150,14 @@ class MultipleFields extends Component {
   addAnotherItem = () => {
     const { value, onChange } = this.props;
     const newValue = [...value, ''];
-    onChange(newValue);
+    this.setState(
+      {
+        newItemAdded: true,
+      },
+      () => {
+        onChange(newValue);
+      },
+    );
   };
 
   render = () => {
@@ -136,8 +165,11 @@ class MultipleFields extends Component {
       onDragEnd,
       changeItem,
       onDragOver,
+      onDragLeave,
       onDragStart,
+      onMouseDown,
       addAnotherItem,
+      state: { newItemAdded },
       props: { label, value: values, component, onChange },
     } = this;
     return (
@@ -152,11 +184,15 @@ class MultipleFields extends Component {
                 key={index}
                 data-key={index}
                 onDragEnd={onDragEnd}
-                style={style.listItem}
                 onDragOver={onDragOver}
+                onDragLeave={onDragLeave}
                 onDragStart={onDragStart}
+                style={style.ListItemStyles}
               >
-                <ListItemIcon style={style.ListItemIconStyles}>
+                <ListItemIcon
+                  onMouseDown={onMouseDown}
+                  style={style.ListItemIconStyles}
+                >
                   <ReorderIcon />
                 </ListItemIcon>
                 <ListItemText>
@@ -165,9 +201,10 @@ class MultipleFields extends Component {
                     value,
                     label: '', // Enforce a hidden label
                     onChange: changeItem(index),
+                    autoFocus: newItemAdded && index + 1 === values.length,
                   })}
                 </ListItemText>
-                <ListItemSecondaryAction>
+                <Fragment>
                   <Button
                     mini
                     variant="fab"
@@ -183,7 +220,7 @@ class MultipleFields extends Component {
                   >
                     <DeleteIcon />
                   </Button>
-                </ListItemSecondaryAction>
+                </Fragment>
               </ListItem>
             ))}
           <Add>
