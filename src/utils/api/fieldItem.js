@@ -11,6 +11,9 @@ export const setItemById = (multiple, item, items) => {
 };
 
 export const getItemsAsArray = (multiple, items) => {
+  if (Array.isArray(items)) {
+    return items;
+  }
   if (multiple) {
     return Object.values(items);
   }
