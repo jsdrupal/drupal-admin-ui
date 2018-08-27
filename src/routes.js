@@ -1,19 +1,37 @@
 import React from 'react';
-import loadable from 'loadable-components';
+import Loadable from 'react-loadable';
 
 import widgets from './components/05_pages/NodeForm/Widgets';
+import Loading from './components/02_atoms/Loading/Loading';
 
-const AddContent = loadable(() => import('./components/05_pages/AddContent'));
-const Content = loadable(() => import('./components/05_pages/Content/Content'));
-const Permissions = loadable(() =>
-  import('./components/05_pages/Permissions/Permissions'),
-);
-const Roles = loadable(() => import('./components/05_pages/Roles'));
-const Dblog = loadable(() => import('./components/05_pages/Reports/Dblog'));
-const NodeEditForm = loadable(() =>
-  import('./components/05_pages/NodeEditForm'),
-);
-const NodeAddForm = loadable(() => import('./components/05_pages/NodeAddForm'));
+const AddContent = Loadable({
+  loader: () => import('./components/05_pages/AddContent'),
+  loading: Loading,
+});
+const Content = Loadable({
+  loader: () => import('./components/05_pages/Content/Content'),
+  loading: Loading,
+});
+const Permissions = Loadable({
+  loader: () => import('./components/05_pages/Permissions/Permissions'),
+  loading: Loading,
+});
+const Roles = Loadable({
+  loader: () => import('./components/05_pages/Roles'),
+  loading: Loading,
+});
+const Dblog = Loadable({
+  loader: () => import('./components/05_pages/Reports/Dblog'),
+  loading: Loading,
+});
+const NodeEditForm = Loadable({
+  loader: () => import('./components/05_pages/NodeEditForm'),
+  loading: Loading,
+});
+const NodeAddForm = Loadable({
+  loader: () => import('./components/05_pages/NodeAddForm'),
+  loading: Loading,
+});
 
 // @todo Share this with Drupal
 const routes = {
