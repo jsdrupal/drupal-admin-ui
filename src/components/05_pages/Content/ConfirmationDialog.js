@@ -6,9 +6,11 @@ import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Slide from '@material-ui/core/Slide';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
 
 const styles = {
   dialogActionName: css`
@@ -37,22 +39,22 @@ const ConfirmationDialog = ({
     >
       <DialogTitle>
         Are you sure you want to apply the &quot;
-        <span className={styles.dialogActionName}>{actionLabel}</span>&quot;
-        action to these content items?
+        <span className={styles.dialogActionName}>{actionLabel}</span>
+        &quot; action to these content items?
       </DialogTitle>
       <DialogContent>
-        <DialogContentText>
-          <ul>
-            {contentList
-              .filter(({ attributes: { nid } }) =>
-                Object.keys(checked).includes(`${nid}`),
-              )
-              .map(({ attributes: { title, nid } }) => (
-                <li key={nid}>{title}</li>
-              ))}
-          </ul>
-          This action cannot be undone.
-        </DialogContentText>
+        <List>
+          {contentList
+            .filter(({ attributes: { nid } }) =>
+              Object.keys(checked).includes(`${nid}`),
+            )
+            .map(({ attributes: { title, nid } }) => (
+              <ListItem key={nid}>
+                <ListItemText>{`- ${title}`}</ListItemText>
+              </ListItem>
+            ))}
+        </List>
+        This action cannot be undone.
       </DialogContent>
       <DialogActions>
         <Button
