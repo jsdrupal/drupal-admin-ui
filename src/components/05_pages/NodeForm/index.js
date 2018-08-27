@@ -12,10 +12,11 @@ import CloseIcon from '@material-ui/icons/Close';
 
 import SchemaPropType from './SchemaPropType';
 
+import MultipleFields from '../../02_atoms/MultipleFields/MultipleFields';
+
 import { contentAdd, requestUser } from '../../../actions/content';
 import { requestSchema, requestUiSchema } from '../../../actions/schema';
-
-import MultipleFields from '../../02_atoms/MultipleFields/MultipleFields';
+import { setErrorMessage } from '../../../actions/application';
 
 import {
   createEntity,
@@ -50,6 +51,7 @@ class NodeForm extends React.Component {
       data: PropTypes.object,
     }),
     requestUser: PropTypes.func.isRequired,
+    setErrorMessage: PropTypes.func.isRequired,
     onChange: PropTypes.func,
   };
 
@@ -100,7 +102,16 @@ class NodeForm extends React.Component {
   };
 
   onSave = () => {
-    this.props.onSave(this.state.entity.data);
+    const missingFields = this.resolveMissingRequiredFields();
+    if (missingFields.length) {
+      this.props.setErrorMessage(
+        missingFields.length > 1
+          ? `The following fields are missing, ${missingFields.join(', ')}.`
+          : `The following field is missing, ${missingFields.join('')}.`,
+      );
+    } else {
+      this.props.onSave(this.state.entity.data);
+    }
   };
 
   onRelationshipChange = fieldName => data => {
@@ -132,6 +143,30 @@ class NodeForm extends React.Component {
   getSchemaInfo = (schema, fieldName) =>
     schema.properties.data.properties.attributes.properties[fieldName] ||
     schema.properties.data.properties.relationships.properties[fieldName];
+
+  resolveMissingRequiredFields = () => {
+    const unavailableFields = ['nid', 'uuid', 'vid', 'path'];
+    const requiredFields = this.props.schema.properties.data.properties.attributes.required.filter(
+      field => !unavailableFields.includes(field),
+    );
+    return Object.entries(this.state.entity.data.attributes)
+      .filter(([fieldName]) => requiredFields.includes(fieldName))
+      .filter(([fieldName, value]) => {
+        // @todo Ideally the schema would identify the main property for us.
+        if (
+          typeof value === 'object' &&
+          Object.keys(value).length &&
+          value.value === ''
+        ) {
+          return fieldName;
+        }
+        if (typeof value === 'string' && value.length === 0) {
+          return fieldName;
+        }
+        return false;
+      })
+      .map(([fieldName]) => fieldName);
+  };
 
   calculateState = (prevProps, prevState, setState) => {
     if (!prevProps.schema) {
@@ -346,5 +381,6 @@ export default connect(
     requestUiSchema,
     contentAdd,
     requestUser,
+    setErrorMessage,
   },
 )(NodeForm);
