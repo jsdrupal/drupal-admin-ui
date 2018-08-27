@@ -17,11 +17,7 @@ import { requestSchema, requestUiSchema } from '../../../actions/schema';
 
 import MultipleFields from '../../02_atoms/MultipleFields/MultipleFields';
 
-import {
-  createEntity,
-  createUISchema,
-  sortUISchemaFields,
-} from '../../../utils/api/schema';
+import { createUISchema, sortUISchemaFields } from '../../../utils/api/schema';
 
 let styles;
 
@@ -66,10 +62,12 @@ class NodeForm extends React.Component {
 
   componentDidMount() {
     this.props.requestUser(1);
-    this.props.requestSchema({
-      entityTypeId: this.props.entityTypeId,
-      bundle: this.props.bundle,
-    });
+    if (!this.props.schema) {
+      this.props.requestSchema({
+        entityTypeId: this.props.entityTypeId,
+        bundle: this.props.bundle,
+      });
+    }
     this.props.requestUiSchema({
       entityTypeId: this.props.entityTypeId,
       bundle: this.props.bundle,
@@ -152,9 +150,7 @@ class NodeForm extends React.Component {
       // as we don't want to ask the user.
       restored: prevState.restored || !prevProps.restorableEntity,
       restorableEntity: !prevState.restored && prevProps.restorableEntity,
-      entity: prevProps.entity || {
-        ...createEntity(prevProps.schema),
-      },
+      entity: prevProps.entity,
     };
 
     // Just contain values which are in the ui metadata.
