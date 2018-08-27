@@ -106,7 +106,9 @@ class NodeForm extends React.Component {
     const missingFields = this.resolveMissingRequiredFields();
     if (missingFields.length) {
       this.props.setMessage(
-        `${missingFields.join(' ')} are missing.`,
+        missingFields.length > 1
+          ? `The following fields are missing, ${missingFields.join(', ')}.`
+          : `The following field is missing, ${missingFields.join('')}.`,
         MESSAGE_SEVERITY_ERROR,
       );
     } else {
