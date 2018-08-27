@@ -6,8 +6,7 @@ import {
 } from 'react-redux-loading-bar';
 
 import api from '../utils/api/api';
-import { MESSAGE_SEVERITY_ERROR } from '../constants/messages';
-import { setMessage } from './application';
+import { setErrorMessage } from './application';
 
 export const UI_SCHEMA_REQUESTED = 'UI_SCHEMA_REQUESTED';
 export const requestUiSchema = ({ entityTypeId, bundle }) => ({
@@ -55,7 +54,7 @@ function* loadUiSchema(action) {
       },
     });
   } catch (error) {
-    yield put(setMessage(error.toString(), MESSAGE_SEVERITY_ERROR));
+    yield put(setErrorMessage(error.toString()));
   } finally {
     yield put(hideLoading());
   }
@@ -88,7 +87,7 @@ function* loadSchema(action) {
       },
     });
   } catch (error) {
-    yield put(setMessage(error.toString(), MESSAGE_SEVERITY_ERROR));
+    yield put(setErrorMessage(error.toString()));
   } finally {
     yield put(hideLoading());
   }

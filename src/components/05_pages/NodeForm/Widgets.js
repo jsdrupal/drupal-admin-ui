@@ -9,14 +9,32 @@ import TextTextarea from '../../02_atoms/Widgets/TextTextarea';
 
 // @todo How do we do extensibility from modules, maybe a build step?
 const widgets = {
-  options_select: OptionsSelect,
-  number: NumberTextfield,
-  string: StringTextfield,
-  boolean_checkbox: BooleanCheckbox,
-  datetime_timestamp: DatetimeTimestamp,
-  image_image: FileUploadWidget,
-  entity_reference_autocomplete: EntityReferenceAutocomplete,
-  text_textarea: TextTextarea,
+  options_select: {
+    component: OptionsSelect,
+  },
+  number: {
+    component: NumberTextfield,
+  },
+  string: {
+    component: StringTextfield,
+  },
+  boolean_checkbox: {
+    component: BooleanCheckbox,
+  },
+  datetime_timestamp: {
+    component: DatetimeTimestamp,
+  },
+  image_image: {
+    component: FileUploadWidget,
+    multiple: true,
+  },
+  entity_reference_autocomplete: {
+    component: EntityReferenceAutocomplete,
+    multiple: true,
+  },
+  text_textarea: {
+    component: TextTextarea,
+  },
 };
 
 export default widgets;

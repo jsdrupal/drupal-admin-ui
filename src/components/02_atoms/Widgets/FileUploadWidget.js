@@ -57,25 +57,22 @@ class FileUploadWidget extends React.Component {
   };
 
   componentDidMount() {
-    if (!this.state.selectedItems && this.props.value) {
-      const entityTypeId = 'file';
-      const bundle = 'file';
+    if (
+      !this.state.selectedItems &&
+      this.props.value &&
+      this.props.value.data
+    ) {
+      this.recalculateSelectedItems();
+    }
+  }
 
-      const multiple = this.props.schema.properties.data.type === 'array';
-      const items = getItemsAsArray(multiple, this.props.value.data);
-      const ids = items.map(({ id }) => id);
-      this.fetchEntitites(entityTypeId, bundle, ids).then(
-        ({ data: entities }) => {
-          this.setState({
-            selectedItems: entities.map(({ id, attributes }, index) => ({
-              id,
-              type: 'file--file',
-              [entityTypeId]: attributes,
-              meta: items[index].meta,
-            })),
-          });
-        },
-      );
+  componentDidUpdate(prevProps) {
+    if (
+      this.props.value &&
+      this.props.value.data &&
+      prevProps.value.data !== this.props.value.data
+    ) {
+      this.recalculateSelectedItems();
     }
   }
 
@@ -87,6 +84,32 @@ class FileUploadWidget extends React.Component {
       () => {
         this.props.onChange({
           data: this.state.selectedItems,
+        });
+      },
+    );
+  };
+
+  recalculateSelectedItems = () => {
+    const entityTypeId = 'file';
+    const bundle = 'file';
+
+    const multiple = this.props.schema.properties.data.type === 'array';
+    const items = getItemsAsArray(multiple, this.props.value.data);
+    const ids = items.map(({ id }) => id);
+    this.fetchEntitites(entityTypeId, bundle, ids).then(
+      ({ data: entities }) => {
+        this.setState({
+          selectedItems: entities
+            .map(({ id, attributes }, index) => ({
+              id,
+              type: 'file--file',
+              [entityTypeId]: attributes,
+              meta: items[index].meta,
+            }))
+            .reduce(
+              (agg, item) => setItemById(multiple, item, agg),
+              multiple ? [] : {},
+            ),
         });
       },
     );

@@ -6,12 +6,16 @@ import { css } from 'emotion';
 import Paper from '@material-ui/core/Paper';
 import Divider from '@material-ui/core/Divider';
 import Button from '@material-ui/core/Button';
+import Snackbar from '@material-ui/core/Snackbar';
+import IconButton from '@material-ui/core/IconButton';
+import CloseIcon from '@material-ui/icons/Close';
 
 import SchemaPropType from './SchemaPropType';
 
+import MultipleFields from '../../02_atoms/MultipleFields/MultipleFields';
+
 import { contentAdd, requestUser } from '../../../actions/content';
 import { requestSchema, requestUiSchema } from '../../../actions/schema';
-
 import { setMessage } from '../../../actions/application';
 import { MESSAGE_SEVERITY_ERROR } from '../../../constants/messages';
 
@@ -44,59 +48,24 @@ class NodeForm extends React.Component {
       }),
       PropTypes.bool,
     ]),
+    restorableEntity: PropTypes.shape({
+      data: PropTypes.object,
+    }),
     requestUser: PropTypes.func.isRequired,
     setMessage: PropTypes.func.isRequired,
+    onChange: PropTypes.func,
   };
 
   static defaultProps = {
     schema: false,
     uiSchema: false,
+    restorableEntity: null,
+    onChange: () => {},
   };
 
-  state = {};
-
-  static getDerivedStateFromProps(props, prevState) {
-    if (!props.schema) {
-      return prevState;
-    }
-
-    if (!props.uiSchema) {
-      return prevState;
-    }
-
-    if (Object.prototype.hasOwnProperty.call(prevState || {}, 'entity')) {
-      return prevState;
-    }
-
-    const state = {
-      ...prevState,
-      entity: props.entity || {
-        ...createEntity(props.schema),
-      },
-    };
-
-    // Just contain values which are in the ui metadata.
-    state.entity.data.attributes = Object.entries(state.entity.data.attributes)
-      .filter(([key]) =>
-        Object.keys(props.uiSchema.formDisplaySchema)
-          .concat(['type'])
-          .includes(key),
-      )
-      .reduce((agg, [key, value]) => ({ ...agg, [key]: value }), {});
-
-    // @TODO Remove this when we create the entity scaffolding at the NodeEdit
-    // or NodeAdd component level.
-    // https://github.com/jsdrupal/drupal-admin-ui/issues/378
-    // Set default `Authored By` relationship.
-    // Set default `Created On` attribute.
-    if (!Object.prototype.hasOwnProperty.call(props, 'entity')) {
-      state.entity.data.relationships.uid.data = { ...props.user };
-      const local = new Date();
-      local.setMinutes(local.getMinutes() - local.getTimezoneOffset());
-      state.entity.data.attributes.created = Math.round(+local / 1000);
-    }
-    return state;
-  }
+  state = {
+    restored: false,
+  };
 
   componentDidMount() {
     this.props.requestUser(1);
@@ -108,20 +77,29 @@ class NodeForm extends React.Component {
       entityTypeId: this.props.entityTypeId,
       bundle: this.props.bundle,
     });
+
+    this.calculateState(this.props, this.state, state => this.setState(state));
+  }
+
+  componentDidUpdate() {
+    this.calculateState(this.props, this.state, state => this.setState(state));
   }
 
   onAttributeChange = fieldName => data => {
-    this.setState(prevState => ({
-      entity: {
-        data: {
-          ...prevState.entity.data,
-          attributes: {
-            ...prevState.entity.data.attributes,
-            [fieldName]: data,
+    this.setState(
+      prevState => ({
+        entity: {
+          data: {
+            ...prevState.entity.data,
+            attributes: {
+              ...prevState.entity.data.attributes,
+              [fieldName]: data,
+            },
           },
         },
-      },
-    }));
+      }),
+      () => this.props.onChange(this.props.bundle, this.state.entity),
+    );
   };
 
   onSave = () => {
@@ -144,19 +122,22 @@ class NodeForm extends React.Component {
     } else {
       fieldData = Object.values(data);
     }
-    this.setState(prevState => ({
-      entity: {
-        data: {
-          ...prevState.entity.data,
-          relationships: {
-            ...prevState.entity.data.relationships,
-            [fieldName]: {
-              data: fieldData,
+    this.setState(
+      prevState => ({
+        entity: {
+          data: {
+            ...prevState.entity.data,
+            relationships: {
+              ...prevState.entity.data.relationships,
+              [fieldName]: {
+                data: fieldData,
+              },
             },
           },
         },
-      },
-    }));
+      }),
+      () => this.props.onChange(this.props.bundle, this.state.entity),
+    );
   };
 
   getSchemaInfo = (schema, fieldName) =>
@@ -187,6 +168,54 @@ class NodeForm extends React.Component {
       .map(([fieldName]) => fieldName);
   };
 
+  calculateState = (prevProps, prevState, setState) => {
+    if (!prevProps.schema) {
+      return;
+    }
+
+    if (!prevProps.uiSchema) {
+      return;
+    }
+
+    if (prevState.entity) {
+      return;
+    }
+
+    const state = {
+      ...prevState,
+      // Mark the entity as restored when we don't have a restoreable entity,
+      // as we don't want to ask the user.
+      restored: prevState.restored || !prevProps.restorableEntity,
+      restorableEntity: !prevState.restored && prevProps.restorableEntity,
+      entity: prevProps.entity || {
+        ...createEntity(prevProps.schema),
+      },
+    };
+
+    // Just contain values which are in the ui metadata.
+    state.entity.data.attributes = Object.entries(state.entity.data.attributes)
+      .filter(([key]) =>
+        Object.keys(prevProps.uiSchema.formDisplaySchema)
+          .concat(['type'])
+          .includes(key),
+      )
+      .reduce((agg, [key, value]) => ({ ...agg, [key]: value }), {});
+
+    // @TODO Remove this when we create the entity scaffolding at the NodeEdit
+    // or NodeAdd component level.
+    // https://github.com/jsdrupal/drupal-admin-ui/issues/378
+    // Set default `Authored By` relationship.
+    // Set default `Created On` attribute.
+    if (!Object.prototype.hasOwnProperty.call(prevProps, 'entity')) {
+      state.entity.data.relationships.uid.data = { ...prevProps.user };
+      const local = new Date();
+      local.setMinutes(local.getMinutes() - local.getTimezoneOffset());
+      state.entity.data.attributes.created = Math.round(+local / 1000);
+    }
+
+    setState(state);
+  };
+
   createField = ({ fieldName, widget, inputProps }) => {
     // @todo We need to pass along props.
     // @todo How do we handle cardinality together with jsonapi
@@ -202,7 +231,7 @@ class NodeForm extends React.Component {
       (attributes.properties[fieldName] && 'attributes') ||
       (relationships.properties[fieldName] && 'relationships');
 
-    return React.createElement(widget, {
+    const widgetProps = {
       key: fieldName,
       entityTypeId: this.props.entityTypeId,
       bundle: this.props.bundle,
@@ -220,12 +249,73 @@ class NodeForm extends React.Component {
         fieldName,
       ),
       inputProps,
-    });
+    };
+
+    const widgetComponent = widget.component;
+    const widgetIsMultiple = widget.multiple || false;
+    const hasMultipleDeltas =
+      (fieldSchema.type && fieldSchema.type === 'array') ||
+      (fieldSchema.properties &&
+        fieldSchema.properties.data &&
+        fieldSchema.properties.data.type === 'array');
+
+    return hasMultipleDeltas && !widgetIsMultiple ? (
+      <MultipleFields component={widgetComponent} {...widgetProps} />
+    ) : (
+      React.createElement(widgetComponent, widgetProps)
+    );
   };
+
+  renderRestoreSnackbar() {
+    return (
+      // Ensure that there was some previously stored entity
+      this.props.restorableEntity &&
+      // Hide thie restore form once the content got restored.
+      !this.state.restored && (
+        <Snackbar
+          anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+          autoHideDuration={10000}
+          open
+          data-nightwatch="restore-content-snackbar"
+          ContentProps={{
+            'aria-describedby': 'message-id',
+          }}
+          message={<span id="message-id">Unsaved content found</span>}
+          action={[
+            <Button
+              key="undo"
+              color="secondary"
+              size="small"
+              onClick={() =>
+                this.setState({
+                  entity: this.props.restorableEntity,
+                  restored: true,
+                })
+              }
+            >
+              Restore
+            </Button>,
+            <IconButton
+              key="close"
+              aria-label="Close"
+              color="inherit"
+              onClick={() =>
+                this.setState({
+                  restored: true,
+                })
+              }
+            >
+              <CloseIcon className={styles.icon} />
+            </IconButton>,
+          ]}
+        />
+      )
+    );
+  }
 
   render() {
     let result = null;
-    if (this.props.schema && this.props.uiSchema) {
+    if (this.props.schema && this.props.uiSchema && this.state.entity) {
       const { right, left } = sortUISchemaFields(
         createUISchema(
           this.props.uiSchema.fieldSchema,
@@ -237,6 +327,7 @@ class NodeForm extends React.Component {
       );
       result = (
         <div className={styles.gridRoot}>
+          {this.renderRestoreSnackbar()}
           <Paper classes={{ root: styles.fieldContainer }}>
             {left.map(this.createField)}
             <Divider classes={{ root: styles.divider }} />
@@ -271,6 +362,9 @@ styles = {
   widgetRoot: css`
     display: flex;
     align-items: start;
+  `,
+  icon: css`
+    font-size: 20px;
   `,
 };
 

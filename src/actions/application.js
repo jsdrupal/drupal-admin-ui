@@ -5,7 +5,12 @@ import {
   resetLoading,
 } from 'react-redux-loading-bar';
 import api from '../utils/api/api';
-import { MESSAGE_SEVERITY_ERROR } from '../constants/messages';
+import {
+  MESSAGE_SEVERITY_ERROR,
+  MESSAGE_SEVERITY_SUCCESS,
+  MESSAGE_SEVERITY_INFO,
+  MESSAGE_SEVERITY_WARNING,
+} from '../constants/messages';
 
 export const OPEN_DRAWER = 'OPEN_DRAWER';
 export const openDrawer = () => ({
@@ -24,7 +29,7 @@ export const SET_MESSAGE = 'SET_MESSAGE';
  * @param {string} message - the message content
  * @param {string} severity - the severity level of the message, one of the levels
  *  listed at constants/messages.js
- * @returns {{type: string, payload: {message: *, messageInterface: *, messageSeverity: *}}}
+ * @returns {{type: string, payload: {message: *, messageSeverity: *}}}
  */
 export const setMessage = (message, messageSeverity) => ({
   type: SET_MESSAGE,
@@ -33,6 +38,38 @@ export const setMessage = (message, messageSeverity) => ({
     messageSeverity,
   },
 });
+
+/**
+ * @param {string} message - the message content
+ *
+ * @returns {{type: string, payload: {message: *, messageSeverity: MESSAGE_SEVERITY_ERROR}}}
+ */
+export const setErrorMessage = message =>
+  setMessage(message, MESSAGE_SEVERITY_ERROR);
+
+/**
+ * @param {string} message - the message content
+ *
+ * @returns {{type: string, payload: {message: *, messageSeverity: MESSAGE_SEVERITY_SUCCESS}}}
+ */
+export const setSuccessMessage = message =>
+  setMessage(message, MESSAGE_SEVERITY_SUCCESS);
+
+/**
+ * @param {string} message - the message content
+ *
+ * @returns {{type: string, payload: {message: *, messageSeverity: MESSAGE_SEVERITY_INFO}}}
+ */
+export const setInfoMessage = message =>
+  setMessage(message, MESSAGE_SEVERITY_INFO);
+
+/**
+ * @param {string} message - the message content
+ *
+ * @returns {{type: string, payload: {message: *, messageSeverity: MESSAGE_SEVERITY_WARNING}}}
+ */
+export const setWarningMessage = message =>
+  setMessage(message, MESSAGE_SEVERITY_WARNING);
 
 export const CLEAR_MESSAGE = 'CLEAR_MESSAGE';
 export const clearMessage = key => ({
@@ -70,13 +107,12 @@ function* loadMenu() {
   } catch (error) {
     if (process.env.REACT_APP_DRUPAL_BASE_URL.includes('localhost')) {
       yield put(
-        setMessage(
+        setErrorMessage(
           'Unable to access data from Drupal. Did you set REACT_APP_DRUPAL_BASE_URL to localhost instead of 127.0.0.1?',
-          MESSAGE_SEVERITY_ERROR,
         ),
       );
     }
-    yield put(setMessage(error.toString(), MESSAGE_SEVERITY_ERROR));
+    yield put(setErrorMessage(error.toString()));
   } finally {
     yield put(hideLoading());
   }
@@ -103,7 +139,7 @@ function* loadContentTypes() {
       },
     });
   } catch (error) {
-    yield put(setMessage(error.toString(), MESSAGE_SEVERITY_ERROR));
+    yield put(setErrorMessage(error.toString()));
   } finally {
     yield put(hideLoading());
   }
@@ -133,7 +169,7 @@ function* loadActions() {
       },
     });
   } catch (error) {
-    yield put(setMessage(error.toString(), MESSAGE_SEVERITY_ERROR));
+    yield put(setErrorMessage(error.toString()));
   }
 }
 

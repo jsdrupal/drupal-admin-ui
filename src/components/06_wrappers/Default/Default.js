@@ -109,12 +109,12 @@ class Default extends React.Component {
       <main className={styles.main} id={styles.main}>
         <ErrorBoundary>
           {this.props.children}
-          {this.props.messages.map(message => (
+          {this.props.message && (
             <Snackbar
-              {...message}
-              onClose={() => this.props.clearMessage(message.key)}
+              {...this.props.message}
+              onClose={() => this.props.clearMessage(this.props.message.key)}
             />
-          ))}
+          )}
         </ErrorBoundary>
       </main>
     </div>
@@ -157,12 +157,12 @@ styles = {
 
 Default.propTypes = {
   children: PropTypes.node.isRequired,
-  messages: PropTypes.arrayOf(
-    PropTypes.shape({
-      message: PropTypes.string,
-      type: PropTypes.string,
-    }),
-  ),
+  message: PropTypes.shape({
+    message: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
+    type: PropTypes.string,
+    key: PropTypes.number,
+    open: PropTypes.bool,
+  }),
   menuLinks: PropTypes.arrayOf(
     PropTypes.shape({
       link: PropTypes.shape({
@@ -180,12 +180,12 @@ Default.propTypes = {
 };
 
 Default.defaultProps = {
-  messages: [],
+  message: null,
   drawerOpen: false,
 };
 
 const mapStateToProps = state => ({
-  messages: state.application.messages || [],
+  message: state.application.messages[0] || null,
   menuLinks: state.application.menuLinks || [],
   drawerOpen: state.application.drawerOpen,
 });
