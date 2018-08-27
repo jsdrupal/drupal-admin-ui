@@ -11,6 +11,8 @@ import ReorderIcon from '@material-ui/icons/Reorder';
 import FormControl from '@material-ui/core/FormControl';
 import ListItemText from '@material-ui/core/ListItemText';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
+import { createEntity } from '../../../utils/api/schema';
+import SchemaPropType from '../../05_pages/NodeForm/SchemaPropType';
 
 const Add = styled('div')`
   .icon {
@@ -35,6 +37,7 @@ class MultipleFields extends Component {
     onChange: PropTypes.func.isRequired,
     component: PropTypes.func.isRequired,
     value: PropTypes.arrayOf(PropTypes.string).isRequired,
+    schema: SchemaPropType.isRequired,
   };
 
   /**
@@ -45,14 +48,6 @@ class MultipleFields extends Component {
     currentIndex: -1,
     newItemAdded: false,
   };
-
-  componentDidMount() {
-    const { value, onChange } = this.props;
-    // Set the initial value to an empty string if no values in array.
-    if (!value.length) {
-      onChange(['']);
-    }
-  }
 
   /**
    * Sets the state handle with the handle target.
@@ -160,6 +155,10 @@ class MultipleFields extends Component {
     );
   };
 
+  createEmptyItem() {
+    return createEntity(this.props.schema.items);
+  }
+
   render = () => {
     const {
       onDragEnd,
@@ -172,11 +171,12 @@ class MultipleFields extends Component {
       state: { newItemAdded },
       props: { label, value: values, component, onChange },
     } = this;
+    const usedValues = values.length ? values : [this.createEmptyItem()];
     return (
       <FormControl margin="normal" fullWidth>
         <FormLabel component="legend">{label}</FormLabel>
         <List>
-          {values &&
+          {usedValues &&
             values.map((value, index) => (
               <ListItem
                 draggable
