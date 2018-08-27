@@ -29,6 +29,7 @@
     "interweave": "^8.0.2",
     "jss": "^9.8.2",
     "keycode": "^2.2.0",
+    "loadable-components": "^2.2.3",
     "makecancelable": "^1.0.0",
     "prop-types": "^15.6.1",
     "qs": "^6.5.1",
