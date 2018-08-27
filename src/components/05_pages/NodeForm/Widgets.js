@@ -1,29 +1,11 @@
-import loadable from 'loadable-components';
-
-const OptionsSelect = loadable(() =>
-  import('../../02_atoms/Widgets/OptionsSelect'),
-);
-const NumberTextfield = loadable(() =>
-  import('../../02_atoms/Widgets/NumberTextfield'),
-);
-const StringTextfield = loadable(() =>
-  import('../../02_atoms/Widgets/StringTextfield'),
-);
-const BooleanCheckbox = loadable(() =>
-  import('../../02_atoms/Widgets/BooleanCheckbox'),
-);
-const DatetimeTimestamp = loadable(() =>
-  import('../../02_atoms/Widgets/DatetimeTimestamp'),
-);
-const FileUploadWidget = loadable(() =>
-  import('../../02_atoms/Widgets/FileUploadWidget'),
-);
-const EntityReferenceAutocomplete = loadable(() =>
-  import('../../02_atoms/Widgets/EntityReferenceAutocomplete'),
-);
-const TextTextarea = loadable(() =>
-  import('../../02_atoms/Widgets/TextTextarea'),
-);
+import OptionsSelect from '../../02_atoms/Widgets/OptionsSelect';
+import NumberTextfield from '../../02_atoms/Widgets/NumberTextfield';
+import StringTextfield from '../../02_atoms/Widgets/StringTextfield';
+import BooleanCheckbox from '../../02_atoms/Widgets/BooleanCheckbox';
+import DatetimeTimestamp from '../../02_atoms/Widgets/DatetimeTimestamp';
+import FileUploadWidget from '../../02_atoms/Widgets/FileUploadWidget';
+import EntityReferenceAutocomplete from '../../02_atoms/Widgets/EntityReferenceAutocomplete';
+import TextTextarea from '../../02_atoms/Widgets/TextTextarea';
 
 // @todo How do we do extensibility from modules, maybe a build step?
 const widgets = {
