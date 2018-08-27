@@ -15,6 +15,8 @@ import SchemaPropType from './SchemaPropType';
 import { contentAdd, requestUser } from '../../../actions/content';
 import { requestSchema, requestUiSchema } from '../../../actions/schema';
 
+import MultipleFields from '../../02_atoms/MultipleFields/MultipleFields';
+
 import {
   createEntity,
   createUISchema,
@@ -194,7 +196,7 @@ class NodeForm extends React.Component {
       (attributes.properties[fieldName] && 'attributes') ||
       (relationships.properties[fieldName] && 'relationships');
 
-    return React.createElement(widget, {
+    const widgetProps = {
       key: fieldName,
       entityTypeId: this.props.entityTypeId,
       bundle: this.props.bundle,
@@ -212,7 +214,21 @@ class NodeForm extends React.Component {
         fieldName,
       ),
       inputProps,
-    });
+    };
+
+    const widgetComponent = widget.component;
+    const widgetIsMultiple = widget.multiple || false;
+    const hasMultipleDeltas =
+      (fieldSchema.type && fieldSchema.type === 'array') ||
+      (fieldSchema.properties &&
+        fieldSchema.properties.data &&
+        fieldSchema.properties.data.type === 'array');
+
+    return hasMultipleDeltas && !widgetIsMultiple ? (
+      <MultipleFields component={widgetComponent} {...widgetProps} />
+    ) : (
+      React.createElement(widgetComponent, widgetProps)
+    );
   };
 
   renderRestoreSnackbar() {

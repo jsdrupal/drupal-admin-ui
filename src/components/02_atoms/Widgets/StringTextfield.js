@@ -15,6 +15,7 @@ const StringTextfield = props => (
     label={props.label}
     classes={props.classes}
     required={props.required}
+    autoFocus={props.autoFocus}
     fullWidth
   />
 );
@@ -26,10 +27,12 @@ StringTextfield.propTypes = {
     PropTypes.arrayOf(PropTypes.string),
     PropTypes.string,
   ]),
+  autoFocus: PropTypes.bool,
 };
 
 StringTextfield.defaultProps = {
   value: '',
+  autoFocus: false,
 };
 
 export default StringTextfield;
