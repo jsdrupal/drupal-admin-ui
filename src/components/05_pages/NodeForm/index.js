@@ -16,8 +16,7 @@ import MultipleFields from '../../02_atoms/MultipleFields/MultipleFields';
 
 import { contentAdd, requestUser } from '../../../actions/content';
 import { requestSchema, requestUiSchema } from '../../../actions/schema';
-import { setMessage } from '../../../actions/application';
-import { MESSAGE_SEVERITY_ERROR } from '../../../constants/messages';
+import { setErrorMessage } from '../../../actions/application';
 
 import {
   createEntity,
@@ -52,7 +51,7 @@ class NodeForm extends React.Component {
       data: PropTypes.object,
     }),
     requestUser: PropTypes.func.isRequired,
-    setMessage: PropTypes.func.isRequired,
+    setErrorMessage: PropTypes.func.isRequired,
     onChange: PropTypes.func,
   };
 
@@ -105,11 +104,10 @@ class NodeForm extends React.Component {
   onSave = () => {
     const missingFields = this.resolveMissingRequiredFields();
     if (missingFields.length) {
-      this.props.setMessage(
+      this.props.setErrorMessage(
         missingFields.length > 1
           ? `The following fields are missing, ${missingFields.join(', ')}.`
           : `The following field is missing, ${missingFields.join('')}.`,
-        MESSAGE_SEVERITY_ERROR,
       );
     } else {
       this.props.onSave(this.state.entity.data);
@@ -383,6 +381,6 @@ export default connect(
     requestUiSchema,
     contentAdd,
     requestUser,
-    setMessage,
+    setErrorMessage,
   },
 )(NodeForm);
