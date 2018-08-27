@@ -17,6 +17,8 @@ import { requestSchema, requestUiSchema } from '../../../actions/schema';
 
 import MultipleFields from '../../02_atoms/MultipleFields/MultipleFields';
 
+import Widgets from '../NodeForm/Widgets';
+
 import {
   createEntity,
   createUISchema,
@@ -337,6 +339,7 @@ const mapStateToProps = (state, { bundle, entityTypeId }) => ({
   schema: state.schema.schema[`${entityTypeId}--${bundle}`],
   uiSchema: state.schema.uiSchema[`${entityTypeId}--${bundle}`],
   user: state.content.user,
+  widgets: Widgets,
 });
 
 export default connect(

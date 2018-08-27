@@ -76,8 +76,17 @@ styles = {
 };
 
 export default connect(
-  (state, props) => ({
-    entity: state.content.contentByNid[props.nid],
+  (
+    state,
+    {
+      match: {
+        params: { nid },
+      },
+    },
+  ) => ({
+    entity: state.content.contentByNid[nid],
+    entityTypeId: 'node',
+    nid,
   }),
   {
     requestSingleContent,

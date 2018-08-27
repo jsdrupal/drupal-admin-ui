@@ -1,7 +1,4 @@
-import React from 'react';
 import Loadable from 'react-loadable';
-
-import widgets from './components/05_pages/NodeForm/Widgets';
 import Loading from './components/02_atoms/Loading/Loading';
 
 const AddContent = Loadable({
@@ -40,22 +37,8 @@ const routes = {
   '/admin/people/roles': Roles,
   '/admin/reports/dblog': Dblog,
   '/node/add': AddContent,
-  // eslint-disable-next-line react/prop-types
-  '/node/:nid/edit': ({ match }) => (
-    <NodeEditForm
-      entityTypeId="node"
-      widgets={widgets}
-      nid={match.params.nid}
-    />
-  ),
-  // eslint-disable-next-line react/prop-types
-  '/node/add/:bundle': ({ match }) => (
-    <NodeAddForm
-      entityTypeId="node"
-      bundle={match.params.bundle}
-      widgets={widgets}
-    />
-  ),
+  '/node/:nid/edit': NodeEditForm,
+  '/node/add/:bundle': NodeAddForm,
 };
 
 export default routes;
