@@ -45,28 +45,34 @@ class NodeAddForm extends React.Component {
     this.props.contentAdd(data, this.props.bundle);
   };
 
+  forgeEntity = schema => {
+    const entity = createEntity(schema);
+    // Set default `Created On` attribute.
+    const local = new Date();
+    local.setMinutes(local.getMinutes() - local.getTimezoneOffset());
+    entity.data.attributes.created = Math.round(+local / 1000);
+
+    // Set default `Authored By` relationship.
+    entity.data.relationships.uid.data = { ...this.props.user };
+
+    return entity;
+  };
+
   render() {
-    let result = null;
-    if (this.props.schema) {
-      const entity = createEntity(this.props.schema);
-
-      // Set default `Created On` attribute.
-      const local = new Date();
-      local.setMinutes(local.getMinutes() - local.getTimezoneOffset());
-      entity.data.attributes.created = Math.round(+local / 1000);
-
-      // Set default `Authored By` relationship.
-      entity.data.relationships.uid.data = { ...this.props.user };
-
-      result = (
+    return (
+      this.props.schema &&
+      this.props.user && (
         <Fragment>
           <PageTitle>Create {this.props.bundle}</PageTitle>
           <LoadingBar />
-          <NodeForm {...this.props} entity={entity} onSave={this.onSave} />
+          <NodeForm
+            {...this.props}
+            entity={this.forgeEntity(this.props.schema)}
+            onSave={this.onSave}
+          />
         </Fragment>
-      );
-    }
-    return result;
+      )
+    );
   }
 }
 
