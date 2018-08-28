@@ -12,6 +12,7 @@ import PageTitle from '../../02_atoms/PageTitle/PageTitle';
 import { createEntity } from '../../../utils/api/schema';
 import { requestSchema } from '../../../actions/schema';
 import SchemaPropType from '../NodeForm/SchemaPropType';
+import { cleanupRelationships } from '../../../utils/api/content';
 
 class NodeAddForm extends React.Component {
   static propTypes = {
@@ -38,11 +39,13 @@ class NodeAddForm extends React.Component {
   }
 
   onSave = entity => {
-    const data = {
-      ...entity,
-      type: `${this.props.entityTypeId}--${this.props.bundle}`,
-    };
-    this.props.contentAdd(data, this.props.bundle);
+    this.props.contentAdd(
+      cleanupRelationships({
+        ...entity,
+        type: `${this.props.entityTypeId}--${this.props.bundle}`,
+      }),
+      this.props.bundle,
+    );
   };
 
   forgeEntity = schema => {
