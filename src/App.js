@@ -10,6 +10,7 @@ import {
 } from 'react-router-redux';
 import { Provider } from 'react-redux';
 import createSagaMiddleware from 'redux-saga';
+// eslint-disable-next-line import/no-extraneous-dependencies
 import { composeWithDevTools } from 'redux-devtools-extension/developmentOnly';
 
 import JssProvider from 'react-jss/lib/JssProvider';
