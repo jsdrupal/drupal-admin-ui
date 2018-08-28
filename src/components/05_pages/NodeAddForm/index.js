@@ -5,14 +5,17 @@ import LoadingBar from 'react-redux-loading-bar';
 import NodeForm from '../NodeForm';
 import { contentAddChange, contentAdd } from '../../../actions/content';
 import PageTitle from '../../02_atoms/PageTitle/PageTitle';
+import { cleanupRelationships } from '../../../utils/api/content';
 
 class NodeAddForm extends React.Component {
   onSave = entity => {
-    const data = {
-      ...entity,
-      type: `${this.props.entityTypeId}--${this.props.bundle}`,
-    };
-    this.props.contentAdd(data, this.props.bundle);
+    this.props.contentAdd(
+      cleanupRelationships({
+        ...entity,
+        type: `${this.props.entityTypeId}--${this.props.bundle}`,
+      }),
+      this.props.bundle,
+    );
   };
 
   render() {
