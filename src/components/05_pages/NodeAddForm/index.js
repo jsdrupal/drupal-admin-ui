@@ -5,37 +5,18 @@ import LoadingBar from 'react-redux-loading-bar';
 import NodeForm from '../NodeForm';
 import { contentAddChange, contentAdd } from '../../../actions/content';
 import PageTitle from '../../02_atoms/PageTitle/PageTitle';
+import { cleanupRelationships } from '../../../utils/api/content';
 
 class NodeAddForm extends React.Component {
   onSave = entity => {
     this.props.contentAdd(
-      this.cleanupRelationships({
+      cleanupRelationships({
         ...entity,
         type: `${this.props.entityTypeId}--${this.props.bundle}`,
       }),
       this.props.bundle,
     );
   };
-
-  cleanupRelationships = ({ relationships, ...rest }) => ({
-    ...rest,
-    relationships: Object.entries(relationships).reduce((acc, cur) => {
-      const [key, { data: relationshipData }] = cur;
-      if (
-        typeof relationshipData === 'object' &&
-        relationshipData.id &&
-        relationshipData.type &&
-        relationshipData.id !== '' &&
-        relationshipData.type !== ''
-      ) {
-        acc[key] = { data: relationshipData };
-      }
-      if (Array.isArray(relationshipData) && relationshipData.length) {
-        acc[key] = { data: relationshipData };
-      }
-      return acc;
-    }, {}),
-  });
 
   render() {
     return (

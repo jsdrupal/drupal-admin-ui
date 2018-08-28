@@ -6,6 +6,7 @@ import { css } from 'emotion';
 import NodeForm from '../NodeForm';
 import { contentSave, requestSingleContent } from '../../../actions/content';
 import PageTitle from '../../02_atoms/PageTitle/PageTitle';
+import { cleanupRelationships } from '../../../utils/api/content';
 
 let styles;
 
@@ -15,11 +16,12 @@ class NodeEditForm extends React.Component {
   }
 
   onSave = bundle => entity => {
-    const data = {
-      ...entity,
-      type: `${this.props.entityTypeId}--${bundle}`,
-    };
-    this.props.contentSave(data);
+    this.props.contentSave(
+      cleanupRelationships({
+        ...entity,
+        type: `${this.props.entityTypeId}--${bundle}`,
+      }),
+    );
   };
 
   render() {
