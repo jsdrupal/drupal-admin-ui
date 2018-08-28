@@ -3,7 +3,11 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import LoadingBar from 'react-redux-loading-bar';
 import NodeForm from '../NodeForm';
-import { contentAddChange, contentAdd } from '../../../actions/content';
+import {
+  contentAddChange,
+  contentAdd,
+  requestUser,
+} from '../../../actions/content';
 import PageTitle from '../../02_atoms/PageTitle/PageTitle';
 import { createEntity } from '../../../utils/api/schema';
 import { requestSchema } from '../../../actions/schema';
@@ -16,13 +20,17 @@ class NodeAddForm extends React.Component {
     entityTypeId: PropTypes.string.isRequired,
     schema: PropTypes.oneOfType([SchemaPropType, PropTypes.bool]),
     requestSchema: PropTypes.func.isRequired,
+    requestUser: PropTypes.func.isRequired,
+    user: PropTypes.shape({}),
   };
 
   static defaultProps = {
     schema: false,
+    user: false,
   };
 
   componentDidMount() {
+    this.props.requestUser(1);
     this.props.requestSchema({
       entityTypeId: this.props.entityTypeId,
       bundle: this.props.bundle,
@@ -38,19 +46,27 @@ class NodeAddForm extends React.Component {
   };
 
   render() {
-    return (
-      this.props.schema && (
+    let result = null;
+    if (this.props.schema) {
+      const entity = createEntity(this.props.schema);
+
+      // Set default `Created On` attribute.
+      const local = new Date();
+      local.setMinutes(local.getMinutes() - local.getTimezoneOffset());
+      entity.data.attributes.created = Math.round(+local / 1000);
+
+      // Set default `Authored By` relationship.
+      entity.data.relationships.uid.data = { ...this.props.user };
+
+      result = (
         <Fragment>
           <PageTitle>Create {this.props.bundle}</PageTitle>
           <LoadingBar />
-          <NodeForm
-            {...this.props}
-            entity={createEntity(this.props.schema)}
-            onSave={this.onSave}
-          />
+          <NodeForm {...this.props} entity={entity} onSave={this.onSave} />
         </Fragment>
-      )
-    );
+      );
+    }
+    return result;
   }
 }
 
@@ -61,10 +77,12 @@ export default connect(
   (state, { bundle, entityTypeId }) => ({
     schema: state.schema.schema[`${entityTypeId}--${bundle}`],
     restorableEntity: extractRestorableEntity(state, bundle),
+    user: state.content.user,
   }),
   {
     contentAdd,
     requestSchema,
     onChange: contentAddChange,
+    requestUser,
   },
 )(NodeAddForm);

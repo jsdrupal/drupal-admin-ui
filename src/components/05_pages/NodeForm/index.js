@@ -14,7 +14,7 @@ import SchemaPropType from './SchemaPropType';
 
 import MultipleFields from '../../02_atoms/MultipleFields/MultipleFields';
 
-import { contentAdd, requestUser } from '../../../actions/content';
+import { contentAdd } from '../../../actions/content';
 import { requestSchema, requestUiSchema } from '../../../actions/schema';
 import { setErrorMessage } from '../../../actions/application';
 
@@ -46,7 +46,6 @@ class NodeForm extends React.Component {
     restorableEntity: PropTypes.shape({
       data: PropTypes.object,
     }),
-    requestUser: PropTypes.func.isRequired,
     setErrorMessage: PropTypes.func.isRequired,
     onChange: PropTypes.func,
   };
@@ -63,7 +62,6 @@ class NodeForm extends React.Component {
   };
 
   componentDidMount() {
-    this.props.requestUser(1);
     if (!this.props.schema) {
       this.props.requestSchema({
         entityTypeId: this.props.entityTypeId,
@@ -196,18 +194,6 @@ class NodeForm extends React.Component {
           .includes(key),
       )
       .reduce((agg, [key, value]) => ({ ...agg, [key]: value }), {});
-
-    // @TODO Remove this when we create the entity scaffolding at the NodeEdit
-    // or NodeAdd component level.
-    // https://github.com/jsdrupal/drupal-admin-ui/issues/378
-    // Set default `Authored By` relationship.
-    // Set default `Created On` attribute.
-    if (!Object.prototype.hasOwnProperty.call(prevProps, 'entity')) {
-      state.entity.data.relationships.uid.data = { ...prevProps.user };
-      const local = new Date();
-      local.setMinutes(local.getMinutes() - local.getTimezoneOffset());
-      state.entity.data.attributes.created = Math.round(+local / 1000);
-    }
 
     setState(state);
   };
@@ -367,7 +353,6 @@ styles = {
 const mapStateToProps = (state, { bundle, entityTypeId }) => ({
   schema: state.schema.schema[`${entityTypeId}--${bundle}`],
   uiSchema: state.schema.uiSchema[`${entityTypeId}--${bundle}`],
-  user: state.content.user,
 });
 
 export default connect(
@@ -376,7 +361,6 @@ export default connect(
     requestSchema,
     requestUiSchema,
     contentAdd,
-    requestUser,
     setErrorMessage,
   },
 )(NodeForm);
