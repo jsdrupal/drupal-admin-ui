@@ -8,12 +8,34 @@ import PageTitle from '../../02_atoms/PageTitle/PageTitle';
 
 class NodeAddForm extends React.Component {
   onSave = entity => {
-    const data = {
-      ...entity,
-      type: `${this.props.entityTypeId}--${this.props.bundle}`,
-    };
-    this.props.contentAdd(data, this.props.bundle);
+    this.props.contentAdd(
+      this.cleanupRelationships({
+        ...entity,
+        type: `${this.props.entityTypeId}--${this.props.bundle}`,
+      }),
+      this.props.bundle,
+    );
   };
+
+  cleanupRelationships = ({ relationships, ...rest }) => ({
+    ...rest,
+    relationships: Object.entries(relationships).reduce((acc, cur) => {
+      const [key, { data: relationshipData }] = cur;
+      if (
+        typeof relationshipData === 'object' &&
+        relationshipData.id &&
+        relationshipData.type &&
+        relationshipData.id !== '' &&
+        relationshipData.type !== ''
+      ) {
+        acc[key] = { data: relationshipData };
+      }
+      if (Array.isArray(relationshipData) && relationshipData.length) {
+        acc[key] = { data: relationshipData };
+      }
+      return acc;
+    }, {}),
+  });
 
   render() {
     return (
