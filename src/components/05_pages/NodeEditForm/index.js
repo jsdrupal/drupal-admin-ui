@@ -84,13 +84,12 @@ styles = {
 const extractRestorableEntity = (state, entity) => {
   const restorableEntity = state.content.restorableContentEditById[entity.id];
   if (
-    // @todo maybe that's too defensive?
     restorableEntity &&
     restorableEntity.data &&
     restorableEntity.data.attributes &&
     entity &&
     entity.attributes &&
-    // Just offer to restoring when the loaded entity wasn't changed in the meantime.
+    // Restoring content is only offered when the loaded entity wasn't changed in the meantime.
     restorableEntity.data.attributes.changed === entity.attributes.change
   ) {
     return restorableEntity;
