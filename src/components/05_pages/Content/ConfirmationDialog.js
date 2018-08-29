@@ -11,10 +11,15 @@ import Slide from '@material-ui/core/Slide';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
+import Typography from '@material-ui/core/Typography';
 
 const styles = {
   dialogActionName: css`
     text-transform: lowercase;
+  `,
+  listItemText: css`
+    list-style-type: disc;
+    display: list-item;
   `,
 };
 
@@ -50,11 +55,13 @@ const ConfirmationDialog = ({
             )
             .map(({ attributes: { title, nid } }) => (
               <ListItem key={nid}>
-                <ListItemText>{`- ${title}`}</ListItemText>
+                <ListItemText className={styles.listItemText}>
+                  {`${title}`}
+                </ListItemText>
               </ListItem>
             ))}
         </List>
-        This action cannot be undone.
+        <Typography>This action cannot be undone.</Typography>
       </DialogContent>
       <DialogActions>
         <Button
