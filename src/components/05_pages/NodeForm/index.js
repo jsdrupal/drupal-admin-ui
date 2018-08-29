@@ -62,6 +62,8 @@ class NodeForm extends React.Component {
   };
 
   componentDidMount() {
+    // @TODO Remove this when resolving
+    // https://github.com/jsdrupal/drupal-admin-ui/issues/435
     if (!this.props.schema) {
       this.props.requestSchema({
         entityTypeId: this.props.entityTypeId,
