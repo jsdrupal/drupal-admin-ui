@@ -171,13 +171,13 @@ class MultipleFields extends Component {
       state: { newItemAdded },
       props: { label, value: values, component, onChange },
     } = this;
-    const usedValues = values.length ? values : [this.createEmptyItem()];
+    const usedValues = values || [this.createEmptyItem()];
     return (
       <FormControl margin="normal" fullWidth>
         <FormLabel component="legend">{label}</FormLabel>
         <List>
           {usedValues &&
-            values.map((value, index) => (
+            usedValues.map((value, index) => (
               <ListItem
                 draggable
                 // eslint-disable-next-line react/no-array-index-key
