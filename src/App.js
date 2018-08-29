@@ -64,7 +64,8 @@ const restoreState = () => {
 
 export const localStorageStore = state => ({
   content: {
-    contentAddByBundle: state.content.contentAddByBundle,
+    restorableContentAddByBundle: state.content.restorableContentAddByBundle,
+    restorableContentEditById: state.content.restorableContentEditById,
   },
 });
 
