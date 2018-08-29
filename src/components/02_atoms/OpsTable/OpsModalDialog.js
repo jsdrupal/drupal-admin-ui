@@ -49,8 +49,6 @@ OpsModalDialog.defaultProps = {
   text: '',
   cancelText: '',
   confirmText: '',
-  handleClose: () => {},
-  enterAction: () => {},
 };
 
 OpsModalDialog.propTypes = {
@@ -59,8 +57,7 @@ OpsModalDialog.propTypes = {
   text: PropTypes.string,
   cancelText: PropTypes.string,
   confirmText: PropTypes.string,
-  handleClose: PropTypes.func,
-  enterAction: PropTypes.func,
+  enterAction: PropTypes.func.isRequired,
 };
 
 export default OpsModalDialog;
