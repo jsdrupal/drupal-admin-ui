@@ -36,7 +36,7 @@ NodeAddForm.propTypes = {
 };
 
 const extractRestorableEntity = (state, bundle) =>
-  state.content.contentAddByBundle[bundle];
+  state.content.restorableContentAddByBundle[bundle];
 
 export default connect(
   (state, { bundle }) => ({
