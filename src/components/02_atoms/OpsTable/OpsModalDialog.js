@@ -8,20 +8,21 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Slide from '@material-ui/core/Slide';
 
+const Transition = props => <Slide direction="up" {...props} />;
+
 const OpsModalDialog = props => {
   const {
+    cancelText,
+    confirmText,
+    enterAction,
+    handleClose,
     open,
     title,
     text,
-    cancelText,
-    confirmText,
-    handleClose,
-    enterAction,
   } = props;
-  const transition = p => <Slide direction="up" {...p} />;
 
   return (
-    <Dialog open={open} TransitionComponent={transition} onClose={handleClose}>
+    <Dialog open={open} TransitionComponent={Transition} onClose={handleClose}>
       <DialogTitle>{title}</DialogTitle>
       <DialogContent>
         <DialogContentText>{text}</DialogContentText>
@@ -45,19 +46,20 @@ const OpsModalDialog = props => {
 };
 
 OpsModalDialog.defaultProps = {
-  title: '',
-  text: '',
   cancelText: '',
   confirmText: '',
+  text: '',
+  title: '',
 };
 
 OpsModalDialog.propTypes = {
-  open: PropTypes.bool.isRequired,
-  title: PropTypes.string,
-  text: PropTypes.string,
   cancelText: PropTypes.string,
   confirmText: PropTypes.string,
   enterAction: PropTypes.func.isRequired,
+  handleClose: PropTypes.func.isRequired,
+  open: PropTypes.bool.isRequired,
+  title: PropTypes.string,
+  text: PropTypes.string,
 };
 
 export default OpsModalDialog;
