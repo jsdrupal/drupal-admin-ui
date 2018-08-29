@@ -5,13 +5,15 @@ import {
   CONTENT_ADD,
   CONTENT_ADD_CHANGE,
   USER_LOADED,
+  CONTENT_EDIT_CHANGE,
 } from '../actions/content';
 
 export const initialState = {
   contentList: [],
   contentByNid: {},
   links: {},
-  contentAddByBundle: {},
+  restorableContentAddByBundle: {},
+  restorableContentEditById: {},
   user: {},
 };
 
@@ -27,15 +29,23 @@ export default (state = initialState, action) => {
     case CONTENT_ADD_CHANGE:
       return {
         ...state,
-        contentAddByBundle: {
-          ...state.contentAddByBundle,
+        restorableContentAddByBundle: {
+          ...state.restorableContentAddByBundle,
           [action.payload.bundle]: action.payload.entity,
+        },
+      };
+    case CONTENT_EDIT_CHANGE:
+      return {
+        ...state,
+        restorableContentEditById: {
+          ...state.restorableContentEditById,
+          [action.payload.entity.data.id]: action.payload.entity,
         },
       };
     case CONTENT_ADD:
       return {
         ...state,
-        contentAddByBundle: {
+        restorableContentAddByBundle: {
           [action.payload.bundle]: null,
         },
       };
