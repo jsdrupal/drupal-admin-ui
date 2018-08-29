@@ -171,7 +171,7 @@ class MultipleFields extends Component {
       state: { newItemAdded },
       props: { label, value: values, component, onChange },
     } = this;
-    const usedValues = values || [this.createEmptyItem()];
+    const usedValues = (values && values.length) || [this.createEmptyItem()];
     return (
       <FormControl margin="normal" fullWidth>
         <FormLabel component="legend">{label}</FormLabel>
