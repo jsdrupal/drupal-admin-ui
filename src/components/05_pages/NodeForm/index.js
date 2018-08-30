@@ -29,6 +29,11 @@ class NodeForm extends React.Component {
       PropTypes.oneOfType([
         PropTypes.func,
         PropTypes.instanceOf(React.Component),
+        PropTypes.shape({
+          options_select: PropTypes.shape({
+            component: PropTypes.instanceOf(React.Component),
+          }),
+        }),
       ]).isRequired,
     ).isRequired,
     onSave: PropTypes.func.isRequired,
