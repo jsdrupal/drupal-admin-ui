@@ -91,6 +91,10 @@ class EntityReferenceAutocomplete extends React.Component {
             ({ id, attributes: { name: label } }) => ({
               id,
               label,
+              type: (
+                this.props.schema.properties.data.items ||
+                this.props.schema.properties.data
+              ).properties.type.enum[0],
             }),
           ),
         });
