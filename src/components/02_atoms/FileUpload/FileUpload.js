@@ -41,6 +41,7 @@ const marginTop = {
 
 const error = {
   color: 'red',
+  paddingLeft: 0,
 };
 
 class FileUpload extends Component {
