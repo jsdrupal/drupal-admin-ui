@@ -164,6 +164,12 @@ export const contentAddChange = (bundle, entity) => ({
   payload: { bundle, entity },
 });
 
+export const CONTENT_EDIT_CHANGE = 'CONTENT_EDIT_CHANGE';
+export const contentEditChange = (bundle, entity) => ({
+  type: CONTENT_EDIT_CHANGE,
+  payload: { bundle, entity },
+});
+
 export const CONTENT_SAVE = 'CONTENT_SAVE';
 export const contentSave = content => ({
   type: CONTENT_SAVE,

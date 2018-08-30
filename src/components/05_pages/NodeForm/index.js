@@ -14,17 +14,13 @@ import SchemaPropType from './SchemaPropType';
 
 import MultipleFields from '../../02_atoms/MultipleFields/MultipleFields';
 
-import { contentAdd, requestUser } from '../../../actions/content';
+import { contentAdd } from '../../../actions/content';
 import { requestSchema, requestUiSchema } from '../../../actions/schema';
 import { setErrorMessage } from '../../../actions/application';
 
 import Widgets from '../NodeForm/Widgets';
 
-import {
-  createEntity,
-  createUISchema,
-  sortUISchemaFields,
-} from '../../../utils/api/schema';
+import { createUISchema, sortUISchemaFields } from '../../../utils/api/schema';
 
 let styles;
 
@@ -52,7 +48,6 @@ class NodeForm extends React.Component {
     restorableEntity: PropTypes.shape({
       data: PropTypes.object,
     }),
-    requestUser: PropTypes.func.isRequired,
     setErrorMessage: PropTypes.func.isRequired,
     onChange: PropTypes.func,
   };
@@ -69,11 +64,14 @@ class NodeForm extends React.Component {
   };
 
   componentDidMount() {
-    this.props.requestUser(1);
-    this.props.requestSchema({
-      entityTypeId: this.props.entityTypeId,
-      bundle: this.props.bundle,
-    });
+    // @TODO Remove this when resolving
+    // https://github.com/jsdrupal/drupal-admin-ui/issues/435
+    if (!this.props.schema) {
+      this.props.requestSchema({
+        entityTypeId: this.props.entityTypeId,
+        bundle: this.props.bundle,
+      });
+    }
     this.props.requestUiSchema({
       entityTypeId: this.props.entityTypeId,
       bundle: this.props.bundle,
@@ -189,9 +187,7 @@ class NodeForm extends React.Component {
       // as we don't want to ask the user.
       restored: prevState.restored || !prevProps.restorableEntity,
       restorableEntity: !prevState.restored && prevProps.restorableEntity,
-      entity: prevProps.entity || {
-        ...createEntity(prevProps.schema),
-      },
+      entity: prevProps.entity,
     };
 
     // Just contain values which are in the ui metadata.
@@ -202,18 +198,6 @@ class NodeForm extends React.Component {
           .includes(key),
       )
       .reduce((agg, [key, value]) => ({ ...agg, [key]: value }), {});
-
-    // @TODO Remove this when we create the entity scaffolding at the NodeEdit
-    // or NodeAdd component level.
-    // https://github.com/jsdrupal/drupal-admin-ui/issues/378
-    // Set default `Authored By` relationship.
-    // Set default `Created On` attribute.
-    if (!Object.prototype.hasOwnProperty.call(prevProps, 'entity')) {
-      state.entity.data.relationships.uid.data = { ...prevProps.user };
-      const local = new Date();
-      local.setMinutes(local.getMinutes() - local.getTimezoneOffset());
-      state.entity.data.attributes.created = Math.round(+local / 1000);
-    }
 
     setState(state);
   };
@@ -383,7 +367,6 @@ export default connect(
     requestSchema,
     requestUiSchema,
     contentAdd,
-    requestUser,
     setErrorMessage,
   },
 )(NodeForm);

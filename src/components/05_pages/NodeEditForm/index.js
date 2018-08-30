@@ -4,7 +4,11 @@ import LoadingBar from 'react-redux-loading-bar';
 import PropTypes from 'prop-types';
 import { css } from 'emotion';
 import NodeForm from '../NodeForm';
-import { contentSave, requestSingleContent } from '../../../actions/content';
+import {
+  contentEditChange,
+  contentSave,
+  requestSingleContent,
+} from '../../../actions/content';
 import PageTitle from '../../02_atoms/PageTitle/PageTitle';
 import { cleanupRelationships } from '../../../utils/api/content';
 
@@ -77,6 +81,22 @@ styles = {
   `,
 };
 
+const extractRestorableEntity = (state, entity) => {
+  const restorableEntity = state.content.restorableContentEditById[entity.id];
+  if (
+    restorableEntity &&
+    restorableEntity.data &&
+    restorableEntity.data.attributes &&
+    entity &&
+    entity.attributes &&
+    // Restoring content is only offered when the loaded entity wasn't changed in the meantime.
+    restorableEntity.data.attributes.changed === entity.attributes.change
+  ) {
+    return restorableEntity;
+  }
+  return null;
+};
+
 export default connect(
   (
     state,
@@ -85,13 +105,18 @@ export default connect(
         params: { nid },
       },
     },
-  ) => ({
-    entity: state.content.contentByNid[nid],
-    entityTypeId: 'node',
-    nid,
-  }),
+  ) => {
+    const entity = state.content.contentByNid[nid];
+    return {
+      entity: state.content.contentByNid[nid],
+      restorableEntity: entity && extractRestorableEntity(state, entity),
+      entityTypeId: 'node',
+      nid,
+    };
+  },
   {
     requestSingleContent,
     contentSave,
+    onChange: contentEditChange,
   },
 )(NodeEditForm);

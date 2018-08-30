@@ -3,17 +3,22 @@ module.exports = {
   nodeEditFormRestoring(browser) {
     browser
       .logUserIn()
-      .relativeURL('/node/add/article')
+      .relativeURL('/node/9/edit')
       .waitForElementVisible('#title');
 
-    browser.setValue('#title', 'this is my first title');
+    browser.expect
+      .element('#title')
+      .value.to.equal('Super easy vegetarian pasta bake');
+    browser.clearValue('#title').setValue('#title', 'Self made pasta');
 
     browser
-      .relativeURL('/node/add/article')
+      .relativeURL('/node/9/edit')
       .waitForElementVisible('#title')
       .waitForElementVisible('[data-nightwatch="restore-content-snackbar"]');
 
-    browser.expect.element('#title').value.to.equal('');
+    browser.expect
+      .element('#title')
+      .value.to.equal('Super easy vegetarian pasta bake');
 
     browser.click(
       '[data-nightwatch="restore-content-snackbar"] button:first-of-type',
@@ -22,7 +27,7 @@ module.exports = {
       '[data-nightwatch="restore-content-snackbar"]',
     );
 
-    browser.expect.element('#title').value.to.equal('this is my first title');
+    browser.expect.element('#title').value.to.equal('Self made pasta');
 
     browser.end();
   },
