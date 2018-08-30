@@ -83,10 +83,19 @@ const extractRestorableEntity = (state, bundle) =>
   state.content.restorableContentAddByBundle[bundle];
 
 export default connect(
-  (state, { bundle, entityTypeId }) => ({
-    schema: state.schema.schema[`${entityTypeId}--${bundle}`],
+  (
+    state,
+    {
+      match: {
+        params: { bundle },
+      },
+    },
+  ) => ({
+    schema: state.schema.schema[`node--${bundle}`],
     restorableEntity: extractRestorableEntity(state, bundle),
     user: state.content.user,
+    bundle,
+    entityTypeId: 'node',
   }),
   {
     contentAdd,

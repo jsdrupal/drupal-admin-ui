@@ -18,6 +18,8 @@ import { contentAdd } from '../../../actions/content';
 import { requestSchema, requestUiSchema } from '../../../actions/schema';
 import { setErrorMessage } from '../../../actions/application';
 
+import Widgets from '../NodeForm/Widgets';
+
 import { createUISchema, sortUISchemaFields } from '../../../utils/api/schema';
 
 let styles;
@@ -355,6 +357,8 @@ styles = {
 const mapStateToProps = (state, { bundle, entityTypeId }) => ({
   schema: state.schema.schema[`${entityTypeId}--${bundle}`],
   uiSchema: state.schema.uiSchema[`${entityTypeId}--${bundle}`],
+  user: state.content.user,
+  widgets: Widgets,
 });
 
 export default connect(
