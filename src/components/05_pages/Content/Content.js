@@ -176,16 +176,15 @@ class Content extends Component {
                         onChange={e => {
                           this.setState({ title: e.target.value }, () => {
                             const { title } = this.state;
-
                             // Clearing up the previous request if user is entering some more letters.
                             if (this.requestContentWithDelay) {
                               clearTimeout(this.requestContentWithDelay);
                             }
 
-                            // !title || 500 - set delay to 500ms if the title is not empty.
+                            // !title || 400 - set delay to 400ms if the title is not empty.
                             this.requestContentWithDelay = setTimeout(() => {
                               this.props.requestContent(this.state);
-                            }, !title || 500);
+                            }, !title || 400);
                           });
                         }}
                         margin="normal"
