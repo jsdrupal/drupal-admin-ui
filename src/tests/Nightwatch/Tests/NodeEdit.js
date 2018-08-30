@@ -9,7 +9,12 @@ module.exports = {
     browser.expect
       .element('#title')
       .value.to.equal('Super easy vegetarian pasta bake');
-    browser.clearValue('#title').setValue('#title', 'Self made pasta');
+
+    browser
+      .clearValue('#title')
+      .expect.element('#title')
+      .value.to.equal('')
+      .setValue('#title', 'Self made pasta');
 
     browser
       .relativeURL('/node/9/edit')
