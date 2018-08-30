@@ -13,7 +13,9 @@ module.exports = {
     browser
       .clearValue('#title')
       .expect.element('#title')
-      .value.to.equal('')
+      .value.to.equal(''):
+    
+    browser
       .setValue('#title', 'Self made pasta');
 
     browser
