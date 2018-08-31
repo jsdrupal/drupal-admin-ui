@@ -13,10 +13,9 @@ module.exports = {
     browser
       .clearValue('#title')
       .expect.element('#title')
-      .value.to.equal(''):
-    
-    browser
-      .setValue('#title', 'Self made pasta');
+      .value.to.equal('');
+
+    browser.setValue('#title', 'Self made pasta');
 
     browser
       .relativeURL('/node/9/edit')
