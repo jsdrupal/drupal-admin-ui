@@ -93,7 +93,40 @@ function* loadSchema(action) {
   }
 }
 
+export const SCHEMA_BY_NID_REQUESTED = 'SCHEMA_BY_NID_REQUESTED';
+export const requestSchemaByNid = ({ entityTypeId, nid }) => ({
+  type: SCHEMA_BY_NID_REQUESTED,
+  payload: { entityTypeId, nid },
+});
+
+export const SCHEMA_BY_NID_LOADED = 'SCHEMA_BY_NID_LOADED';
+function* loadSchemaByNid(action) {
+  const { entityTypeId, nid } = action.payload;
+  try {
+    yield put(resetLoading());
+    yield put(showLoading());
+
+    const entitySchema = yield call(api, 'schema_by_id', {
+      parameters: { entityTypeId, nid },
+    });
+
+    yield put({
+      type: SCHEMA_BY_NID_LOADED,
+      payload: {
+        entityTypeId,
+        nid,
+        entitySchema,
+      },
+    });
+  } catch (error) {
+    yield put(setErrorMessage(error.toString()));
+  } finally {
+    yield put(hideLoading());
+  }
+}
+
 export default function* rootSaga() {
   yield takeLatest(SCHEMA_REQUESTED, loadSchema);
+  yield takeLatest(SCHEMA_BY_NID_REQUESTED, loadSchemaByNid);
   yield takeLatest(UI_SCHEMA_REQUESTED, loadUiSchema);
 }

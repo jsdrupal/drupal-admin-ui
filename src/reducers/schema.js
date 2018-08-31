@@ -1,4 +1,8 @@
-import { SCHEMA_LOADED, UI_SCHEMA_LOADED } from '../actions/schema';
+import {
+  SCHEMA_LOADED,
+  UI_SCHEMA_LOADED,
+  SCHEMA_BY_NID_LOADED,
+} from '../actions/schema';
 
 export const initialState = {
   uiSchema: {},
@@ -12,6 +16,15 @@ export default (state = initialState, action) => {
         ...state,
         schema: {
           [`${action.payload.entityTypeId}--${action.payload.bundle}`]: action
+            .payload.entitySchema,
+        },
+      };
+    }
+    case SCHEMA_BY_NID_LOADED: {
+      return {
+        ...state,
+        schema: {
+          [`${action.payload.entityTypeId}--${action.payload.nid}`]: action
             .payload.entitySchema,
         },
       };

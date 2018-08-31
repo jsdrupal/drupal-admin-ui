@@ -15,7 +15,7 @@ import SchemaPropType from './SchemaPropType';
 import MultipleFields from '../../02_atoms/MultipleFields/MultipleFields';
 
 import { contentAdd } from '../../../actions/content';
-import { requestSchema, requestUiSchema } from '../../../actions/schema';
+import { requestUiSchema } from '../../../actions/schema';
 import { setErrorMessage } from '../../../actions/application';
 
 import { createUISchema, sortUISchemaFields } from '../../../utils/api/schema';
@@ -62,14 +62,6 @@ class NodeForm extends React.Component {
   };
 
   componentDidMount() {
-    // @TODO Remove this when resolving
-    // https://github.com/jsdrupal/drupal-admin-ui/issues/435
-    if (!this.props.schema) {
-      this.props.requestSchema({
-        entityTypeId: this.props.entityTypeId,
-        bundle: this.props.bundle,
-      });
-    }
     this.props.requestUiSchema({
       entityTypeId: this.props.entityTypeId,
       bundle: this.props.bundle,
@@ -353,14 +345,12 @@ styles = {
 };
 
 const mapStateToProps = (state, { bundle, entityTypeId }) => ({
-  schema: state.schema.schema[`${entityTypeId}--${bundle}`],
   uiSchema: state.schema.uiSchema[`${entityTypeId}--${bundle}`],
 });
 
 export default connect(
   mapStateToProps,
   {
-    requestSchema,
     requestUiSchema,
     contentAdd,
     setErrorMessage,
