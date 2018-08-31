@@ -16,10 +16,7 @@ import MultipleFields from '../../02_atoms/MultipleFields/MultipleFields';
 
 import { contentAdd } from '../../../actions/content';
 import { requestSchema, requestUiSchema } from '../../../actions/schema';
-import {
-  setErrorMessage,
-  requestContentTypes,
-} from '../../../actions/application';
+import { setErrorMessage } from '../../../actions/application';
 
 import { createUISchema, sortUISchemaFields } from '../../../utils/api/schema';
 
@@ -39,7 +36,6 @@ class NodeForm extends React.Component {
     bundle: PropTypes.string.isRequired,
     requestSchema: PropTypes.func.isRequired,
     requestUiSchema: PropTypes.func.isRequired,
-    requestContentTypes: PropTypes.func.isRequired,
     uiSchema: PropTypes.oneOfType([
       PropTypes.shape({
         fieldSchema: PropTypes.shape({}),
@@ -78,8 +74,6 @@ class NodeForm extends React.Component {
       entityTypeId: this.props.entityTypeId,
       bundle: this.props.bundle,
     });
-    this.props.requestContentTypes();
-
     this.calculateState(this.props, this.state, state => this.setState(state));
   }
 
@@ -365,7 +359,6 @@ const mapStateToProps = (state, { bundle, entityTypeId }) => ({
 export default connect(
   mapStateToProps,
   {
-    requestContentTypes,
     requestSchema,
     requestUiSchema,
     contentAdd,
