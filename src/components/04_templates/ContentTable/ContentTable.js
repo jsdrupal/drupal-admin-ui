@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom';
 import { css } from 'emotion';
 import { connect } from 'react-redux';
 
-import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
@@ -17,7 +16,8 @@ import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
 import Checkbox from '@material-ui/core/Checkbox';
 
-import OpsModalButton from '../../02_atoms/OpsModalButton/OpsModalButton';
+import OpsTable from '../../02_atoms/OpsTable/OpsTable';
+import OpsModalButton from '../../02_atoms/OpsTable/OpsModalButton';
 
 import { contentDelete } from '../../../actions/content';
 
@@ -86,7 +86,7 @@ class ContentTable extends React.Component {
           this.table = node;
         }}
       >
-        <Table>
+        <OpsTable>
           <TableHead>
             <TableRow>
               {
@@ -248,7 +248,7 @@ class ContentTable extends React.Component {
               );
             })}
           </TableBody>
-        </Table>
+        </OpsTable>
         <TablePagination
           component="div"
           count={count}
