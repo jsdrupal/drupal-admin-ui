@@ -2,7 +2,7 @@
 
 This is an admin UI for Drupal, built with JavaScript and based on [create-react-app](https://github.com/facebook/create-react-app).
 
-![Demo of vfancy falling back to Drupal for an unknown route](https://i.imgur.com/JW7CdkZ.gifv)
+[Demo of vfancy falling back to Drupal for an unknown route](https://i.imgur.com/JW7CdkZ.gifv)
 
 - [Drupal Admin UI](#drupal-admin-ui)
   * [Installation](#installation)
