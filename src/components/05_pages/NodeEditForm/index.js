@@ -11,11 +11,16 @@ import {
 } from '../../../actions/content';
 import PageTitle from '../../02_atoms/PageTitle/PageTitle';
 import { cleanupRelationships } from '../../../utils/api/content';
+import { requestSchemaByNid } from '../../../actions/schema';
 
 let styles;
 
 class NodeEditForm extends React.Component {
   componentDidMount() {
+    this.props.requestSchemaByNid({
+      entityTypeId: this.props.entityTypeId,
+      nid: this.props.nid,
+    });
     this.props.requestSingleContent(this.props.nid);
   }
 
@@ -73,6 +78,7 @@ NodeEditForm.propTypes = {
       title: PropTypes.string.isRequired,
     }).isRequired,
   }),
+  requestSchemaByNid: PropTypes.func.isRequired,
 };
 
 styles = {
@@ -108,6 +114,7 @@ export default connect(
   ) => {
     const entity = state.content.contentByNid[nid];
     return {
+      schema: state.schema.schema[`node--${nid}`],
       entity: state.content.contentByNid[nid],
       restorableEntity: entity && extractRestorableEntity(state, entity),
       entityTypeId: 'node',
@@ -118,5 +125,6 @@ export default connect(
     requestSingleContent,
     contentSave,
     onChange: contentEditChange,
+    requestSchemaByNid,
   },
 )(NodeEditForm);

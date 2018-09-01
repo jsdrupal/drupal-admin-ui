@@ -158,6 +158,12 @@ async function api(
       )}`;
       break;
     }
+    case 'schema_by_id': {
+      url = `/admin-api/entity-schema/${parameters.entityTypeId}/${
+        parameters.nid
+      }`;
+      break;
+    }
     case 'field_schema': {
       url = '/jsonapi/field_config';
       break;
