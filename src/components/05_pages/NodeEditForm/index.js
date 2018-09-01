@@ -104,12 +104,21 @@ const extractRestorableEntity = (state, entity) => {
 };
 
 export default connect(
-  (state, props) => {
-    const entity = state.content.contentByNid[props.nid];
+  (
+    state,
+    {
+      match: {
+        params: { nid },
+      },
+    },
+  ) => {
+    const entity = state.content.contentByNid[nid];
     return {
-      schema: state.schema.schema[`${props.entityTypeId}--${props.nid}`],
-      entity: state.content.contentByNid[props.nid],
+      schema: state.schema.schema[`node--${nid}`],
+      entity: state.content.contentByNid[nid],
       restorableEntity: entity && extractRestorableEntity(state, entity),
+      entityTypeId: 'node',
+      nid,
     };
   },
   {
