@@ -20,17 +20,13 @@ import { setErrorMessage } from '../../../actions/application';
 
 import { createUISchema, sortUISchemaFields } from '../../../utils/api/schema';
 
+import widgets from './Widgets';
+
 let styles;
 
 class NodeForm extends React.Component {
   static propTypes = {
     schema: PropTypes.oneOfType([SchemaPropType, PropTypes.bool]),
-    widgets: PropTypes.objectOf(
-      PropTypes.oneOfType([
-        PropTypes.func,
-        PropTypes.instanceOf(React.Component),
-      ]).isRequired,
-    ).isRequired,
     onSave: PropTypes.func.isRequired,
     entityTypeId: PropTypes.string.isRequired,
     bundle: PropTypes.string.isRequired,
@@ -305,7 +301,7 @@ class NodeForm extends React.Component {
           this.props.uiSchema.fieldSchema,
           this.props.uiSchema.formDisplaySchema,
           this.props.uiSchema.fieldStorageConfig,
-          this.props.widgets,
+          widgets,
         ),
         ['promote', 'status', 'sticky', 'uid', 'created'],
       );
