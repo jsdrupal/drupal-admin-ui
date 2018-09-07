@@ -142,6 +142,11 @@ async function api(
       );
       break;
     }
+    case 'taxonomy_vocabulary': {
+      url = '/jsonapi/taxonomy_vocabulary';
+      options.headers.Accept = 'application/vnd.api+json';
+      break;
+    }
     case 'taxonomy_term': {
       url = `/jsonapi/taxonomy_term/${parameters.type}`;
       options.headers.Accept = 'application/vnd.api+json';
