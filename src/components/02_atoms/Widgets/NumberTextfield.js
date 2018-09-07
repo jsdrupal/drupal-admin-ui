@@ -19,7 +19,8 @@ const NumberTextfield = ({
     fullWidth
     onChange={event => onChange(Number(event.target.value))}
     InputProps={{
-      inputProps,
+      ...inputProps,
+      unsigned: inputProps.unsigned.toString(),
       endAdornment: inputProps.suffix && (
         <InputAdornment position="end">{inputProps.suffix}</InputAdornment>
       ),
