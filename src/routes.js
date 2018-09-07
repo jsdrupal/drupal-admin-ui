@@ -5,7 +5,7 @@ import Roles from './components/05_pages/Roles';
 import Dblog from './components/05_pages/Reports/Dblog';
 import NodeEditForm from './components/05_pages/NodeEditForm';
 import NodeAddForm from './components/05_pages/NodeAddForm';
-import Taxonomy from './components/05_pages/Taxonomy';
+import Taxonomy from './components/05_pages/TaxonomyVocabulary';
 
 // @todo Share this with Drupal
 const routes = {

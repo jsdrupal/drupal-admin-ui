@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { Link } from 'react-router-dom';
+import { Redirect } from 'react-router';
 
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -11,8 +11,9 @@ import TableRow from '@material-ui/core/TableRow';
 
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
+import MenuItem from '@material-ui/core/MenuItem/MenuItem';
 
-export default class Taxonomy extends React.Component {
+export default class TaxonomyVocabulary extends React.Component {
   static propTypes = {
     requestTaxonomyVocabulary: PropTypes.func.isRequired,
     taxonomyVocabulary: PropTypes.oneOfType([
@@ -31,33 +32,47 @@ export default class Taxonomy extends React.Component {
   static defaultProps = {
     taxonomyVocabulary: null,
   };
+  state = {
+    activeLink: null,
+  };
+
   componentDidMount() {
     this.props.requestTaxonomyVocabulary();
   }
+
   vocabularyOperations = vid => (
     <FormControl>
-      <Select autoWidth>
-        <Link to={`/admin/structure/taxonomy/manage/${vid}/overview`}>
+      {/* @todo Extract the select element with links out into a component */}
+      <Select
+        autoWidth
+        onChange={e => this.setState({ activeLink: e.target.value })}
+      >
+        <MenuItem value={`/admin/structure/taxonomy/manage/${vid}/overview`}>
           List Terms
-        </Link>
-        <Link to={`/admin/structure/taxonomy/manage/${vid}`}>
+        </MenuItem>
+        <MenuItem value={`/admin/structure/taxonomy/manage/${vid}`}>
           Edit Vocabulary
-        </Link>
-        <Link to={`/admin/structure/taxonomy/manage/${vid}/add`}>
+        </MenuItem>
+        <MenuItem value={`/admin/structure/taxonomy/manage/${vid}/add`}>
           Add Terms
-        </Link>
-        <Link to={`/admin/structure/taxonomy/manage/${vid}/overview/fields`}>
+        </MenuItem>
+        <MenuItem
+          value={`/admin/structure/taxonomy/manage/${vid}/overview/fields`}
+        >
           Manage Fields
-        </Link>
-        <Link
-          to={`/admin/structure/taxonomy/manage/${vid}/overview/form-display`}
+        </MenuItem>
+        <MenuItem
+          value={`/admin/structure/taxonomy/manage/${vid}/overview/form-display`}
         >
           Manage Form Display
-        </Link>
-        <Link to={`/admin/structure/taxonomy/manage/${vid}/overview/display`}>
+        </MenuItem>
+        <MenuItem
+          value={`/admin/structure/taxonomy/manage/${vid}/overview/display`}
+        >
           Manage Display
-        </Link>
+        </MenuItem>
       </Select>
+      {this.state.activeLink && <Redirect to={this.state.activeLink} />}
     </FormControl>
   );
   render() {
@@ -66,9 +81,9 @@ export default class Taxonomy extends React.Component {
       <Table>
         <TableHead>
           <TableRow>
-            <TableCell>VOCABULARY NAME</TableCell>
-            <TableCell>DESCRIPTION</TableCell>
-            <TableCell>OPERATIONS</TableCell>
+            <TableCell>Vocabulary name</TableCell>
+            <TableCell>Description</TableCell>
+            <TableCell>Operations</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
