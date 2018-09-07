@@ -175,7 +175,16 @@ class Content extends Component {
                         className={styles.textField}
                         onChange={e => {
                           this.setState({ title: e.target.value }, () => {
-                            this.props.requestContent(this.state);
+                            const { title } = this.state;
+                            // Clearing up the previous request if user is entering some more letters.
+                            if (this.requestContentWithDelay) {
+                              clearTimeout(this.requestContentWithDelay);
+                            }
+
+                            // !title || 400 - set delay to 400ms if the title is not empty.
+                            this.requestContentWithDelay = setTimeout(() => {
+                              this.props.requestContent(this.state);
+                            }, !title || 400);
                           });
                         }}
                         margin="normal"
