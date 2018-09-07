@@ -35,9 +35,9 @@ class NodeEditForm extends React.Component {
   };
 
   render() {
-    const { entity } = this.props;
+    const { entity, schema } = this.props;
     let result = null;
-    if (entity) {
+    if (entity && schema) {
       const bundle = entity.type.replace('node--', '');
       result = (
         <Fragment>
@@ -67,6 +67,7 @@ class NodeEditForm extends React.Component {
 
 NodeEditForm.defaultProps = {
   entity: null,
+  schema: null,
 };
 
 NodeEditForm.propTypes = {
@@ -79,7 +80,8 @@ NodeEditForm.propTypes = {
       title: PropTypes.string.isRequired,
     }).isRequired,
   }),
-  requestSchemaByNid: PropTypes.func.isRequired,
+  requestSchemaByEntityId: PropTypes.func.isRequired,
+  schema: PropTypes.oneOfType([SchemaPropType, PropTypes.bool]),
 };
 
 styles = {
