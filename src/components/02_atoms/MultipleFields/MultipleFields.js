@@ -171,13 +171,18 @@ class MultipleFields extends Component {
       state: { newItemAdded },
       props: { label, value: values, component, onChange },
     } = this;
-    const usedValues = values.length ? values : [this.createEmptyItem()];
+
+    // values && values.length is to validate the object is not null and not an empty array, respectively
+    // the last `&& values` is to make sure after validation, it always return `values`  instead of `values.length`
+    const usedValues = (values && values.length && values) || [
+      this.createEmptyItem(),
+    ];
     return (
       <FormControl margin="normal" fullWidth>
         <FormLabel component="legend">{label}</FormLabel>
         <List>
           {usedValues &&
-            values.map((value, index) => (
+            usedValues.map((value, index) => (
               <ListItem
                 draggable
                 // eslint-disable-next-line react/no-array-index-key
