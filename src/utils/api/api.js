@@ -160,7 +160,7 @@ async function api(
     }
     case 'schema_by_id': {
       url = `/admin-api/entity-schema/${parameters.entityTypeId}/${
-        parameters.nid
+        parameters.entityId
       }`;
       break;
     }

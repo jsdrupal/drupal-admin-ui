@@ -1,7 +1,7 @@
 import {
   SCHEMA_LOADED,
   UI_SCHEMA_LOADED,
-  SCHEMA_BY_NID_LOADED,
+  SCHEMA_BY_ENTITY_ID_LOADED,
 } from '../actions/schema';
 
 export const initialState = {
@@ -20,11 +20,11 @@ export default (state = initialState, action) => {
         },
       };
     }
-    case SCHEMA_BY_NID_LOADED: {
+    case SCHEMA_BY_ENTITY_ID_LOADED: {
       return {
         ...state,
         schema: {
-          [`${action.payload.entityTypeId}--${action.payload.nid}`]: action
+          [`${action.payload.entityTypeId}--${action.payload.entityId}`]: action
             .payload.entitySchema,
         },
       };

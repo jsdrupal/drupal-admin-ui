@@ -11,15 +11,16 @@ import {
 } from '../../../actions/content';
 import PageTitle from '../../02_atoms/PageTitle/PageTitle';
 import { cleanupRelationships } from '../../../utils/api/content';
-import { requestSchemaByNid } from '../../../actions/schema';
+import { requestSchemaByEntityId } from '../../../actions/schema';
+import SchemaPropType from '../NodeForm/SchemaPropType';
 
 let styles;
 
 class NodeEditForm extends React.Component {
   componentDidMount() {
-    this.props.requestSchemaByNid({
+    this.props.requestSchemaByEntityId({
       entityTypeId: this.props.entityTypeId,
-      nid: this.props.nid,
+      entityId: this.props.nid,
     });
     this.props.requestSingleContent(this.props.nid);
   }
@@ -125,6 +126,6 @@ export default connect(
     requestSingleContent,
     contentSave,
     onChange: contentEditChange,
-    requestSchemaByNid,
+    requestSchemaByEntityId,
   },
 )(NodeEditForm);
