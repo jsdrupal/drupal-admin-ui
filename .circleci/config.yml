@@ -72,8 +72,9 @@ jobs:
             command: |
                 cd ../
                 composer create-project jsdrupal/drupal-admin-ui-demo -s dev --prefer-dist --no-install
+                mv project drupal-admin-ui-demo/drupal-admin-ui
                 cd drupal-admin-ui-demo
-                composer config repositories.repo-name path "../project/admin_ui_support"
+                composer config repositories.repo-name path "~/drupal-admin-ui-demo/drupal-admin-ui/admin_ui_support"
                 composer require justafish/drupal-admin-ui-support:dev-$CIRCLE_BRANCH
                 composer install
                 composer setup
