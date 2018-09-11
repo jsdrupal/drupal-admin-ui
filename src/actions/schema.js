@@ -1,4 +1,4 @@
-import { put, call, takeLatest } from 'redux-saga/effects';
+import { put, call, takeLatest, all } from 'redux-saga/effects';
 import {
   showLoading,
   hideLoading,
@@ -25,7 +25,7 @@ function* loadUiSchema(action) {
       { data: fieldSchema },
       { data: formDisplaySchema },
       { data: fieldStorageConfig },
-    ] = yield Promise.all([
+    ] = yield all([
       api('field_schema', {
         queryString: {
           filter: { entity_type: entityTypeId, bundle },
