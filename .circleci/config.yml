@@ -76,6 +76,7 @@ jobs:
                 composer config repositories.repo-name path "../project/admin_ui_support"
                 composer require justafish/drupal-admin-ui-support:dev-$CIRCLE_BRANCH
                 composer install
+                composer setup
         - save_cache:
             key: *vendor-key
             paths:
