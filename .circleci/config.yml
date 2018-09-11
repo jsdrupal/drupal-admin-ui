@@ -74,6 +74,7 @@ jobs:
                 composer create-project jsdrupal/drupal-admin-ui-demo -s dev --prefer-dist --no-install
                 cd drupal-admin-ui-demo
                 composer config repositories.repo-name path "../project/admin_ui_support"
+                composer require justafish/drupal-admin-ui-support:dev-$CIRCLE_BRANCH
                 composer install
         - save_cache:
             key: *vendor-key
