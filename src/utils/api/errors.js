@@ -15,6 +15,26 @@ class ApiError extends Error {
     this.response = response;
     this.message = `${status} - ${statusText}`;
   }
+
+  async toHumanString() {
+    try {
+      switch (this.status) {
+        case 403:
+          return `You don't have access: ${await this.response.json().message}`;
+        case 404:
+          return `Some page is missing: ${await this.response.json().message}`;
+        case 400:
+          return `You posted some invalid data, contact the administration team: ${await this.response.json().message}`;
+        case 500:
+          return `The server crashed, contact the administration team: ${await this.response.json().message}`;
+        default:
+          return this.toString();
+      }
+    }
+    catch (e) {
+      return this.toString();
+    }
+  }
 }
 
 // eslint-disable-next-line import/prefer-default-export

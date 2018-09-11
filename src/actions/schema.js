@@ -54,7 +54,7 @@ function* loadUiSchema(action) {
       },
     });
   } catch (error) {
-    yield put(setErrorMessage(error.toString()));
+    yield put(setErrorMessage(error.toHumanString()));
   } finally {
     yield put(hideLoading());
   }
@@ -87,7 +87,7 @@ function* loadSchema(action) {
       },
     });
   } catch (error) {
-    yield put(setErrorMessage(error.toString()));
+    yield put(setErrorMessage(error.toHumanString()));
   } finally {
     yield put(hideLoading());
   }

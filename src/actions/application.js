@@ -112,7 +112,7 @@ function* loadMenu() {
         ),
       );
     }
-    yield put(setErrorMessage(error.toString()));
+    yield put(setErrorMessage(error.toHumanString()));
   } finally {
     yield put(hideLoading());
   }
@@ -139,7 +139,7 @@ function* loadContentTypes() {
       },
     });
   } catch (error) {
-    yield put(setErrorMessage(error.toString()));
+    yield put(setErrorMessage(error.toHumanString()));
   } finally {
     yield put(hideLoading());
   }
@@ -169,7 +169,7 @@ function* loadActions() {
       },
     });
   } catch (error) {
-    yield put(setErrorMessage(error.toString()));
+    yield put(setErrorMessage(error.toHumanString()));
   }
 }
 
