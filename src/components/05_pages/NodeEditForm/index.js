@@ -11,11 +11,17 @@ import {
 } from '../../../actions/content';
 import PageTitle from '../../02_atoms/PageTitle/PageTitle';
 import { cleanupRelationships } from '../../../utils/api/content';
+import { requestSchemaByEntityId } from '../../../actions/schema';
+import SchemaPropType from '../NodeForm/SchemaPropType';
 
 let styles;
 
 class NodeEditForm extends React.Component {
   componentDidMount() {
+    this.props.requestSchemaByEntityId({
+      entityTypeId: this.props.entityTypeId,
+      entityId: this.props.nid,
+    });
     this.props.requestSingleContent(this.props.nid);
   }
 
@@ -29,9 +35,9 @@ class NodeEditForm extends React.Component {
   };
 
   render() {
-    const { entity } = this.props;
+    const { entity, schema } = this.props;
     let result = null;
-    if (entity) {
+    if (entity && schema) {
       const bundle = entity.type.replace('node--', '');
       result = (
         <Fragment>
@@ -61,6 +67,7 @@ class NodeEditForm extends React.Component {
 
 NodeEditForm.defaultProps = {
   entity: null,
+  schema: null,
 };
 
 NodeEditForm.propTypes = {
@@ -73,6 +80,8 @@ NodeEditForm.propTypes = {
       title: PropTypes.string.isRequired,
     }).isRequired,
   }),
+  requestSchemaByEntityId: PropTypes.func.isRequired,
+  schema: PropTypes.oneOfType([SchemaPropType, PropTypes.bool]),
 };
 
 styles = {
@@ -108,6 +117,7 @@ export default connect(
   ) => {
     const entity = state.content.contentByNid[nid];
     return {
+      schema: state.schema.schema[`node--${nid}`],
       entity: state.content.contentByNid[nid],
       restorableEntity: entity && extractRestorableEntity(state, entity),
       entityTypeId: 'node',
@@ -118,5 +128,6 @@ export default connect(
     requestSingleContent,
     contentSave,
     onChange: contentEditChange,
+    requestSchemaByEntityId,
   },
 )(NodeEditForm);

@@ -45,7 +45,6 @@ function* loadContent(action) {
   const page = (action.payload.options && action.payload.options.page) || null;
 
   try {
-    yield put(resetLoading());
     yield put(showLoading());
 
     const queryString = {
@@ -417,7 +416,7 @@ function* loadUser(action) {
 }
 
 export default function* rootSaga() {
-  yield takeEvery(CONTENT_REQUESTED, loadContent);
+  yield takeLatest(CONTENT_REQUESTED, loadContent);
   yield takeEvery(CONTENT_SAVE, saveContent);
   yield takeLatest(CONTENT_SINGLE_REQUESTED, loadSingleContent);
   yield takeEvery(ACTION_EXECUTE, executeAction);
