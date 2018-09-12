@@ -4,11 +4,13 @@ import application, {
 } from './application';
 import content, { initialState as contentInitialState } from './content';
 import schema, { initialState as schemaInitialState } from './schema';
+import taxonomy, { initialState as taxonomyInitialState } from './taxonomy';
 
-const reducers = { application, content, schema };
+const reducers = { application, content, schema, taxonomy };
 export const initialState = {
   application: applicationInitialState,
   content: contentInitialState,
   schema: schemaInitialState,
+  taxonomy: taxonomyInitialState,
 };
 export default { ...reducers, loadingBar };
