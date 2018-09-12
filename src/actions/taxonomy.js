@@ -10,7 +10,12 @@ import { ApiError } from '../utils/api/errors';
 import { setErrorMessage } from './application';
 
 export const TAXONOMY_VOCABULARY_REQUESTED = 'TAXONOMY_VOCABULARY_REQUESTED';
-export const requestTaxonomyVocabulary = (vocabulary = null) => ({
+export const requestTaxonomyVocabulary = () => ({
+  type: TAXONOMY_VOCABULARY_REQUESTED,
+  payload: {},
+});
+
+export const requestTaxonomyVocabularyById = vocabulary => ({
   type: TAXONOMY_VOCABULARY_REQUESTED,
   payload: { vocabulary },
 });
@@ -18,10 +23,6 @@ export const requestTaxonomyVocabulary = (vocabulary = null) => ({
 export const TAXONOMY_VOCABULARY_LOADED = 'TAXONOMY_VOCABULARY_LOADED';
 function* loadTaxonomyVocabulary(action) {
   try {
-    const {
-      payload: { vocabulary },
-    } = action;
-
     yield put(resetLoading());
     yield put(showLoading());
 
@@ -29,9 +30,11 @@ function* loadTaxonomyVocabulary(action) {
       api,
       'taxonomy_vocabulary',
       {
-        ...((vocabulary && {
+        ...((action.payload.vocabulary && {
           queryString: {
-            filter: { condition: { path: 'vid', value: vocabulary } },
+            filter: {
+              condition: { path: 'vid', value: action.payload.vocabulary },
+            },
           },
         }) ||
           {}),

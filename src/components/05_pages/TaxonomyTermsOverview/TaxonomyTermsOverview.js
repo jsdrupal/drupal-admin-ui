@@ -18,7 +18,7 @@ import PageTitle from '../../02_atoms/PageTitle';
 export default class TaxonomyTermsOverview extends React.Component {
   static propTypes = {
     requestTaxonomyTerms: PropTypes.func.isRequired,
-    requestTaxonomyVocabulary: PropTypes.func.isRequired,
+    requestTaxonomyVocabularyById: PropTypes.func.isRequired,
     vocabulary: PropTypes.string.isRequired,
     taxonomyTerms: PropTypes.oneOfType([
       PropTypes.bool,
@@ -51,7 +51,7 @@ export default class TaxonomyTermsOverview extends React.Component {
     activeLink: null,
   };
   componentDidMount() {
-    this.props.requestTaxonomyVocabulary(this.props.vocabulary);
+    this.props.requestTaxonomyVocabularyById(this.props.vocabulary);
     this.props.requestTaxonomyTerms(this.props.vocabulary);
   }
   vocabularyOperations = vid => (
