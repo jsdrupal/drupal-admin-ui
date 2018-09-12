@@ -1,4 +1,4 @@
-import { put, takeLatest, call } from 'redux-saga/effects';
+import { put, takeLatest, call, select } from 'redux-saga/effects';
 import {
   showLoading,
   hideLoading,
@@ -61,6 +61,13 @@ export const requestTaxonomyTerms = taxonomyVocabulary => ({
   payload: { taxonomyVocabulary },
 });
 
+export const getTaxonomyVocabularyCache = state =>
+  state.taxonomy.taxonomyVocabulary;
+export const filterTaxonomyVocabulary = (taxonomyVocabularyList, vocabulary) =>
+  taxonomyVocabularyList.filter(
+    ({ attributes: { vid } }) => vid === vocabulary,
+  );
+
 export const TAXONOMY_TERMS_LOADED = 'TAXONOMY_TERMS_LOADED';
 function* loadTaxonomyTerms(action) {
   try {
@@ -73,6 +80,19 @@ function* loadTaxonomyTerms(action) {
     const { data: taxonomyTerms } = yield call(api, 'taxonomy_term', {
       parameters: { type: taxonomyVocabulary },
     });
+
+    const vocabulary = yield select(getTaxonomyVocabularyCache);
+    if (
+      !vocabulary.length &&
+      !filterTaxonomyVocabulary(vocabulary, taxonomyVocabulary).length
+    ) {
+      yield put({
+        type: TAXONOMY_VOCABULARY_REQUESTED,
+        payload: {
+          vocabulary: taxonomyVocabulary,
+        },
+      });
+    }
 
     yield put({
       type: TAXONOMY_TERMS_LOADED,

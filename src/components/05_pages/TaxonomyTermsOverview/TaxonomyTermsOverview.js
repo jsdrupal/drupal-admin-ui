@@ -18,7 +18,6 @@ import PageTitle from '../../02_atoms/PageTitle';
 export default class TaxonomyTermsOverview extends React.Component {
   static propTypes = {
     requestTaxonomyTerms: PropTypes.func.isRequired,
-    requestTaxonomyVocabularyById: PropTypes.func.isRequired,
     vocabulary: PropTypes.string.isRequired,
     taxonomyTerms: PropTypes.oneOfType([
       PropTypes.bool,
@@ -51,10 +50,9 @@ export default class TaxonomyTermsOverview extends React.Component {
     activeLink: null,
   };
   componentDidMount() {
-    this.props.requestTaxonomyVocabularyById(this.props.vocabulary);
     this.props.requestTaxonomyTerms(this.props.vocabulary);
   }
-  vocabularyOperations = vid => (
+  termOperations = vid => (
     <FormControl>
       {/* @todo Extract the select element with links out into a component */}
       <Select
@@ -84,11 +82,11 @@ export default class TaxonomyTermsOverview extends React.Component {
           </TableHead>
           <TableBody>
             {taxonomyTerms &&
-              taxonomyTerms.map(vocabulary => (
-                <TableRow key={vocabulary.attributes.name}>
-                  <TableCell>{vocabulary.attributes.name}</TableCell>
+              taxonomyTerms.map(term => (
+                <TableRow key={term.attributes.uuid}>
+                  <TableCell>{term.attributes.name}</TableCell>
                   <TableCell>
-                    {this.vocabularyOperations(vocabulary.attributes.vid)}
+                    {this.termOperations(term.attributes.vid)}
                   </TableCell>
                 </TableRow>
               ))}

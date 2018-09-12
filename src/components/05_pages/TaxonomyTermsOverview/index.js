@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import TaxonomyTermsOverview from './TaxonomyTermsOverview';
 import {
   requestTaxonomyTerms,
-  requestTaxonomyVocabularyById,
+  filterTaxonomyVocabulary,
 } from '../../../actions/taxonomy';
 
 export default connect(
@@ -16,8 +16,11 @@ export default connect(
     },
   ) => ({
     taxonomyTerms: state.taxonomy.taxonomyTerms[vocabulary],
-    taxonomyVocabulary: state.taxonomy.taxonomyVocabulary[0],
+    taxonomyVocabulary: filterTaxonomyVocabulary(
+      state.taxonomy.taxonomyVocabulary,
+      vocabulary,
+    )[0],
     vocabulary,
   }),
-  { requestTaxonomyTerms, requestTaxonomyVocabularyById },
+  { requestTaxonomyTerms },
 )(TaxonomyTermsOverview);
