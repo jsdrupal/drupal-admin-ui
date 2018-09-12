@@ -8,6 +8,7 @@ import { setErrorMessage } from './application';
 it('test empty options', () => {
   testSaga(loadDblog, { payload: {} })
     .next()
+    .next("TypeError: Cannot read property 'sort' of undefined")
     .put(setErrorMessage("TypeError: Cannot read property 'sort' of undefined"))
     .next()
     .finish()
