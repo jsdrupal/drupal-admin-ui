@@ -14,6 +14,7 @@ import {
 import api from '../utils/api/api';
 
 import { setErrorMessage } from './application';
+import { ApiError } from '../utils/api/errors';
 
 export const ROLES_REQUESTED = 'ROLES_REQUESTED';
 export const requestRoles = () => ({
@@ -34,7 +35,8 @@ function* loadRoles() {
       },
     });
   } catch (error) {
-    yield put(setErrorMessage(error.toString()));
+    const errorMessage = yield ApiError.errorToHumanString(error);
+    yield put(setErrorMessage(errorMessage));
   } finally {
     yield put(hideLoading());
     if (yield cancelled()) {

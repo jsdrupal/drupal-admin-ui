@@ -7,6 +7,7 @@ import {
 
 import api from '../utils/api/api';
 import { setErrorMessage } from './application';
+import { ApiError } from '../utils/api/errors';
 
 export const UI_SCHEMA_REQUESTED = 'UI_SCHEMA_REQUESTED';
 export const requestUiSchema = ({ entityTypeId, bundle }) => ({
@@ -54,7 +55,8 @@ function* loadUiSchema(action) {
       },
     });
   } catch (error) {
-    yield put(setErrorMessage(error.toString()));
+    const errorMessage = yield ApiError.errorToHumanString(error);
+    yield put(setErrorMessage(errorMessage));
   } finally {
     yield put(hideLoading());
   }
@@ -87,7 +89,8 @@ function* loadSchema(action) {
       },
     });
   } catch (error) {
-    yield put(setErrorMessage(error.toString()));
+    const errorMessage = yield ApiError.errorToHumanString(error);
+    yield put(setErrorMessage(errorMessage));
   } finally {
     yield put(hideLoading());
   }
