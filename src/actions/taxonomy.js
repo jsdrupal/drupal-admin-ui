@@ -63,10 +63,10 @@ export const requestTaxonomyTerms = taxonomyVocabulary => ({
 
 export const getTaxonomyVocabularyCache = state =>
   state.taxonomy.taxonomyVocabulary;
-export const filterTaxonomyVocabulary = (taxonomyVocabularyList, vocabulary) =>
-  taxonomyVocabularyList.filter(
-    ({ attributes: { vid } }) => vid === vocabulary,
-  );
+export const getTaxonomyVocabularyById = (taxonomyVocabularyList, vocabulary) =>
+  taxonomyVocabularyList
+    .filter(({ attributes: { vid } }) => vid === vocabulary)
+    .shift();
 
 export const TAXONOMY_TERMS_LOADED = 'TAXONOMY_TERMS_LOADED';
 function* loadTaxonomyTerms(action) {
@@ -83,8 +83,10 @@ function* loadTaxonomyTerms(action) {
 
     const vocabulary = yield select(getTaxonomyVocabularyCache);
     if (
-      vocabulary.length === 0 ||
-      filterTaxonomyVocabulary(vocabulary, taxonomyVocabulary).length === 0
+      !(
+        vocabulary.length &&
+        getTaxonomyVocabularyById(vocabulary, taxonomyVocabulary)
+      )
     ) {
       yield put({
         type: TAXONOMY_VOCABULARY_REQUESTED,
