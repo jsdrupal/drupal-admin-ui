@@ -86,7 +86,7 @@ export function* loadDblog({ payload: { options } }) {
       },
     });
   } catch (error) {
-    const errorMessage = yield ApiError.errorToHumanString(error);
+    const errorMessage = yield call(ApiError.errorToHumanString, error);
     yield put(setErrorMessage(errorMessage));
   } finally {
     yield put(hideLoading());
