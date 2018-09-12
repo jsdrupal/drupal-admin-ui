@@ -5,6 +5,7 @@ import Roles from './components/05_pages/Roles';
 import Dblog from './components/05_pages/Reports/Dblog';
 import NodeEditForm from './components/05_pages/NodeEditForm';
 import NodeAddForm from './components/05_pages/NodeAddForm';
+import Taxonomy from './components/05_pages/TaxonomyVocabulary';
 
 // @todo Share this with Drupal
 const routes = {
@@ -15,6 +16,7 @@ const routes = {
   '/node/add': AddContent,
   '/node/:nid/edit': NodeEditForm,
   '/node/add/:bundle': NodeAddForm,
+  '/admin/structure/taxonomy': Taxonomy,
 };
 
 export default routes;
