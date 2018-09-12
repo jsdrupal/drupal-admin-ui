@@ -183,7 +183,7 @@ async function api(
     options,
   ).then(res => {
     if (![200, 201, 204].includes(res.status)) {
-      throw new ApiError(res.status, res.statusText, res.body);
+      throw new ApiError(res.status, res.statusText, res);
     }
 
     // CSRF tokens return text, not json.

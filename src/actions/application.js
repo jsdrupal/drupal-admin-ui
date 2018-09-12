@@ -11,6 +11,7 @@ import {
   MESSAGE_SEVERITY_INFO,
   MESSAGE_SEVERITY_WARNING,
 } from '../constants/messages';
+import { ApiError } from '../utils/api/errors';
 
 export const OPEN_DRAWER = 'OPEN_DRAWER';
 export const openDrawer = () => ({
@@ -112,7 +113,8 @@ function* loadMenu() {
         ),
       );
     }
-    yield put(setErrorMessage(error.toHumanString()));
+    const errorMessage = yield ApiError.errorToHumanString(error);
+    yield put(setErrorMessage(errorMessage));
   } finally {
     yield put(hideLoading());
   }
@@ -139,7 +141,8 @@ function* loadContentTypes() {
       },
     });
   } catch (error) {
-    yield put(setErrorMessage(error.toHumanString()));
+    const errorMessage = yield ApiError.errorToHumanString(error);
+    yield put(setErrorMessage(errorMessage));
   } finally {
     yield put(hideLoading());
   }
@@ -169,7 +172,8 @@ function* loadActions() {
       },
     });
   } catch (error) {
-    yield put(setErrorMessage(error.toHumanString()));
+    const errorMessage = yield ApiError.errorToHumanString(error);
+    yield put(setErrorMessage(errorMessage));
   }
 }
 

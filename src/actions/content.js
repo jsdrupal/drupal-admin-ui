@@ -23,6 +23,7 @@ import {
 
 import MessageSave from '../components/01_subatomics/MessageHelpers/MessageSave';
 import { extractContentType, mapContentTypeToName } from '../utils/api/content';
+import { ApiError } from '../utils/api/errors';
 
 export const CONTENT_REQUESTED = 'CONTENT_REQUESTED';
 export const requestContent = (
@@ -116,7 +117,8 @@ function* loadContent(action) {
       },
     });
   } catch (error) {
-    yield put(setErrorMessage(error.toHumanString()));
+    const errorMessage = yield ApiError.errorToHumanString(error);
+    yield put(setErrorMessage(errorMessage));
   } finally {
     yield put(hideLoading());
   }
@@ -152,7 +154,8 @@ function* loadSingleContent(action) {
       },
     });
   } catch (error) {
-    yield put(setErrorMessage(error.toHumanString()));
+    const errorMessage = yield ApiError.errorToHumanString(error);
+    yield put(setErrorMessage(errorMessage));
   } finally {
     yield put(hideLoading());
   }
@@ -311,7 +314,8 @@ export function* executeAction({ payload: { action, nids } }) {
       .filter(x => x);
     yield all(actions);
   } catch (error) {
-    yield put(setErrorMessage(error.toHumanString()));
+    const errorMessage = yield ApiError.errorToHumanString(error);
+    yield put(setErrorMessage(errorMessage));
   } finally {
     yield put(hideLoading());
   }
@@ -333,7 +337,8 @@ function* saveContent({ payload: { content } }) {
       ),
     );
   } catch (error) {
-    yield put(setErrorMessage(error.toHumanString()));
+    const errorMessage = yield ApiError.errorToHumanString(error);
+    yield put(setErrorMessage(errorMessage));
   } finally {
     yield put(hideLoading());
   }
@@ -354,7 +359,8 @@ function* addContent({ payload: { content } }) {
     yield put(push('/admin/content'));
     yield put(setSuccessMessage(`New ${contentName} added successfully`));
   } catch (error) {
-    yield put(setErrorMessage(error.toHumanString()));
+    const errorMessage = yield ApiError.errorToHumanString(error);
+    yield put(setErrorMessage(errorMessage));
   } finally {
     yield put(hideLoading());
   }
@@ -366,7 +372,8 @@ function* deleteContent({ payload: { content } }) {
     yield put(showLoading());
     yield call(api, 'node:delete', { parameters: { node: content } });
   } catch (error) {
-    yield put(setErrorMessage(error.toHumanString()));
+    const errorMessage = yield ApiError.errorToHumanString(error);
+    yield put(setErrorMessage(errorMessage));
   } finally {
     yield put(hideLoading());
   }
@@ -402,7 +409,8 @@ function* loadUser(action) {
       },
     });
   } catch (error) {
-    yield put(setErrorMessage(error.toHumanString()));
+    const errorMessage = yield ApiError.errorToHumanString(error);
+    yield put(setErrorMessage(errorMessage));
   } finally {
     yield put(hideLoading());
   }

@@ -16,23 +16,30 @@ class ApiError extends Error {
     this.message = `${status} - ${statusText}`;
   }
 
-  async toHumanString() {
+  static errorToHumanString(error) {
+    if (error.name === 'ApiError') {
+      return ApiError.toHumanString(error);
+    }
+    return error.toString();
+  }
+
+  static async toHumanString(error) {
     try {
-      switch (this.status) {
+      switch (error.status) {
         case 403:
-          return `You don't have access: ${await this.response.json().message}`;
+          return `You don't have access: ${(await error.response.json()).message} Maybe you aren't logged in.`;
         case 404:
-          return `Some page is missing: ${await this.response.json().message}`;
+          return `Some page is missing: ${(await error.response.json()).message}`;
         case 400:
-          return `You posted some invalid data, contact the administration team: ${await this.response.json().message}`;
+          return `You posted some invalid data, contact the administration team: ${(await error.response.json()).message}`;
         case 500:
-          return `The server crashed, contact the administration team: ${await this.response.json().message}`;
+          return `The server crashed, contact the administration team: ${(await error.response.json()).message}`;
         default:
-          return this.toString();
+          return error.toString();
       }
     }
     catch (e) {
-      return this.toString();
+      return error.toString();
     }
   }
 }
