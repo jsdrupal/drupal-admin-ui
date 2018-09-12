@@ -1,0 +1,17 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - admin_ui_support
+    - serialization
+    - user
+id: entity_schema_resource
+plugin_id: entity_schema_resource
+granularity: resource
+configuration:
+  methods:
+    - GET
+  formats:
+    - json
+  authentication:
+    - cookie
