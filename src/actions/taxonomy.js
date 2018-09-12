@@ -83,8 +83,8 @@ function* loadTaxonomyTerms(action) {
 
     const vocabulary = yield select(getTaxonomyVocabularyCache);
     if (
-      !vocabulary.length &&
-      !filterTaxonomyVocabulary(vocabulary, taxonomyVocabulary).length
+      vocabulary.length === 0 ||
+      filterTaxonomyVocabulary(vocabulary, taxonomyVocabulary).length === 0
     ) {
       yield put({
         type: TAXONOMY_VOCABULARY_REQUESTED,
