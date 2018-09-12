@@ -142,6 +142,11 @@ async function api(
       );
       break;
     }
+    case 'taxonomy_vocabulary': {
+      url = '/jsonapi/taxonomy_vocabulary';
+      options.headers.Accept = 'application/vnd.api+json';
+      break;
+    }
     case 'taxonomy_term': {
       url = `/jsonapi/taxonomy_term/${parameters.type}`;
       options.headers.Accept = 'application/vnd.api+json';
@@ -156,6 +161,12 @@ async function api(
       url = `/schemata/${[parameters.entityTypeId, parameters.bundle].join(
         '/',
       )}`;
+      break;
+    }
+    case 'schema_by_id': {
+      url = `/admin-api/entity-schema/${parameters.entityTypeId}/${
+        parameters.entityId
+      }`;
       break;
     }
     case 'field_schema': {
