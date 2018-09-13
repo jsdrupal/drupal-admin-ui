@@ -44,6 +44,7 @@ export default class TaxonomyVocabulary extends React.Component {
     <FormControl>
       {/* @todo Extract the select element with links out into a component */}
       <Select
+        value=""
         autoWidth
         onChange={e => this.setState({ activeLink: e.target.value })}
       >
@@ -89,7 +90,7 @@ export default class TaxonomyVocabulary extends React.Component {
         <TableBody>
           {taxonomyVocabulary &&
             taxonomyVocabulary.map(vocabulary => (
-              <TableRow>
+              <TableRow key={vocabulary.id}>
                 <TableCell>{vocabulary.attributes.name}</TableCell>
                 <TableCell>{vocabulary.attributes.description}</TableCell>
                 <TableCell>
