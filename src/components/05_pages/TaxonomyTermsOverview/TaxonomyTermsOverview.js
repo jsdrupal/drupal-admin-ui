@@ -55,7 +55,7 @@ export default class TaxonomyTermsOverview extends React.Component {
   componentDidMount() {
     this.props.requestTaxonomyTerms(this.props.vocabulary);
   }
-  termOperations = vid => (
+  termOperations = tid => (
     <FormControl>
       {/* @todo Extract the select element with links out into a component */}
       <Select
@@ -63,8 +63,8 @@ export default class TaxonomyTermsOverview extends React.Component {
         onChange={e => this.setState({ activeLink: e.target.value })}
         value={this.state.activeLink}
       >
-        <MenuItem value={`/taxonomy/term/${vid}/edit`}>Edit</MenuItem>
-        <MenuItem value={`taxonomy/term/${vid}/delete`}>Delete</MenuItem>
+        <MenuItem value={`/taxonomy/term/${tid}/edit`}>Edit</MenuItem>
+        <MenuItem value={`/taxonomy/term/${tid}/delete`}>Delete</MenuItem>
       </Select>
       {this.state.activeLink && <Redirect to={this.state.activeLink} />}
     </FormControl>
@@ -91,7 +91,7 @@ export default class TaxonomyTermsOverview extends React.Component {
                   <TableRow key={term.attributes.uuid}>
                     <TableCell>{term.attributes.name}</TableCell>
                     <TableCell>
-                      {this.termOperations(term.attributes.vid)}
+                      {this.termOperations(term.attributes.tid)}
                     </TableCell>
                   </TableRow>
                 ))}
