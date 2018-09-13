@@ -3,6 +3,9 @@ import PropTypes from 'prop-types';
 
 import { Redirect } from 'react-router';
 
+import LoadingBar from 'react-redux-loading-bar';
+
+import Paper from '@material-ui/core/Paper';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -73,25 +76,28 @@ export default class TaxonomyTermsOverview extends React.Component {
         {taxonomyVocabulary && (
           <PageTitle>{taxonomyVocabulary.attributes.name}</PageTitle>
         )}
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>Name</TableCell>
-              <TableCell>Operations</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {taxonomyTerms &&
-              taxonomyTerms.map(term => (
-                <TableRow key={term.attributes.uuid}>
-                  <TableCell>{term.attributes.name}</TableCell>
-                  <TableCell>
-                    {this.termOperations(term.attributes.vid)}
-                  </TableCell>
-                </TableRow>
-              ))}
-          </TableBody>
-        </Table>
+        <LoadingBar style={{ position: 'relative', marginBottom: '5px' }} />
+        <Paper>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell>Name</TableCell>
+                <TableCell>Operations</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {taxonomyTerms &&
+                taxonomyTerms.map(term => (
+                  <TableRow key={term.attributes.uuid}>
+                    <TableCell>{term.attributes.name}</TableCell>
+                    <TableCell>
+                      {this.termOperations(term.attributes.vid)}
+                    </TableCell>
+                  </TableRow>
+                ))}
+            </TableBody>
+          </Table>
+        </Paper>
       </Fragment>
     );
   }
