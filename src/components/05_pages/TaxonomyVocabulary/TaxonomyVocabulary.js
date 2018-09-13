@@ -1,7 +1,11 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 
 import { Redirect } from 'react-router';
+
+import LoadingBar from 'react-redux-loading-bar';
+
+import Paper from '@material-ui/core/Paper';
 
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -12,6 +16,8 @@ import TableRow from '@material-ui/core/TableRow';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem/MenuItem';
+
+import PageTitle from '../../02_atoms/PageTitle';
 
 export default class TaxonomyVocabulary extends React.Component {
   static propTypes = {
@@ -79,27 +85,33 @@ export default class TaxonomyVocabulary extends React.Component {
   render() {
     const { taxonomyVocabulary } = this.props;
     return (
-      <Table>
-        <TableHead>
-          <TableRow>
-            <TableCell>Vocabulary name</TableCell>
-            <TableCell>Description</TableCell>
-            <TableCell>Operations</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {taxonomyVocabulary &&
-            taxonomyVocabulary.map(vocabulary => (
-              <TableRow key={vocabulary.id}>
-                <TableCell>{vocabulary.attributes.name}</TableCell>
-                <TableCell>{vocabulary.attributes.description}</TableCell>
-                <TableCell>
-                  {this.vocabularyOperations(vocabulary.attributes.vid)}
-                </TableCell>
+      <Fragment>
+        <PageTitle>Taxonomy</PageTitle>
+        <LoadingBar style={{ position: 'relative', marginBottom: '5px' }} />
+        <Paper>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell>Vocabulary name</TableCell>
+                <TableCell>Description</TableCell>
+                <TableCell>Operations</TableCell>
               </TableRow>
-            ))}
-        </TableBody>
-      </Table>
+            </TableHead>
+            <TableBody>
+              {taxonomyVocabulary &&
+                taxonomyVocabulary.map(vocabulary => (
+                  <TableRow key={vocabulary.id}>
+                    <TableCell>{vocabulary.attributes.name}</TableCell>
+                    <TableCell>{vocabulary.attributes.description}</TableCell>
+                    <TableCell>
+                      {this.vocabularyOperations(vocabulary.attributes.vid)}
+                    </TableCell>
+                  </TableRow>
+                ))}
+            </TableBody>
+          </Table>
+        </Paper>
+      </Fragment>
     );
   }
 }
