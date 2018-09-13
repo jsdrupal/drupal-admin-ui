@@ -56,13 +56,11 @@ function* loadTaxonomyVocabulary(action) {
 }
 
 export const TAXONOMY_TERMS_REQUESTED = 'TAXONOMY_TERMS_REQUESTED';
-export const requestTaxonomyTerms = taxonomyVocabulary => ({
+export const requestTaxonomyTerms = vocabulary => ({
   type: TAXONOMY_TERMS_REQUESTED,
-  payload: { taxonomyVocabulary },
+  payload: { vocabulary },
 });
 
-export const getTaxonomyVocabularyCache = state =>
-  state.taxonomy.taxonomyVocabulary;
 export const getTaxonomyVocabularyById = (taxonomyVocabularyList, vocabulary) =>
   taxonomyVocabularyList
     .filter(({ attributes: { vid } }) => vid === vocabulary)
@@ -72,26 +70,28 @@ export const TAXONOMY_TERMS_LOADED = 'TAXONOMY_TERMS_LOADED';
 function* loadTaxonomyTerms(action) {
   try {
     const {
-      payload: { taxonomyVocabulary },
+      payload: { vocabulary },
     } = action;
     yield put(resetLoading());
     yield put(showLoading());
 
     const { data: taxonomyTerms } = yield call(api, 'taxonomy_term', {
-      parameters: { type: taxonomyVocabulary },
+      parameters: { type: vocabulary },
     });
 
-    const vocabulary = yield select(getTaxonomyVocabularyCache);
+    const {
+      taxonomy: { taxonomyVocabulary },
+    } = yield select();
     if (
       !(
-        vocabulary.length &&
-        getTaxonomyVocabularyById(vocabulary, taxonomyVocabulary)
+        taxonomyVocabulary.length &&
+        getTaxonomyVocabularyById(taxonomyVocabulary, vocabulary)
       )
     ) {
       yield put({
         type: TAXONOMY_VOCABULARY_REQUESTED,
         payload: {
-          vocabulary: taxonomyVocabulary,
+          vocabulary,
         },
       });
     }
@@ -99,7 +99,7 @@ function* loadTaxonomyTerms(action) {
     yield put({
       type: TAXONOMY_TERMS_LOADED,
       payload: {
-        taxonomyVocabulary,
+        vocabulary,
         taxonomyTerms,
       },
     });

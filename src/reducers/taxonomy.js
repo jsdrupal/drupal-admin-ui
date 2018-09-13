@@ -17,12 +17,12 @@ export default (state = initialState, action) => {
       };
     }
     case TAXONOMY_TERMS_LOADED: {
-      const { taxonomyVocabulary, taxonomyTerms } = action.payload;
+      const { vocabulary, taxonomyTerms } = action.payload;
       return {
         ...state,
         taxonomyTerms: {
           ...state.taxonomyTerms,
-          [taxonomyVocabulary]: taxonomyTerms,
+          [vocabulary]: taxonomyTerms,
         },
       };
     }
