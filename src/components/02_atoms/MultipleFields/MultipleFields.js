@@ -228,18 +228,18 @@ class MultipleFields extends Component {
                 </Fragment>
               </ListItem>
             ))}
-          <Add>
-            <Button
-              color="primary"
-              variant="contained"
-              onClick={addAnotherItem}
-              aria-label="Add another item"
-            >
-              Add another item
-              <AddIcon />
-            </Button>
-          </Add>
         </List>
+        <Add>
+          <Button
+            color="primary"
+            variant="contained"
+            onClick={addAnotherItem}
+            aria-label="Add another item"
+          >
+            Add another item
+            <AddIcon />
+          </Button>
+        </Add>
       </FormControl>
     );
   };
