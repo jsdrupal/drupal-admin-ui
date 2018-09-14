@@ -56,9 +56,9 @@ function* loadTaxonomyVocabulary(action) {
 }
 
 export const TAXONOMY_TERMS_REQUESTED = 'TAXONOMY_TERMS_REQUESTED';
-export const requestTaxonomyTerms = vocabulary => ({
+export const requestTaxonomyTerms = (vocabulary, options) => ({
   type: TAXONOMY_TERMS_REQUESTED,
-  payload: { vocabulary },
+  payload: { vocabulary, options },
 });
 
 export const getTaxonomyVocabularyById = (taxonomyVocabularyList, vocabulary) =>
@@ -72,12 +72,19 @@ function* loadTaxonomyTerms(action) {
     const {
       payload: { vocabulary },
     } = action;
+
+    const page =
+      (action.payload.options && action.payload.options.page) || null;
+
     yield put(resetLoading());
     yield put(showLoading());
 
-    const { data: taxonomyTerms } = yield call(api, 'taxonomy_term', {
-      parameters: { type: vocabulary },
-    });
+    const queryString = {};
+
+    if (page) {
+      const { offset, limit } = page;
+      queryString.page = { offset, limit };
+    }
 
     const {
       taxonomy: { taxonomyVocabulary },
@@ -96,6 +103,10 @@ function* loadTaxonomyTerms(action) {
       });
     }
 
+    const { jsonapi, ...taxonomyTerms } = yield call(api, 'taxonomy_term', {
+      parameters: { type: vocabulary },
+      queryString,
+    });
     yield put({
       type: TAXONOMY_TERMS_LOADED,
       payload: {
