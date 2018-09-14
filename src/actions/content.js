@@ -19,6 +19,7 @@ import {
   contentTypesSelector,
   setErrorMessage,
   setSuccessMessage,
+  requestContentTypes,
 } from './application';
 
 import MessageSave from '../components/01_subatomics/MessageHelpers/MessageSave';
@@ -324,15 +325,29 @@ function* saveContent({ payload: { content } }) {
   try {
     yield put(resetLoading());
     yield put(showLoading());
-    const {
-      data: {
-        attributes: { title, nid },
-        type,
+    const [
+      {
+        data: {
+          attributes: { title, nid },
+        },
       },
-    } = yield call(api, 'node:save', { parameters: { node: content } });
+    ] = yield all([
+      api('node:save', { parameters: { node: content } }),
+      put(requestContentTypes()),
+    ]);
+
+    // Get the content types from the redux state
+    const contentTypes = yield select(contentTypesSelector);
+    // Extract the content type from the content data
+    const contentType = extractContentType(content);
+
+    // Map the content type to the human-readable name
+    const contentTypeName =
+      mapContentTypeToName(contentTypes, contentType) || 'unknown';
+
     yield put(
       setSuccessMessage(
-        <MessageSave bundle={type.split('--')[1]} title={title} nid={nid} />,
+        <MessageSave bundle={contentTypeName} title={title} nid={nid} />,
       ),
     );
   } catch (error) {
@@ -345,6 +360,14 @@ function* saveContent({ payload: { content } }) {
 
 function* addContent({ payload: { content } }) {
   try {
+    yield put(resetLoading());
+    yield put(showLoading());
+
+    yield all([
+      call(api, 'node:add', { parameters: { node: content } }),
+      put(requestContentTypes()),
+    ]);
+
     // Get the content types from the redux state
     const contentTypes = yield select(contentTypesSelector);
     // Extract the content type from the content data
@@ -352,9 +375,7 @@ function* addContent({ payload: { content } }) {
     // Map the content type to the human-readable name
     const contentName =
       mapContentTypeToName(contentTypes, contentType) || 'unknown';
-    yield put(resetLoading());
-    yield put(showLoading());
-    yield call(api, 'node:add', { parameters: { node: content } });
+
     yield put(push('/admin/content'));
     yield put(setSuccessMessage(`New ${contentName} added successfully`));
   } catch (error) {
