@@ -1,7 +1,7 @@
+import 'jest-plugin-console-matchers/setup';
 import React from 'react';
 import { shallow } from 'enzyme';
 import InlineMessage from './InlineMessage';
-import 'jest-plugin-console-matchers/setup';
 
 describe('inline messages', () => {
   it('severity error', () => {
