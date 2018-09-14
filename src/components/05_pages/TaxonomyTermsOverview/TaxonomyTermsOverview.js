@@ -1,5 +1,7 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
+import { css } from 'emotion';
 
 import { Redirect } from 'react-router';
 
@@ -12,11 +14,23 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 
+import Button from '@material-ui/core/Button';
+import AddIcon from '@material-ui/icons/Add';
+
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem/MenuItem';
 
 import PageTitle from '../../02_atoms/PageTitle';
+
+const styles = {
+  addButton: css`
+    margin: 0.5rem;
+    position: fixed;
+    right: 0;
+    bottom: 0;
+  `,
+};
 
 export default class TaxonomyTermsOverview extends React.Component {
   static propTypes = {
@@ -98,6 +112,16 @@ export default class TaxonomyTermsOverview extends React.Component {
             </TableBody>
           </Table>
         </Paper>
+        <Button
+          variant="fab"
+          color="primary"
+          aria-label="add"
+          className={styles.addButton}
+          component={Link}
+          to={`/admin/structure/taxonomy/manage/${this.props.vocabulary}/add`}
+        >
+          <AddIcon />
+        </Button>
       </Fragment>
     );
   }
