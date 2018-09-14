@@ -6,6 +6,7 @@ import Dblog from './components/05_pages/Reports/Dblog';
 import NodeEditForm from './components/05_pages/NodeEditForm';
 import NodeAddForm from './components/05_pages/NodeAddForm';
 import Taxonomy from './components/05_pages/TaxonomyVocabulary';
+import TaxonomyTermsOverview from './components/05_pages/TaxonomyTermsOverview';
 
 // @todo Share this with Drupal
 const routes = {
@@ -16,6 +17,7 @@ const routes = {
   '/node/add': AddContent,
   '/node/:nid/edit': NodeEditForm,
   '/node/add/:bundle': NodeAddForm,
+  '/admin/structure/taxonomy/manage/:vocabulary/overview': TaxonomyTermsOverview,
   '/admin/structure/taxonomy': Taxonomy,
 };
 
