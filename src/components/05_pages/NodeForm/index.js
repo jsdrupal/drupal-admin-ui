@@ -62,7 +62,6 @@ class NodeForm extends React.Component {
       entityTypeId: this.props.entityTypeId,
       bundle: this.props.bundle,
     });
-
     this.calculateState(this.props, this.state, state => this.setState(state));
   }
 
