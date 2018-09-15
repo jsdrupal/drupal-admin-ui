@@ -1,4 +1,3 @@
-import 'jest-plugin-console-matchers/setup';
 import React from 'react';
 import { shallow } from 'enzyme';
 import InlineMessage from './InlineMessage';
@@ -14,10 +13,14 @@ describe('inline messages', () => {
   });
 
   it('without severity', () => {
-    expect(() => {
-      const inlineMessage = 'This is sample message';
-      const message = shallow(<InlineMessage message={inlineMessage} />);
-      return message.text();
-    }).toThrowWarning();
+    global.console.error = jest.fn();
+    const inlineMessage = 'This is sample message';
+    const message = shallow(<InlineMessage message={inlineMessage} />);
+    expect(global.console.error.mock.calls[0][0]).toMatch(
+      new RegExp(
+        '^Warning: Failed prop type: The prop `messageSeverity` is marked as required in `Message`, but its value is `undefined`',
+      ),
+    );
+    expect(message.text()).toEqual('This is sample message');
   });
 });
