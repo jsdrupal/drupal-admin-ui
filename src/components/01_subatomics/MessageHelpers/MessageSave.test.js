@@ -16,7 +16,6 @@ describe('Verify Message', () => {
     );
     expect(message.find('a').prop('href')).toEqual('/node/5');
     expect(message.find('a').text()).toEqual('Thai green curry');
-    expect(message.find('span').text()).toEqual('Article');
     expect(message.find('p').text()).toEqual(
       'Article Thai green curry has been updated',
     );
