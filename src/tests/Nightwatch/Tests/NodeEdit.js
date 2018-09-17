@@ -6,23 +6,12 @@ module.exports = {
       .relativeURL('/admin/content')
       .waitForElementVisible('[data-nightwatch="content-type-select"]');
 
-    browser.setValue(
-      '[data-nightwatch="title-search-text-field"] input',
-      'Super easy vegetarian pasta bake',
+    browser.waitForElementVisible(
+      '[data-nightwatch="Edit Super easy vegetarian pasta bake"]',
     );
 
-    browser.waitForElementVisible('table tbody tr:only-child', 3000);
-
-    browser.elements('css selector', 'table tbody tr', result => {
-      browser.assert.equal(
-        result.value.length,
-        1,
-        'Correctly filter content row.',
-      );
-    });
-
     // Click 'Edit' for 'Super easy vegetarian pasta bake'
-    browser.click('table tbody tr:last-child td:last-child a');
+    browser.click('[data-nightwatch="Edit Super easy vegetarian pasta bake"]');
 
     // Wait for `#title`
     browser.waitForElementVisible('#title');
@@ -44,14 +33,11 @@ module.exports = {
       .relativeURL('/admin/content')
       .waitForElementVisible('[data-nightwatch="content-type-select"]');
 
-    browser.setValue(
-      '[data-nightwatch="title-search-text-field"] input',
-      'Super easy vegetarian pasta bake',
+    browser.waitForElementVisible(
+      '[data-nightwatch="Edit Super easy vegetarian pasta bake"]',
     );
 
-    browser.waitForElementVisible('table tbody tr:only-child');
-
-    browser.click('table tbody tr:last-child td:last-child a');
+    browser.click('[data-nightwatch="Edit Super easy vegetarian pasta bake"]');
 
     browser
       .waitForElementVisible('#title')

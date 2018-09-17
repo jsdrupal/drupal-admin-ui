@@ -179,7 +179,6 @@ class Content extends Component {
                           });
                         }}
                         margin="normal"
-                        data-nightwatch="title-search-text-field"
                       />
 
                       <FormControl className={styles.formControl}>
