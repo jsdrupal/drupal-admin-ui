@@ -11,7 +11,7 @@ module.exports = {
       'Super easy vegetarian pasta bake',
     );
 
-    browser.waitForElementVisible('table tbody tr:only-child');
+    browser.waitForElementVisible('table tbody tr:only-child', 3000);
 
     browser.elements('css selector', 'table tbody tr', result => {
       browser.assert.equal(
