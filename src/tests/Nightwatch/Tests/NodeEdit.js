@@ -3,22 +3,57 @@ module.exports = {
   nodeEditFormRestoring(browser) {
     browser
       .logUserIn()
-      .relativeURL('/node/9/edit')
-      .waitForElementVisible('#title');
+      .relativeURL('/admin/content')
+      .waitForElementVisible('[data-nightwatch="content-type-select"]');
+
+    browser.setValue(
+      '[data-nightwatch="title-search-text-field"] input',
+      'Super easy vegetarian pasta bake',
+    );
+
+    browser.waitForElementVisible('table tbody tr:only-child');
+
+    browser.elements('css selector', 'table tbody tr', result => {
+      browser.assert.equal(
+        result.value.length,
+        1,
+        'Correctly filter content row.',
+      );
+    });
+
+    // Click 'Edit' for 'Super easy vegetarian pasta bake'
+    browser.click('table tbody tr:last-child td:last-child a');
+
+    // Wait for `#title`
+    browser.waitForElementVisible('#title');
 
     browser.expect
       .element('#title')
       .value.to.equal('Super easy vegetarian pasta bake');
 
+    // Clear the `#title` value
     browser
       .clearValue('#title')
       .expect.element('#title')
       .value.to.equal('');
 
+    // Set a temporary value
     browser.setValue('#title', 'Self made pasta');
 
     browser
-      .relativeURL('/node/9/edit')
+      .relativeURL('/admin/content')
+      .waitForElementVisible('[data-nightwatch="content-type-select"]');
+
+    browser.setValue(
+      '[data-nightwatch="title-search-text-field"] input',
+      'Super easy vegetarian pasta bake',
+    );
+
+    browser.waitForElementVisible('table tbody tr:only-child');
+
+    browser.click('table tbody tr:last-child td:last-child a');
+
+    browser
       .waitForElementVisible('#title')
       .waitForElementVisible('[data-nightwatch="restore-content-snackbar"]');
 
