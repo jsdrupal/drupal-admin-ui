@@ -30,7 +30,6 @@ class NodeForm extends React.Component {
     onSave: PropTypes.func.isRequired,
     entityTypeId: PropTypes.string.isRequired,
     bundle: PropTypes.string.isRequired,
-    requestSchema: PropTypes.func.isRequired,
     requestUiSchema: PropTypes.func.isRequired,
     uiSchema: PropTypes.oneOfType([
       PropTypes.shape({
