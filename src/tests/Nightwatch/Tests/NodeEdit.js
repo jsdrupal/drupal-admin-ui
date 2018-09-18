@@ -3,22 +3,43 @@ module.exports = {
   nodeEditFormRestoring(browser) {
     browser
       .logUserIn()
-      .relativeURL('/node/9/edit')
-      .waitForElementVisible('#title');
+      .relativeURL('/admin/content')
+      .waitForElementVisible('[data-nightwatch="content-type-select"]');
+
+    browser.waitForElementVisible(
+      '[data-nightwatch="Edit Super easy vegetarian pasta bake"]',
+    );
+
+    // Click 'Edit' for 'Super easy vegetarian pasta bake'
+    browser.click('[data-nightwatch="Edit Super easy vegetarian pasta bake"]');
+
+    // Wait for `#title`
+    browser.waitForElementVisible('#title');
 
     browser.expect
       .element('#title')
       .value.to.equal('Super easy vegetarian pasta bake');
 
+    // Clear the `#title` value
     browser
       .clearValue('#title')
       .expect.element('#title')
       .value.to.equal('');
 
+    // Set a temporary value
     browser.setValue('#title', 'Self made pasta');
 
     browser
-      .relativeURL('/node/9/edit')
+      .relativeURL('/admin/content')
+      .waitForElementVisible('[data-nightwatch="content-type-select"]');
+
+    browser.waitForElementVisible(
+      '[data-nightwatch="Edit Super easy vegetarian pasta bake"]',
+    );
+
+    browser.click('[data-nightwatch="Edit Super easy vegetarian pasta bake"]');
+
+    browser
       .waitForElementVisible('#title')
       .waitForElementVisible('[data-nightwatch="restore-content-snackbar"]');
 
