@@ -226,6 +226,7 @@ class ContentTable extends React.Component {
                       aria-label="edit"
                       className={styles.button}
                       component={Link}
+                      data-nightwatch={`Edit ${title}`}
                       to={`/node/${nid}/edit`}
                     >
                       <EditIcon />
