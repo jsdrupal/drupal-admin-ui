@@ -144,7 +144,8 @@ class MultipleFields extends Component {
    */
   addAnotherItem = () => {
     const { value, onChange } = this.props;
-    const newValue = [...value, ''];
+    const updatedValue = (value.length && value) || [''];
+    const newValue = [...updatedValue, ''];
     this.setState(
       {
         newItemAdded: true,
