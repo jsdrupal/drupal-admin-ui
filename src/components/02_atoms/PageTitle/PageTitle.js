@@ -12,7 +12,7 @@ const styles = {
 };
 
 const PageTitle = ({ children }) => (
-  <Typography variant="display1" classes={{ root: styles.title }}>
+  <Typography variant="h4" classes={{ root: styles.title }}>
     {children}
   </Typography>
 );
