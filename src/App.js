@@ -14,7 +14,12 @@ import { composeWithDevTools } from 'redux-devtools-extension/developmentOnly';
 
 import JssProvider from 'react-jss/lib/JssProvider';
 import { create } from 'jss';
-import { createGenerateClassName, jssPreset } from '@material-ui/core/styles';
+import {
+  MuiThemeProvider,
+  createMuiTheme,
+  createGenerateClassName,
+  jssPreset
+} from '@material-ui/core/styles';
 
 import routes from './routes';
 
@@ -98,32 +103,40 @@ const jss = create(jssPreset());
 // We define a custom insertion point that JSS will look for injecting the styles in the DOM.
 jss.options.insertionPoint = document.getElementById('jss-insertion-point');
 
+const theme = createMuiTheme({
+  typography: {
+    useNextVariants: true,
+  },
+});
+
 const App = () => (
   <JssProvider jss={jss} generateClassName={generateClassName}>
-    <ErrorBoundary>
-      <Provider store={store}>
-        <ConnectedRouter history={history}>
-          <Default>
-            <Switch>
-              <Route exact path="/" component={withRouter(Content)} />
-              {Object.keys(routes).map(route => (
+    <MuiThemeProvider theme={theme}>
+      <ErrorBoundary>
+        <Provider store={store}>
+          <ConnectedRouter history={history}>
+            <Default>
+              <Switch>
+                <Route exact path="/" component={withRouter(Content)} />
+                {Object.keys(routes).map(route => (
+                  <Route
+                    exact
+                    path={route}
+                    component={withRouter(routes[route])}
+                    key={route}
+                  />
+                ))}
                 <Route
-                  exact
-                  path={route}
-                  component={withRouter(routes[route])}
-                  key={route}
+                  path="/(vfancy/?)"
+                  component={withRouter(InitialRedirect)}
                 />
-              ))}
-              <Route
-                path="/(vfancy/?)"
-                component={withRouter(InitialRedirect)}
-              />
-              <Route component={NoMatch} />
-            </Switch>
-          </Default>
-        </ConnectedRouter>
-      </Provider>
-    </ErrorBoundary>
+                <Route component={NoMatch} />
+              </Switch>
+            </Default>
+          </ConnectedRouter>
+        </Provider>
+      </ErrorBoundary>
+    </MuiThemeProvider>
   </JssProvider>
 );
 
