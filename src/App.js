@@ -18,7 +18,7 @@ import {
   MuiThemeProvider,
   createMuiTheme,
   createGenerateClassName,
-  jssPreset
+  jssPreset,
 } from '@material-ui/core/styles';
 
 import routes from './routes';
