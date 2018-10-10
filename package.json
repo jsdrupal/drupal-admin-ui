@@ -68,7 +68,7 @@
     "eslint-plugin-jsx-a11y": "^6.1.0",
     "eslint-plugin-prettier": "^2.6.0",
     "eslint-plugin-react": "^7.4.0",
-    "jest-junit": "^3.6.0",
+    "jest-junit": "^5.2.0",
     "mkdirp": "^0.5.1",
     "nightwatch": "^0.9.21",
     "prettier": "^1.11.1",
