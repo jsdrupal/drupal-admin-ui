@@ -6,7 +6,7 @@ import LoadingBar from 'react-redux-loading-bar';
 
 import { requestRoles } from '../../../actions/roles';
 import { cancelTask } from '../../../actions/helpers';
-import { Table, TBody, THead } from 'drupal-admin-ui-components';
+import { Table, TBody, THead } from 'drupal-ui';
 
 export const Roles = class Roles extends Component {
   componentDidMount() {

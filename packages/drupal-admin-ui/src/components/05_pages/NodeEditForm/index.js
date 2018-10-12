@@ -9,7 +9,7 @@ import {
   contentSave,
   requestSingleContent,
 } from '../../../actions/content';
-import { PageTitle } from 'drupal-admin-ui-components';
+import { PageTitle } from 'drupal-ui';
 import { cleanupRelationships } from '../../../utils/api/content';
 import { requestSchemaByEntityId } from '../../../actions/schema';
 import SchemaPropType from '../NodeForm/SchemaPropType';

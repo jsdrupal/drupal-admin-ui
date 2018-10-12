@@ -17,7 +17,7 @@ import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem/MenuItem';
 
-import { PageTitle } from 'drupal-admin-ui-components';
+import { PageTitle } from 'drupal-ui';
 
 export default class TaxonomyVocabulary extends React.Component {
   static propTypes = {

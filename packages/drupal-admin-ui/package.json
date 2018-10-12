@@ -15,7 +15,7 @@
     "@material-ui/core": "^3.2.0",
     "@material-ui/icons": "^3.0.1",
     "deepmerge": "^2.1.1",
-    "drupal-admin-ui-components": "^0.1.0",
+    "drupal-ui": "^0.1.0",
     "emotion": "^9.0.2",
     "history": "^4.7.2",
     "interweave": "^8.0.2",

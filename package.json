@@ -54,6 +54,6 @@
   },
   "workspaces": [
     "packages/drupal-admin-ui",
-    "packages/drupal-admin-ui-components"
+    "packages/drupal-ui"
   ]
 }

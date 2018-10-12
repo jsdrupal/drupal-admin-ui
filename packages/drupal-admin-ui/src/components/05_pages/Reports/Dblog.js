@@ -5,7 +5,7 @@ import LoadingBar from 'react-redux-loading-bar';
 import { Markup } from 'interweave';
 
 import { requestDblogCollection } from '../../../actions/reports';
-import { Table, TBody, THead } from 'drupal-admin-ui-components';
+import { Table, TBody, THead } from 'drupal-ui';
 
 class Dblog extends Component {
   static propTypes = {

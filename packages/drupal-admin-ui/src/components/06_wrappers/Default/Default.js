@@ -24,7 +24,7 @@ import HelpIcon from '@material-ui/icons/Help';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 
-import { SnackbarMessage as Snackbar } from 'drupal-admin-ui-components';
+import { SnackbarMessage as Snackbar } from 'drupal-ui';
 import ErrorBoundary from '../ErrorBoundary/ErrorBoundary';
 
 import {

@@ -12,7 +12,7 @@ import CloseIcon from '@material-ui/icons/Close';
 
 import SchemaPropType from './SchemaPropType';
 
-import { MultipleFields } from 'drupal-admin-ui-components';
+import { MultipleFields } from 'drupal-ui';
 
 import { contentAdd } from '../../../actions/content';
 import { requestUiSchema } from '../../../actions/schema';

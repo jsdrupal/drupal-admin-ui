@@ -20,7 +20,7 @@ import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import AddIcon from '@material-ui/icons/Add';
 
-import { PageTitle } from 'drupal-admin-ui-components';
+import { PageTitle } from 'drupal-ui';
 import ContentTable from '../../04_templates/ContentTable/ContentTable';
 
 import ConfirmationDialog from './ConfirmationDialog';

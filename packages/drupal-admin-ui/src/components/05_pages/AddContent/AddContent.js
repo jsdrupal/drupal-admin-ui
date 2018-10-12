@@ -8,7 +8,7 @@ import Paper from '@material-ui/core/Paper';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
-import { PageTitle } from 'drupal-admin-ui-components';
+import { PageTitle } from 'drupal-ui';
 
 const styles = {
   menuLink: css`

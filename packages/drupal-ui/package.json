@@ -1,5 +1,5 @@
 {
-  "name": "drupal-admin-ui-components",
+  "name": "drupal-ui",
   "private": true,
   "version": "0.1.0",
   "description": "React components that implement Drupal style guide.",

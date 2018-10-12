@@ -8,7 +8,7 @@ import {
   contentAdd,
   requestUser,
 } from '../../../actions/content';
-import { PageTitle } from 'drupal-admin-ui-components';
+import { PageTitle } from 'drupal-ui';
 import { createEntity } from '../../../utils/api/schema';
 import { requestSchema } from '../../../actions/schema';
 import SchemaPropType from '../NodeForm/SchemaPropType';

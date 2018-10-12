@@ -17,7 +17,7 @@ import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
 import Checkbox from '@material-ui/core/Checkbox';
 
-import { OpsModalButton } from 'drupal-admin-ui-components';
+import { OpsModalButton } from 'drupal-ui';
 
 import { contentDelete } from '../../../actions/content';
 

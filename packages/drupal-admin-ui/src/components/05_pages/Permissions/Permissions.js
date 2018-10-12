@@ -6,7 +6,7 @@ import { Markup } from 'interweave';
 import { css } from 'emotion';
 import { StickyContainer, Sticky } from 'react-sticky';
 
-import { Loading, Table, TBody, THead } from 'drupal-admin-ui-components';
+import { Loading, Table, TBody, THead } from 'drupal-ui';
 
 import api from '../../../utils/api/api';
 import { MESSAGE_SEVERITY_SUCCESS } from '../../../constants/messages';

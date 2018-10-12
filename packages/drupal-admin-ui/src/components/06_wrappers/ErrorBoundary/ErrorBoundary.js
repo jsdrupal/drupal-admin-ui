@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { InlineMessage } from 'drupal-admin-ui-components';
+import { InlineMessage } from 'drupal-ui';
 
 import { MESSAGE_SEVERITY_ERROR } from '../../../constants/messages';
 
