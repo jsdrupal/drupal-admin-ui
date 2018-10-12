@@ -1,0 +1,67 @@
+{
+  "name": "drupal-admin-ui",
+  "private": true,
+  "version": "0.1.0",
+  "description": "This is an admin UI for Drupal, built with JavaScript & React",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jsdrupal/drupal-admin-ui.git"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jsdrupal/drupal-admin-ui/issues"
+  },
+  "dependencies": {
+    "@material-ui/core": "^3.2.0",
+    "@material-ui/icons": "^3.0.1",
+    "deepmerge": "^2.1.1",
+    "drupal-admin-ui-components": "^0.1.0",
+    "emotion": "^9.0.2",
+    "history": "^4.7.2",
+    "interweave": "^8.0.2",
+    "jss": "^9.8.2",
+    "makecancelable": "^1.0.0",
+    "prop-types": "^15.6.1",
+    "qs": "^6.5.1",
+    "react": "^16.4.0",
+    "react-dom": "^16.4.0",
+    "react-emotion": "^9.2.5",
+    "react-jss": "^8.4.0",
+    "react-redux": "^5.0.7",
+    "react-redux-loading-bar": "^3.1.2",
+    "react-router": "^4.3.1",
+    "react-router-dom": "^4.2.2",
+    "react-router-redux": "^5.0.0-alpha.9",
+    "react-sticky": "^6.0.2",
+    "redux": "^3.7.2",
+    "redux-devtools-extension": "^2.13.2",
+    "redux-saga": "^0.16.0"
+  },
+  "devDependencies": {
+    "@storybook/addon-knobs": "^3.4.8",
+    "@storybook/addons": "^3.4.8",
+    "@storybook/react": "^3.4.8",
+    "chromedriver": "^2.40.0",
+    "mkdirp": "^0.5.1",
+    "nightwatch": "^0.9.21",
+    "react-scripts": "1.1.1",
+    "redux-saga-test-plan": "^3.6.0",
+    "storybook-addon-jsx": "^5.3.0"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "jest": "react-scripts test --env=jsdom",
+    "nightwatch": "nightwatch --config ./src/tests/Nightwatch/nightwatch.conf.js",
+    "storybook": "start-storybook -p 9001 -c .storybook",
+    "// Test commands for the CI": "⬅✌➡",
+    "test": "yarn test:lint && yarn test:unit && yarn test:functional",
+    "test:functional": "yarn nightwatch",
+    "test:unit": "CI=true JEST_JUNIT_OUTPUT=reports/jest-junit.xml react-scripts test --testResultsProcessor ./node_modules/jest-junit --env=jsdom",
+    "test:lint": "eslint ./src --max-warnings=0 --format junit -o reports/eslint-junit.xml",
+    "eject": "react-scripts eject"
+  },
+  "engines": {
+    "node": ">= 8.11.0"
+  }
+}

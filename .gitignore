@@ -1,14 +1,15 @@
 # See https://help.github.com/ignore-files/ for more about ignoring files.
 
 # dependencies
-/node_modules
+node_modules
 
 # testing
 /coverage
 /reports
 
 # production
-/build
+/packages/drupal-admin-ui/build
+/packages/drupal-admin-ui-components/build
 
 # misc
 .DS_Store

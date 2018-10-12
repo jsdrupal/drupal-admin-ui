@@ -1,0 +1,44 @@
+{
+  "name": "drupal-admin-ui-components",
+  "private": true,
+  "version": "0.1.0",
+  "description": "React components that implement Drupal style guide.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jsdrupal/drupal-admin-ui.git"
+  },
+  "main": "build/index.js",
+  "files": [
+    "build"
+  ],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jsdrupal/drupal-admin-ui/issues"
+  },
+  "peerDependencies": {
+    "emotion": "^9.0.2",
+    "react": "^16.4.0",
+    "react-dom": "^16.4.0",
+    "prop-types": "^15.6.1"
+  },
+  "dependencies": {
+    "@material-ui/core": "^3.2.0",
+    "@material-ui/icons": "^3.0.1",
+    "downshift": "^2.0.16",
+    "keycode": "^2.2.0",
+    "react-emotion": "^9.2.5",
+    "react-rte": "^0.16.1",
+    "react-side-effect": "^1.1.5"
+  },
+  "scripts": {
+    "build": "NODE_ENV=production babel src -d build"
+  },
+  "engines": {
+    "node": ">= 8.11.0"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-react-app": "^3.1.2",
+    "webpack": "^4.20.2"
+  }
+}
