@@ -94,6 +94,7 @@ class ContentTable extends React.Component {
                   <Checkbox
                     id="selectAll"
                     onChange={(event, checked) => this.selectAll(checked)}
+                    inputProps={{ 'aria-label': 'select all content' }}
                   />
                 </TableCell>
               }
