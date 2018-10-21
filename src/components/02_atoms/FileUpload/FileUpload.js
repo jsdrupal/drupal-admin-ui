@@ -5,7 +5,7 @@ import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import LinearProgress from '@material-ui/core/LinearProgress';
-import api from './../../../utils/api/api';
+import api from '../../../utils/api/api';
 
 const Container = styled('div')`
   width: 100%;

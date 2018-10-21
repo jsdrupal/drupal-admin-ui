@@ -35,9 +35,11 @@ export default class TaxonomyVocabulary extends React.Component {
       ),
     ]),
   };
+
   static defaultProps = {
     taxonomyVocabulary: null,
   };
+
   state = {
     activeLink: null,
   };
@@ -82,6 +84,7 @@ export default class TaxonomyVocabulary extends React.Component {
       {this.state.activeLink && <Redirect to={this.state.activeLink} />}
     </FormControl>
   );
+
   render() {
     const { taxonomyVocabulary } = this.props;
     return (

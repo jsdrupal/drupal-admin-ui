@@ -66,7 +66,10 @@ class NodeAddForm extends React.Component {
       this.props.schema &&
       this.props.user && (
         <Fragment>
-          <PageTitle>Create {this.props.bundle}</PageTitle>
+          <PageTitle>
+            Create
+            {this.props.bundle}
+          </PageTitle>
           <LoadingBar />
           <NodeForm
             {...this.props}

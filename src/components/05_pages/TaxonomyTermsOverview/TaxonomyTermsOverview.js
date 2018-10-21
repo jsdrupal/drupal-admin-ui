@@ -59,16 +59,20 @@ export default class TaxonomyTermsOverview extends React.Component {
       }),
     ]),
   };
+
   static defaultProps = {
     taxonomyTerms: null,
     taxonomyVocabulary: null,
   };
+
   state = {
     activeLink: null,
   };
+
   componentDidMount() {
     this.props.requestTaxonomyTerms(this.props.vocabulary);
   }
+
   termOperations = tid => (
     <FormControl>
       {/* @todo Extract the select element with links out into a component */}
@@ -83,6 +87,7 @@ export default class TaxonomyTermsOverview extends React.Component {
       {this.state.activeLink && <Redirect to={this.state.activeLink} />}
     </FormControl>
   );
+
   render() {
     const { taxonomyTerms, taxonomyVocabulary } = this.props;
     return (

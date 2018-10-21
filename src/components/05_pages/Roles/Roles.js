@@ -12,9 +12,11 @@ export const Roles = class Roles extends Component {
   componentDidMount() {
     this.props.requestRoles();
   }
+
   componentWillUnmount() {
     this.props.cancelTask();
   }
+
   createTableRows = roles =>
     roles.map(({ attributes: { label, id } }) => ({
       key: `row-${label}`,
@@ -26,6 +28,7 @@ export const Roles = class Roles extends Component {
         ],
       ],
     }));
+
   render = () => {
     if (!this.props.roles) {
       return <LoadingBar />;
