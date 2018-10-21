@@ -335,7 +335,7 @@ class FileUpload extends Component {
           }}
         >
           <Text>
-            <Typography variant="subheading">
+            <Typography variant="subtitle1">
               {multiple
                 ? 'Drop files or click here to upload.'
                 : 'Drop a file or click here to upload.'}
