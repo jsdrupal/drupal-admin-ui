@@ -29,9 +29,11 @@ export default class extends Component {
     ).isRequired,
     requestContentTypes: PropTypes.func.isRequired,
   };
+
   componentDidMount() {
     this.props.requestContentTypes();
   }
+
   render = () => (
     <div className={styles.root}>
       <PageTitle>Add content</PageTitle>

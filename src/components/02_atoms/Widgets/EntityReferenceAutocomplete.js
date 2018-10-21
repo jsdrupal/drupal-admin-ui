@@ -13,7 +13,7 @@ import FormControl from '@material-ui/core/FormControl';
 import WidgetPropTypes from '../../05_pages/NodeForm/WidgetPropTypes';
 import SchemaPropType from '../../05_pages/NodeForm/SchemaPropType';
 
-import api from './../../../utils/api/api';
+import api from '../../../utils/api/api';
 import { getItemsAsArray } from '../../../utils/api/fieldItem';
 
 const styles = {
