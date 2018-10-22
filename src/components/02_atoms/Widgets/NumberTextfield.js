@@ -20,7 +20,7 @@ const NumberTextfield = ({
     onChange={event => onChange(Number(event.target.value))}
     InputProps={{
       ...inputProps,
-      unsigned: inputProps.unsigned.toString(),
+      unsigned: inputProps.unsigned && inputProps.unsigned.toString(),
       endAdornment: inputProps.suffix && (
         <InputAdornment position="end">{inputProps.suffix}</InputAdornment>
       ),
