@@ -9,6 +9,7 @@ const NoMatch = class NoMatch extends Component {
       pathname: PropTypes.string.isRequired,
     }).isRequired,
   };
+
   componentDidMount() {
     // We want to redirect everything without a match back to Drupal.
     if (!Object.keys(routes).includes(this.props.location.pathname)) {
@@ -16,6 +17,7 @@ const NoMatch = class NoMatch extends Component {
         process.env.REACT_APP_DRUPAL_BASE_URL + this.props.location.pathname;
     }
   }
+
   render() {
     return null;
   }

@@ -53,7 +53,7 @@
     "@storybook/addons": "^3.4.8",
     "@storybook/react": "^3.4.8",
     "babel-core": "^6.26.3",
-    "babel-eslint": "^8.2.2",
+    "babel-eslint": "9.0.0",
     "babel-preset-env": "^1.7.0",
     "babel-preset-react-app": "^3.1.2",
     "babel-register": "^6.26.0",
@@ -61,8 +61,8 @@
     "chromedriver": "^2.40.0",
     "enzyme": "^3.3.0",
     "enzyme-adapter-react-16": "^1.1.1",
-    "eslint": "^4.9.0",
-    "eslint-config-airbnb": "^16.1.0",
+    "eslint": "5.6.0",
+    "eslint-config-airbnb": "17.1.0",
     "eslint-config-prettier": "^2.9.0",
     "eslint-plugin-import": "^2.7.0",
     "eslint-plugin-jsx-a11y": "^6.1.0",
@@ -73,7 +73,7 @@
     "nightwatch": "^0.9.21",
     "prettier": "^1.11.1",
     "react-axe": "^3.0.1",
-    "react-scripts": "1.1.1",
+    "react-scripts": "2.0.3",
     "react-test-renderer": "^16.3.0",
     "redux-saga-test-plan": "^3.6.0",
     "storybook-addon-jsx": "^5.3.0"
@@ -92,5 +92,11 @@
     "test:unit": "CI=true JEST_JUNIT_OUTPUT=reports/jest-junit.xml react-scripts test --testResultsProcessor ./node_modules/jest-junit --env=jsdom",
     "test:lint": "eslint ./src --max-warnings=0 --format junit -o reports/eslint-junit.xml",
     "eject": "react-scripts eject"
-  }
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ]
 }

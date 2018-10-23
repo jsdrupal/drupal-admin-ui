@@ -47,6 +47,7 @@ class OpsModalButton extends React.Component {
      */
     enterAction: PropTypes.func.isRequired,
   };
+
   state = {
     open: false,
   };
