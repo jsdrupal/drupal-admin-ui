@@ -13,17 +13,24 @@ import {
 } from '../constants/messages';
 import { ApiError } from '../utils/api/errors';
 
-export const OPEN_DRAWER = 'OPEN_DRAWER';
+interface StateType {
+    application: {
+      contentTypes: string,
+      actions: string,
+    };
+}
+
+export const OPEN_DRAWER: string = 'OPEN_DRAWER';
 export const openDrawer = () => ({
   type: OPEN_DRAWER,
 });
 
-export const CLOSE_DRAWER = 'CLOSE_DRAWER';
+export const CLOSE_DRAWER: string = 'CLOSE_DRAWER';
 export const closeDrawer = () => ({
   type: CLOSE_DRAWER,
 });
 
-export const SET_MESSAGE = 'SET_MESSAGE';
+export const SET_MESSAGE: string = 'SET_MESSAGE';
 
 /**
  *
@@ -32,7 +39,7 @@ export const SET_MESSAGE = 'SET_MESSAGE';
  *  listed at constants/messages.js
  * @returns {{type: string, payload: {message: *, messageSeverity: *}}}
  */
-export const setMessage = (message, messageSeverity) => ({
+export const setMessage = (message: string, messageSeverity: string) => ({
   type: SET_MESSAGE,
   payload: {
     message,
@@ -45,7 +52,7 @@ export const setMessage = (message, messageSeverity) => ({
  *
  * @returns {{type: string, payload: {message: *, messageSeverity: MESSAGE_SEVERITY_ERROR}}}
  */
-export const setErrorMessage = message =>
+export const setErrorMessage = (message: string) =>
   setMessage(message, MESSAGE_SEVERITY_ERROR);
 
 /**
@@ -53,7 +60,7 @@ export const setErrorMessage = message =>
  *
  * @returns {{type: string, payload: {message: *, messageSeverity: MESSAGE_SEVERITY_SUCCESS}}}
  */
-export const setSuccessMessage = message =>
+export const setSuccessMessage = (message: string) =>
   setMessage(message, MESSAGE_SEVERITY_SUCCESS);
 
 /**
@@ -61,7 +68,7 @@ export const setSuccessMessage = message =>
  *
  * @returns {{type: string, payload: {message: *, messageSeverity: MESSAGE_SEVERITY_INFO}}}
  */
-export const setInfoMessage = message =>
+export const setInfoMessage = (message: string) =>
   setMessage(message, MESSAGE_SEVERITY_INFO);
 
 /**
@@ -69,11 +76,11 @@ export const setInfoMessage = message =>
  *
  * @returns {{type: string, payload: {message: *, messageSeverity: MESSAGE_SEVERITY_WARNING}}}
  */
-export const setWarningMessage = message =>
+export const setWarningMessage = (message: string) =>
   setMessage(message, MESSAGE_SEVERITY_WARNING);
 
-export const CLEAR_MESSAGE = 'CLEAR_MESSAGE';
-export const clearMessage = key => ({
+export const CLEAR_MESSAGE: string = 'CLEAR_MESSAGE';
+export const clearMessage = (key: string) => ({
   type: CLEAR_MESSAGE,
   payload: {
     key,
@@ -106,7 +113,7 @@ function* loadMenu() {
       },
     });
   } catch (error) {
-    if (process.env.REACT_APP_DRUPAL_BASE_URL.includes('localhost')) {
+    if (process.env.REACT_APP_DRUPAL_BASE_URL!.includes('localhost')) {
       yield put(
         setErrorMessage(
           'Unable to access data from Drupal. Did you set REACT_APP_DRUPAL_BASE_URL to localhost instead of 127.0.0.1?',
@@ -129,7 +136,7 @@ export const requestContentTypes = () => ({
   payload: {},
 });
 
-export const contentTypesSelector = state => state.application.contentTypes;
+export const contentTypesSelector = (state: StateType) => state.application.contentTypes;
 export const CONTENT_TYPES_LOADED = 'CONTENT_TYPES_LOADED';
 function* loadContentTypes() {
   try {
@@ -151,14 +158,14 @@ function* loadContentTypes() {
 /**
  * Gets all available action types.
  */
-export const ACTIONS_REQUESTED = 'ACTIONS_REQUESTED';
+export const ACTIONS_REQUESTED: string = 'ACTIONS_REQUESTED';
 export const requestActions = () => ({
   type: ACTIONS_REQUESTED,
   payload: {},
 });
 
-export const getActionsCache = state => state.application.actions;
-export const ACTIONS_LOADED = 'ACTIONS_LOADED';
+export const getActionsCache = (state: StateType) => state.application.actions;
+export const ACTIONS_LOADED: string = 'ACTIONS_LOADED';
 function* loadActions() {
   try {
     let actions = { data: yield select(getActionsCache) };
@@ -172,7 +179,7 @@ function* loadActions() {
       },
     });
   } catch (error) {
-    const errorMessage = yield ApiError.errorToHumanString(error);
+    const errorMessage: string = yield ApiError.errorToHumanString(error);
     yield put(setErrorMessage(errorMessage));
   }
 }

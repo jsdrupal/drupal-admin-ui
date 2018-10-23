@@ -1,8 +1,42 @@
 import qs from 'qs';
 import { ApiError } from './errors';
 
+interface NodeType {
+  attribute: {
+    nid: string,
+    revision_timestamp: string,
+    changes: boolean,
+  },
+  relationships: {
+    revision_uid: string,
+    type: string,
+    uid: string,
+  }
+  id: string,
+  type: string,
+}
+
+export interface ParametersType {
+  body: string,
+  bundle: string,
+  entityTypeId: string,
+  fileName: string,
+  role: {
+    id: string,
+  }
+  node: NodeType,
+};
+
+export interface OptionsType {
+  credientials?: string,
+  header?: {
+    Accept: Array<string>,
+  },
+  text?: boolean,
+};
+
 async function api(
-  endpoint,
+  endpoint: string,
   { queryString = null, parameters = {}, options = {} } = {},
 ) {
   let url;

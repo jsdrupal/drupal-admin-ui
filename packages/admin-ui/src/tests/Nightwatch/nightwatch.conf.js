@@ -6,7 +6,7 @@ require('babel-register');
 process.env.BABEL_ENV = 'nightwatch';
 process.env.NODE_ENV = 'nightwatch';
 // Ensure environment variables are read.
-require('react-scripts/config/env');
+require('react-scripts-ts/config/env');
 
 const chromeArgs = ['--disable-notifications'];
 if (

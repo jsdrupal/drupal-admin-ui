@@ -18,18 +18,17 @@ import Button from '@material-ui/core/Button';
 import AddIcon from '@material-ui/icons/Add';
 
 import FormControl from '@material-ui/core/FormControl';
-import InputLabel from '@material-ui/core/InputLabel';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem/MenuItem';
 
 import PageTitle from '../../02_atoms/PageTitle';
 
 const styles = {
-  action: css`
-    margin-left: 0rem;
-    margin-bottom: 0.5rem;
-    min-width: 5rem;
-    max-width: 15rem;
+  addButton: css`
+    margin: 0.5rem;
+    position: fixed;
+    right: 0;
+    bottom: 0;
   `,
 };
 
@@ -75,13 +74,12 @@ export default class TaxonomyTermsOverview extends React.Component {
   }
 
   termOperations = tid => (
-    <FormControl className={styles.action}>
+    <FormControl>
       {/* @todo Extract the select element with links out into a component */}
-      <InputLabel htmlFor="action">Actions</InputLabel>
       <Select
         autoWidth
         onChange={e => this.setState({ activeLink: e.target.value })}
-        value={this.state.activeLink || ''}
+        value={this.state.activeLink}
       >
         <MenuItem value={`/taxonomy/term/${tid}/edit`}>Edit</MenuItem>
         <MenuItem value={`/taxonomy/term/${tid}/delete`}>Delete</MenuItem>

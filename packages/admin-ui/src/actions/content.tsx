@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import {
   put,
   call,
@@ -15,6 +15,11 @@ import {
 import { push } from 'react-router-redux';
 
 import api from '../utils/api/api';
+// import {
+//   OptionsType,
+//   ParametersType
+// } from '../utils/api/api';
+
 import {
   contentTypesSelector,
   setErrorMessage,
@@ -26,6 +31,24 @@ import MessageSave from '../components/01_subatomics/MessageHelpers/MessageSave'
 import { extractContentType, mapContentTypeToName } from '../utils/api/content';
 import { ApiError } from '../utils/api/errors';
 
+
+interface ActionType {
+  payload: {
+    options: {
+      contentTypes: [],
+      page: {
+        offset: number,
+        limit: number,
+      },
+      status: string,
+      sort: {
+        path: string,
+        direction: string,
+      },
+      title: string,
+    }
+  };
+}
 export const CONTENT_REQUESTED = 'CONTENT_REQUESTED';
 export const requestContent = (
   options = { contentTypes: [], status: null },
@@ -35,7 +58,7 @@ export const requestContent = (
 });
 
 export const CONTENT_LOADED = 'CONTENT_LOADED';
-function* loadContent(action) {
+function* loadContent(action: ActionType) {
   const title =
     (action.payload.options && action.payload.options.title) || null;
   const contentTypes =
@@ -50,6 +73,9 @@ function* loadContent(action) {
 
     const queryString = {
       filter: {},
+      page: {},
+      sort: {},
+      include: {},
     };
 
     if (page) {
