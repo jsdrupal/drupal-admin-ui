@@ -36,9 +36,10 @@ export interface OptionsType {
 };
 
 async function api(
-  endpoint: string,
-  { queryString = null, parameters = {}, options = {} } = {},
-) {
+  endpoint:string,
+  ...args,
+) : Promise<any>{
+  const{options, parameters} = args
   let url;
   options.credentials = 'include';
   options.headers = options.headers || {};

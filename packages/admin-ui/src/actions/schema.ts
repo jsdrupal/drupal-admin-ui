@@ -10,13 +10,13 @@ import { setErrorMessage } from './application';
 import { ApiError } from '../utils/api/errors';
 
 export const UI_SCHEMA_REQUESTED = 'UI_SCHEMA_REQUESTED';
-export const requestUiSchema = ({ entityTypeId, bundle }) => ({
+export const requestUiSchema = ({ entityTypeId, bundle }: {entityTypeId:string, bundle:string}) => ({
   type: UI_SCHEMA_REQUESTED,
   payload: { entityTypeId, bundle },
 });
 
 export const UI_SCHEMA_LOADED = 'UI_SCHEMA_LOADED';
-function* loadUiSchema(action) {
+function* loadUiSchema(action: any) {
   const { entityTypeId, bundle } = action.payload;
   try {
     yield put(resetLoading());
@@ -63,13 +63,13 @@ function* loadUiSchema(action) {
 }
 
 export const SCHEMA_REQUESTED = 'SCHEMA_REQUESTED';
-export const requestSchema = ({ entityTypeId, bundle }) => ({
+export const requestSchema = ({ entityTypeId, bundle } : {entityTypeId: string, bundle: string}) => ({
   type: SCHEMA_REQUESTED,
   payload: { entityTypeId, bundle },
 });
 
 export const SCHEMA_LOADED = 'SCHEMA_LOADED';
-function* loadSchema(action) {
+function* loadSchema(action: any) {
   const { entityTypeId, bundle } = action.payload;
   try {
     yield put(resetLoading());
@@ -97,13 +97,13 @@ function* loadSchema(action) {
 }
 
 export const SCHEMA_BY_ENTITY_ID_REQUESTED = 'SCHEMA_BY_ENTITY_ID_REQUESTED';
-export const requestSchemaByEntityId = ({ entityTypeId, entityId }) => ({
+export const requestSchemaByEntityId = ({ entityTypeId, entityId } : {entityTypeId: string, entityId: string}) => ({
   type: SCHEMA_BY_ENTITY_ID_REQUESTED,
   payload: { entityTypeId, entityId },
 });
 
 export const SCHEMA_BY_ENTITY_ID_LOADED = 'SCHEMA_BY_ENTITY_ID_LOADED';
-function* loadSchemaByEntityId(action) {
+function* loadSchemaByEntityId(action: any) {
   const { entityTypeId, entityId } = action.payload;
   try {
     yield put(resetLoading());

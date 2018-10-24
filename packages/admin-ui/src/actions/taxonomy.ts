@@ -15,13 +15,13 @@ export const requestTaxonomyVocabulary = () => ({
   payload: {},
 });
 
-export const requestTaxonomyVocabularyById = vocabulary => ({
+export const requestTaxonomyVocabularyById = (vocabulary: any) => ({
   type: TAXONOMY_VOCABULARY_REQUESTED,
   payload: { vocabulary },
 });
 
 export const TAXONOMY_VOCABULARY_LOADED = 'TAXONOMY_VOCABULARY_LOADED';
-function* loadTaxonomyVocabulary(action) {
+function* loadTaxonomyVocabulary(action: any) {
   try {
     yield put(resetLoading());
     yield put(showLoading());
@@ -56,18 +56,18 @@ function* loadTaxonomyVocabulary(action) {
 }
 
 export const TAXONOMY_TERMS_REQUESTED = 'TAXONOMY_TERMS_REQUESTED';
-export const requestTaxonomyTerms = vocabulary => ({
+export const requestTaxonomyTerms = (vocabulary: any) => ({
   type: TAXONOMY_TERMS_REQUESTED,
   payload: { vocabulary },
 });
 
-export const getTaxonomyVocabularyById = (taxonomyVocabularyList, vocabulary) =>
+export const getTaxonomyVocabularyById = (taxonomyVocabularyList: Array<any>, vocabulary: string) =>
   taxonomyVocabularyList
     .filter(({ attributes: { vid } }) => vid === vocabulary)
     .shift();
 
 export const TAXONOMY_TERMS_LOADED = 'TAXONOMY_TERMS_LOADED';
-function* loadTaxonomyTerms(action) {
+function* loadTaxonomyTerms(action: any) {
   try {
     const {
       payload: { vocabulary },

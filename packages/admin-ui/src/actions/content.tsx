@@ -15,10 +15,6 @@ import {
 import { push } from 'react-router-redux';
 
 import api from '../utils/api/api';
-// import {
-//   OptionsType,
-//   ParametersType
-// } from '../utils/api/api';
 
 import {
   contentTypesSelector,
@@ -31,24 +27,39 @@ import MessageSave from '../components/01_subatomics/MessageHelpers/MessageSave'
 import { extractContentType, mapContentTypeToName } from '../utils/api/content';
 import { ApiError } from '../utils/api/errors';
 
-
-interface ActionType {
-  payload: {
-    options: {
-      contentTypes: [],
-      page: {
-        offset: number,
-        limit: number,
-      },
-      status: string,
-      sort: {
-        path: string,
-        direction: string,
-      },
-      title: string,
-    }
+interface ContentType {
+    id: string,
+    type: string,
+    attributes: {
+      promote?: boolean,
+      sticky?: boolean,
+      status?: boolean,
+    },
+    links: Array<string>,
   };
-}
+
+// type ContentAction = {
+//   attributes?: {
+//     plugin: string,
+//   },
+//   payload: {
+//     uid: string,
+//     options?: {
+//       contentTypes: Array<any>,
+//       page?: {
+//         offset: number,
+//         limit: number,
+//       },
+//       status?: string,
+//       sort?: {
+//         path: string,
+//         direction: string,
+//       },
+//       title?: string,
+//     }
+//   }
+// }
+
 export const CONTENT_REQUESTED = 'CONTENT_REQUESTED';
 export const requestContent = (
   options = { contentTypes: [], status: null },
@@ -58,7 +69,7 @@ export const requestContent = (
 });
 
 export const CONTENT_LOADED = 'CONTENT_LOADED';
-function* loadContent(action: ActionType) {
+function* loadContent(action: any) {
   const title =
     (action.payload.options && action.payload.options.title) || null;
   const contentTypes =
@@ -105,7 +116,7 @@ function* loadContent(action: ActionType) {
         typearticle: {},
         typepage: {},
         ...contentTypes.reduce(
-          (accumulator, contentType) => ({
+          (accumulator: any, contentType: string) => ({
             ...accumulator,
             [`type${contentType}`]: {
               condition: {
@@ -151,13 +162,13 @@ function* loadContent(action: ActionType) {
 }
 
 export const CONTENT_SINGLE_REQUESTED = 'CONTENT_SINGLE_REQUESTED';
-export const requestSingleContent = nid => ({
+export const requestSingleContent = (nid: string) => ({
   type: CONTENT_SINGLE_REQUESTED,
   payload: { nid },
 });
 
 export const CONTENT_SINGLE_LOADED = 'CONTENT_SINGLE_LOADED';
-function* loadSingleContent(action) {
+function* loadSingleContent(action: any) {
   const {
     payload: { nid },
   } = action;
@@ -188,19 +199,21 @@ function* loadSingleContent(action) {
 }
 
 export const CONTENT_ADD_CHANGE = 'CONTENT_ADD_CHANGE';
-export const contentAddChange = (bundle, entity) => ({
+export const contentAddChange = (bundle: string, entity: string) => ({
   type: CONTENT_ADD_CHANGE,
   payload: { bundle, entity },
 });
 
 export const CONTENT_EDIT_CHANGE = 'CONTENT_EDIT_CHANGE';
-export const contentEditChange = (bundle, entity) => ({
+export const contentEditChange = (bundle: string, entity: string) => ({
   type: CONTENT_EDIT_CHANGE,
   payload: { bundle, entity },
 });
 
+
+
 export const CONTENT_SAVE = 'CONTENT_SAVE';
-export const contentSave = content => ({
+export const contentSave = (content: ContentType) => ({
   type: CONTENT_SAVE,
   payload: {
     content,
@@ -208,7 +221,7 @@ export const contentSave = content => ({
 });
 
 export const CONTENT_ADD = 'CONTENT_ADD';
-export const contentAdd = (content, bundle) => ({
+export const contentAdd = (content: ContentType, bundle: string) => ({
   type: CONTENT_ADD,
   payload: {
     content,
@@ -217,7 +230,7 @@ export const contentAdd = (content, bundle) => ({
 });
 
 export const CONTENT_DELETE = 'CONTENT_DELETE';
-export const contentDelete = content => ({
+export const contentDelete = (content: ContentType) => ({
   type: CONTENT_DELETE,
   payload: {
     content,
@@ -225,7 +238,7 @@ export const contentDelete = content => ({
 });
 
 export const ACTION_EXECUTE = 'ACTION_EXECUTE';
-export const actionExecute = (action, nids) => ({
+export const actionExecute = (action: string, nids: Array<string>) => ({
   type: ACTION_EXECUTE,
   payload: {
     action,
@@ -243,16 +256,23 @@ export const SUPPORTED_ACTIONS = [
   'entity:unpublish_action:node',
 ];
 
+// type executeActionType = {
+//   attributes: {
+//     plugin: string,
+//   }
+// };
+
 // @todo How do we update the store with the new values of the nodes
 //    or the deleted nodes, see https://github.com/jsdrupal/drupal-admin-ui/issues/131
 // @todo Once jsonapi supports bulk operations, leverage it.
-export function* executeAction({ payload: { action, nids } }) {
+export function* executeAction(
+{ payload: { action, nids} }: any) {
   try {
-    const contentList = yield select(state => state.content.contentList);
+    const contentList = yield select((state: {content:{contentList: Array<string>}}) => state.content.contentList);
     const actions = nids
-      .map(nid => {
+      .map((nid: string) => {
         const node = contentList.filter(
-          contentItem => String(contentItem.attributes.nid) === nid,
+          (contentItem:{attributes:{nid: string}}) => String(contentItem.attributes.nid) === nid,
         )[0];
 
         let saveAction;
@@ -337,7 +357,7 @@ export function* executeAction({ payload: { action, nids } }) {
         }
         return saveAction;
       })
-      .filter(x => x);
+      .filter((x:any) => x);
     yield all(actions);
   } catch (error) {
     const errorMessage = yield ApiError.errorToHumanString(error);
@@ -347,7 +367,7 @@ export function* executeAction({ payload: { action, nids } }) {
   }
 }
 
-function* saveContent({ payload: { content } }) {
+function* saveContent({ payload: { content } } :any) {
   try {
     yield put(resetLoading());
     yield put(showLoading());
@@ -384,7 +404,7 @@ function* saveContent({ payload: { content } }) {
   }
 }
 
-function* addContent({ payload: { content } }) {
+function* addContent({ payload: { content } }: any) {
   try {
     yield put(resetLoading());
     yield put(showLoading());
@@ -412,7 +432,7 @@ function* addContent({ payload: { content } }) {
   }
 }
 
-function* deleteContent({ payload: { content } }) {
+function* deleteContent({ payload: { content } }: any) {
   try {
     yield put(resetLoading());
     yield put(showLoading());
@@ -426,13 +446,13 @@ function* deleteContent({ payload: { content } }) {
 }
 
 export const USER_REQUESTED = 'USER_REQUESTED';
-export const requestUser = uid => ({
+export const requestUser = (uid: string) => ({
   type: USER_REQUESTED,
   payload: { uid },
 });
 
 export const USER_LOADED = 'USER_LOADED';
-function* loadUser(action) {
+function* loadUser(action: any) {
   const {
     payload: { uid },
   } = action;

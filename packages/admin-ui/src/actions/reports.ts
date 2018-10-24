@@ -9,7 +9,7 @@ import { setErrorMessage } from './application';
 import { ApiError } from '../utils/api/errors';
 
 export const DBLOG_COLLECTION_REQUEST = 'DBLOG_COLLECTION_REQUEST';
-export const requestDblogCollection = options => ({
+export const requestDblogCollection = (options: any) => ({
   type: DBLOG_COLLECTION_REQUEST,
   payload: { options },
 });
@@ -17,7 +17,7 @@ export const requestDblogCollection = options => ({
 export const DBLOG_FILTER_UPDATED = 'DBLOG_FILTER_UPDATED';
 
 export const DBLOG_COLLECTION_LOADED = 'DBLOG_COLLECTION_LOADED';
-export function* loadDblog({ payload: { options } }) {
+export function* loadDblog({ payload: { options } }: any) {
   try {
     const queryString = {
       sort: options.sort || '',
@@ -32,7 +32,7 @@ export function* loadDblog({ payload: { options } }) {
       filter: {
         ...(options.types && Object.keys(options.types).length
           ? options.types.reduce(
-              (acc, cur) => ({
+              (acc: any, cur:string) => ({
                 ...acc,
                 [`type${cur}`]: {
                   condition: {
@@ -47,7 +47,7 @@ export function* loadDblog({ payload: { options } }) {
           : {}),
         ...(options.severities && Object.keys(options.severities).length
           ? options.severities.reduce(
-              (acc, cur) => ({
+              (acc: any, cur: string) => ({
                 ...acc,
                 [`severity${cur}`]: {
                   condition: {

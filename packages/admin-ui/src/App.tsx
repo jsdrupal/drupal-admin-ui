@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { Route, Switch, withRouter } from 'react-router-dom';
 import createBrowserHistory from 'history/createBrowserHistory';
-import deepMerge from 'deepmerge';
-import { createStore, applyMiddleware, combineReducers } from 'redux';
+import * as deepMerge from 'deepmerge';
+import { createStore, applyMiddleware, combineReducers, Store } from 'redux';
 import {
   ConnectedRouter,
   routerReducer,
@@ -43,38 +43,48 @@ export const localStorageName = 'drupalAdminUiReduxState';
  * Restore from local storage.
  */
 const restoreState = () => {
+  let storedStateStr: string = '{}';
   let storedState = {};
+
   if (typeof window === 'object') {
     try {
       // Test for Safari private browsing mode. This will throw an error if it can't set an item.
-      localStorage.setItem('localStorageTest', true);
-      storedState = localStorage.getItem(localStorageName) || '{}';
+      localStorage.setItem('localStorageTest', 'true');
+      storedStateStr = localStorage.getItem(localStorageName) || '{}';
     } catch (e) {
       // In case like Safari private browing mode we don't support any restoring.
       // Also note: enzyme has window but no Cookie set.
-      storedState =
-        (window.Cookie &&
-          decodeURIComponent(window.Cookie.get(localStorageName))) ||
-        {};
+      // storedState =
+      //   (window.Cookie &&
+      //     decodeURIComponent(window.Cookie.get(localStorageName))) ||
+      //   {};
     }
   }
 
   try {
-    storedState = JSON.parse(storedState);
+    storedState = JSON.parse(storedStateStr);
   } catch (e) {
     storedState = {};
   }
   return storedState;
 };
 
-export const localStorageStore = state => ({
+interface StateInterface {
+  content:{
+    restorableContentAddByBundle: string,
+    restorableContentEditById: string,
+  }
+  getState: () => any;
+};
+
+export const localStorageStore = (state: StateInterface) => ({
   content: {
     restorableContentAddByBundle: state.content.restorableContentAddByBundle,
     restorableContentEditById: state.content.restorableContentEditById,
   },
 });
 
-const storeState = store => {
+const storeState = (store: StateInterface) => {
   // Persist state.
   const state = store.getState();
 
@@ -87,7 +97,7 @@ const storeState = store => {
   }
 };
 
-const store = createStore(
+const store: Store<any> = createStore(
   combineReducers({ ...reducers, router: routerReducer }),
   deepMerge(initialState, restoreState()),
   composeWithDevTools(applyMiddleware(sagaMiddleware, middleware)),
