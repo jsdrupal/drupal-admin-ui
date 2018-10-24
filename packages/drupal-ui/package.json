@@ -24,10 +24,9 @@
   "dependencies": {
     "@material-ui/core": "^3.2.0",
     "@material-ui/icons": "^3.0.1",
-    "downshift": "^2.0.16",
-    "keycode": "^2.2.0",
+    "enzyme": "^3.3.0",
+    "enzyme-adapter-react-16": "^1.1.1",
     "react-emotion": "^9.2.5",
-    "react-rte": "^0.16.1",
     "react-side-effect": "^1.1.5"
   },
   "scripts": {

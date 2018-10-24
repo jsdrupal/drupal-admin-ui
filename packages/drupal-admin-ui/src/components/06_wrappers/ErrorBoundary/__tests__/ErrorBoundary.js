@@ -1,8 +1,8 @@
 import React from 'react';
 import { mount } from 'enzyme';
 
-import ErrorBoundary from './ErrorBoundary';
-import InlineMessage from '../../../../../drupal-ui/src/InlineMessage/InlineMessage';
+import ErrorBoundary from '../ErrorBoundary';
+import InlineMessage from '../../../../../../drupal-ui/src/InlineMessage/InlineMessage';
 
 describe('ErrorBoundary', () => {
   // Prevent errors from being printed in the test console output since we are

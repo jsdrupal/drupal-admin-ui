@@ -1,4 +1,4 @@
-import { filterPermissions } from './Permissions';
+import { filterPermissions } from '../Permissions';
 
 const permissions = [
   {

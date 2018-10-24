@@ -14,7 +14,7 @@ import Button from '@material-ui/core/Button';
 import DeleteIcon from '@material-ui/icons/Delete';
 
 import WidgetPropTypes from '../../05_pages/NodeForm/WidgetPropTypes';
-import FileUpload from '../../../../../drupal-ui/src/FileUpload/FileUpload';
+import FileUpload from '../FileUpload/FileUpload';
 import {
   deleteItemById,
   getItemsAsArray,

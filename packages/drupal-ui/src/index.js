@@ -1,4 +1,6 @@
-export { default as FileUpload } from './FileUpload';
+export {
+  default as FileUpload,
+} from '../../drupal-admin-ui/src/components/02_atoms/FileUpload';
 export { default as InlineMessage } from './InlineMessage';
 export { default as Loading } from './Loading';
 export { default as MultipleFields } from './MultipleFields';

@@ -10,8 +10,8 @@ import Chip from '@material-ui/core/Chip';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 
-import WidgetPropTypes from 'drupal-admin-ui/src/components/05_pages/NodeForm/WidgetPropTypes';
-import SchemaPropType from 'drupal-admin-ui/src/components/05_pages/NodeForm/SchemaPropType';
+import WidgetPropTypes from '../../05_pages/NodeForm/WidgetPropTypes';
+import SchemaPropType from '../../05_pages/NodeForm/SchemaPropType';
 
 import api from '../../../utils/api/api';
 import { getItemsAsArray } from '../../../utils/api/fieldItem';

@@ -2,7 +2,7 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import LoadingBar from 'react-redux-loading-bar';
 
-import { Roles } from './Roles';
+import { Roles } from '../Roles';
 
 describe('Roles', () => {
   it('tasks are deployed correctly on mount on unmount', () => {
