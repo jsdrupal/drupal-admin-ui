@@ -101,12 +101,14 @@ class Content extends Component {
       next: PropTypes.string,
     }),
   };
+
   static defaultProps = {
     contentList: [],
     includes: {},
     actions: [],
     links: {},
   };
+
   state = {
     contentTypes: [],
     status: null,
@@ -119,14 +121,18 @@ class Content extends Component {
     checked: {},
     dialogVisibility: false,
   };
+
   componentDidMount() {
     this.props.requestContentTypes();
     this.props.requestContent(this.state);
     this.props.requestActions();
   }
+
   dialogOpen = () => this.setState({ dialogVisibility: true });
+
   dialogClose = () =>
     this.setState({ dialogVisibility: false, action: null, checked: {} });
+
   executeAction = () => {
     const matchingAction = this.props.actions.filter(
       action => action.attributes.id === this.state.action,
@@ -134,17 +140,19 @@ class Content extends Component {
     this.props.actionExecute(matchingAction, Object.keys(this.state.checked));
     this.setState({ checked: {}, action: null });
   };
+
   tableSortHandler = (path, direction) => () => {
     this.setState(
-      {
+      prevState => ({
         sort: { path, direction },
-        page: { offset: 0, limit: this.state.page.limit },
-      },
+        page: { offset: 0, limit: prevState.page.limit },
+      }),
       () => {
         this.props.requestContent(this.state);
       },
     );
   };
+
   pageChangeHandler = (event, page) => {
     this.setState(
       ({ page: { limit } }) => ({

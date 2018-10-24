@@ -44,7 +44,9 @@
     "chromedriver": "^2.40.0",
     "mkdirp": "^0.5.1",
     "nightwatch": "^0.9.21",
-    "react-scripts": "1.1.1",
+    "react-axe": "^3.0.1",
+    "react-scripts": "2.0.3",
+    "react-test-renderer": "^16.3.0",
     "redux-saga-test-plan": "^3.6.0",
     "storybook-addon-jsx": "^5.3.0"
   },
@@ -63,5 +65,11 @@
   },
   "engines": {
     "node": ">= 8.11.0"
-  }
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ]
 }

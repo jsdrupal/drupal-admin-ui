@@ -32,18 +32,22 @@ const Permissions = class Permissions extends Component {
       }).isRequired,
     }).isRequired,
   };
+
   state = {
     loaded: false,
     rawPermissions: [],
     renderablePermissions: [],
     working: false,
   };
+
   componentDidMount() {
     this.cancelFetch = this.fetchData();
   }
+
   componentWillUnmount() {
     this.cancelFetch();
   }
+
   onPermissionCheck = (roleName, permission) => {
     this.setState(prevState => ({
       changedRoles: [...new Set(prevState.changedRoles).add(roleName).values()],
@@ -51,6 +55,7 @@ const Permissions = class Permissions extends Component {
     }));
     this.props.clearMessage();
   };
+
   fetchData = () =>
     makeCancelable(
       Promise.all([api('permissions'), api('roles')])
@@ -72,9 +77,11 @@ const Permissions = class Permissions extends Component {
                 : roles.sort((a, b) => {
                     if (a.attributes.is_admin && b.attributes.is_admin) {
                       return a.attributes.id - b.attributes.id;
-                    } else if (a.attributes.is_admin) {
+                    }
+                    if (a.attributes.is_admin) {
                       return 1;
-                    } else if (b.attributes.is_admin) {
+                    }
+                    if (b.attributes.is_admin) {
                       return -1;
                     }
                     return a.attributes.id - b.attributes.id;
@@ -84,6 +91,7 @@ const Permissions = class Permissions extends Component {
         )
         .catch(err => this.setState({ loaded: false, err })),
     );
+
   togglePermission = (permission, roleName, roles) => {
     const roleIndex = roles.map(role => role.attributes.id).indexOf(roleName);
     const role = roles[roleIndex];
@@ -96,6 +104,7 @@ const Permissions = class Permissions extends Component {
     roles[roleIndex] = role;
     return roles;
   };
+
   groupPermissions = permissions =>
     Object.entries(
       permissions.reduce((acc, cur) => {
@@ -107,6 +116,7 @@ const Permissions = class Permissions extends Component {
         return acc;
       }, {}),
     );
+
   createTableRows = (groupedPermissions, roles) =>
     [].concat(
       ...groupedPermissions.map(
@@ -159,6 +169,7 @@ const Permissions = class Permissions extends Component {
         ],
       ),
     );
+
   handleKeyPress = event => {
     const input = event.target.value;
     this.setState(prevState => ({
@@ -166,6 +177,7 @@ const Permissions = class Permissions extends Component {
       renderablePermissions: filterPermissions(input, prevState.rawPermissions),
     }));
   };
+
   saveRoles = () => {
     this.setState(
       prevState => ({ ...prevState, working: true }),
@@ -192,6 +204,7 @@ const Permissions = class Permissions extends Component {
         }),
     );
   };
+
   render() {
     if (this.state.err) {
       throw new Error('Error while loading page');
@@ -211,6 +224,7 @@ const Permissions = class Permissions extends Component {
                 onKeyDown={this.handleKeyPress}
               />
               <button
+                type="submit"
                 key="button-save-roles"
                 onClick={this.saveRoles}
                 className={styles.saveButton}

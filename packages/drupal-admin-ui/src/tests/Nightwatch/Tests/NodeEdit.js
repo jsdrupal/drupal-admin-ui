@@ -22,7 +22,7 @@ module.exports = {
 
     // Clear the `#title` value
     browser
-      .clearValue('#title')
+      .betterClearValue('#title')
       .expect.element('#title')
       .value.to.equal('');
 

@@ -27,6 +27,7 @@ class Dblog extends Component {
     }),
     next: PropTypes.bool,
   };
+
   static defaultProps = {
     entries: null,
     availableTypes: null,
@@ -36,12 +37,14 @@ class Dblog extends Component {
     },
     next: true,
   };
+
   componentDidMount() {
     this.props.requestDblogCollection({
       ...this.props.filterOptions,
       sort: '-timestamp',
     });
   }
+
   generateTableRows = entries =>
     entries.map(({ wid, type, messageFormattedPlain, timestamp }) => ({
       key: String(wid),
@@ -61,6 +64,7 @@ class Dblog extends Component {
         [`user-${wid}`, ''],
       ],
     }));
+
   severityFilterHandler = e =>
     this.props.requestDblogCollection({
       types: null,
@@ -70,6 +74,7 @@ class Dblog extends Component {
         .filter(option => option.selected)
         .map(option => option.value),
     });
+
   typeFilterHandler = e =>
     this.props.requestDblogCollection({
       severities: null,
@@ -79,18 +84,21 @@ class Dblog extends Component {
         .filter(option => option.selected)
         .map(option => option.value),
     });
+
   nextPage = () =>
     this.props.requestDblogCollection({
       severities: null,
       ...this.props.filterOptions,
       offset: (this.props.filterOptions.offset || 0) + 50,
     });
+
   previousPage = () =>
     this.props.requestDblogCollection({
       severities: null,
       ...this.props.filterOptions,
       offset: (this.props.filterOptions.offset || 0) - 50,
     });
+
   render() {
     if (!this.props.entries) {
       return <LoadingBar />;
@@ -135,12 +143,17 @@ class Dblog extends Component {
           ))}
         </select>
         <button
+          type="button"
           onClick={this.previousPage}
           disabled={this.props.filterOptions.offset <= 0}
         >
           prev
         </button>
-        <button onClick={this.nextPage} disabled={!this.props.next}>
+        <button
+          type="button"
+          onClick={this.nextPage}
+          disabled={!this.props.next}
+        >
           next
         </button>
         <Table>
