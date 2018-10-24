@@ -12,13 +12,13 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Provides a rest resource for listing available permissions.
+ * Provides a rest resource for listing available permissionsTest.
  *
  * @RestResource(
  *   id = "permissions_collection",
- *   label = @Translation("Available permissions"),
+ *   label = @Translation("Available permissionsTest"),
  *   uri_paths = {
- *     "canonical" = "/admin-api/permissions"
+ *     "canonical" = "/admin-api/permissionsTest"
  *   }
  * )
  */
@@ -83,7 +83,7 @@ class PermissionsCollectionResource extends ResourceBase {
       $plugin_definition,
       $container->getParameter('serializer.formats'),
       $container->get('logger.factory')->get('rest'),
-      $container->get('user.permissions'),
+      $container->get('user.permissionsTest'),
       $container->get('renderer'),
       $container->get('extension.list.module')
     );
@@ -93,25 +93,25 @@ class PermissionsCollectionResource extends ResourceBase {
    * Responds to GET requests.
    *
    * @return \Drupal\rest\ResourceResponse
-   *   The response containing the list of available permissions.
+   *   The response containing the list of available permissionsTest.
    */
   public function get() {
     $context = new RenderContext();
 
-    $permissions = $this->renderer->executeInRenderContext($context, function () {
-      $permissions = $this->permissionHandler->getPermissions();
-      foreach ($permissions as $id => $permission) {
-        $permissions[$id]['id'] = $id;
-        $permissions[$id]['provider_label'] = $this->moduleExtensionList->getName($permissions[$id]['provider']);
+    $permissionsTest = $this->renderer->executeInRenderContext($context, function () {
+      $permissionsTest = $this->permissionHandler->getPermissions();
+      foreach ($permissionsTest as $id => $permission) {
+        $permissionsTest[$id]['id'] = $id;
+        $permissionsTest[$id]['provider_label'] = $this->moduleExtensionList->getName($permissionsTest[$id]['provider']);
         // @todo Make a helper method to automatically render elements.
-        if (is_array($permissions[$id]['description'])) {
-          $permissions[$id]['description'] = $this->renderer->render($permissions[$id]['description']);
+        if (is_array($permissionsTest[$id]['description'])) {
+          $permissionsTest[$id]['description'] = $this->renderer->render($permissionsTest[$id]['description']);
         }
       };
-      return array_values($permissions);
+      return array_values($permissionsTest);
     });
 
-    $response = new ResourceResponse($permissions);
+    $response = new ResourceResponse($permissionsTest);
     $response->addCacheableDependency($context);
     return $response;
   }
@@ -119,7 +119,7 @@ class PermissionsCollectionResource extends ResourceBase {
   /**
    * {@inheritdoc}
    */
-  public function permissions() {
+  public function permissionsTest() {
     return [];
   }
 
@@ -128,7 +128,7 @@ class PermissionsCollectionResource extends ResourceBase {
    */
   protected function getBaseRoute($canonical_path, $method) {
     $route = parent::getBaseRoute($canonical_path, $method);
-    $route->addRequirements(['_permission' => 'administer permissions']);
+    $route->addRequirements(['_permission' => 'administer permissionsTest']);
     return $route;
   }
 

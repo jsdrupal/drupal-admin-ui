@@ -85,7 +85,7 @@ abstract class SimpleConfigTestBase extends ResourceTestBase {
     $this->setUpAuthorization('GET');
 
     $response = $this->request('GET', $url, $request_options);
-    $this->assertResourceResponse(200, FALSE, $response, $this->getExpectedGetCacheTags(), ['user.permissions'], FALSE, 'MISS');
+    $this->assertResourceResponse(200, FALSE, $response, $this->getExpectedGetCacheTags(), ['user.permissionsTest'], FALSE, 'MISS');
     $response_data = Json::decode((string) $response->getBody());
     $this->assertEquals($config->get(), $response_data);
   }
@@ -130,7 +130,7 @@ abstract class SimpleConfigTestBase extends ResourceTestBase {
   }
 
   /**
-   * Gets the permissions associated with the REST resource.
+   * Gets the permissionsTest associated with the REST resource.
    *
    * @return string
    *   The permission.

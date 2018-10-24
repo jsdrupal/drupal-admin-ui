@@ -9,6 +9,8 @@ build
 # testing
 /coverage
 /reports
+packages/*/coverage
+packages/*/reports
 
 # misc
 .DS_Store

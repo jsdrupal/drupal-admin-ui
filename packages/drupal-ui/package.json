@@ -24,20 +24,20 @@
   "dependencies": {
     "@material-ui/core": "^3.2.0",
     "@material-ui/icons": "^3.0.1",
-    "enzyme": "^3.3.0",
-    "enzyme-adapter-react-16": "^1.1.1",
     "react-emotion": "^9.2.5",
     "react-side-effect": "^1.1.5"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-react-app": "^3.1.2",
+    "enzyme": "^3.3.0",
+    "enzyme-adapter-react-16": "^1.1.1",
+    "webpack": "^4.20.2"
   },
   "scripts": {
     "build": "NODE_ENV=production babel src -d build"
   },
   "engines": {
     "node": ">= 8.11.0"
-  },
-  "devDependencies": {
-    "babel-cli": "^6.26.0",
-    "babel-preset-react-app": "^3.1.2",
-    "webpack": "^4.20.2"
   }
 }

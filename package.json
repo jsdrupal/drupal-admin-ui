@@ -49,7 +49,9 @@
   "scripts": {
     "eslint": "eslint . --max-warnings=0 --fix",
     "prettier": "prettier --write 'packages/**/*.js'",
-    "test:lint": "eslint . --max-warnings=0 --format junit -o reports/eslint-junit.xml"
+    "test": "yarn test:lint && yarn test:unit && yarn test:functional",
+    "test:lint": "eslint . --max-warnings=0 --format junit -o reports/eslint-junit.xml",
+    "test:unit": "yarn workspace drupal-admin-ui test:unit"
   },
   "workspaces": [
     "packages/drupal-admin-ui",

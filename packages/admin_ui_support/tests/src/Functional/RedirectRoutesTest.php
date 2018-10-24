@@ -19,7 +19,7 @@ class RedirectRoutesTest extends BrowserTestBase {
   protected function setUp() {
     parent::setUp();
     $this->drupalLogin($this->createUser([
-      'administer permissions',
+      'administer permissionsTest',
       'administer site configuration',
     ]));
   }
@@ -38,7 +38,7 @@ class RedirectRoutesTest extends BrowserTestBase {
       $this->fail('redirect_related_routes should be enabled when is first enabled');
     }
     $paths = [
-      '/admin/people/permissions',
+      '/admin/people/permissionsTest',
       '/admin/people/roles',
     ];
 

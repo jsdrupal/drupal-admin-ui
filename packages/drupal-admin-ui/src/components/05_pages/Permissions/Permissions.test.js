@@ -1,6 +1,6 @@
-import { filterPermissions } from '../Permissions';
+import { filterPermissions } from './Permissions';
 
-const permissions = [
+const permissionsTest = [
   {
     title: 'Administer blocks',
     description: null,
@@ -40,28 +40,28 @@ const permissions = [
 ];
 
 it('Does not filter on empty string', () => {
-  expect(filterPermissions('', permissions).length).toEqual(5);
+  expect(filterPermissions('', permissionsTest).length).toEqual(5);
 });
 
-it('Returns an empty set of permissions, when no string match', () => {
-  expect(filterPermissions('ccccccibhdbvblfhin', permissions).length).toEqual(
-    0,
-  );
+it('Returns an empty set of permissionsTest, when no string match', () => {
+  expect(
+    filterPermissions('ccccccibhdbvblfhin', permissionsTest).length,
+  ).toEqual(0);
 });
 
 it('Filter by a lowercase title', () => {
-  const result = filterPermissions('post comment', permissions);
+  const result = filterPermissions('post comment', permissionsTest);
   expect(result.length).toEqual(1);
   expect(result[0].title).toEqual('Post comments');
 });
 
 it('Filter by an uppercase title', () => {
-  const result = filterPermissions('Post comment', permissions);
+  const result = filterPermissions('Post comment', permissionsTest);
   expect(result.length).toEqual(1);
   expect(result[0].title).toEqual('Post comments');
 });
 
 it('Filter by provider', () => {
-  const result = filterPermissions('comment', permissions);
+  const result = filterPermissions('comment', permissionsTest);
   expect(result.length).toEqual(4);
 });

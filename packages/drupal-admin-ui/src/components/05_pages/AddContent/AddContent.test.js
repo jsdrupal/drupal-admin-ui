@@ -3,7 +3,7 @@ import { mount, shallow } from 'enzyme';
 import { MemoryRouter } from 'react-router';
 import ListItemText from '@material-ui/core/ListItemText';
 
-import AddContent from '../AddContent';
+import AddContent from './AddContent';
 
 describe('AddContent', () => {
   it('content types are requested on mount', () => {

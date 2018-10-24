@@ -9,7 +9,7 @@ use Drupal\Tests\rest\Functional\CookieResourceTestTrait;
 use Drupal\Tests\rest\Functional\ResourceTestBase;
 
 /**
- * Tests the user permissions resource.
+ * Tests the user permissionsTest resource.
  *
  * @group admin_ui_support
  */
@@ -78,28 +78,28 @@ class UserPermissionsResourceTest extends ResourceTestBase {
     $request_options = $this->getAuthenticationRequestOptions('GET');
 
     $response = $this->request('GET', $url, $request_options);
-    $this->assertResourceResponse(403, '{"message":"The \u0027administer permissions\u0027 permission is required."}', $response);
+    $this->assertResourceResponse(403, '{"message":"The \u0027administer permissionsTest\u0027 permission is required."}', $response);
 
-    // create a user account that has the required permissions to read
+    // create a user account that has the required permissionsTest to read
     // the watchdog resource via the rest api.
     $this->setUpAuthorization('GET');
 
     $response = $this->request('GET', $url, $request_options);
     // @todo This response should be a response 'MISS' not 'UNCACHEABLE'.
-    $this->assertResourceResponse(200, false, $response, ['config:rest.resource.permissions_collection', 'config:rest.settings', 'http_response'], ['user.permissions'], FALSE, 'UNCACHEABLE');
-    $permissions = json::decode((string) $response->getBody());
+    $this->assertResourceResponse(200, false, $response, ['config:rest.resource.permissions_collection', 'config:rest.settings', 'http_response'], ['user.permissionsTest'], FALSE, 'UNCACHEABLE');
+    $permissionsTest = json::decode((string) $response->getBody());
 
-    $permission_handler = \drupal::service('user.permissions')->getPermissions();
+    $permission_handler = \drupal::service('user.permissionsTest')->getPermissions();
     $permission_ids = [];
-    foreach ($permissions as $permission) {
+    foreach ($permissionsTest as $permission) {
       $permission_ids[] = $permission['id'];
-      if ($permission['id'] === 'administer permissions') {
+      if ($permission['id'] === 'administer permissionsTest') {
         $this->assertSame([
-          'title' => 'Administer permissions',
+          'title' => 'Administer permissionsTest',
           'restrict access' => TRUE,
           'description' => NULL,
           'provider' => 'user',
-          'id' => 'administer permissions',
+          'id' => 'administer permissionsTest',
           'provider_label' => 'User',
         ], $permission);
       }
@@ -114,7 +114,7 @@ class UserPermissionsResourceTest extends ResourceTestBase {
   protected function setUpAuthorization($method) {
     switch ($method) {
       case 'GET':
-        $this->grantPermissionsToTestedRole(['administer permissions']);
+        $this->grantPermissionsToTestedRole(['administer permissionsTest']);
         break;
 
       default:

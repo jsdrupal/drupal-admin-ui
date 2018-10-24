@@ -136,14 +136,14 @@ class SimpleConfigResource extends ResourceBase implements DependentPluginInterf
   /**
    * {@inheritdoc}
    */
-  public function permissions() {
+  public function permissionsTest() {
     // @todo how to implement this?
     // @see https://www.drupal.org/node/2664780
     if ($this->configFactory->get('rest.settings')->get('bc_entity_resource_permissions')) {
       // The default Drupal 8.0.x and 8.1.x behavior.
-      return parent::permissions();
+      return parent::permissionsTest();
     }
-    return parent::permissions();
+    return parent::permissionsTest();
   }
 
   /**

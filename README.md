@@ -35,7 +35,7 @@ composer setup
 composer start
 ```
 
-Try visiting one of the converted pages, e.g. the user permissions or roles page.
+Try visiting one of the converted pages, e.g. the user permissionsTest or roles page.
 
 ## Developing
 
@@ -115,7 +115,7 @@ When deciding which system to use to add test coverage, the general rule is Nigh
   git checkout master
   git pull upstream master
   ```
-- Our [issue queue](https://github.com/jsdrupal/drupal-admin-ui/issues) is public and you already have the required permissions to participate. However in order to perform administrative tasks, such as assigning issues or editing labels, make a request in #javascript in [Drupal Slack](https://www.drupal.org/slack) to be added as a member of the [Contributors Team](https://github.com/orgs/jsdrupal/teams/contributors)
+- Our [issue queue](https://github.com/jsdrupal/drupal-admin-ui/issues) is public and you already have the required permissionsTest to participate. However in order to perform administrative tasks, such as assigning issues or editing labels, make a request in #javascript in [Drupal Slack](https://www.drupal.org/slack) to be added as a member of the [Contributors Team](https://github.com/orgs/jsdrupal/teams/contributors)
 
 If someone has made a pull request and you would like to add code to their branch, there are a number of ways to move forward. It will be very helpful to get familiar with [managing remotes](https://help.github.com/categories/managing-remotes/) in Git.
 

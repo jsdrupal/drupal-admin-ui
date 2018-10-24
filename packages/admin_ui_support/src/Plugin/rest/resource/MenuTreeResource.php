@@ -84,7 +84,7 @@ class MenuTreeResource extends ResourceBase {
    * Responds to GET requests.
    *
    * @return \Drupal\rest\ResourceResponse
-   *   The response containing the list of available permissions.
+   *   The response containing the list of available permissionsTest.
    */
   public function get() {
     $context = new RenderContext();
@@ -110,7 +110,7 @@ class MenuTreeResource extends ResourceBase {
   /**
    * {@inheritdoc}
    */
-  public function permissions() {
+  public function permissionsTest() {
     return [];
   }
 
