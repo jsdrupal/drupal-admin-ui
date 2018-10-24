@@ -3,6 +3,6 @@
 /.github
 /.storybook
 /packages/admin_ui_support
-/packages/drupal-admin-ui-components/build
+/packages/drupal-ui/build
 build
 node_modules

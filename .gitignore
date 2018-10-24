@@ -3,13 +3,12 @@
 # dependencies
 node_modules
 
+# generated files
+build
+
 # testing
 /coverage
 /reports
-
-# production
-/packages/drupal-admin-ui/build
-/packages/drupal-admin-ui-components/build
 
 # misc
 .DS_Store
