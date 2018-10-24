@@ -42,13 +42,14 @@
     "eslint-plugin-import": "^2.7.0",
     "eslint-plugin-jsx-a11y": "^6.1.0",
     "eslint-plugin-prettier": "^2.6.0",
-    "eslint-plugin-react": "^7.4.0",
+    "eslint-plugin-react": "^7.11.1",
     "jest-junit": "^3.6.0",
     "prettier": "^1.11.1"
   },
   "scripts": {
     "eslint": "eslint . --max-warnings=0 --fix",
-    "prettier": "prettier --write 'packages/**/*.js'"
+    "prettier": "prettier --write 'packages/**/*.js'",
+    "test:lint": "eslint . --max-warnings=0 --format junit -o reports/eslint-junit.xml"
   },
   "workspaces": [
     "packages/drupal-admin-ui",

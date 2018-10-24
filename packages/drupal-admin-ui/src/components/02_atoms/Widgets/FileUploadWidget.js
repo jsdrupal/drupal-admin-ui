@@ -13,14 +13,14 @@ import ListItem from '@material-ui/core/ListItem';
 import Button from '@material-ui/core/Button';
 import DeleteIcon from '@material-ui/icons/Delete';
 
-import WidgetPropTypes from '../../../drupal-admin-ui/src/components/05_pages/NodeForm/WidgetPropTypes';
-import FileUpload from '../FileUpload/FileUpload';
+import WidgetPropTypes from '../../05_pages/NodeForm/WidgetPropTypes';
+import FileUpload from '../../../../../drupal-ui/src/FileUpload/FileUpload';
 import {
   deleteItemById,
   getItemsAsArray,
   setItemById,
-} from '../../../drupal-admin-ui/src/utils/api/fieldItem';
-import api from '../../../drupal-admin-ui/src/utils/api/api';
+} from '../../../utils/api/fieldItem';
+import api from '../../../utils/api/api';
 
 const CardWrapper = styled('div')`
   margin-top: 15px;

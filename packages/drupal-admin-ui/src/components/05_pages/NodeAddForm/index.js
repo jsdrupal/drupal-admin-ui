@@ -2,13 +2,13 @@ import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import LoadingBar from 'react-redux-loading-bar';
+import { PageTitle } from 'drupal-ui';
 import NodeForm from '../NodeForm/index';
 import {
   contentAddChange,
   contentAdd,
   requestUser,
 } from '../../../actions/content';
-import { PageTitle } from 'drupal-ui';
 import { createEntity } from '../../../utils/api/schema';
 import { requestSchema } from '../../../actions/schema';
 import SchemaPropType from '../NodeForm/SchemaPropType';

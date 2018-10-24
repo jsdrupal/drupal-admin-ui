@@ -1,11 +1,11 @@
-import OptionsSelect from 'drupal-ui/build/Widgets/OptionsSelect';
-import NumberTextfield from 'drupal-ui/build/Widgets/NumberTextfield';
-import StringTextfield from 'drupal-ui/build/Widgets/StringTextfield';
-import BooleanCheckbox from 'drupal-ui/build/Widgets/BooleanCheckbox';
-import DatetimeTimestamp from 'drupal-ui/build/Widgets/DatetimeTimestamp';
-import FileUploadWidget from 'drupal-ui/build/Widgets/FileUploadWidget';
-import EntityReferenceAutocomplete from 'drupal-ui/build/Widgets/EntityReferenceAutocomplete';
-import TextTextarea from 'drupal-ui/build/Widgets/TextTextarea';
+import OptionsSelect from '../../02_atoms/Widgets/OptionsSelect';
+import NumberTextfield from '../../02_atoms/Widgets/NumberTextfield';
+import StringTextfield from '../../02_atoms/Widgets/StringTextfield';
+import BooleanCheckbox from '../../02_atoms/Widgets/BooleanCheckbox';
+import DatetimeTimestamp from '../../02_atoms/Widgets/DatetimeTimestamp';
+import FileUploadWidget from '../../02_atoms/Widgets/FileUploadWidget';
+import EntityReferenceAutocomplete from '../../02_atoms/Widgets/EntityReferenceAutocomplete';
+import TextTextarea from '../../02_atoms/Widgets/TextTextarea';
 
 // @todo How do we do extensibility from modules, maybe a build step?
 const widgets = {

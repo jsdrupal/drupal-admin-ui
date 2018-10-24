@@ -10,9 +10,8 @@ import Snackbar from '@material-ui/core/Snackbar';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 
-import SchemaPropType from './SchemaPropType';
-
 import { MultipleFields } from 'drupal-ui';
+import SchemaPropType from './SchemaPropType';
 
 import { contentAdd } from '../../../actions/content';
 import { requestUiSchema } from '../../../actions/schema';

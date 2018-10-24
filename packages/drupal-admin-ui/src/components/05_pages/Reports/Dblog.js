@@ -4,8 +4,8 @@ import { connect } from 'react-redux';
 import LoadingBar from 'react-redux-loading-bar';
 import { Markup } from 'interweave';
 
-import { requestDblogCollection } from '../../../actions/reports';
 import { Table, TBody, THead } from 'drupal-ui';
+import { requestDblogCollection } from '../../../actions/reports';
 
 class Dblog extends Component {
   static propTypes = {

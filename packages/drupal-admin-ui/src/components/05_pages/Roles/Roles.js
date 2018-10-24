@@ -4,9 +4,9 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import LoadingBar from 'react-redux-loading-bar';
 
+import { Table, TBody, THead } from 'drupal-ui';
 import { requestRoles } from '../../../actions/roles';
 import { cancelTask } from '../../../actions/helpers';
-import { Table, TBody, THead } from 'drupal-ui';
 
 export const Roles = class Roles extends Component {
   componentDidMount() {

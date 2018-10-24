@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import CheckBox from '@material-ui/core/Checkbox';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import { css } from 'emotion';
-import WidgetPropTypes from '../../../drupal-admin-ui/src/components/05_pages/NodeForm/WidgetPropTypes';
+import WidgetPropTypes from '../../05_pages/NodeForm/WidgetPropTypes';
 
 let styles;
 

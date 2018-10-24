@@ -5,7 +5,7 @@ import RichTextEditor from 'react-rte';
 import FormLabel from '@material-ui/core/FormLabel';
 import FormControl from '@material-ui/core/FormControl';
 
-import WidgetPropTypes from '../../../drupal-admin-ui/src/components/05_pages/NodeForm/WidgetPropTypes';
+import WidgetPropTypes from '../../05_pages/NodeForm/WidgetPropTypes';
 
 let styles;
 

@@ -3,13 +3,13 @@ import { connect } from 'react-redux';
 import LoadingBar from 'react-redux-loading-bar';
 import PropTypes from 'prop-types';
 import { css } from 'emotion';
+import { PageTitle } from 'drupal-ui';
 import NodeForm from '../NodeForm/index';
 import {
   contentEditChange,
   contentSave,
   requestSingleContent,
 } from '../../../actions/content';
-import { PageTitle } from 'drupal-ui';
 import { cleanupRelationships } from '../../../utils/api/content';
 import { requestSchemaByEntityId } from '../../../actions/schema';
 import SchemaPropType from '../NodeForm/SchemaPropType';
