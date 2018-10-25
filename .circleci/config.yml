@@ -15,12 +15,12 @@ aliases:
       - source-v1-{{ .Branch }}-{{ .Revision }}
       - source-v1-{{ .Branch }}-
       - source-v1-
-
-  - &restore-node-modules
+  - &restore-yarn-cache
     restore_cache:
-      keys:
-        - *node-modules-key
-
+      key: v1-yarn-sha-{{ checksum "yarn.lock" }}
+  - &restore-yarn-offline-mirror
+    restore_cache:
+      key: v1-node-modules-offline-cache
   - &restore-vendor
     restore_cache:
       keys:
@@ -30,8 +30,11 @@ aliases:
       run: |
           sudo apt-get install -y libpng-dev sqlite3
           sudo docker-php-ext-install gd
+
   - &step-install
-      run: yarn install
+      run: |
+        yarn config set yarn-offline-mirror ~/.cache/node-modules-offline-cache/v1
+        yarn install
   - &step-build
       run: |
           yarn build
@@ -43,16 +46,21 @@ jobs:
     steps:
     - *restore-source
     - checkout
-    - *restore-node-modules
+    - *restore-yarn-offline-mirror
+    - *restore-yarn-cache
     - *step-install
     - run: yarn test:lint
     - run: yarn test:unit
     - store_test_results:
         path: reports
     - save_cache:
-        key: *node-modules-key
+        key: v1-yarn-sha-{{ checksum "yarn.lock" }}
         paths:
-        - node_modules
+        - ~/.cache/yarn/v1
+    - save_cache:
+        key: v1-node-modules-offline-cache
+        paths:
+        - ~/.cache/npm-packages-offline-cache/v1
     - save_cache:
         key: source-v1-{{ .Branch }}-{{ .Revision }}
         paths:
@@ -64,7 +72,8 @@ jobs:
         - *fix-php-env
         - *restore-source
         - checkout
-        - *restore-node-modules
+        - *restore-yarn-offline-mirror
+        - *restore-yarn-cache
         - *step-install
         - *step-build
         - *restore-vendor
@@ -112,7 +121,8 @@ jobs:
             - "82:b8:cc:fe:02:24:17:b1:31:ba:dc:30:e1:01:7a:df"
       - *restore-source
       - checkout
-      - *restore-node-modules
+      - *restore-yarn-offline-mirror
+      - *restore-yarn-cache
       - *step-install
       - *step-build
       - run: |
@@ -136,7 +146,8 @@ jobs:
             - "6c:c9:15:82:34:e7:30:e2:91:1b:ea:e2:06:b2:cf:e0"
       - *restore-source
       - checkout
-      - *restore-node-modules
+      - *restore-yarn-offline-mirror
+      - *restore-yarn-cache
       - *step-install
       - *step-build
       - run: |
