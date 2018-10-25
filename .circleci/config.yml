@@ -4,7 +4,7 @@ aliases:
       - image: circleci/node:8-browsers
 
   - &node-modules-key
-    v3-yarn-dependencies-{{ checksum "yarn.lock" }}
+    v4-yarn-dependencies-{{ checksum "yarn.lock" }}
 
   - &vendor-key
     v3-composer-dependencies-
