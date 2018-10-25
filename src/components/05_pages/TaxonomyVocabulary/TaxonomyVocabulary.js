@@ -1,5 +1,6 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
+import { css } from 'emotion';
 
 import { Redirect } from 'react-router';
 
@@ -14,10 +15,20 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 
 import FormControl from '@material-ui/core/FormControl';
+import InputLabel from '@material-ui/core/InputLabel';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem/MenuItem';
 
 import PageTitle from '../../02_atoms/PageTitle';
+
+const styles = {
+  action: css`
+    margin-left: 0rem;
+    margin-bottom: 0.5rem;
+    min-width: 5rem;
+    max-width: 15rem;
+  `,
+};
 
 export default class TaxonomyVocabulary extends React.Component {
   static propTypes = {
@@ -49,10 +60,11 @@ export default class TaxonomyVocabulary extends React.Component {
   }
 
   vocabularyOperations = vid => (
-    <FormControl>
+    <FormControl className={styles.action}>
       {/* @todo Extract the select element with links out into a component */}
+      <InputLabel htmlFor="action">Actions</InputLabel>
       <Select
-        value=""
+        value={this.state.activeLink || ''}
         autoWidth
         onChange={e => this.setState({ activeLink: e.target.value })}
       >
