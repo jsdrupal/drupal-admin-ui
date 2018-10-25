@@ -1,0 +1,95 @@
+{
+    "name": "jsdrupal/drupal-admin-ui-demo",
+    "description": "Project template for testing Drupal's React Admin user interface",
+    "type": "project",
+    "license": "GPL-2.0-or-later",
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "https://packages.drupal.org/8"
+        }
+    ],
+    "require": {
+        "ext-pdo_sqlite" : "*",
+        "composer/installers": "^1.2",
+        "cweagans/composer-patches": "^1.6",
+        "drupal-composer/drupal-scaffold": "^2.2",
+        "drupal/core": "~8.7",
+        "oomphinc/composer-installers-extender": "^1.1",
+        "webflo/drupal-finder": "^1.0.0",
+        "webmozart/path-util": "^2.3",
+        "justafish/drupal-admin-ui": "dev-master",
+        "justafish/drupal-admin-ui-support": "dev-master"
+    },
+    "require-dev": {
+        "webflo/drupal-core-require-dev": "~8.6",
+        "drush/drush": "^9.2"
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "autoload": {
+        "classmap": [
+            "scripts/composer/ScriptHandler.php"
+        ]
+    },
+    "config": {
+        "process-timeout": 0
+    },
+    "scripts": {
+        "setup": [
+            "cd docroot && php core/scripts/drupal install demo_umami --no-interaction",
+            "cd docroot && ../vendor/bin/drush en -y jsonapi admin_ui_support"
+        ],
+        "start": [
+            "cd docroot && php core/scripts/drupal server"
+        ],
+        "devify": [
+            "git clone https://github.com/jsdrupal/drupal-admin-ui",
+            "cp drupal-admin-ui/.env drupal-admin-ui/.env.local",
+            "cd drupal-admin-ui && yarn install",
+            "rm -rf docroot/vfancy",
+            "ln -s ../drupal-admin-ui/build docroot/vfancy",
+            "rm -rf docroot/modules/contrib/drupal-admin-ui-support",
+            "ln -s ../../../drupal-admin-ui/admin_ui_support docroot/modules/contrib/drupal-admin-ui-support"
+        ],
+        "pre-install-cmd": [
+            "DrupalProject\\composer\\ScriptHandler::checkComposerVersion"
+        ],
+        "pre-update-cmd": [
+            "DrupalProject\\composer\\ScriptHandler::checkComposerVersion"
+        ],
+        "post-install-cmd": [
+            "@composer drupal:scaffold",
+            "DrupalProject\\composer\\ScriptHandler::createRequiredFiles"
+        ],
+        "post-update-cmd": [
+            "@composer drupal:scaffold",
+            "DrupalProject\\composer\\ScriptHandler::createRequiredFiles"
+        ]
+    },
+    "extra": {
+        "installer-types": ["library"],
+        "installer-paths": {
+            "docroot/vfancy": ["justafish/drupal-admin-ui"],
+            "docroot/core": ["type:drupal-core"],
+            "docroot/libraries/{$name}": [
+                "type:drupal-library",
+                "type:bower-asset"
+            ],
+            "docroot/modules/contrib/{$name}": ["type:drupal-module"],
+            "docroot/profiles/contrib/{$name}": ["type:drupal-profile"],
+            "docroot/themes/contrib/{$name}": ["type:drupal-theme"]
+        },
+        "enable-patching": true,
+        "patches": {
+            "drupal/schemata": {
+                "Small inaccuracies for JSON API schemas": "https://www.drupal.org/files/issues/2018-04-28/2967572--schemata--multiple-minor-adjustments--3.patch",
+                "Take the field label into account for entity references": "https://www.drupal.org/files/issues/2018-07-20/2987199-2.patch",
+                "Returning boolean type for promote to homepage": "https://www.drupal.org/files/issues/2018-08-30/promote_returning_boolean_value_instead_of_integer-2996099-2.patch"
+            },
+            "drupal/core": {
+                "Remove Umami dependency to Workflows because the admin UI doesn't currently support it": "patches/remove-umami-workflows-dependency.patch"
+            }
+        }
+    }
+}

@@ -5,8 +5,14 @@ exports.command = function drush(command = 'status', callback) {
   let procResult = '';
 
   try {
+    if (!process.env.REACT_APP_DRUPAL_ROOT) {
+      throw new Error(
+        'Missing REACT_APP_DRUPAL_ROOT environment variable, please set it in the .env.local file.',
+      );
+    }
+
     const proc = execSync(
-      `../vendor/bin/drush --uri=${
+      `${process.env.REACT_APP_DRUPAL_ROOT}/vendor/bin/drush --uri=${
         process.env.REACT_APP_DRUPAL_BASE_URL
       } ${command}`,
     );
