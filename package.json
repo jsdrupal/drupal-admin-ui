@@ -47,7 +47,7 @@
     "prettier": "^1.11.1"
   },
   "scripts": {
-    "build": "yarn workspaces run build",
+    "build": "yarn workspace drupal-ui build && yarn workspace drupal-admin-ui build",
     "eslint": "eslint . --max-warnings=0 --fix",
     "prettier": "prettier --write 'packages/**/*.js'",
     "test": "yarn test:lint && yarn test:unit && yarn test:functional",
