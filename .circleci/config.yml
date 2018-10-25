@@ -30,10 +30,9 @@ aliases:
       run: |
           sudo apt-get install -y libpng-dev sqlite3
           sudo docker-php-ext-install gd
-  - &step-install
-      run: yarn install
   - &step-build
       run: |
+          yarn install
           yarn build
 
 version: 2
@@ -41,11 +40,10 @@ jobs:
   lint_unit:
     <<: *default
     steps:
-    - run: yarn --version
     - *restore-source
     - checkout
     - *restore-node-modules
-    - *step-install
+    - *step-build
     - run: yarn test:lint
     - run: yarn test:unit
     - store_test_results:
@@ -66,7 +64,6 @@ jobs:
         - *restore-source
         - checkout
         - *restore-node-modules
-        - *step-install
         - *step-build
         - *restore-vendor
         - run:
@@ -138,7 +135,6 @@ jobs:
       - *restore-source
       - checkout
       - *restore-node-modules
-      - *step-install
       - *step-build
       - run: |
           mv ~/project/admin_ui_support ~
