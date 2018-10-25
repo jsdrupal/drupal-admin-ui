@@ -111,7 +111,6 @@ jobs:
       - *restore-source
       - checkout
       - *restore-node-modules
-      - *step-install
       - *step-build
       - run: |
           mv ~/project/build ~
