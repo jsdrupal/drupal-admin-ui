@@ -105,6 +105,11 @@ jobs:
             - ~/.composer/cache
         - run:
             name: Start Drupal and run Nightwatch and PHPUnit tests
+            environment:
+              REACT_APP_DRUPAL_ROOT: ~/project/demo
+              REACT_APP_DRUPAL_BASE_URL: http://127.0.0.1:8888
+              SIMPLETEST_BASE_URL: http://localhost:8888
+              SYMFONY_DEPRECATIONS_HELPER: disabled
             command: |
               cd ~/project/demo
               composer start &
@@ -115,11 +120,6 @@ jobs:
               yarn test:functional
               cd ~/project/demo
               ./vendor/bin/phpunit -c docroot/core --log-junit reports/phpunit.xml docroot/modules/contrib/drupal-admin-ui-support
-            environment:
-              REACT_APP_DRUPAL_ROOT: ~/project/demo
-              REACT_APP_DRUPAL_BASE_URL: http://127.0.0.1:8888
-              SIMPLETEST_BASE_URL: http://localhost:8888
-              SYMFONY_DEPRECATIONS_HELPER: disabled
 
         - store_test_results:
             path: ~/project/demo/drupal-admin-ui/reports/nightwatch
