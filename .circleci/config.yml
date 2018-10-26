@@ -27,7 +27,12 @@ commands:
         type: string
       destination_repo:
         type: string
+      ssh_key_fingerprint:
+        type: string
     steps:
+      - add_ssh_keys:
+          fingerprints:
+            - << parameter.ssh_key_fingerprint >>
       - run:
           name: Configure git
           command: |
@@ -132,34 +137,27 @@ jobs:
     executor:
       name: node-executor
     steps:
-      - add_ssh_keys:
-          fingerprints:
-            - "82:b8:cc:fe:02:24:17:b1:31:ba:dc:30:e1:01:7a:df"
       - build
       - run: cp ~/project/.circleci/drupal-admin-ui--composer.json ~/project/build/composer.json
       - commit-and-push:
           files: ~/project/build
           destination_repo: git@github.com:jsdrupal/drupal-admin-ui-dist.git
+          ssh_key_fingerprint: "82:b8:cc:fe:02:24:17:b1:31:ba:dc:30:e1:01:7a:df"
 
   dist_support:
     executor:
       name: node-executor
     steps:
-      - add_ssh_keys:
-          fingerprints:
-            - "6c:c9:15:82:34:e7:30:e2:91:1b:ea:e2:06:b2:cf:e0"
       - checkout
       - commit-and-push:
           files: ~/project/admin_ui_support
           destination_repo: git@github.com:jsdrupal/drupal-admin-ui-support-dist.git
+          ssh_key_fingerprint: "6c:c9:15:82:34:e7:30:e2:91:1b:ea:e2:06:b2:cf:e0"
 
   dist_demo:
     executor:
       name: php-node-executor
     steps:
-    - add_ssh_keys:
-        fingerprints:
-          - "1e:cb:02:bc:68:40:3c:31:40:5f:45:b5:55:c8:02:24"
     - fix-php-env
     - checkout
     - run:
@@ -171,6 +169,7 @@ jobs:
         message: "Auto update composer.lock from admin-ui-support-dist build"
         files: ~/project/demo
         destination_repo: git@github.com:jsdrupal/drupal-admin-ui-demo.git
+        ssh_key_fingerprint: "1e:cb:02:bc:68:40:3c:31:40:5f:45:b5:55:c8:02:24"
 
 workflows:
   version: 2
