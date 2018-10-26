@@ -1,0 +1,626 @@
+diff --git a/core/profiles/demo_umami/config/install/core.entity_form_display.block_content.banner_block.default.yml b/core/profiles/demo_umami/config/install/core.entity_form_display.block_content.banner_block.default.yml
+index c2727589d9..5cc98ced6c 100644
+--- a/core/profiles/demo_umami/config/install/core.entity_form_display.block_content.banner_block.default.yml
++++ b/core/profiles/demo_umami/config/install/core.entity_form_display.block_content.banner_block.default.yml
+@@ -56,5 +56,4 @@ content:
+       size: 60
+       placeholder: ''
+     third_party_settings: {  }
+-hidden:
+-  moderation_state: true
++hidden: {  }
+diff --git a/core/profiles/demo_umami/config/install/core.entity_form_display.block_content.basic.default.yml b/core/profiles/demo_umami/config/install/core.entity_form_display.block_content.basic.default.yml
+index a60d7db281..97f5d00feb 100644
+--- a/core/profiles/demo_umami/config/install/core.entity_form_display.block_content.basic.default.yml
++++ b/core/profiles/demo_umami/config/install/core.entity_form_display.block_content.basic.default.yml
+@@ -28,5 +28,4 @@ content:
+       size: 60
+       placeholder: ''
+     third_party_settings: {  }
+-hidden:
+-  moderation_state: true
++hidden: {  }
+diff --git a/core/profiles/demo_umami/config/install/core.entity_form_display.block_content.disclaimer_block.default.yml b/core/profiles/demo_umami/config/install/core.entity_form_display.block_content.disclaimer_block.default.yml
+index 386ff59c2a..052eea190d 100644
+--- a/core/profiles/demo_umami/config/install/core.entity_form_display.block_content.disclaimer_block.default.yml
++++ b/core/profiles/demo_umami/config/install/core.entity_form_display.block_content.disclaimer_block.default.yml
+@@ -36,5 +36,4 @@ content:
+       size: 60
+       placeholder: ''
+     third_party_settings: {  }
+-hidden:
+-  moderation_state: true
++hidden: {  }
+diff --git a/core/profiles/demo_umami/config/install/core.entity_form_display.block_content.footer_promo_block.default.yml b/core/profiles/demo_umami/config/install/core.entity_form_display.block_content.footer_promo_block.default.yml
+index 81b95045dd..fc782fe716 100644
+--- a/core/profiles/demo_umami/config/install/core.entity_form_display.block_content.footer_promo_block.default.yml
++++ b/core/profiles/demo_umami/config/install/core.entity_form_display.block_content.footer_promo_block.default.yml
+@@ -56,5 +56,4 @@ content:
+       size: 60
+       placeholder: ''
+     third_party_settings: {  }
+-hidden:
+-  moderation_state: true
++hidden: {  }
+diff --git a/core/profiles/demo_umami/config/install/core.entity_form_display.media.audio.default.yml b/core/profiles/demo_umami/config/install/core.entity_form_display.media.audio.default.yml
+index 38efab24a7..a36135b3f5 100644
+--- a/core/profiles/demo_umami/config/install/core.entity_form_display.media.audio.default.yml
++++ b/core/profiles/demo_umami/config/install/core.entity_form_display.media.audio.default.yml
+@@ -55,5 +55,4 @@ content:
+       placeholder: ''
+     region: content
+     third_party_settings: {  }
+-hidden:
+-  moderation_state: true
++hidden: {  }
+diff --git a/core/profiles/demo_umami/config/install/core.entity_form_display.media.file.default.yml b/core/profiles/demo_umami/config/install/core.entity_form_display.media.file.default.yml
+index 16536c8127..db9b25551e 100644
+--- a/core/profiles/demo_umami/config/install/core.entity_form_display.media.file.default.yml
++++ b/core/profiles/demo_umami/config/install/core.entity_form_display.media.file.default.yml
+@@ -55,5 +55,4 @@ content:
+       placeholder: ''
+     region: content
+     third_party_settings: {  }
+-hidden:
+-  moderation_state: true
++hidden: {  }
+diff --git a/core/profiles/demo_umami/config/install/core.entity_form_display.media.image.default.yml b/core/profiles/demo_umami/config/install/core.entity_form_display.media.image.default.yml
+index 06ab5d285e..c1139a8a39 100644
+--- a/core/profiles/demo_umami/config/install/core.entity_form_display.media.image.default.yml
++++ b/core/profiles/demo_umami/config/install/core.entity_form_display.media.image.default.yml
+@@ -57,5 +57,4 @@ content:
+       placeholder: ''
+     region: content
+     third_party_settings: {  }
+-hidden:
+-  moderation_state: true
++hidden: {  }
+diff --git a/core/profiles/demo_umami/config/install/core.entity_form_display.media.remote_video.default.yml b/core/profiles/demo_umami/config/install/core.entity_form_display.media.remote_video.default.yml
+index d0924b7042..098a2ecc54 100644
+--- a/core/profiles/demo_umami/config/install/core.entity_form_display.media.remote_video.default.yml
++++ b/core/profiles/demo_umami/config/install/core.entity_form_display.media.remote_video.default.yml
+@@ -49,5 +49,4 @@ content:
+     region: content
+     third_party_settings: {  }
+ hidden:
+-  moderation_state: true
+   name: true
+diff --git a/core/profiles/demo_umami/config/install/core.entity_form_display.node.article.default.yml b/core/profiles/demo_umami/config/install/core.entity_form_display.node.article.default.yml
+index 50db6035b7..122c53e37c 100644
+--- a/core/profiles/demo_umami/config/install/core.entity_form_display.node.article.default.yml
++++ b/core/profiles/demo_umami/config/install/core.entity_form_display.node.article.default.yml
+@@ -8,7 +8,6 @@ dependencies:
+     - image.style.thumbnail
+     - node.type.article
+   module:
+-    - content_moderation
+     - image
+     - path
+     - text
+@@ -28,13 +27,13 @@ content:
+     third_party_settings: {  }
+   created:
+     type: datetime_timestamp
+-    weight: 5
++    weight: 10
+     region: content
+     settings: {  }
+     third_party_settings: {  }
+   field_image:
+     type: image_image
+-    weight: 3
++    weight: 4
+     region: content
+     settings:
+       progress_indicator: throbber
+@@ -42,22 +41,13 @@ content:
+     third_party_settings: {  }
+   field_tags:
+     type: entity_reference_autocomplete_tags
+-    weight: 2
+-    region: content
+-    settings:
+-      match_operator: CONTAINS
+-      size: 60
+-      placeholder: ''
+-    third_party_settings: {  }
+-  moderation_state:
+-    type: moderation_state_default
+-    weight: 10
++    weight: 3
+     region: content
+     settings: {  }
+     third_party_settings: {  }
+   path:
+     type: path
+-    weight: 8
++    weight: 30
+     region: content
+     settings: {  }
+     third_party_settings: {  }
+@@ -65,21 +55,21 @@ content:
+     type: boolean_checkbox
+     settings:
+       display_label: true
+-    weight: 6
++    weight: 15
+     region: content
+     third_party_settings: {  }
+   status:
+     type: boolean_checkbox
+     settings:
+       display_label: true
+-    weight: 9
++    weight: 120
+     region: content
+     third_party_settings: {  }
+   sticky:
+     type: boolean_checkbox
+     settings:
+       display_label: true
+-    weight: 7
++    weight: 16
+     region: content
+     third_party_settings: {  }
+   title:
+@@ -92,7 +82,7 @@ content:
+     third_party_settings: {  }
+   uid:
+     type: entity_reference_autocomplete
+-    weight: 4
++    weight: 5
+     region: content
+     settings:
+       match_operator: CONTAINS
+diff --git a/core/profiles/demo_umami/config/install/core.entity_form_display.node.page.default.yml b/core/profiles/demo_umami/config/install/core.entity_form_display.node.page.default.yml
+index 9a896e5a33..682f1a550c 100644
+--- a/core/profiles/demo_umami/config/install/core.entity_form_display.node.page.default.yml
++++ b/core/profiles/demo_umami/config/install/core.entity_form_display.node.page.default.yml
+@@ -5,7 +5,6 @@ dependencies:
+     - field.field.node.page.body
+     - node.type.page
+   module:
+-    - content_moderation
+     - path
+     - text
+ id: node.page.default
+@@ -15,7 +14,7 @@ mode: default
+ content:
+   body:
+     type: text_textarea_with_summary
+-    weight: 6
++    weight: 31
+     region: content
+     settings:
+       rows: 9
+@@ -24,19 +23,13 @@ content:
+     third_party_settings: {  }
+   created:
+     type: datetime_timestamp
+-    weight: 2
+-    region: content
+-    settings: {  }
+-    third_party_settings: {  }
+-  moderation_state:
+-    type: moderation_state_default
+-    weight: 8
++    weight: 10
+     region: content
+     settings: {  }
+     third_party_settings: {  }
+   path:
+     type: path
+-    weight: 5
++    weight: 30
+     region: content
+     settings: {  }
+     third_party_settings: {  }
+@@ -44,26 +37,26 @@ content:
+     type: boolean_checkbox
+     settings:
+       display_label: true
+-    weight: 3
++    weight: 15
+     region: content
+     third_party_settings: {  }
+   status:
+     type: boolean_checkbox
+     settings:
+       display_label: true
+-    weight: 7
++    weight: 120
+     region: content
+     third_party_settings: {  }
+   sticky:
+     type: boolean_checkbox
+     settings:
+       display_label: true
+-    weight: 4
++    weight: 16
+     region: content
+     third_party_settings: {  }
+   title:
+     type: string_textfield
+-    weight: 0
++    weight: -5
+     region: content
+     settings:
+       size: 60
+@@ -71,7 +64,7 @@ content:
+     third_party_settings: {  }
+   uid:
+     type: entity_reference_autocomplete
+-    weight: 1
++    weight: 5
+     region: content
+     settings:
+       match_operator: CONTAINS
+diff --git a/core/profiles/demo_umami/config/install/core.entity_form_display.node.recipe.default.yml b/core/profiles/demo_umami/config/install/core.entity_form_display.node.recipe.default.yml
+index 5c3431958d..fa4072fb6d 100644
+--- a/core/profiles/demo_umami/config/install/core.entity_form_display.node.recipe.default.yml
++++ b/core/profiles/demo_umami/config/install/core.entity_form_display.node.recipe.default.yml
+@@ -15,7 +15,6 @@ dependencies:
+     - image.style.thumbnail
+     - node.type.recipe
+   module:
+-    - content_moderation
+     - image
+     - path
+     - text
+@@ -107,12 +106,6 @@ content:
+     third_party_settings: {  }
+     type: entity_reference_autocomplete_tags
+     region: content
+-  moderation_state:
+-    type: moderation_state_default
+-    weight: 18
+-    region: content
+-    settings: {  }
+-    third_party_settings: {  }
+   path:
+     type: path
+     weight: 16
+diff --git a/core/profiles/demo_umami/config/install/core.entity_view_display.node.article.default.yml b/core/profiles/demo_umami/config/install/core.entity_view_display.node.article.default.yml
+index 66a013a76d..6fca71afd6 100644
+--- a/core/profiles/demo_umami/config/install/core.entity_view_display.node.article.default.yml
++++ b/core/profiles/demo_umami/config/install/core.entity_view_display.node.article.default.yml
+@@ -45,5 +45,4 @@ content:
+     region: content
+     settings: {  }
+     third_party_settings: {  }
+-hidden:
+-  content_moderation_control: true
++hidden: {  }
+diff --git a/core/profiles/demo_umami/config/install/core.entity_view_display.node.article.full.yml b/core/profiles/demo_umami/config/install/core.entity_view_display.node.article.full.yml
+index 55b9cc35d5..b6fd2212e5 100644
+--- a/core/profiles/demo_umami/config/install/core.entity_view_display.node.article.full.yml
++++ b/core/profiles/demo_umami/config/install/core.entity_view_display.node.article.full.yml
+@@ -46,5 +46,4 @@ content:
+     region: content
+     settings: {  }
+     third_party_settings: {  }
+-hidden:
+-  content_moderation_control: true
++hidden: {  }
+diff --git a/core/profiles/demo_umami/config/install/core.entity_view_display.node.article.rss.yml b/core/profiles/demo_umami/config/install/core.entity_view_display.node.article.rss.yml
+index df4d92d8ec..da445c08d2 100644
+--- a/core/profiles/demo_umami/config/install/core.entity_view_display.node.article.rss.yml
++++ b/core/profiles/demo_umami/config/install/core.entity_view_display.node.article.rss.yml
+@@ -19,6 +19,5 @@ content:
+     region: content
+ hidden:
+   body: true
+-  content_moderation_control: true
+   field_image: true
+   field_tags: true
+diff --git a/core/profiles/demo_umami/config/install/core.entity_view_display.node.page.default.yml b/core/profiles/demo_umami/config/install/core.entity_view_display.node.page.default.yml
+index 29e721a67f..84a0bd9f28 100644
+--- a/core/profiles/demo_umami/config/install/core.entity_view_display.node.page.default.yml
++++ b/core/profiles/demo_umami/config/install/core.entity_view_display.node.page.default.yml
+@@ -22,5 +22,4 @@ content:
+   links:
+     weight: 101
+     region: content
+-hidden:
+-  content_moderation_control: true
++hidden: {  }
+diff --git a/core/profiles/demo_umami/config/install/core.entity_view_display.node.page.teaser.yml b/core/profiles/demo_umami/config/install/core.entity_view_display.node.page.teaser.yml
+index ce8cd320fe..0904d2cfa6 100644
+--- a/core/profiles/demo_umami/config/install/core.entity_view_display.node.page.teaser.yml
++++ b/core/profiles/demo_umami/config/install/core.entity_view_display.node.page.teaser.yml
+@@ -24,5 +24,4 @@ content:
+   links:
+     weight: 101
+     region: content
+-hidden:
+-  content_moderation_control: true
++hidden: {  }
+diff --git a/core/profiles/demo_umami/config/install/core.entity_view_display.node.recipe.default.yml b/core/profiles/demo_umami/config/install/core.entity_view_display.node.recipe.default.yml
+index ac80368228..ae66a39c00 100644
+--- a/core/profiles/demo_umami/config/install/core.entity_view_display.node.recipe.default.yml
++++ b/core/profiles/demo_umami/config/install/core.entity_view_display.node.recipe.default.yml
+@@ -111,4 +111,4 @@ content:
+     settings: {  }
+     third_party_settings: {  }
+ hidden:
+-  content_moderation_control: true
++  field_author: true
+diff --git a/core/profiles/demo_umami/config/install/core.entity_view_display.node.recipe.full.yml b/core/profiles/demo_umami/config/install/core.entity_view_display.node.recipe.full.yml
+index de50c44443..a16de0fe70 100644
+--- a/core/profiles/demo_umami/config/install/core.entity_view_display.node.recipe.full.yml
++++ b/core/profiles/demo_umami/config/install/core.entity_view_display.node.recipe.full.yml
+@@ -107,5 +107,5 @@ content:
+     type: entity_reference_label
+     region: content
+ hidden:
+-  content_moderation_control: true
++  field_author: true
+   links: true
+diff --git a/core/profiles/demo_umami/config/install/core.entity_view_display.node.recipe.teaser.yml b/core/profiles/demo_umami/config/install/core.entity_view_display.node.recipe.teaser.yml
+index e149ba9d07..f10a54d160 100644
+--- a/core/profiles/demo_umami/config/install/core.entity_view_display.node.recipe.teaser.yml
++++ b/core/profiles/demo_umami/config/install/core.entity_view_display.node.recipe.teaser.yml
+@@ -25,7 +25,7 @@ content:
+     weight: 100
+     region: content
+ hidden:
+-  content_moderation_control: true
++  field_author: true
+   field_cooking_time: true
+   field_difficulty: true
+   field_image: true
+diff --git a/core/profiles/demo_umami/config/install/user.role.editor.yml b/core/profiles/demo_umami/config/install/user.role.editor.yml
+deleted file mode 100644
+index e4dea00cab..0000000000
+--- a/core/profiles/demo_umami/config/install/user.role.editor.yml
++++ /dev/null
+@@ -1,46 +0,0 @@
+-langcode: en
+-status: true
+-dependencies: {  }
+-id: editor
+-label: Editor
+-weight: 4
+-is_admin: null
+-permissions:
+-  - 'access content overview'
+-  - 'access contextual links'
+-  - 'access files overview'
+-  - 'access in-place editing'
+-  - 'access toolbar'
+-  - 'cancel account'
+-  - 'change own username'
+-  - 'create terms in recipe_category'
+-  - 'create terms in tags'
+-  - 'create url aliases'
+-  - 'delete all revisions'
+-  - 'delete any article content'
+-  - 'delete any page content'
+-  - 'delete any recipe content'
+-  - 'delete article revisions'
+-  - 'delete page revisions'
+-  - 'delete recipe revisions'
+-  - 'delete terms in recipe_category'
+-  - 'delete terms in tags'
+-  - 'edit any article content'
+-  - 'edit any page content'
+-  - 'edit any recipe content'
+-  - 'edit terms in recipe_category'
+-  - 'edit terms in tags'
+-  - 'revert all revisions'
+-  - 'revert article revisions'
+-  - 'revert page revisions'
+-  - 'revert recipe revisions'
+-  - 'use editorial transition archive'
+-  - 'use editorial transition archived_published'
+-  - 'use editorial transition publish'
+-  - 'view all revisions'
+-  - 'view any unpublished content'
+-  - 'view article revisions'
+-  - 'view latest version'
+-  - 'view page revisions'
+-  - 'view recipe revisions'
+-  - 'view the administration theme'
+diff --git a/core/profiles/demo_umami/config/install/workflows.workflow.editorial.yml b/core/profiles/demo_umami/config/install/workflows.workflow.editorial.yml
+deleted file mode 100644
+index 601289de94..0000000000
+--- a/core/profiles/demo_umami/config/install/workflows.workflow.editorial.yml
++++ /dev/null
+@@ -1,68 +0,0 @@
+-langcode: en
+-status: true
+-dependencies:
+-  config:
+-    - node.type.article
+-    - node.type.page
+-    - node.type.recipe
+-  module:
+-    - content_moderation
+-id: editorial
+-label: Editorial
+-type: content_moderation
+-type_settings:
+-  states:
+-    archived:
+-      label: Archived
+-      weight: 5
+-      published: false
+-      default_revision: true
+-    draft:
+-      label: Draft
+-      published: false
+-      default_revision: false
+-      weight: -5
+-    published:
+-      label: Published
+-      published: true
+-      default_revision: true
+-      weight: 0
+-  transitions:
+-    archive:
+-      label: Archive
+-      from:
+-        - published
+-      to: archived
+-      weight: 2
+-    archived_draft:
+-      label: 'Restore to Draft'
+-      from:
+-        - archived
+-      to: draft
+-      weight: 3
+-    archived_published:
+-      label: Restore
+-      from:
+-        - archived
+-      to: published
+-      weight: 4
+-    create_new_draft:
+-      label: 'Create New Draft'
+-      to: draft
+-      weight: 0
+-      from:
+-        - draft
+-        - published
+-    publish:
+-      label: Publish
+-      to: published
+-      weight: 1
+-      from:
+-        - draft
+-        - published
+-  entity_types:
+-    node:
+-      - article
+-      - page
+-      - recipe
+-  default_moderation_state: draft
+diff --git a/core/profiles/demo_umami/demo_umami.info.yml b/core/profiles/demo_umami/demo_umami.info.yml
+index 98be81fffe..48de3411d6 100644
+--- a/core/profiles/demo_umami/demo_umami.info.yml
++++ b/core/profiles/demo_umami/demo_umami.info.yml
+@@ -40,8 +40,6 @@ install:
+   - tour
+   - automated_cron
+   - responsive_image
+-  - content_moderation
+-  - workflows
+ themes:
+   - seven
+   - umami
+diff --git a/core/profiles/demo_umami/modules/demo_umami_content/src/InstallHelper.php b/core/profiles/demo_umami/modules/demo_umami_content/src/InstallHelper.php
+index 01e998e9b3..ebfc1dd7df 100644
+--- a/core/profiles/demo_umami/modules/demo_umami_content/src/InstallHelper.php
++++ b/core/profiles/demo_umami/modules/demo_umami_content/src/InstallHelper.php
+@@ -81,41 +81,12 @@ public static function create(ContainerInterface $container) {
+    * Imports default contents.
+    */
+   public function importContent() {
+-    $this->importEditors()
+-      ->importArticles()
++    $this->importArticles()
+       ->importRecipes()
+       ->importPages()
+       ->importBlockContent();
+   }
+ 
+-  /**
+-   * Imports editors.
+-   *
+-   * Other users are created as their content is imported. However, editors
+-   * don't have their own content so are created here instead.
+-   *
+-   * @return $this
+-   */
+-  protected function importEditors() {
+-    $user_storage = $this->entityTypeManager->getStorage('user');
+-    $editors = [
+-      'Margaret Hopper',
+-      'Grace Hamilton',
+-    ];
+-    foreach ($editors as $name) {
+-      $user = $user_storage->create([
+-        'name' => $name,
+-        'status' => 1,
+-        'roles' => ['editor'],
+-        'mail' => mb_strtolower(str_replace(' ', '.', $name)) . '@example.com',
+-      ]);
+-      $user->enforceIsNew();
+-      $user->save();
+-      $this->storeCreatedContentUuids([$user->uuid() => 'user']);
+-    }
+-    return $this;
+-  }
+-
+   /**
+    * Imports articles.
+    *
+@@ -133,7 +104,6 @@ protected function importArticles() {
+         $values = [
+           'type' => 'article',
+           'title' => $data['title'],
+-          'moderation_state' => 'published',
+         ];
+         // Fields mapping starts.
+         // Set Body Field.
+@@ -197,7 +167,6 @@ protected function importRecipes() {
+           'type' => 'recipe',
+           // Title field.
+           'title' => $data['title'],
+-          'moderation_state' => 'published',
+         ];
+         // Set article author.
+         if (!empty($data['author'])) {
+@@ -294,7 +263,6 @@ protected function importPages() {
+         $values = [
+           'type' => 'page',
+           'title' => $data['title'],
+-          'moderation_state' => 'published',
+         ];
+         // Fields mapping starts.
+         // Set Body Field.
+@@ -432,11 +400,10 @@ protected function getUser($name) {
+     $user_storage = $this->entityTypeManager->getStorage('user');
+     $users = $user_storage->loadByProperties(['name' => $name]);;
+     if (empty($users)) {
+-      // Creating user without any password.
++      // Creating user without any email/password.
+       $user = $user_storage->create([
+         'name' => $name,
+         'status' => 1,
+-        'roles' => ['author'],
+         'mail' => mb_strtolower(str_replace(' ', '.', $name)) . '@example.com',
+       ]);
+       $user->enforceIsNew();
+diff --git a/core/profiles/demo_umami/tests/src/Functional/DemoUmamiProfileTest.php b/core/profiles/demo_umami/tests/src/Functional/DemoUmamiProfileTest.php
+index e27c6a19a3..8a1375d932 100644
+--- a/core/profiles/demo_umami/tests/src/Functional/DemoUmamiProfileTest.php
++++ b/core/profiles/demo_umami/tests/src/Functional/DemoUmamiProfileTest.php
+@@ -92,12 +92,7 @@ protected function assertDefaultConfig(StorageInterface $default_config_storage,
+    * Tests the successful editing of nodes by admin.
+    */
+   public function testEditNodesByAdmin() {
+-    $permissions = [
+-      'administer nodes',
+-      'edit any recipe content',
+-      'use editorial transition create_new_draft',
+-    ];
+-    $account = $this->drupalCreateUser($permissions);
++    $account = $this->drupalCreateUser(['administer nodes', 'edit any recipe content']);
+     $this->drupalLogin($account);
+     $webassert = $this->assertSession();
+ 
+@@ -130,11 +125,10 @@ public function testAppearance() {
+   public function testDemonstrationWarningMessage() {
+     $permissions = [
+       'access content overview',
+-      'access toolbar',
+       'administer nodes',
+-      'edit any recipe content',
+       'create recipe content',
+-      'use editorial transition create_new_draft',
++      'edit any recipe content',
++      'access toolbar',
+     ];
+     $account = $this->drupalCreateUser($permissions);
+     $this->drupalLogin($account);
