@@ -36,7 +36,7 @@ commands:
       - run:
           name: Overwrite files with build
           command: |
-            mv ~/project/<< parameters.files >> ~/build-files
+            mv << parameters.files >> ~/build-files
             git clone << parameters.source_repo >> ~/build-repo
             rm -rf ~/build-files/.git
             mv ~/build-repo/.git ~/build-files/.git
