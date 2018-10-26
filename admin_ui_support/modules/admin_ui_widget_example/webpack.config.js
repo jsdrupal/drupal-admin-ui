@@ -1,19 +1,26 @@
 const path = require('path');
+const WPAsyncDefine = require('webpack-async-define');
 
 module.exports = {
   entry: {
-    'options_buttons_widget': './js/src/options_buttons.widget.js',
+    options_buttons_widget: './js/src/options_buttons.widget.js',
   },
   optimization: {
     minimize: false,
   },
   output: {
-    libraryTarget: 'var',
+    libraryTarget: 'amd',
     library: 'jsDrupal_[name]',
     path: path.resolve(__dirname, 'js', 'build'),
     filename: '[name].js',
   },
-  externals: ['react', 'react-dom', '@material-ui/core', /\@material-ui\/core\/*./],
+  plugins: [new WPAsyncDefine()],
+  externals: [
+    'react',
+    'react-dom',
+    '@material-ui/core',
+    /@material-ui\/core\/*./,
+  ],
   module: {
     rules: [
       {

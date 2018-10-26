@@ -3,12 +3,16 @@
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
+  "scripts": {
+    "build": "webpack --config webpack.config.js"
+  },
   "devDependencies": {
     "@babel/plugin-proposal-class-properties": "^7.1.0",
     "@babel/preset-env": "^7.1.0",
     "@babel/preset-react": "^7.0.0",
     "babel-loader": "^8.0.4",
     "webpack": "^4.23.1",
+    "webpack-async-define": "^1.1.1",
     "webpack-cli": "^3.1.2"
   }
 }

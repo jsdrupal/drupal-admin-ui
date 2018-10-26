@@ -22,6 +22,7 @@
   "dependencies": {
     "@material-ui/core": "^3.2.0",
     "@material-ui/icons": "^3.0.1",
+    "async-define": "^3.2.0",
     "deepmerge": "^2.1.1",
     "downshift": "^2.0.16",
     "emotion": "^9.0.2",

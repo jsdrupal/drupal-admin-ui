@@ -1,4 +1,4 @@
 widgets:
   options_buttons:
-    component: js/build/options_buttons.widget.js
+    component: js/build/options_buttons_widget.js
     multiple: true
