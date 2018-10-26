@@ -30,9 +30,9 @@ commands:
       ssh_key_fingerprint:
         type: string
     steps:
-    - add_ssh_keys:
-        fingerprints:
-        - << parameter.ssh_key_fingerprint >>
+      - add_ssh_keys:
+          fingerprints:
+            - << parameter.ssh_key_fingerprint >>
       - run:
           name: Configure git
           command: |
