@@ -43,4 +43,4 @@ const OptionsButtons = ({
   );
 };
 
-export default OptionsButtons;
+export default () => OptionsButtons;

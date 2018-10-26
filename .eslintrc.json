@@ -13,13 +13,17 @@
   },
   "rules": {
     "react/jsx-filename-extension": [1, { "extensions": [".js"] }],
-    "jsx-a11y/anchor-is-valid": [ "error", {
-      "aspects": [ "noHref" ]
-    }],
+    "jsx-a11y/anchor-is-valid": [
+      "error",
+      {
+        "aspects": ["noHref"]
+      }
+    ],
     "jsx-a11y/label-has-for": 0,
     "no-param-reassign": [2, { "props": false }],
     "react/destructuring-assignment": ["never"],
     "react/jsx-one-expression-per-line": ["never"],
-    "react/jsx-wrap-multilines": ["never"]
+    "react/jsx-wrap-multilines": ["never"],
+    "no-restricted-properties": ["never"]
   }
 }

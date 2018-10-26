@@ -1,5 +1,4 @@
 const path = require('path');
-const WPAsyncDefine = require('webpack-async-define');
 
 module.exports = {
   entry: {
@@ -14,7 +13,6 @@ module.exports = {
     path: path.resolve(__dirname, 'js', 'build'),
     filename: '[name].js',
   },
-  plugins: [new WPAsyncDefine()],
   externals: [
     'react',
     'react-dom',

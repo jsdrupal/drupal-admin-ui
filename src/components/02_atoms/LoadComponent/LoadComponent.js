@@ -1,8 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import asyncDefine from 'async-define';
-
 class LoadComponent extends React.Component {
   state = {
     component: null,
@@ -24,21 +22,9 @@ class LoadComponent extends React.Component {
       //     const component = window[`jsDrupal_${this.props.name}_widget`]; // eslint-ignore-line
       //     this.setState({ component });
       //   });
-      const script = document.createElement('script');
-      document.body.appendChild(script);
-
-      script.async = true;
-      script.crossOrigin = true;
-
-      script.onload = () => {
-        asyncDefine(`jsDrupal_${this.props.name}_widget`, component => {
-          debugger;
-          this.setState({ component })
-        })
-        // const component = window[this.props.name]; // eslint-ignore-line
-        // this.setState({ component });
-      };
-      script.src = this.props.component;
+      window.System.import(this.props.component).then(component =>
+        this.setState({ component }),
+      );
     } else {
       this.setState({
         component: this.props.component,

@@ -47,7 +47,8 @@
     "react-sticky": "^6.0.2",
     "redux": "^3.7.2",
     "redux-devtools-extension": "^2.13.2",
-    "redux-saga": "^0.16.0"
+    "redux-saga": "^0.16.0",
+    "systemjs": "^2.0.2"
   },
   "devDependencies": {
     "@storybook/addon-knobs": "^3.4.8",
