@@ -84,3 +84,9 @@ admin_ui_support.node.add:
     parameters:
       node_type:
         with_config_overrides: TRUE
+admin_ui_support.components:
+  path: '/jsdrupal/components'
+  defaults:
+    _controller: '\Drupal\admin_ui_support\Controller\DefaultController::components'
+  requirements:
+    _access: 'TRUE'

@@ -181,6 +181,10 @@ async function api(
       url = '/jsonapi/field_storage_config';
       break;
     }
+    case 'admin_ui_components': {
+      url = '/jsdrupal/components';
+      break;
+    }
     default:
       break;
   }

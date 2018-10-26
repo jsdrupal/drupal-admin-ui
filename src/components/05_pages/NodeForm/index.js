@@ -16,11 +16,13 @@ import MultipleFields from '../../02_atoms/MultipleFields/MultipleFields';
 
 import { contentAdd } from '../../../actions/content';
 import { requestUiSchema } from '../../../actions/schema';
-import { setErrorMessage } from '../../../actions/application';
+import {
+  requestComponents,
+  setErrorMessage,
+} from '../../../actions/application';
 
 import { createUISchema, sortUISchemaFields } from '../../../utils/api/schema';
-
-import widgets from './Widgets';
+import LoadComponent from '../../02_atoms/LoadComponent/LoadComponent';
 
 let styles;
 
@@ -43,6 +45,7 @@ class NodeForm extends React.Component {
     }),
     setErrorMessage: PropTypes.func.isRequired,
     onChange: PropTypes.func,
+    requestComponents: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
@@ -63,6 +66,7 @@ class NodeForm extends React.Component {
     });
 
     this.calculateState(this.props, this.state, state => this.setState(state));
+    this.props.requestComponents();
   }
 
   componentDidUpdate() {
@@ -222,7 +226,6 @@ class NodeForm extends React.Component {
       inputProps,
     };
 
-    const widgetComponent = widget.component;
     const widgetIsMultiple = widget.multiple || false;
     const hasMultipleDeltas =
       (fieldSchema.type && fieldSchema.type === 'array') ||
@@ -230,10 +233,18 @@ class NodeForm extends React.Component {
         fieldSchema.properties.data &&
         fieldSchema.properties.data.type === 'array');
 
-    return hasMultipleDeltas && !widgetIsMultiple ? (
-      <MultipleFields component={widgetComponent} {...widgetProps} />
-    ) : (
-      React.createElement(widgetComponent, widgetProps)
+    return (
+      <LoadComponent
+        name={widget.name}
+        component={widget.component}
+        render={widgetComponent =>
+          hasMultipleDeltas && !widgetIsMultiple ? (
+            <MultipleFields component={widgetComponent} {...widgetProps} />
+          ) : (
+            React.createElement(widgetComponent, widgetProps)
+          )
+        }
+      />
     );
   };
 
@@ -286,16 +297,22 @@ class NodeForm extends React.Component {
 
   render() {
     let result = null;
-    if (this.props.schema && this.props.uiSchema && this.state.entity) {
+    if (
+      this.props.schema &&
+      this.props.uiSchema &&
+      this.state.entity &&
+      this.props.components.widgets
+    ) {
       const { right, left } = sortUISchemaFields(
         createUISchema(
           this.props.uiSchema.fieldSchema,
           this.props.uiSchema.formDisplaySchema,
           this.props.uiSchema.fieldStorageConfig,
-          widgets,
+          this.props.components.widgets,
         ),
         ['promote', 'status', 'sticky', 'uid', 'created'],
       );
+      console.log({ right });
       result = (
         <div className={styles.gridRoot}>
           {this.renderRestoreSnackbar()}
@@ -341,6 +358,7 @@ styles = {
 
 const mapStateToProps = (state, { bundle, entityTypeId }) => ({
   uiSchema: state.schema.uiSchema[`${entityTypeId}--${bundle}`],
+  components: state.application.components,
 });
 
 export default connect(
@@ -349,5 +367,6 @@ export default connect(
     requestUiSchema,
     contentAdd,
     setErrorMessage,
+    requestComponents,
   },
 )(NodeForm);

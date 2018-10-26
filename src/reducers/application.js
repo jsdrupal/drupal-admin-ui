@@ -13,6 +13,7 @@ import {
   MENU_LOADED,
   CONTENT_TYPES_LOADED,
   ACTIONS_LOADED,
+  COMPONENTS_LOADED,
 } from '../actions/application';
 
 export const initialState = {
@@ -22,6 +23,7 @@ export const initialState = {
   contentTypes: {},
   actions: [],
   drawerOpen: false,
+  components: null,
 };
 
 export default (state = initialState, action) => {
@@ -147,6 +149,12 @@ export default (state = initialState, action) => {
       return {
         ...state,
         actions: action.payload.actions.data,
+      };
+    }
+    case COMPONENTS_LOADED: {
+      return {
+        ...state,
+        components: action.payload.components,
       };
     }
     default:

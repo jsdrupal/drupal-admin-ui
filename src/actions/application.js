@@ -12,6 +12,7 @@ import {
   MESSAGE_SEVERITY_WARNING,
 } from '../constants/messages';
 import { ApiError } from '../utils/api/errors';
+import widgets from "../components/05_pages/NodeForm/Widgets";
 
 export const OPEN_DRAWER = 'OPEN_DRAWER';
 export const openDrawer = () => ({
@@ -177,8 +178,38 @@ function* loadActions() {
   }
 }
 
-export default function* watchRequestedMenu() {
+export const COMPONENTS_REQUESTED = 'COMPONENTS_REQUESTED';
+export const requestComponents = () => ({
+  type: COMPONENTS_REQUESTED,
+  payload: {},
+});
+
+export const COMPONENTS_LOADED = 'COMPONENTS_LOADED';
+
+function* loadComponents() {
+  try {
+    const components = yield call(api, 'admin_ui_components');
+    yield put({
+      type: COMPONENTS_LOADED,
+      payload: {
+        components: {
+          ...components,
+          widgets: {
+            ...components.widgets,
+            ...widgets,
+          },
+        },
+      },
+    });
+  } catch (error) {
+    const errorMessage = yield ApiError.errorToHumanString(error);
+    yield put(setErrorMessage(errorMessage));
+  }
+}
+
+export default function* watchApplication() {
   yield takeLatest(MENU_REQUESTED, loadMenu);
   yield takeLatest(CONTENT_TYPES_REQUESTED, loadContentTypes);
   yield takeEvery(ACTIONS_REQUESTED, loadActions);
+  yield takeLatest(COMPONENTS_REQUESTED, loadComponents);
 }

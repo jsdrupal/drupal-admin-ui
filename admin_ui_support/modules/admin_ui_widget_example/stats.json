@@ -1,0 +1,972 @@
+{
+  "errors": [],
+  "warnings": [],
+  "version": "4.23.1",
+  "hash": "d061da6ed09f6fcdfd23",
+  "time": 519,
+  "builtAt": 1540491915389,
+  "publicPath": "",
+  "outputPath": "/Users/dawehner/www/drupal-admin-ui-demo/drupal-admin-ui/admin_ui_support/modules/admin_ui_widget_example/js/build",
+  "assetsByChunkName": {
+    "options_buttons.widget": "options_buttons.widget.js"
+  },
+  "assets": [
+    {
+      "name": "options_buttons.widget.js",
+      "size": 11959,
+      "chunks": [
+        "options_buttons.widget"
+      ],
+      "chunkNames": [
+        "options_buttons.widget"
+      ],
+      "emitted": true
+    }
+  ],
+  "filteredAssets": 0,
+  "entrypoints": {
+    "options_buttons.widget": {
+      "chunks": [
+        "options_buttons.widget"
+      ],
+      "assets": [
+        "options_buttons.widget.js"
+      ],
+      "children": {},
+      "childAssets": {}
+    }
+  },
+  "namedChunkGroups": {
+    "options_buttons.widget": {
+      "chunks": [
+        "options_buttons.widget"
+      ],
+      "assets": [
+        "options_buttons.widget.js"
+      ],
+      "children": {},
+      "childAssets": {}
+    }
+  },
+  "chunks": [
+    {
+      "id": "options_buttons.widget",
+      "rendered": true,
+      "initial": true,
+      "entry": true,
+      "size": 2441,
+      "names": [
+        "options_buttons.widget"
+      ],
+      "files": [
+        "options_buttons.widget.js"
+      ],
+      "hash": "d9fced7e30dcaa8bd845",
+      "siblings": [],
+      "parents": [],
+      "children": [],
+      "childrenByOrder": {},
+      "modules": [
+        {
+          "id": "./js/src/options_buttons.widget.js",
+          "identifier": "/Users/dawehner/www/drupal-admin-ui-demo/drupal-admin-ui/admin_ui_support/modules/admin_ui_widget_example/node_modules/babel-loader/lib/index.js??ref--4!/Users/dawehner/www/drupal-admin-ui-demo/drupal-admin-ui/admin_ui_support/modules/admin_ui_widget_example/js/src/options_buttons.widget.js",
+          "name": "./js/src/options_buttons.widget.js",
+          "index": 0,
+          "index2": 7,
+          "size": 2147,
+          "cacheable": true,
+          "built": true,
+          "optional": false,
+          "prefetched": false,
+          "chunks": [
+            "options_buttons.widget"
+          ],
+          "issuer": null,
+          "issuerId": null,
+          "issuerName": null,
+          "issuerPath": null,
+          "failed": false,
+          "errors": 0,
+          "warnings": 0,
+          "assets": [],
+          "reasons": [
+            {
+              "moduleId": null,
+              "moduleIdentifier": null,
+              "module": null,
+              "moduleName": null,
+              "type": "single entry",
+              "userRequest": "./js/src/options_buttons.widget.js",
+              "loc": "options_buttons.widget"
+            }
+          ],
+          "providedExports": [
+            "default"
+          ],
+          "optimizationBailout": [],
+          "depth": 0,
+          "source": "function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest(); }\n\nfunction _nonIterableRest() { throw new TypeError(\"Invalid attempt to destructure non-iterable instance\"); }\n\nfunction _iterableToArrayLimit(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i[\"return\"] != null) _i[\"return\"](); } finally { if (_d) throw _e; } } return _arr; }\n\nfunction _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }\n\nimport React from 'react';\nimport InputLabel from '@material-ui/core/InputLabel';\nimport FormControl from '@material-ui/core/FormControl';\nimport FormGroup from '@material-ui/core/FormGroup';\nimport FormControlLabel from '@material-ui/core/FormControlLabel';\nimport Checkbox from '@material-ui/core/Checkbox';\nimport FormHelperText from '@material-ui/core/FormHelperText';\n\nvar OptionsButtons = function OptionsButtons(_ref) {\n  var label = _ref.label,\n      value = _ref.value,\n      onChange = _ref.onChange,\n      helpText = _ref.helpText,\n      fieldName = _ref.fieldName,\n      required = _ref.required,\n      defaultValue = _ref.schema.default,\n      classes = _ref.classes,\n      allowedValues = _ref.inputProps.allowed_values;\n  var options = {\n    'foo': 'Foo',\n    'bar': 'Bar'\n  };\n  return React.createElement(FormControl, {\n    margin: \"normal\",\n    classes: classes\n  }, React.createElement(InputLabel, {\n    htmlFor: fieldName,\n    required: required\n  }, label), React.createElement(FormGroup, {\n    row: true\n  }, Object.entries(options).map(function (_ref2) {\n    var _ref3 = _slicedToArray(_ref2, 2),\n        key = _ref3[0],\n        label = _ref3[1];\n\n    return React.createElement(FormControlLabel, {\n      control: React.createElement(Checkbox, {\n        value: \"foo\"\n      }),\n      label: label\n    });\n  })), helpText && React.createElement(FormHelperText, null, helpText));\n};\n\nexport default OptionsButtons;"
+        },
+        {
+          "id": "@material-ui/core/Checkbox",
+          "identifier": "external \"@material-ui/core/Checkbox\"",
+          "name": "external \"@material-ui/core/Checkbox\"",
+          "index": 6,
+          "index2": 5,
+          "size": 42,
+          "built": true,
+          "optional": false,
+          "prefetched": false,
+          "chunks": [
+            "options_buttons.widget"
+          ],
+          "issuer": "/Users/dawehner/www/drupal-admin-ui-demo/drupal-admin-ui/admin_ui_support/modules/admin_ui_widget_example/node_modules/babel-loader/lib/index.js??ref--4!/Users/dawehner/www/drupal-admin-ui-demo/drupal-admin-ui/admin_ui_support/modules/admin_ui_widget_example/js/src/options_buttons.widget.js",
+          "issuerId": "./js/src/options_buttons.widget.js",
+          "issuerName": "./js/src/options_buttons.widget.js",
+          "issuerPath": [
+            {
+              "id": "./js/src/options_buttons.widget.js",
+              "identifier": "/Users/dawehner/www/drupal-admin-ui-demo/drupal-admin-ui/admin_ui_support/modules/admin_ui_widget_example/node_modules/babel-loader/lib/index.js??ref--4!/Users/dawehner/www/drupal-admin-ui-demo/drupal-admin-ui/admin_ui_support/modules/admin_ui_widget_example/js/src/options_buttons.widget.js",
+              "name": "./js/src/options_buttons.widget.js"
+            }
+          ],
+          "failed": false,
+          "errors": 0,
+          "warnings": 0,
+          "assets": [],
+          "reasons": [
+            {
+              "moduleId": "./js/src/options_buttons.widget.js",
+              "moduleIdentifier": "/Users/dawehner/www/drupal-admin-ui-demo/drupal-admin-ui/admin_ui_support/modules/admin_ui_widget_example/node_modules/babel-loader/lib/index.js??ref--4!/Users/dawehner/www/drupal-admin-ui-demo/drupal-admin-ui/admin_ui_support/modules/admin_ui_widget_example/js/src/options_buttons.widget.js",
+              "module": "./js/src/options_buttons.widget.js",
+              "moduleName": "./js/src/options_buttons.widget.js",
+              "type": "harmony side effect evaluation",
+              "userRequest": "@material-ui/core/Checkbox",
+              "loc": "14:0-50"
+            },
+            {
+              "moduleId": "./js/src/options_buttons.widget.js",
+              "moduleIdentifier": "/Users/dawehner/www/drupal-admin-ui-demo/drupal-admin-ui/admin_ui_support/modules/admin_ui_widget_example/node_modules/babel-loader/lib/index.js??ref--4!/Users/dawehner/www/drupal-admin-ui-demo/drupal-admin-ui/admin_ui_support/modules/admin_ui_widget_example/js/src/options_buttons.widget.js",
+              "module": "./js/src/options_buttons.widget.js",
+              "moduleName": "./js/src/options_buttons.widget.js",
+              "type": "harmony import specifier",
+              "userRequest": "@material-ui/core/Checkbox",
+              "loc": "45:35-43"
+            }
+          ],
+          "providedExports": null,
+          "optimizationBailout": [],
+          "depth": 1
+        },
+        {
+          "id": "@material-ui/core/FormControl",
+          "identifier": "external \"@material-ui/core/FormControl\"",
+          "name": "external \"@material-ui/core/FormControl\"",
+          "index": 3,
+          "index2": 2,
+          "size": 42,
+          "built": true,
+          "optional": false,
+          "prefetched": false,
+          "chunks": [
+            "options_buttons.widget"
+          ],
+          "issuer": "/Users/dawehner/www/drupal-admin-ui-demo/drupal-admin-ui/admin_ui_support/modules/admin_ui_widget_example/node_modules/babel-loader/lib/index.js??ref--4!/Users/dawehner/www/drupal-admin-ui-demo/drupal-admin-ui/admin_ui_support/modules/admin_ui_widget_example/js/src/options_buttons.widget.js",
+          "issuerId": "./js/src/options_buttons.widget.js",
+          "issuerName": "./js/src/options_buttons.widget.js",
+          "issuerPath": [
+            {
+              "id": "./js/src/options_buttons.widget.js",
+              "identifier": "/Users/dawehner/www/drupal-admin-ui-demo/drupal-admin-ui/admin_ui_support/modules/admin_ui_widget_example/node_modules/babel-loader/lib/index.js??ref--4!/Users/dawehner/www/drupal-admin-ui-demo/drupal-admin-ui/admin_ui_support/modules/admin_ui_widget_example/js/src/options_buttons.widget.js",
+              "name": "./js/src/options_buttons.widget.js"
+            }
+          ],
+          "failed": false,
+          "errors": 0,
+          "warnings": 0,
+          "assets": [],
+          "reasons": [
+            {
+              "moduleId": "./js/src/options_buttons.widget.js",
+              "moduleIdentifier": "/Users/dawehner/www/drupal-admin-ui-demo/drupal-admin-ui/admin_ui_support/modules/admin_ui_widget_example/node_modules/babel-loader/lib/index.js??ref--4!/Users/dawehner/www/drupal-admin-ui-demo/drupal-admin-ui/admin_ui_support/modules/admin_ui_widget_example/js/src/options_buttons.widget.js",
+              "module": "./js/src/options_buttons.widget.js",
+              "moduleName": "./js/src/options_buttons.widget.js",
+              "type": "harmony side effect evaluation",
+              "userRequest": "@material-ui/core/FormControl",
+              "loc": "11:0-56"
+            },
+            {
+              "moduleId": "./js/src/options_buttons.widget.js",
+              "moduleIdentifier": "/Users/dawehner/www/drupal-admin-ui-demo/drupal-admin-ui/admin_ui_support/modules/admin_ui_widget_example/node_modules/babel-loader/lib/index.js??ref--4!/Users/dawehner/www/drupal-admin-ui-demo/drupal-admin-ui/admin_ui_support/modules/admin_ui_widget_example/js/src/options_buttons.widget.js",
+              "module": "./js/src/options_buttons.widget.js",
+              "moduleName": "./js/src/options_buttons.widget.js",
+              "type": "harmony import specifier",
+              "userRequest": "@material-ui/core/FormControl",
+              "loc": "31:29-40"
+            }
+          ],
+          "providedExports": null,
+          "optimizationBailout": [],
+          "depth": 1
+        },
+        {
+          "id": "@material-ui/core/FormControlLabel",
+          "identifier": "external \"@material-ui/core/FormControlLabel\"",
+          "name": "external \"@material-ui/core/FormControlLabel\"",
+          "index": 5,
+          "index2": 4,
+          "size": 42,
+          "built": true,
+          "optional": false,
+          "prefetched": false,
+          "chunks": [
+            "options_buttons.widget"
+          ],
+          "issuer": "/Users/dawehner/www/drupal-admin-ui-demo/drupal-admin-ui/admin_ui_support/modules/admin_ui_widget_example/node_modules/babel-loader/lib/index.js??ref--4!/Users/dawehner/www/drupal-admin-ui-demo/drupal-admin-ui/admin_ui_support/modules/admin_ui_widget_example/js/src/options_buttons.widget.js",
+          "issuerId": "./js/src/options_buttons.widget.js",
+          "issuerName": "./js/src/options_buttons.widget.js",
+          "issuerPath": [
+            {
+              "id": "./js/src/options_buttons.widget.js",
+              "identifier": "/Users/dawehner/www/drupal-admin-ui-demo/drupal-admin-ui/admin_ui_support/modules/admin_ui_widget_example/node_modules/babel-loader/lib/index.js??ref--4!/Users/dawehner/www/drupal-admin-ui-demo/drupal-admin-ui/admin_ui_support/modules/admin_ui_widget_example/js/src/options_buttons.widget.js",
+              "name": "./js/src/options_buttons.widget.js"
+            }
+          ],
+          "failed": false,
+          "errors": 0,
+          "warnings": 0,
+          "assets": [],
+          "reasons": [
+            {
+              "moduleId": "./js/src/options_buttons.widget.js",
+              "moduleIdentifier": "/Users/dawehner/www/drupal-admin-ui-demo/drupal-admin-ui/admin_ui_support/modules/admin_ui_widget_example/node_modules/babel-loader/lib/index.js??ref--4!/Users/dawehner/www/drupal-admin-ui-demo/drupal-admin-ui/admin_ui_support/modules/admin_ui_widget_example/js/src/options_buttons.widget.js",
+              "module": "./js/src/options_buttons.widget.js",
+              "moduleName": "./js/src/options_buttons.widget.js",
+              "type": "harmony side effect evaluation",
+              "userRequest": "@material-ui/core/FormControlLabel",
+              "loc": "13:0-66"
+            },
+            {
+              "moduleId": "./js/src/options_buttons.widget.js",
+              "moduleIdentifier": "/Users/dawehner/www/drupal-admin-ui-demo/drupal-admin-ui/admin_ui_support/modules/admin_ui_widget_example/node_modules/babel-loader/lib/index.js??ref--4!/Users/dawehner/www/drupal-admin-ui-demo/drupal-admin-ui/admin_ui_support/modules/admin_ui_widget_example/js/src/options_buttons.widget.js",
+              "module": "./js/src/options_buttons.widget.js",
+              "moduleName": "./js/src/options_buttons.widget.js",
+              "type": "harmony import specifier",
+              "userRequest": "@material-ui/core/FormControlLabel",
+              "loc": "44:31-47"
+            }
+          ],
+          "providedExports": null,
+          "optimizationBailout": [],
+          "depth": 1
+        },
+        {
+          "id": "@material-ui/core/FormGroup",
+          "identifier": "external \"@material-ui/core/FormGroup\"",
+          "name": "external \"@material-ui/core/FormGroup\"",
+          "index": 4,
+          "index2": 3,
+          "size": 42,
+          "built": true,
+          "optional": false,
+          "prefetched": false,
+          "chunks": [
+            "options_buttons.widget"
+          ],
+          "issuer": "/Users/dawehner/www/drupal-admin-ui-demo/drupal-admin-ui/admin_ui_support/modules/admin_ui_widget_example/node_modules/babel-loader/lib/index.js??ref--4!/Users/dawehner/www/drupal-admin-ui-demo/drupal-admin-ui/admin_ui_support/modules/admin_ui_widget_example/js/src/options_buttons.widget.js",
+          "issuerId": "./js/src/options_buttons.widget.js",
+          "issuerName": "./js/src/options_buttons.widget.js",
+          "issuerPath": [
+            {
+              "id": "./js/src/options_buttons.widget.js",
+              "identifier": "/Users/dawehner/www/drupal-admin-ui-demo/drupal-admin-ui/admin_ui_support/modules/admin_ui_widget_example/node_modules/babel-loader/lib/index.js??ref--4!/Users/dawehner/www/drupal-admin-ui-demo/drupal-admin-ui/admin_ui_support/modules/admin_ui_widget_example/js/src/options_buttons.widget.js",
+              "name": "./js/src/options_buttons.widget.js"
+            }
+          ],
+          "failed": false,
+          "errors": 0,
+          "warnings": 0,
+          "assets": [],
+          "reasons": [
+            {
+              "moduleId": "./js/src/options_buttons.widget.js",
+              "moduleIdentifier": "/Users/dawehner/www/drupal-admin-ui-demo/drupal-admin-ui/admin_ui_support/modules/admin_ui_widget_example/node_modules/babel-loader/lib/index.js??ref--4!/Users/dawehner/www/drupal-admin-ui-demo/drupal-admin-ui/admin_ui_support/modules/admin_ui_widget_example/js/src/options_buttons.widget.js",
+              "module": "./js/src/options_buttons.widget.js",
+              "moduleName": "./js/src/options_buttons.widget.js",
+              "type": "harmony side effect evaluation",
+              "userRequest": "@material-ui/core/FormGroup",
+              "loc": "12:0-52"
+            },
+            {
+              "moduleId": "./js/src/options_buttons.widget.js",
+              "moduleIdentifier": "/Users/dawehner/www/drupal-admin-ui-demo/drupal-admin-ui/admin_ui_support/modules/admin_ui_widget_example/node_modules/babel-loader/lib/index.js??ref--4!/Users/dawehner/www/drupal-admin-ui-demo/drupal-admin-ui/admin_ui_support/modules/admin_ui_widget_example/js/src/options_buttons.widget.js",
+              "module": "./js/src/options_buttons.widget.js",
+              "moduleName": "./js/src/options_buttons.widget.js",
+              "type": "harmony import specifier",
+              "userRequest": "@material-ui/core/FormGroup",
+              "loc": "37:33-42"
+            }
+          ],
+          "providedExports": null,
+          "optimizationBailout": [],
+          "depth": 1
+        },
+        {
+          "id": "@material-ui/core/FormHelperText",
+          "identifier": "external \"@material-ui/core/FormHelperText\"",
+          "name": "external \"@material-ui/core/FormHelperText\"",
+          "index": 7,
+          "index2": 6,
+          "size": 42,
+          "built": true,
+          "optional": false,
+          "prefetched": false,
+          "chunks": [
+            "options_buttons.widget"
+          ],
+          "issuer": "/Users/dawehner/www/drupal-admin-ui-demo/drupal-admin-ui/admin_ui_support/modules/admin_ui_widget_example/node_modules/babel-loader/lib/index.js??ref--4!/Users/dawehner/www/drupal-admin-ui-demo/drupal-admin-ui/admin_ui_support/modules/admin_ui_widget_example/js/src/options_buttons.widget.js",
+          "issuerId": "./js/src/options_buttons.widget.js",
+          "issuerName": "./js/src/options_buttons.widget.js",
+          "issuerPath": [
+            {
+              "id": "./js/src/options_buttons.widget.js",
+              "identifier": "/Users/dawehner/www/drupal-admin-ui-demo/drupal-admin-ui/admin_ui_support/modules/admin_ui_widget_example/node_modules/babel-loader/lib/index.js??ref--4!/Users/dawehner/www/drupal-admin-ui-demo/drupal-admin-ui/admin_ui_support/modules/admin_ui_widget_example/js/src/options_buttons.widget.js",
+              "name": "./js/src/options_buttons.widget.js"
+            }
+          ],
+          "failed": false,
+          "errors": 0,
+          "warnings": 0,
+          "assets": [],
+          "reasons": [
+            {
+              "moduleId": "./js/src/options_buttons.widget.js",
+              "moduleIdentifier": "/Users/dawehner/www/drupal-admin-ui-demo/drupal-admin-ui/admin_ui_support/modules/admin_ui_widget_example/node_modules/babel-loader/lib/index.js??ref--4!/Users/dawehner/www/drupal-admin-ui-demo/drupal-admin-ui/admin_ui_support/modules/admin_ui_widget_example/js/src/options_buttons.widget.js",
+              "module": "./js/src/options_buttons.widget.js",
+              "moduleName": "./js/src/options_buttons.widget.js",
+              "type": "harmony side effect evaluation",
+              "userRequest": "@material-ui/core/FormHelperText",
+              "loc": "15:0-62"
+            },
+            {
+              "moduleId": "./js/src/options_buttons.widget.js",
+              "moduleIdentifier": "/Users/dawehner/www/drupal-admin-ui-demo/drupal-admin-ui/admin_ui_support/modules/admin_ui_widget_example/node_modules/babel-loader/lib/index.js??ref--4!/Users/dawehner/www/drupal-admin-ui-demo/drupal-admin-ui/admin_ui_support/modules/admin_ui_widget_example/js/src/options_buttons.widget.js",
+              "module": "./js/src/options_buttons.widget.js",
+              "moduleName": "./js/src/options_buttons.widget.js",
+              "type": "harmony import specifier",
+              "userRequest": "@material-ui/core/FormHelperText",
+              "loc": "50:39-53"
+            }
+          ],
+          "providedExports": null,
+          "optimizationBailout": [],
+          "depth": 1
+        },
+        {
+          "id": "@material-ui/core/InputLabel",
+          "identifier": "external \"@material-ui/core/InputLabel\"",
+          "name": "external \"@material-ui/core/InputLabel\"",
+          "index": 2,
+          "index2": 1,
+          "size": 42,
+          "built": true,
+          "optional": false,
+          "prefetched": false,
+          "chunks": [
+            "options_buttons.widget"
+          ],
+          "issuer": "/Users/dawehner/www/drupal-admin-ui-demo/drupal-admin-ui/admin_ui_support/modules/admin_ui_widget_example/node_modules/babel-loader/lib/index.js??ref--4!/Users/dawehner/www/drupal-admin-ui-demo/drupal-admin-ui/admin_ui_support/modules/admin_ui_widget_example/js/src/options_buttons.widget.js",
+          "issuerId": "./js/src/options_buttons.widget.js",
+          "issuerName": "./js/src/options_buttons.widget.js",
+          "issuerPath": [
+            {
+              "id": "./js/src/options_buttons.widget.js",
+              "identifier": "/Users/dawehner/www/drupal-admin-ui-demo/drupal-admin-ui/admin_ui_support/modules/admin_ui_widget_example/node_modules/babel-loader/lib/index.js??ref--4!/Users/dawehner/www/drupal-admin-ui-demo/drupal-admin-ui/admin_ui_support/modules/admin_ui_widget_example/js/src/options_buttons.widget.js",
+              "name": "./js/src/options_buttons.widget.js"
+            }
+          ],
+          "failed": false,
+          "errors": 0,
+          "warnings": 0,
+          "assets": [],
+          "reasons": [
+            {
+              "moduleId": "./js/src/options_buttons.widget.js",
+              "moduleIdentifier": "/Users/dawehner/www/drupal-admin-ui-demo/drupal-admin-ui/admin_ui_support/modules/admin_ui_widget_example/node_modules/babel-loader/lib/index.js??ref--4!/Users/dawehner/www/drupal-admin-ui-demo/drupal-admin-ui/admin_ui_support/modules/admin_ui_widget_example/js/src/options_buttons.widget.js",
+              "module": "./js/src/options_buttons.widget.js",
+              "moduleName": "./js/src/options_buttons.widget.js",
+              "type": "harmony side effect evaluation",
+              "userRequest": "@material-ui/core/InputLabel",
+              "loc": "10:0-54"
+            },
+            {
+              "moduleId": "./js/src/options_buttons.widget.js",
+              "moduleIdentifier": "/Users/dawehner/www/drupal-admin-ui-demo/drupal-admin-ui/admin_ui_support/modules/admin_ui_widget_example/node_modules/babel-loader/lib/index.js??ref--4!/Users/dawehner/www/drupal-admin-ui-demo/drupal-admin-ui/admin_ui_support/modules/admin_ui_widget_example/js/src/options_buttons.widget.js",
+              "module": "./js/src/options_buttons.widget.js",
+              "moduleName": "./js/src/options_buttons.widget.js",
+              "type": "harmony import specifier",
+              "userRequest": "@material-ui/core/InputLabel",
+              "loc": "34:25-35"
+            }
+          ],
+          "providedExports": null,
+          "optimizationBailout": [],
+          "depth": 1
+        },
+        {
+          "id": "react",
+          "identifier": "external \"react\"",
+          "name": "external \"react\"",
+          "index": 1,
+          "index2": 0,
+          "size": 42,
+          "built": true,
+          "optional": false,
+          "prefetched": false,
+          "chunks": [
+            "options_buttons.widget"
+          ],
+          "issuer": "/Users/dawehner/www/drupal-admin-ui-demo/drupal-admin-ui/admin_ui_support/modules/admin_ui_widget_example/node_modules/babel-loader/lib/index.js??ref--4!/Users/dawehner/www/drupal-admin-ui-demo/drupal-admin-ui/admin_ui_support/modules/admin_ui_widget_example/js/src/options_buttons.widget.js",
+          "issuerId": "./js/src/options_buttons.widget.js",
+          "issuerName": "./js/src/options_buttons.widget.js",
+          "issuerPath": [
+            {
+              "id": "./js/src/options_buttons.widget.js",
+              "identifier": "/Users/dawehner/www/drupal-admin-ui-demo/drupal-admin-ui/admin_ui_support/modules/admin_ui_widget_example/node_modules/babel-loader/lib/index.js??ref--4!/Users/dawehner/www/drupal-admin-ui-demo/drupal-admin-ui/admin_ui_support/modules/admin_ui_widget_example/js/src/options_buttons.widget.js",
+              "name": "./js/src/options_buttons.widget.js"
+            }
+          ],
+          "failed": false,
+          "errors": 0,
+          "warnings": 0,
+          "assets": [],
+          "reasons": [
+            {
+              "moduleId": "./js/src/options_buttons.widget.js",
+              "moduleIdentifier": "/Users/dawehner/www/drupal-admin-ui-demo/drupal-admin-ui/admin_ui_support/modules/admin_ui_widget_example/node_modules/babel-loader/lib/index.js??ref--4!/Users/dawehner/www/drupal-admin-ui-demo/drupal-admin-ui/admin_ui_support/modules/admin_ui_widget_example/js/src/options_buttons.widget.js",
+              "module": "./js/src/options_buttons.widget.js",
+              "moduleName": "./js/src/options_buttons.widget.js",
+              "type": "harmony side effect evaluation",
+              "userRequest": "react",
+              "loc": "9:0-26"
+            },
+            {
+              "moduleId": "./js/src/options_buttons.widget.js",
+              "moduleIdentifier": "/Users/dawehner/www/drupal-admin-ui-demo/drupal-admin-ui/admin_ui_support/modules/admin_ui_widget_example/node_modules/babel-loader/lib/index.js??ref--4!/Users/dawehner/www/drupal-admin-ui-demo/drupal-admin-ui/admin_ui_support/modules/admin_ui_widget_example/js/src/options_buttons.widget.js",
+              "module": "./js/src/options_buttons.widget.js",
+              "moduleName": "./js/src/options_buttons.widget.js",
+              "type": "harmony import specifier",
+              "userRequest": "react",
+              "loc": "31:9-14"
+            },
+            {
+              "moduleId": "./js/src/options_buttons.widget.js",
+              "moduleIdentifier": "/Users/dawehner/www/drupal-admin-ui-demo/drupal-admin-ui/admin_ui_support/modules/admin_ui_widget_example/node_modules/babel-loader/lib/index.js??ref--4!/Users/dawehner/www/drupal-admin-ui-demo/drupal-admin-ui/admin_ui_support/modules/admin_ui_widget_example/js/src/options_buttons.widget.js",
+              "module": "./js/src/options_buttons.widget.js",
+              "moduleName": "./js/src/options_buttons.widget.js",
+              "type": "harmony import specifier",
+              "userRequest": "react",
+              "loc": "34:5-10"
+            },
+            {
+              "moduleId": "./js/src/options_buttons.widget.js",
+              "moduleIdentifier": "/Users/dawehner/www/drupal-admin-ui-demo/drupal-admin-ui/admin_ui_support/modules/admin_ui_widget_example/node_modules/babel-loader/lib/index.js??ref--4!/Users/dawehner/www/drupal-admin-ui-demo/drupal-admin-ui/admin_ui_support/modules/admin_ui_widget_example/js/src/options_buttons.widget.js",
+              "module": "./js/src/options_buttons.widget.js",
+              "moduleName": "./js/src/options_buttons.widget.js",
+              "type": "harmony import specifier",
+              "userRequest": "react",
+              "loc": "37:13-18"
+            },
+            {
+              "moduleId": "./js/src/options_buttons.widget.js",
+              "moduleIdentifier": "/Users/dawehner/www/drupal-admin-ui-demo/drupal-admin-ui/admin_ui_support/modules/admin_ui_widget_example/node_modules/babel-loader/lib/index.js??ref--4!/Users/dawehner/www/drupal-admin-ui-demo/drupal-admin-ui/admin_ui_support/modules/admin_ui_widget_example/js/src/options_buttons.widget.js",
+              "module": "./js/src/options_buttons.widget.js",
+              "moduleName": "./js/src/options_buttons.widget.js",
+              "type": "harmony import specifier",
+              "userRequest": "react",
+              "loc": "44:11-16"
+            },
+            {
+              "moduleId": "./js/src/options_buttons.widget.js",
+              "moduleIdentifier": "/Users/dawehner/www/drupal-admin-ui-demo/drupal-admin-ui/admin_ui_support/modules/admin_ui_widget_example/node_modules/babel-loader/lib/index.js??ref--4!/Users/dawehner/www/drupal-admin-ui-demo/drupal-admin-ui/admin_ui_support/modules/admin_ui_widget_example/js/src/options_buttons.widget.js",
+              "module": "./js/src/options_buttons.widget.js",
+              "moduleName": "./js/src/options_buttons.widget.js",
+              "type": "harmony import specifier",
+              "userRequest": "react",
+              "loc": "45:15-20"
+            },
+            {
+              "moduleId": "./js/src/options_buttons.widget.js",
+              "moduleIdentifier": "/Users/dawehner/www/drupal-admin-ui-demo/drupal-admin-ui/admin_ui_support/modules/admin_ui_widget_example/node_modules/babel-loader/lib/index.js??ref--4!/Users/dawehner/www/drupal-admin-ui-demo/drupal-admin-ui/admin_ui_support/modules/admin_ui_widget_example/js/src/options_buttons.widget.js",
+              "module": "./js/src/options_buttons.widget.js",
+              "moduleName": "./js/src/options_buttons.widget.js",
+              "type": "harmony import specifier",
+              "userRequest": "react",
+              "loc": "50:19-24"
+            }
+          ],
+          "providedExports": null,
+          "optimizationBailout": [],
+          "depth": 1
+        }
+      ],
+      "filteredModules": 0,
+      "origins": [
+        {
+          "module": "",
+          "moduleIdentifier": "",
+          "moduleName": "",
+          "loc": "options_buttons.widget",
+          "request": "./js/src/options_buttons.widget.js",
+          "reasons": []
+        }
+      ]
+    }
+  ],
+  "modules": [
+    {
+      "id": "./js/src/options_buttons.widget.js",
+      "identifier": "/Users/dawehner/www/drupal-admin-ui-demo/drupal-admin-ui/admin_ui_support/modules/admin_ui_widget_example/node_modules/babel-loader/lib/index.js??ref--4!/Users/dawehner/www/drupal-admin-ui-demo/drupal-admin-ui/admin_ui_support/modules/admin_ui_widget_example/js/src/options_buttons.widget.js",
+      "name": "./js/src/options_buttons.widget.js",
+      "index": 0,
+      "index2": 7,
+      "size": 2147,
+      "cacheable": true,
+      "built": true,
+      "optional": false,
+      "prefetched": false,
+      "chunks": [
+        "options_buttons.widget"
+      ],
+      "issuer": null,
+      "issuerId": null,
+      "issuerName": null,
+      "issuerPath": null,
+      "failed": false,
+      "errors": 0,
+      "warnings": 0,
+      "assets": [],
+      "reasons": [
+        {
+          "moduleId": null,
+          "moduleIdentifier": null,
+          "module": null,
+          "moduleName": null,
+          "type": "single entry",
+          "userRequest": "./js/src/options_buttons.widget.js",
+          "loc": "options_buttons.widget"
+        }
+      ],
+      "providedExports": [
+        "default"
+      ],
+      "optimizationBailout": [],
+      "depth": 0,
+      "source": "function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest(); }\n\nfunction _nonIterableRest() { throw new TypeError(\"Invalid attempt to destructure non-iterable instance\"); }\n\nfunction _iterableToArrayLimit(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i[\"return\"] != null) _i[\"return\"](); } finally { if (_d) throw _e; } } return _arr; }\n\nfunction _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }\n\nimport React from 'react';\nimport InputLabel from '@material-ui/core/InputLabel';\nimport FormControl from '@material-ui/core/FormControl';\nimport FormGroup from '@material-ui/core/FormGroup';\nimport FormControlLabel from '@material-ui/core/FormControlLabel';\nimport Checkbox from '@material-ui/core/Checkbox';\nimport FormHelperText from '@material-ui/core/FormHelperText';\n\nvar OptionsButtons = function OptionsButtons(_ref) {\n  var label = _ref.label,\n      value = _ref.value,\n      onChange = _ref.onChange,\n      helpText = _ref.helpText,\n      fieldName = _ref.fieldName,\n      required = _ref.required,\n      defaultValue = _ref.schema.default,\n      classes = _ref.classes,\n      allowedValues = _ref.inputProps.allowed_values;\n  var options = {\n    'foo': 'Foo',\n    'bar': 'Bar'\n  };\n  return React.createElement(FormControl, {\n    margin: \"normal\",\n    classes: classes\n  }, React.createElement(InputLabel, {\n    htmlFor: fieldName,\n    required: required\n  }, label), React.createElement(FormGroup, {\n    row: true\n  }, Object.entries(options).map(function (_ref2) {\n    var _ref3 = _slicedToArray(_ref2, 2),\n        key = _ref3[0],\n        label = _ref3[1];\n\n    return React.createElement(FormControlLabel, {\n      control: React.createElement(Checkbox, {\n        value: \"foo\"\n      }),\n      label: label\n    });\n  })), helpText && React.createElement(FormHelperText, null, helpText));\n};\n\nexport default OptionsButtons;"
+    },
+    {
+      "id": "@material-ui/core/Checkbox",
+      "identifier": "external \"@material-ui/core/Checkbox\"",
+      "name": "external \"@material-ui/core/Checkbox\"",
+      "index": 6,
+      "index2": 5,
+      "size": 42,
+      "built": true,
+      "optional": false,
+      "prefetched": false,
+      "chunks": [
+        "options_buttons.widget"
+      ],
+      "issuer": "/Users/dawehner/www/drupal-admin-ui-demo/drupal-admin-ui/admin_ui_support/modules/admin_ui_widget_example/node_modules/babel-loader/lib/index.js??ref--4!/Users/dawehner/www/drupal-admin-ui-demo/drupal-admin-ui/admin_ui_support/modules/admin_ui_widget_example/js/src/options_buttons.widget.js",
+      "issuerId": "./js/src/options_buttons.widget.js",
+      "issuerName": "./js/src/options_buttons.widget.js",
+      "issuerPath": [
+        {
+          "id": "./js/src/options_buttons.widget.js",
+          "identifier": "/Users/dawehner/www/drupal-admin-ui-demo/drupal-admin-ui/admin_ui_support/modules/admin_ui_widget_example/node_modules/babel-loader/lib/index.js??ref--4!/Users/dawehner/www/drupal-admin-ui-demo/drupal-admin-ui/admin_ui_support/modules/admin_ui_widget_example/js/src/options_buttons.widget.js",
+          "name": "./js/src/options_buttons.widget.js"
+        }
+      ],
+      "failed": false,
+      "errors": 0,
+      "warnings": 0,
+      "assets": [],
+      "reasons": [
+        {
+          "moduleId": "./js/src/options_buttons.widget.js",
+          "moduleIdentifier": "/Users/dawehner/www/drupal-admin-ui-demo/drupal-admin-ui/admin_ui_support/modules/admin_ui_widget_example/node_modules/babel-loader/lib/index.js??ref--4!/Users/dawehner/www/drupal-admin-ui-demo/drupal-admin-ui/admin_ui_support/modules/admin_ui_widget_example/js/src/options_buttons.widget.js",
+          "module": "./js/src/options_buttons.widget.js",
+          "moduleName": "./js/src/options_buttons.widget.js",
+          "type": "harmony side effect evaluation",
+          "userRequest": "@material-ui/core/Checkbox",
+          "loc": "14:0-50"
+        },
+        {
+          "moduleId": "./js/src/options_buttons.widget.js",
+          "moduleIdentifier": "/Users/dawehner/www/drupal-admin-ui-demo/drupal-admin-ui/admin_ui_support/modules/admin_ui_widget_example/node_modules/babel-loader/lib/index.js??ref--4!/Users/dawehner/www/drupal-admin-ui-demo/drupal-admin-ui/admin_ui_support/modules/admin_ui_widget_example/js/src/options_buttons.widget.js",
+          "module": "./js/src/options_buttons.widget.js",
+          "moduleName": "./js/src/options_buttons.widget.js",
+          "type": "harmony import specifier",
+          "userRequest": "@material-ui/core/Checkbox",
+          "loc": "45:35-43"
+        }
+      ],
+      "providedExports": null,
+      "optimizationBailout": [],
+      "depth": 1
+    },
+    {
+      "id": "@material-ui/core/FormControl",
+      "identifier": "external \"@material-ui/core/FormControl\"",
+      "name": "external \"@material-ui/core/FormControl\"",
+      "index": 3,
+      "index2": 2,
+      "size": 42,
+      "built": true,
+      "optional": false,
+      "prefetched": false,
+      "chunks": [
+        "options_buttons.widget"
+      ],
+      "issuer": "/Users/dawehner/www/drupal-admin-ui-demo/drupal-admin-ui/admin_ui_support/modules/admin_ui_widget_example/node_modules/babel-loader/lib/index.js??ref--4!/Users/dawehner/www/drupal-admin-ui-demo/drupal-admin-ui/admin_ui_support/modules/admin_ui_widget_example/js/src/options_buttons.widget.js",
+      "issuerId": "./js/src/options_buttons.widget.js",
+      "issuerName": "./js/src/options_buttons.widget.js",
+      "issuerPath": [
+        {
+          "id": "./js/src/options_buttons.widget.js",
+          "identifier": "/Users/dawehner/www/drupal-admin-ui-demo/drupal-admin-ui/admin_ui_support/modules/admin_ui_widget_example/node_modules/babel-loader/lib/index.js??ref--4!/Users/dawehner/www/drupal-admin-ui-demo/drupal-admin-ui/admin_ui_support/modules/admin_ui_widget_example/js/src/options_buttons.widget.js",
+          "name": "./js/src/options_buttons.widget.js"
+        }
+      ],
+      "failed": false,
+      "errors": 0,
+      "warnings": 0,
+      "assets": [],
+      "reasons": [
+        {
+          "moduleId": "./js/src/options_buttons.widget.js",
+          "moduleIdentifier": "/Users/dawehner/www/drupal-admin-ui-demo/drupal-admin-ui/admin_ui_support/modules/admin_ui_widget_example/node_modules/babel-loader/lib/index.js??ref--4!/Users/dawehner/www/drupal-admin-ui-demo/drupal-admin-ui/admin_ui_support/modules/admin_ui_widget_example/js/src/options_buttons.widget.js",
+          "module": "./js/src/options_buttons.widget.js",
+          "moduleName": "./js/src/options_buttons.widget.js",
+          "type": "harmony side effect evaluation",
+          "userRequest": "@material-ui/core/FormControl",
+          "loc": "11:0-56"
+        },
+        {
+          "moduleId": "./js/src/options_buttons.widget.js",
+          "moduleIdentifier": "/Users/dawehner/www/drupal-admin-ui-demo/drupal-admin-ui/admin_ui_support/modules/admin_ui_widget_example/node_modules/babel-loader/lib/index.js??ref--4!/Users/dawehner/www/drupal-admin-ui-demo/drupal-admin-ui/admin_ui_support/modules/admin_ui_widget_example/js/src/options_buttons.widget.js",
+          "module": "./js/src/options_buttons.widget.js",
+          "moduleName": "./js/src/options_buttons.widget.js",
+          "type": "harmony import specifier",
+          "userRequest": "@material-ui/core/FormControl",
+          "loc": "31:29-40"
+        }
+      ],
+      "providedExports": null,
+      "optimizationBailout": [],
+      "depth": 1
+    },
+    {
+      "id": "@material-ui/core/FormControlLabel",
+      "identifier": "external \"@material-ui/core/FormControlLabel\"",
+      "name": "external \"@material-ui/core/FormControlLabel\"",
+      "index": 5,
+      "index2": 4,
+      "size": 42,
+      "built": true,
+      "optional": false,
+      "prefetched": false,
+      "chunks": [
+        "options_buttons.widget"
+      ],
+      "issuer": "/Users/dawehner/www/drupal-admin-ui-demo/drupal-admin-ui/admin_ui_support/modules/admin_ui_widget_example/node_modules/babel-loader/lib/index.js??ref--4!/Users/dawehner/www/drupal-admin-ui-demo/drupal-admin-ui/admin_ui_support/modules/admin_ui_widget_example/js/src/options_buttons.widget.js",
+      "issuerId": "./js/src/options_buttons.widget.js",
+      "issuerName": "./js/src/options_buttons.widget.js",
+      "issuerPath": [
+        {
+          "id": "./js/src/options_buttons.widget.js",
+          "identifier": "/Users/dawehner/www/drupal-admin-ui-demo/drupal-admin-ui/admin_ui_support/modules/admin_ui_widget_example/node_modules/babel-loader/lib/index.js??ref--4!/Users/dawehner/www/drupal-admin-ui-demo/drupal-admin-ui/admin_ui_support/modules/admin_ui_widget_example/js/src/options_buttons.widget.js",
+          "name": "./js/src/options_buttons.widget.js"
+        }
+      ],
+      "failed": false,
+      "errors": 0,
+      "warnings": 0,
+      "assets": [],
+      "reasons": [
+        {
+          "moduleId": "./js/src/options_buttons.widget.js",
+          "moduleIdentifier": "/Users/dawehner/www/drupal-admin-ui-demo/drupal-admin-ui/admin_ui_support/modules/admin_ui_widget_example/node_modules/babel-loader/lib/index.js??ref--4!/Users/dawehner/www/drupal-admin-ui-demo/drupal-admin-ui/admin_ui_support/modules/admin_ui_widget_example/js/src/options_buttons.widget.js",
+          "module": "./js/src/options_buttons.widget.js",
+          "moduleName": "./js/src/options_buttons.widget.js",
+          "type": "harmony side effect evaluation",
+          "userRequest": "@material-ui/core/FormControlLabel",
+          "loc": "13:0-66"
+        },
+        {
+          "moduleId": "./js/src/options_buttons.widget.js",
+          "moduleIdentifier": "/Users/dawehner/www/drupal-admin-ui-demo/drupal-admin-ui/admin_ui_support/modules/admin_ui_widget_example/node_modules/babel-loader/lib/index.js??ref--4!/Users/dawehner/www/drupal-admin-ui-demo/drupal-admin-ui/admin_ui_support/modules/admin_ui_widget_example/js/src/options_buttons.widget.js",
+          "module": "./js/src/options_buttons.widget.js",
+          "moduleName": "./js/src/options_buttons.widget.js",
+          "type": "harmony import specifier",
+          "userRequest": "@material-ui/core/FormControlLabel",
+          "loc": "44:31-47"
+        }
+      ],
+      "providedExports": null,
+      "optimizationBailout": [],
+      "depth": 1
+    },
+    {
+      "id": "@material-ui/core/FormGroup",
+      "identifier": "external \"@material-ui/core/FormGroup\"",
+      "name": "external \"@material-ui/core/FormGroup\"",
+      "index": 4,
+      "index2": 3,
+      "size": 42,
+      "built": true,
+      "optional": false,
+      "prefetched": false,
+      "chunks": [
+        "options_buttons.widget"
+      ],
+      "issuer": "/Users/dawehner/www/drupal-admin-ui-demo/drupal-admin-ui/admin_ui_support/modules/admin_ui_widget_example/node_modules/babel-loader/lib/index.js??ref--4!/Users/dawehner/www/drupal-admin-ui-demo/drupal-admin-ui/admin_ui_support/modules/admin_ui_widget_example/js/src/options_buttons.widget.js",
+      "issuerId": "./js/src/options_buttons.widget.js",
+      "issuerName": "./js/src/options_buttons.widget.js",
+      "issuerPath": [
+        {
+          "id": "./js/src/options_buttons.widget.js",
+          "identifier": "/Users/dawehner/www/drupal-admin-ui-demo/drupal-admin-ui/admin_ui_support/modules/admin_ui_widget_example/node_modules/babel-loader/lib/index.js??ref--4!/Users/dawehner/www/drupal-admin-ui-demo/drupal-admin-ui/admin_ui_support/modules/admin_ui_widget_example/js/src/options_buttons.widget.js",
+          "name": "./js/src/options_buttons.widget.js"
+        }
+      ],
+      "failed": false,
+      "errors": 0,
+      "warnings": 0,
+      "assets": [],
+      "reasons": [
+        {
+          "moduleId": "./js/src/options_buttons.widget.js",
+          "moduleIdentifier": "/Users/dawehner/www/drupal-admin-ui-demo/drupal-admin-ui/admin_ui_support/modules/admin_ui_widget_example/node_modules/babel-loader/lib/index.js??ref--4!/Users/dawehner/www/drupal-admin-ui-demo/drupal-admin-ui/admin_ui_support/modules/admin_ui_widget_example/js/src/options_buttons.widget.js",
+          "module": "./js/src/options_buttons.widget.js",
+          "moduleName": "./js/src/options_buttons.widget.js",
+          "type": "harmony side effect evaluation",
+          "userRequest": "@material-ui/core/FormGroup",
+          "loc": "12:0-52"
+        },
+        {
+          "moduleId": "./js/src/options_buttons.widget.js",
+          "moduleIdentifier": "/Users/dawehner/www/drupal-admin-ui-demo/drupal-admin-ui/admin_ui_support/modules/admin_ui_widget_example/node_modules/babel-loader/lib/index.js??ref--4!/Users/dawehner/www/drupal-admin-ui-demo/drupal-admin-ui/admin_ui_support/modules/admin_ui_widget_example/js/src/options_buttons.widget.js",
+          "module": "./js/src/options_buttons.widget.js",
+          "moduleName": "./js/src/options_buttons.widget.js",
+          "type": "harmony import specifier",
+          "userRequest": "@material-ui/core/FormGroup",
+          "loc": "37:33-42"
+        }
+      ],
+      "providedExports": null,
+      "optimizationBailout": [],
+      "depth": 1
+    },
+    {
+      "id": "@material-ui/core/FormHelperText",
+      "identifier": "external \"@material-ui/core/FormHelperText\"",
+      "name": "external \"@material-ui/core/FormHelperText\"",
+      "index": 7,
+      "index2": 6,
+      "size": 42,
+      "built": true,
+      "optional": false,
+      "prefetched": false,
+      "chunks": [
+        "options_buttons.widget"
+      ],
+      "issuer": "/Users/dawehner/www/drupal-admin-ui-demo/drupal-admin-ui/admin_ui_support/modules/admin_ui_widget_example/node_modules/babel-loader/lib/index.js??ref--4!/Users/dawehner/www/drupal-admin-ui-demo/drupal-admin-ui/admin_ui_support/modules/admin_ui_widget_example/js/src/options_buttons.widget.js",
+      "issuerId": "./js/src/options_buttons.widget.js",
+      "issuerName": "./js/src/options_buttons.widget.js",
+      "issuerPath": [
+        {
+          "id": "./js/src/options_buttons.widget.js",
+          "identifier": "/Users/dawehner/www/drupal-admin-ui-demo/drupal-admin-ui/admin_ui_support/modules/admin_ui_widget_example/node_modules/babel-loader/lib/index.js??ref--4!/Users/dawehner/www/drupal-admin-ui-demo/drupal-admin-ui/admin_ui_support/modules/admin_ui_widget_example/js/src/options_buttons.widget.js",
+          "name": "./js/src/options_buttons.widget.js"
+        }
+      ],
+      "failed": false,
+      "errors": 0,
+      "warnings": 0,
+      "assets": [],
+      "reasons": [
+        {
+          "moduleId": "./js/src/options_buttons.widget.js",
+          "moduleIdentifier": "/Users/dawehner/www/drupal-admin-ui-demo/drupal-admin-ui/admin_ui_support/modules/admin_ui_widget_example/node_modules/babel-loader/lib/index.js??ref--4!/Users/dawehner/www/drupal-admin-ui-demo/drupal-admin-ui/admin_ui_support/modules/admin_ui_widget_example/js/src/options_buttons.widget.js",
+          "module": "./js/src/options_buttons.widget.js",
+          "moduleName": "./js/src/options_buttons.widget.js",
+          "type": "harmony side effect evaluation",
+          "userRequest": "@material-ui/core/FormHelperText",
+          "loc": "15:0-62"
+        },
+        {
+          "moduleId": "./js/src/options_buttons.widget.js",
+          "moduleIdentifier": "/Users/dawehner/www/drupal-admin-ui-demo/drupal-admin-ui/admin_ui_support/modules/admin_ui_widget_example/node_modules/babel-loader/lib/index.js??ref--4!/Users/dawehner/www/drupal-admin-ui-demo/drupal-admin-ui/admin_ui_support/modules/admin_ui_widget_example/js/src/options_buttons.widget.js",
+          "module": "./js/src/options_buttons.widget.js",
+          "moduleName": "./js/src/options_buttons.widget.js",
+          "type": "harmony import specifier",
+          "userRequest": "@material-ui/core/FormHelperText",
+          "loc": "50:39-53"
+        }
+      ],
+      "providedExports": null,
+      "optimizationBailout": [],
+      "depth": 1
+    },
+    {
+      "id": "@material-ui/core/InputLabel",
+      "identifier": "external \"@material-ui/core/InputLabel\"",
+      "name": "external \"@material-ui/core/InputLabel\"",
+      "index": 2,
+      "index2": 1,
+      "size": 42,
+      "built": true,
+      "optional": false,
+      "prefetched": false,
+      "chunks": [
+        "options_buttons.widget"
+      ],
+      "issuer": "/Users/dawehner/www/drupal-admin-ui-demo/drupal-admin-ui/admin_ui_support/modules/admin_ui_widget_example/node_modules/babel-loader/lib/index.js??ref--4!/Users/dawehner/www/drupal-admin-ui-demo/drupal-admin-ui/admin_ui_support/modules/admin_ui_widget_example/js/src/options_buttons.widget.js",
+      "issuerId": "./js/src/options_buttons.widget.js",
+      "issuerName": "./js/src/options_buttons.widget.js",
+      "issuerPath": [
+        {
+          "id": "./js/src/options_buttons.widget.js",
+          "identifier": "/Users/dawehner/www/drupal-admin-ui-demo/drupal-admin-ui/admin_ui_support/modules/admin_ui_widget_example/node_modules/babel-loader/lib/index.js??ref--4!/Users/dawehner/www/drupal-admin-ui-demo/drupal-admin-ui/admin_ui_support/modules/admin_ui_widget_example/js/src/options_buttons.widget.js",
+          "name": "./js/src/options_buttons.widget.js"
+        }
+      ],
+      "failed": false,
+      "errors": 0,
+      "warnings": 0,
+      "assets": [],
+      "reasons": [
+        {
+          "moduleId": "./js/src/options_buttons.widget.js",
+          "moduleIdentifier": "/Users/dawehner/www/drupal-admin-ui-demo/drupal-admin-ui/admin_ui_support/modules/admin_ui_widget_example/node_modules/babel-loader/lib/index.js??ref--4!/Users/dawehner/www/drupal-admin-ui-demo/drupal-admin-ui/admin_ui_support/modules/admin_ui_widget_example/js/src/options_buttons.widget.js",
+          "module": "./js/src/options_buttons.widget.js",
+          "moduleName": "./js/src/options_buttons.widget.js",
+          "type": "harmony side effect evaluation",
+          "userRequest": "@material-ui/core/InputLabel",
+          "loc": "10:0-54"
+        },
+        {
+          "moduleId": "./js/src/options_buttons.widget.js",
+          "moduleIdentifier": "/Users/dawehner/www/drupal-admin-ui-demo/drupal-admin-ui/admin_ui_support/modules/admin_ui_widget_example/node_modules/babel-loader/lib/index.js??ref--4!/Users/dawehner/www/drupal-admin-ui-demo/drupal-admin-ui/admin_ui_support/modules/admin_ui_widget_example/js/src/options_buttons.widget.js",
+          "module": "./js/src/options_buttons.widget.js",
+          "moduleName": "./js/src/options_buttons.widget.js",
+          "type": "harmony import specifier",
+          "userRequest": "@material-ui/core/InputLabel",
+          "loc": "34:25-35"
+        }
+      ],
+      "providedExports": null,
+      "optimizationBailout": [],
+      "depth": 1
+    },
+    {
+      "id": "react",
+      "identifier": "external \"react\"",
+      "name": "external \"react\"",
+      "index": 1,
+      "index2": 0,
+      "size": 42,
+      "built": true,
+      "optional": false,
+      "prefetched": false,
+      "chunks": [
+        "options_buttons.widget"
+      ],
+      "issuer": "/Users/dawehner/www/drupal-admin-ui-demo/drupal-admin-ui/admin_ui_support/modules/admin_ui_widget_example/node_modules/babel-loader/lib/index.js??ref--4!/Users/dawehner/www/drupal-admin-ui-demo/drupal-admin-ui/admin_ui_support/modules/admin_ui_widget_example/js/src/options_buttons.widget.js",
+      "issuerId": "./js/src/options_buttons.widget.js",
+      "issuerName": "./js/src/options_buttons.widget.js",
+      "issuerPath": [
+        {
+          "id": "./js/src/options_buttons.widget.js",
+          "identifier": "/Users/dawehner/www/drupal-admin-ui-demo/drupal-admin-ui/admin_ui_support/modules/admin_ui_widget_example/node_modules/babel-loader/lib/index.js??ref--4!/Users/dawehner/www/drupal-admin-ui-demo/drupal-admin-ui/admin_ui_support/modules/admin_ui_widget_example/js/src/options_buttons.widget.js",
+          "name": "./js/src/options_buttons.widget.js"
+        }
+      ],
+      "failed": false,
+      "errors": 0,
+      "warnings": 0,
+      "assets": [],
+      "reasons": [
+        {
+          "moduleId": "./js/src/options_buttons.widget.js",
+          "moduleIdentifier": "/Users/dawehner/www/drupal-admin-ui-demo/drupal-admin-ui/admin_ui_support/modules/admin_ui_widget_example/node_modules/babel-loader/lib/index.js??ref--4!/Users/dawehner/www/drupal-admin-ui-demo/drupal-admin-ui/admin_ui_support/modules/admin_ui_widget_example/js/src/options_buttons.widget.js",
+          "module": "./js/src/options_buttons.widget.js",
+          "moduleName": "./js/src/options_buttons.widget.js",
+          "type": "harmony side effect evaluation",
+          "userRequest": "react",
+          "loc": "9:0-26"
+        },
+        {
+          "moduleId": "./js/src/options_buttons.widget.js",
+          "moduleIdentifier": "/Users/dawehner/www/drupal-admin-ui-demo/drupal-admin-ui/admin_ui_support/modules/admin_ui_widget_example/node_modules/babel-loader/lib/index.js??ref--4!/Users/dawehner/www/drupal-admin-ui-demo/drupal-admin-ui/admin_ui_support/modules/admin_ui_widget_example/js/src/options_buttons.widget.js",
+          "module": "./js/src/options_buttons.widget.js",
+          "moduleName": "./js/src/options_buttons.widget.js",
+          "type": "harmony import specifier",
+          "userRequest": "react",
+          "loc": "31:9-14"
+        },
+        {
+          "moduleId": "./js/src/options_buttons.widget.js",
+          "moduleIdentifier": "/Users/dawehner/www/drupal-admin-ui-demo/drupal-admin-ui/admin_ui_support/modules/admin_ui_widget_example/node_modules/babel-loader/lib/index.js??ref--4!/Users/dawehner/www/drupal-admin-ui-demo/drupal-admin-ui/admin_ui_support/modules/admin_ui_widget_example/js/src/options_buttons.widget.js",
+          "module": "./js/src/options_buttons.widget.js",
+          "moduleName": "./js/src/options_buttons.widget.js",
+          "type": "harmony import specifier",
+          "userRequest": "react",
+          "loc": "34:5-10"
+        },
+        {
+          "moduleId": "./js/src/options_buttons.widget.js",
+          "moduleIdentifier": "/Users/dawehner/www/drupal-admin-ui-demo/drupal-admin-ui/admin_ui_support/modules/admin_ui_widget_example/node_modules/babel-loader/lib/index.js??ref--4!/Users/dawehner/www/drupal-admin-ui-demo/drupal-admin-ui/admin_ui_support/modules/admin_ui_widget_example/js/src/options_buttons.widget.js",
+          "module": "./js/src/options_buttons.widget.js",
+          "moduleName": "./js/src/options_buttons.widget.js",
+          "type": "harmony import specifier",
+          "userRequest": "react",
+          "loc": "37:13-18"
+        },
+        {
+          "moduleId": "./js/src/options_buttons.widget.js",
+          "moduleIdentifier": "/Users/dawehner/www/drupal-admin-ui-demo/drupal-admin-ui/admin_ui_support/modules/admin_ui_widget_example/node_modules/babel-loader/lib/index.js??ref--4!/Users/dawehner/www/drupal-admin-ui-demo/drupal-admin-ui/admin_ui_support/modules/admin_ui_widget_example/js/src/options_buttons.widget.js",
+          "module": "./js/src/options_buttons.widget.js",
+          "moduleName": "./js/src/options_buttons.widget.js",
+          "type": "harmony import specifier",
+          "userRequest": "react",
+          "loc": "44:11-16"
+        },
+        {
+          "moduleId": "./js/src/options_buttons.widget.js",
+          "moduleIdentifier": "/Users/dawehner/www/drupal-admin-ui-demo/drupal-admin-ui/admin_ui_support/modules/admin_ui_widget_example/node_modules/babel-loader/lib/index.js??ref--4!/Users/dawehner/www/drupal-admin-ui-demo/drupal-admin-ui/admin_ui_support/modules/admin_ui_widget_example/js/src/options_buttons.widget.js",
+          "module": "./js/src/options_buttons.widget.js",
+          "moduleName": "./js/src/options_buttons.widget.js",
+          "type": "harmony import specifier",
+          "userRequest": "react",
+          "loc": "45:15-20"
+        },
+        {
+          "moduleId": "./js/src/options_buttons.widget.js",
+          "moduleIdentifier": "/Users/dawehner/www/drupal-admin-ui-demo/drupal-admin-ui/admin_ui_support/modules/admin_ui_widget_example/node_modules/babel-loader/lib/index.js??ref--4!/Users/dawehner/www/drupal-admin-ui-demo/drupal-admin-ui/admin_ui_support/modules/admin_ui_widget_example/js/src/options_buttons.widget.js",
+          "module": "./js/src/options_buttons.widget.js",
+          "moduleName": "./js/src/options_buttons.widget.js",
+          "type": "harmony import specifier",
+          "userRequest": "react",
+          "loc": "50:19-24"
+        }
+      ],
+      "providedExports": null,
+      "optimizationBailout": [],
+      "depth": 1
+    }
+  ],
+  "filteredModules": 0,
+  "children": []
+}
