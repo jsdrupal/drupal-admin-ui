@@ -70,11 +70,8 @@ jobs:
         - run:
             name: Install Drupal
             command: |
-                cd ../
-                composer create-project jsdrupal/drupal-admin-ui-demo -s dev --prefer-dist --no-install
-                mv project drupal-admin-ui-demo/drupal-admin-ui
-                cd drupal-admin-ui-demo
-                composer config repositories.repo-name path "~/drupal-admin-ui-demo/drupal-admin-ui/admin_ui_support"
+                cd ~/project/demo
+                composer config repositories.repo-name path "~/project/admin_ui_support"
                 composer require justafish/drupal-admin-ui-support:dev-$CIRCLE_BRANCH
                 composer install
                 composer setup
@@ -85,24 +82,25 @@ jobs:
         - run:
             name: Start Drupal and run Nightwatch and PHPUnit tests
             command: |
-              cd ~/drupal-admin-ui-demo
+              cd ~/project/demo
+              export REACT_APP_DRUPAL_ROOT="~/project/demo"
               composer start &
               sleep 10
-              cd ~/drupal-admin-ui-demo/drupal-admin-ui
+              cd ~/project
               export REACT_APP_DRUPAL_BASE_URL="http://127.0.0.1:8888"
               yarn start &
               sleep 20
               yarn test:functional
-              cd ~/drupal-admin-ui-demo
+              cd ~/project/demo
               export SIMPLETEST_BASE_URL=http://localhost:8888
               export SYMFONY_DEPRECATIONS_HELPER=disabled
               ./vendor/bin/phpunit -c docroot/core --log-junit reports/phpunit.xml docroot/modules/contrib/drupal-admin-ui-support
         - store_test_results:
-            path: ~/drupal-admin-ui-demo/drupal-admin-ui/reports/nightwatch
+            path: ~/project/demo/drupal-admin-ui/reports/nightwatch
         - store_artifacts:
-            path: ~/drupal-admin-ui-demo/drupal-admin-ui/reports/nightwatch
+            path: ~/project/demo/drupal-admin-ui/reports/nightwatch
         - store_test_results:
-            path: ~/drupal-admin-ui-demo/reports
+            path: ~/project/demo/reports
   dist:
     <<: *default
     steps:
@@ -174,7 +172,8 @@ jobs:
         git config --global user.name "⬅️✌️➡️"
         git config --global user.email "no-reply@drupal.org"
         git clone git@github.com:jsdrupal/drupal-admin-ui-demo.git ~/drupal-admin-ui-demo
-        cd ~/drupal-admin-ui-demo
+        rm -Rf ~/drupal-admin-ui-demo/*
+        cp ~/project/demo/* ~/drupal-admin-ui-demo/
         composer update --lock
         git add .
         if ! git diff-index --quiet HEAD --; then
