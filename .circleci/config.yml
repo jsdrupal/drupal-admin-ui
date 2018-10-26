@@ -25,7 +25,7 @@ commands:
         default: "Auto build from master"
       files:
         type: string
-      source_repo:
+      destination_repo:
         type: string
     steps:
       - run:
@@ -37,7 +37,7 @@ commands:
           name: Overwrite files with build
           command: |
             mv << parameters.files >> ~/build-files
-            git clone << parameters.source_repo >> ~/build-repo
+            git clone << parameters.destination_repo >> ~/build-repo
             rm -rf ~/build-files/.git
             mv ~/build-repo/.git ~/build-files/.git
             cd ~/build-files
@@ -140,7 +140,7 @@ jobs:
       - run: cp ~/project/.circleci/drupal-admin-ui--composer.json ~/project/build/composer.json
       - commit-and-push:
           files: ~/project/build
-          source_repo: git@github.com:jsdrupal/drupal-admin-ui-dist.git
+          destination_repo: git@github.com:jsdrupal/drupal-admin-ui-dist.git
 
   dist_support:
     executor:
@@ -152,7 +152,7 @@ jobs:
       - checkout
       - commit-and-push:
           files: ~/project/admin_ui_support
-          source_repo: git@github.com:jsdrupal/drupal-admin-ui-support-dist.git
+          destination_repo: git@github.com:jsdrupal/drupal-admin-ui-support-dist.git
 
   dist_demo:
     executor:
@@ -171,7 +171,7 @@ jobs:
     - commit-and-push:
         message: "Auto update composer.lock from admin-ui-support-dist build"
         files: ~/project/demo
-        source_repo: git@github.com:jsdrupal/drupal-admin-ui-demo.git
+        destination_repo: git@github.com:jsdrupal/drupal-admin-ui-demo.git
 
 workflows:
   test:
