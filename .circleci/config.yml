@@ -45,11 +45,11 @@ commands:
             git clone << parameters.destination_repo >> ~/build-repo
             rm -rf ~/build-files/.git
             mv ~/build-repo/.git ~/build-files/.git
-            cd ~/build-files
 
       - run:
           name: Add and push
           command: |
+              cd ~/build-files
               git add .
               if ! git diff-index --quiet HEAD --; then
                 git commit -m "<< parameters.message >>"
