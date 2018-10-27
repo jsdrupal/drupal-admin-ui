@@ -32,7 +32,7 @@ commands:
     steps:
       - add_ssh_keys:
           fingerprints:
-            - << parameter.ssh_key_fingerprint >>
+            - << parameters.ssh_key_fingerprint >>
       - run:
           name: Configure git
           command: |
