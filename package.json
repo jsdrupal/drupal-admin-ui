@@ -4,8 +4,8 @@
   "license": "MIT",
   "private": true,
   "engines": {
-    "yarn": ">= 1.10",
-    "node": ">= 10.12"
+    "yarn": ">= 1.9",
+    "node": ">= 8.12"
   },
   "workspaces": [
     "packages/*"
