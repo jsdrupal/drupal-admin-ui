@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { InputLabel, FormControl, FormGroup, FormControlLabel, Checkbox, FormHelperText } from '@material-ui/core';
 
 class LoadComponent extends React.Component {
   state = {
@@ -14,27 +15,16 @@ class LoadComponent extends React.Component {
 
   componentDidMount() {
     if (typeof this.props.component === 'string') {
-      // fetch(this.props.component)
-      //   .then(res => res.text())
-      //   .then(file => {
-      //
-      //     eval(`${file}`);
-      //     const component = window[`jsDrupal_${this.props.name}_widget`]; // eslint-ignore-line
-      //     this.setState({ component });
-      //   });
-      // window.define(['require', this.props.component], (require) => {
-      //   debugger;
-      //   //debugger;
-      //   // this.setState({ component });
-      // })
-      // const url = new URL(this.props.component);
-      // debugger;
-      // window.requirejs.config({
-      //   baseUrl: `${process.env.REACT_APP_DRUPAL_BASE_URL}/modules/contrib/drupal-admin-ui-support/modules/admin_ui_widget_example/js/build`,
-      // });
-      window.require([this.props.component], (component) => {
-        // debugger;
-        this.setState({ component: component.default })
+      // Cheat and load "React"
+      window.define('react', () => React);
+      window.define('@material-ui/core/InputLabel', () => InputLabel);
+      window.define('@material-ui/core/FormControl', () => FormControl);
+      window.define('@material-ui/core/FormGroup', () => FormGroup);
+      window.define('@material-ui/core/FormControlLabel', () => FormControlLabel);
+      window.define('@material-ui/core/Checkbox', () => Checkbox);
+      window.define('@material-ui/core/FormHelperText', () => FormHelperText);
+      window.require([this.props.component], ({ default: component}) => {
+        this.setState({ component })
       })
     } else {
       this.setState({
