@@ -16,7 +16,7 @@ commands:
         - *node-modules-key
     - run: |
         yarn install
-        yarn build
+        yarn workspace admin-ui build
 
   commit-and-push:
     parameters:
@@ -82,8 +82,8 @@ jobs:
         key: *node-modules-key
         paths:
         - node_modules
-    - run: yarn test:lint
-    - run: yarn test:unit
+    - run: yarn workspace admin-ui test:lint
+    - run: yarn workspace admin-ui test:unit
     - store_test_results:
         path: reports
 
@@ -120,9 +120,9 @@ jobs:
               composer start &
               sleep 10
               cd ~/project
-              yarn start &
+              yarn workspace admin-ui start &
               sleep 20
-              yarn test:functional
+              yarn workspace admin-ui test:functional
               cd ~/project/demo
               ./vendor/bin/phpunit -c docroot/core --log-junit reports/phpunit.xml docroot/modules/contrib/drupal-admin-ui-support
 

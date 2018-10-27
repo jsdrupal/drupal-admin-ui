@@ -47,12 +47,12 @@ It will also symlink the bundled production app to `docroot/vfancy`, and the sup
 - Edit `drupal-admin-ui/.env.local` and add in the URL for your currently running Drupal installation
 that was output from the start command. e.g. for `Starting webserver on http://127.0.0.1:8888`, set
 `REACT_APP_DRUPAL_BASE_URL=http://127.0.0.1:8888`
-- Enter the repo with `cd drupal-admin-ui` and start the Webpack dev server with `yarn start`. This
+- Enter the repo with `cd drupal-admin-ui` and start the Webpack dev server with `yarn workspace admin-ui start`. This
 will open a new window at `http://localhost:3000/`
 
 The webpack dev server has hot reloading, however you won't be able to seamlessly switch between
 Drupal and the React app. If you want to test out your changes in this context, enter the
-`drupal-admin-ui` directory and run `yarn build`. You can then visit the URL that
+`drupal-admin-ui` directory and run `yarn workspace admin-ui build`. You can then visit the URL that
 `composer start` generated.
 
 ### tl;dr
@@ -65,7 +65,7 @@ composer devify
 # Add the URL generated from the start command:
 vim drupal-admin-ui/.env.local
 cd drupal-admin-ui
-yarn start
+yarn workspace admin-ui start
 ```
 
 ### React AXE
@@ -73,14 +73,14 @@ yarn start
 Due to outstanding performance issues, `react-axe` is behind a flag. To enable the assessment provided by `react-axe`, pass an environment variable when starting the application.
 
 ```
-REACT_APP_AXE=true yarn start
+REACT_APP_AXE=true yarn workspace admin-ui start
 ```
 
 ## Commands
 
 See package.json for a full list
 
-|`yarn <script>`|Description|
+|`yarn workspace admin-ui <script>`|Description|
 |------------------|-----------|
 |`start`|Serves your app at `localhost:3000`.|
 |`build`|Compiles the application for production into folder `./build`.|
