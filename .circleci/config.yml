@@ -67,7 +67,7 @@ commands:
 executors:
   node-executor:
     docker:
-      - image: circleci/node:8-browsers
+      - image: circleci/node:10-browsers
   php-node-executor:
     docker:
       - image: circleci/php:7.1-fpm-node-browsers
