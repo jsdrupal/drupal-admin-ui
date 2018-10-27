@@ -17,9 +17,10 @@ const OptionsButtons = ({
   classes,
   inputProps: { allowed_values: allowedValues },
 }) => {
+  // @todo fetch the options automatically
   const options = {
-    'foo': 'Foo',
-    'bar': 'Bar',
+    foo: 'Foo',
+    bar: 'Bar',
   };
   return (
     <FormControl margin="normal" classes={classes}>
@@ -27,15 +28,19 @@ const OptionsButtons = ({
         {label}
       </InputLabel>
       <FormGroup row>
-        {Object.entries(options).map(([key, label]) => (
-         <FormControlLabel
-          control={
-            <Checkbox
-              value="foo"
-            />
-          }
-          label={label}
-        />
+        {Object.entries(options).map(([key, checkboxLabel]) => (
+          <FormControlLabel
+            key={key}
+            control={<Checkbox value="foo" />}
+            onChange={e => {
+              if (e.target.checked) {
+                onChange(Array.from(new Set([...value, e.target.value])));
+              } else {
+                onChange(value.filter(option => option !== e.target.value));
+              }
+            }}
+            label={checkboxLabel}
+          />
         ))}
       </FormGroup>
       {helpText && <FormHelperText>{helpText}</FormHelperText>}
