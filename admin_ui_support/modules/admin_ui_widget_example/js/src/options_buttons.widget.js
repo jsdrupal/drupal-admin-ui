@@ -35,7 +35,7 @@ const OptionsButtons = ({
             />
           }
           label={label}
-        /> 
+        />
         ))}
       </FormGroup>
       {helpText && <FormHelperText>{helpText}</FormHelperText>}
@@ -43,4 +43,4 @@ const OptionsButtons = ({
   );
 };
 
-export default () => OptionsButtons;
+export default OptionsButtons;

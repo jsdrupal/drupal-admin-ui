@@ -8,7 +8,7 @@ module.exports = {
     minimize: false,
   },
   output: {
-    libraryTarget: 'amd',
+    libraryTarget: 'umd',
     library: 'jsDrupal_[name]',
     path: path.resolve(__dirname, 'js', 'build'),
     filename: '[name].js',

@@ -312,7 +312,6 @@ class NodeForm extends React.Component {
         ),
         ['promote', 'status', 'sticky', 'uid', 'created'],
       );
-      console.log({ right });
       result = (
         <div className={styles.gridRoot}>
           {this.renderRestoreSnackbar()}
