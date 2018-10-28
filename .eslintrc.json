@@ -23,7 +23,6 @@
     "no-param-reassign": [2, { "props": false }],
     "react/destructuring-assignment": ["never"],
     "react/jsx-one-expression-per-line": ["never"],
-    "react/jsx-wrap-multilines": ["never"],
-    "no-restricted-properties": ["never"]
+    "react/jsx-wrap-multilines": ["never"]
   }
 }

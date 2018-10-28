@@ -12,7 +12,7 @@ import {
   MESSAGE_SEVERITY_WARNING,
 } from '../constants/messages';
 import { ApiError } from '../utils/api/errors';
-import widgets from "../components/05_pages/NodeForm/Widgets";
+import widgets from '../components/05_pages/NodeForm/Widgets';
 
 export const OPEN_DRAWER = 'OPEN_DRAWER';
 export const openDrawer = () => ({
