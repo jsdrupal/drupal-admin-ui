@@ -1,34 +1,47 @@
-import React, { Component, Fragment } from 'react';
-import PropTypes from 'prop-types';
+import { Markup } from 'interweave';
+import * as React from 'react';
+import { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
 import LoadingBar from 'react-redux-loading-bar';
-import { Markup } from 'interweave';
 
 import { requestDblogCollection } from '../../../actions/reports';
 import { Table, TBody, THead } from '../../01_subatomics/Table/Table';
 
-class Dblog extends Component {
-  static propTypes = {
-    requestDblogCollection: PropTypes.func.isRequired,
-    entries: PropTypes.arrayOf(
-      PropTypes.shape({
-        wid: PropTypes.number.isRequired,
-        messageFormattedPlain: PropTypes.string.isRequired,
-        timestamp: PropTypes.number.isRequired,
-        type: PropTypes.string.isRequired,
-      }),
-    ),
-    availableTypes: PropTypes.arrayOf(PropTypes.string),
-    filterOptions: PropTypes.shape({
-      sort: PropTypes.string,
-      severities: PropTypes.arrayOf(PropTypes.string),
-      offset: PropTypes.number,
-      types: PropTypes.arrayOf(PropTypes.string),
-    }),
-    next: PropTypes.bool,
-  };
+interface Props {
+    requestDblogCollection: () => any,
+    entries: Array<{
+      wid: number,
+      messageFormattedPlain: string,
+      timestamp: number,
+      type: string,
+    }>
+    availableTypes?: string[],
+    filterOptions?: Array<{sort: string, severities: string[], offset: number, types: string[]}>,
+    next?: boolean,
+};
 
-  static defaultProps = {
+class Dblog extends Component {
+  // static propTypes = {
+  //   requestDblogCollection: PropTypes.func.isRequired,
+  //   entries: PropTypes.arrayOf(
+  //     PropTypes.shape({
+  //       wid: PropTypes.number.isRequired,
+  //       messageFormattedPlain: PropTypes.string.isRequired,
+  //       timestamp: PropTypes.number.isRequired,
+  //       type: PropTypes.string.isRequired,
+  //     }),
+  //   ),
+  //   availableTypes: PropTypes.arrayOf(PropTypes.string),
+  //   filterOptions: PropTypes.shape({
+  //     sort: PropTypes.string,
+  //     severities: PropTypes.arrayOf(PropTypes.string),
+  //     offset: PropTypes.number,
+  //     types: PropTypes.arrayOf(PropTypes.string),
+  //   }),
+  //   next: PropTypes.bool,
+  // };
+
+  public static defaultProps = {
     entries: null,
     availableTypes: null,
     filterOptions: {
@@ -38,14 +51,14 @@ class Dblog extends Component {
     next: true,
   };
 
-  componentDidMount() {
+  public componentDidMount() {
     this.props.requestDblogCollection({
       ...this.props.filterOptions,
       sort: '-timestamp',
     });
   }
 
-  generateTableRows = entries =>
+  public generateTableRows = entries =>
     entries.map(({ wid, type, messageFormattedPlain, timestamp }) => ({
       key: String(wid),
       tds: [
@@ -65,7 +78,7 @@ class Dblog extends Component {
       ],
     }));
 
-  severityFilterHandler = e =>
+  public severityFilterHandler = e =>
     this.props.requestDblogCollection({
       types: null,
       offset: 0,
@@ -75,7 +88,7 @@ class Dblog extends Component {
         .map(option => option.value),
     });
 
-  typeFilterHandler = e =>
+  public typeFilterHandler = e =>
     this.props.requestDblogCollection({
       severities: null,
       offset: 0,
@@ -85,21 +98,21 @@ class Dblog extends Component {
         .map(option => option.value),
     });
 
-  nextPage = () =>
+  public nextPage = () =>
     this.props.requestDblogCollection({
       severities: null,
       ...this.props.filterOptions,
       offset: (this.props.filterOptions.offset || 0) + 50,
     });
 
-  previousPage = () =>
+  public previousPage = () =>
     this.props.requestDblogCollection({
       severities: null,
       ...this.props.filterOptions,
       offset: (this.props.filterOptions.offset || 0) - 50,
     });
 
-  render() {
+  public render() {
     if (!this.props.entries) {
       return <LoadingBar />;
     }
@@ -108,7 +121,7 @@ class Dblog extends Component {
         <select
           key="select-type"
           label="Type"
-          multiple
+          multiple={true}
           size={this.props.availableTypes.length}
           onBlur={this.typeFilterHandler}
           selected={this.props.filterOptions.types}
@@ -122,7 +135,7 @@ class Dblog extends Component {
         <select
           key="select-severity"
           label="Severity"
-          multiple
+          multiple={true}
           size={8}
           onBlur={this.severityFilterHandler}
           selected={this.props.filterOptions.severities}

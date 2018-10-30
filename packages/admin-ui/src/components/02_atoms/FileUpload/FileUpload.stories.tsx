@@ -1,4 +1,4 @@
-import * React from 'react';
+import * as React from 'react';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { storiesOf } from '@storybook/react';
 // eslint-disable-next-line import/no-extraneous-dependencies
@@ -19,6 +19,10 @@ import FileUpload from './FileUpload';
 const onFileUploadAction = action('onFileUpload');
 onFileUploadAction.toString = () => "action('onFileUpload')";
 
+// Can remove ignore when this is fixed.
+// https://github.com/storybooks/addon-jsx/issues/36
+
+// @ts-ignore
 storiesOf('FileUpload', module).addWithJSX('Default', () => (
   <FileUpload
     entityTypeId="node"

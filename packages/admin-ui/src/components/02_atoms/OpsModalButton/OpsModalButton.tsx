@@ -1,6 +1,6 @@
 import * as React from 'react';
-import Fragment from 'react';
-import PropTypes from 'prop-types';
+import {Fragment} from 'react';
+
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -10,9 +10,19 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import IconButton from '@material-ui/core/IconButton';
 import Slide from '@material-ui/core/Slide';
 
-function Transition(props) {
+function Transition(props: any) {
   return <Slide direction="up" {...props} />;
 }
+
+interface Props {
+  className?: string,
+  title: string,
+  text: string,
+  confirmText: string,
+  cancelText: string,
+  children: React.ReactNode,
+  enterAction: () => any,
+};
 
 /* A Drupal specific button, for use in the operations column of a table.
  *
@@ -21,47 +31,21 @@ function Transition(props) {
  *
  * When pressed a modal dialog slides up into view.
  */
-class OpsModalButton extends React.Component {
-  static propTypes = {
-    /**
-     * The dialog title.
-     */
-    title: PropTypes.string.isRequired,
-    /**
-     * The text below the dialog title.
-     */
-    text: PropTypes.string.isRequired,
-    /**
-     * The confirm button label.
-     */
-    confirmText: PropTypes.string.isRequired,
-    /**
-     * The cancel button label.
-     */
-    cancelText: PropTypes.string.isRequired,
-    /**
-     * Children of the button.
-     */
-    children: PropTypes.node.isRequired,
-    /**
-     * Called when the confirm button is pressed.
-     */
-    enterAction: PropTypes.func.isRequired,
-  };
+class OpsModalButton extends React.Component<Props> {
 
-  state = {
+  public state = {
     open: false,
   };
 
-  handleClickOpen = () => {
+  public handleClickOpen = () => {
     this.setState({ open: true });
   };
 
-  handleClose = () => {
+  public handleClose = () => {
     this.setState({ open: false });
   };
 
-  render() {
+  public render() {
     // Pass all props except those consumed here down into the button.
     const {
       title,
@@ -70,7 +54,7 @@ class OpsModalButton extends React.Component {
       confirmText,
       enterAction,
       ...buttonProps
-    } = this.props;
+    } : Props = this.props;
 
     return (
       <Fragment>

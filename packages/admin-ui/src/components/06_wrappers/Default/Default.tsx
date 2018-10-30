@@ -1,5 +1,5 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import * as React from 'react';
+import * as PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { css } from 'emotion';
 import { Link } from 'react-router-dom';
@@ -48,7 +48,30 @@ const iconMap = {
   '/admin/help': <HelpIcon />,
 };
 
-class Default extends React.Component {
+interface Props {
+  choldren: React.ReactNodes,
+  classes?: any,
+  message?: {
+    message: string | React.Element,
+    type: string,
+    key: number,
+    open: boolean,
+  },
+  menuLinks: Array<{
+    links:{
+      url: string,
+      title: string,
+    }
+  }>,
+  requestMenu: () => any,
+  openDrawer: () => any,
+  closeDrawer:() => any,
+  setMessage:() => any,
+  clearMessage:() => any,
+  drawerOpen: boolean,
+};
+
+class Default extends React.Component<Props> {
   componentDidMount() {
     this.props.requestMenu();
   }
@@ -155,29 +178,7 @@ styles = {
   `,
 };
 
-Default.propTypes = {
-  children: PropTypes.node.isRequired,
-  message: PropTypes.shape({
-    message: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
-    type: PropTypes.string,
-    key: PropTypes.number,
-    open: PropTypes.bool,
-  }),
-  menuLinks: PropTypes.arrayOf(
-    PropTypes.shape({
-      link: PropTypes.shape({
-        url: PropTypes.string,
-        title: PropTypes.string,
-      }),
-    }),
-  ).isRequired,
-  requestMenu: PropTypes.func.isRequired,
-  openDrawer: PropTypes.func.isRequired,
-  closeDrawer: PropTypes.func.isRequired,
-  setMessage: PropTypes.func.isRequired,
-  clearMessage: PropTypes.func.isRequired,
-  drawerOpen: PropTypes.bool,
-};
+
 
 Default.defaultProps = {
   message: null,

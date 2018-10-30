@@ -1,8 +1,13 @@
-import React from 'react';
 import PropTypes from 'prop-types';
 import { Redirect } from 'react-router-dom';
 
-const InitialRedirect = ({ location: { search } }) => {
+interface InitialProps {
+  location: {
+    search: string,
+  }
+};
+
+const InitialRedirect = ({ location: { search } }: InitialRedirectProps) => {
   // Allow Drupal redirects to determine the initial path.
   const searchString = search
     .replace('?q=', '')

@@ -1,19 +1,19 @@
-import { call, put, select, takeLatest, takeEvery } from 'redux-saga/effects';
 import {
-  showLoading,
   hideLoading,
   resetLoading,
+  showLoading,
 } from 'react-redux-loading-bar';
-import api from '../utils/api/api';
+import { call, put, select, takeEvery, takeLatest } from 'redux-saga/effects';
 import {
   MESSAGE_SEVERITY_ERROR,
-  MESSAGE_SEVERITY_SUCCESS,
   MESSAGE_SEVERITY_INFO,
+  MESSAGE_SEVERITY_SUCCESS,
   MESSAGE_SEVERITY_WARNING,
 } from '../constants/messages';
+import api from '../utils/api/api';
 import { ApiError } from '../utils/api/errors';
 
-interface StateType {
+interface State {
     application: {
       contentTypes: string,
       actions: string,
@@ -136,7 +136,7 @@ export const requestContentTypes = () => ({
   payload: {},
 });
 
-export const contentTypesSelector = (state: StateType) => state.application.contentTypes;
+export const contentTypesSelector = (state: State) => state.application.contentTypes;
 export const CONTENT_TYPES_LOADED = 'CONTENT_TYPES_LOADED';
 function* loadContentTypes() {
   try {
@@ -164,7 +164,7 @@ export const requestActions = () => ({
   payload: {},
 });
 
-export const getActionsCache = (state: StateType) => state.application.actions;
+export const getActionsCache = (state: State) => state.application.actions;
 export const ACTIONS_LOADED = 'ACTIONS_LOADED';
 function* loadActions() {
   try {

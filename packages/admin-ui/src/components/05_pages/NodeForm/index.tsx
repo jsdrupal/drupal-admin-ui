@@ -1,5 +1,4 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import * as React from 'react';
 import { connect } from 'react-redux';
 import { css } from 'emotion';
 
@@ -10,7 +9,7 @@ import Snackbar from '@material-ui/core/Snackbar';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 
-import SchemaPropType from './SchemaPropType';
+import SchemaProp from './SchemaProp';
 
 import MultipleFields from '../../02_atoms/MultipleFields/MultipleFields';
 
@@ -22,28 +21,43 @@ import { createUISchema, sortUISchemaFields } from '../../../utils/api/schema';
 
 import widgets from './Widgets';
 
-let styles;
+let styles: {
+  fieldContainer: string,
+  divider: string,
+  gridRoot: string,
+  widgetRoot: string,
+  icon: string,
+};
 
-class NodeForm extends React.Component {
-  static propTypes = {
-    schema: PropTypes.oneOfType([SchemaPropType, PropTypes.bool]),
-    onSave: PropTypes.func.isRequired,
-    entityTypeId: PropTypes.string.isRequired,
-    bundle: PropTypes.string.isRequired,
-    requestUiSchema: PropTypes.func.isRequired,
-    uiSchema: PropTypes.oneOfType([
-      PropTypes.shape({
-        fieldSchema: PropTypes.shape({}),
-        formDisplaySchema: PropTypes.shape({}),
-      }),
-      PropTypes.bool,
-    ]),
-    restorableEntity: PropTypes.shape({
-      data: PropTypes.object,
-    }),
-    setErrorMessage: PropTypes.func.isRequired,
-    onChange: PropTypes.func,
-  };
+interface Entity {
+  data: {
+    attributes: object,
+    relationships: object,
+  }
+}
+
+interface Props {
+  schema: SchemaProp,
+  onSave: (data: object) => any,
+  entityTypeId: string,
+  bundle: string,
+  requestUiSchema: (entityTypeId: string, bundle: string) => any,
+  uiSchema: {fieldSchema: {},fieldStorageConfig:{},  formDisplaySchema:{}},
+  restorableEntity: Entity,
+  setErrorMessage: (message: string) => any,
+  onChange: (bundle: string, entity: Entity) => any,
+  entity: Entity,
+};
+
+interface State {
+  entity: Entity,
+  restored: boolean,
+  schema: {
+    uiSchema: {},
+  },
+};
+
+class NodeForm extends React.Component<Props,State> {
 
   static defaultProps = {
     schema: false,
@@ -54,22 +68,33 @@ class NodeForm extends React.Component {
 
   state = {
     restored: false,
+    entity: {
+      data: {
+        attributes: {},
+        relationships: {},
+      }
+    },
+    schema:{
+      uiSchema: {}
+    }
   };
 
   componentDidMount() {
+    // @ts-ignore
     this.props.requestUiSchema({
       entityTypeId: this.props.entityTypeId,
       bundle: this.props.bundle,
     });
-
-    this.calculateState(this.props, this.state, state => this.setState(state));
+    // ts-ignore
+    this.calculateState(this.props, this.state, (state: State)  => this.setState(state));
   }
 
   componentDidUpdate() {
-    this.calculateState(this.props, this.state, state => this.setState(state));
+    this.calculateState(this.props, this.state, (state: State) => this.setState(state));
   }
 
-  onAttributeChange = fieldName => data => {
+  // @ts-ignore
+  onAttributeChange = (fieldName: string) => data => {
     this.setState(
       prevState => ({
         entity: {
@@ -99,9 +124,9 @@ class NodeForm extends React.Component {
     }
   };
 
-  onRelationshipChange = fieldName => data => {
+  onRelationshipChange = (fieldName: string) => (data: any) => {
     // Support widgets with multiple cardinality.
-    let fieldData;
+    let fieldData: object;
     if (typeof data.data !== 'undefined') {
       fieldData = data.data;
     } else {
@@ -125,14 +150,14 @@ class NodeForm extends React.Component {
     );
   };
 
-  getSchemaInfo = (schema, fieldName) =>
+  getSchemaInfo = (schema: any, fieldName: string) =>
     schema.properties.data.properties.attributes.properties[fieldName] ||
     schema.properties.data.properties.relationships.properties[fieldName];
 
   resolveMissingRequiredFields = () => {
     const unavailableFields = ['nid', 'uuid', 'vid', 'path'];
     const requiredFields = this.props.schema.properties.data.properties.attributes.required.filter(
-      field => !unavailableFields.includes(field),
+      (file: string): boolean => !unavailableFields.includes(file),
     );
     return Object.entries(this.state.entity.data.attributes)
       .filter(([fieldName]) => requiredFields.includes(fieldName))
@@ -141,6 +166,7 @@ class NodeForm extends React.Component {
         if (
           typeof value === 'object' &&
           Object.keys(value).length &&
+          // @ts-ignore
           value.value === ''
         ) {
           return fieldName;
@@ -153,7 +179,7 @@ class NodeForm extends React.Component {
       .map(([fieldName]) => fieldName);
   };
 
-  calculateState = (prevProps, prevState, setState) => {
+  calculateState = (prevProps: Props, prevState:State, setState: any) => {
     if (!prevProps.schema) {
       return;
     }
@@ -187,7 +213,7 @@ class NodeForm extends React.Component {
     setState(state);
   };
 
-  createField = ({ fieldName, widget, inputProps }) => {
+  createField = ({ fieldName, widget, inputProps }: {fieldName: string, widget: any, inputProps: any}) => {
     // @todo We need to pass along props.
     // @todo How do we handle cardinality together with jsonapi
     // making a distinction between single value fields and multi value fields.
@@ -199,7 +225,9 @@ class NodeForm extends React.Component {
     } = this.props.schema.properties.data.properties;
 
     const propType =
+      // @ts-ignore
       (attributes.properties[fieldName] && 'attributes') ||
+      // @ts-ignore
       (relationships.properties[fieldName] && 'relationships');
 
     const widgetProps = {
@@ -339,7 +367,7 @@ styles = {
   `,
 };
 
-const mapStateToProps = (state, { bundle, entityTypeId }) => ({
+const mapStateToProps = (state: State, { bundle, entityTypeId }: {bundle: string, entityTypeId: string}) => ({
   uiSchema: state.schema.uiSchema[`${entityTypeId}--${bundle}`],
 });
 
@@ -350,4 +378,5 @@ export default connect(
     contentAdd,
     setErrorMessage,
   },
+  // @ts-ignore
 )(NodeForm);

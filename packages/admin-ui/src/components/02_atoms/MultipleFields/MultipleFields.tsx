@@ -1,19 +1,18 @@
+import Button from '@material-ui/core/Button';
+import FormControl from '@material-ui/core/FormControl';
+import FormLabel from '@material-ui/core/FormLabel';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
+import AddIcon from '@material-ui/icons/Add';
+import DeleteIcon from '@material-ui/icons/Delete';
+import ReorderIcon from '@material-ui/icons/Reorder';
 import * as React from 'react';
 import { Component, Fragment } from 'react';
-import PropTypes from 'prop-types';
 import styled from 'react-emotion';
-import List from '@material-ui/core/List';
-import AddIcon from '@material-ui/icons/Add';
-import Button from '@material-ui/core/Button';
-import ListItem from '@material-ui/core/ListItem';
-import DeleteIcon from '@material-ui/icons/Delete';
-import FormLabel from '@material-ui/core/FormLabel';
-import ReorderIcon from '@material-ui/icons/Reorder';
-import FormControl from '@material-ui/core/FormControl';
-import ListItemText from '@material-ui/core/ListItemText';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
 import { createEntity } from '../../../utils/api/schema';
-import SchemaPropType from '../../05_pages/NodeForm/SchemaPropType';
+import SchemaProp from '../../05_pages/NodeForm/SchemaProp';
 
 const Add = styled('div')`
   .icon {
@@ -32,19 +31,27 @@ const style = {
   },
 };
 
-class MultipleFields extends Component {
-  static propTypes = {
-    label: PropTypes.string.isRequired,
-    onChange: PropTypes.func.isRequired,
-    component: PropTypes.func.isRequired,
-    value: PropTypes.arrayOf(PropTypes.string).isRequired,
-    schema: SchemaPropType.isRequired,
-  };
+interface Props {
+  label: string,
+  onChange: (value: string[]) => any,
+  component: () => any,
+  value: string[],
+  schema: SchemaProp,
+};
 
+interface State {
+  // TODO bodge use typescript here.
+  handle: any;
+  currentIndex: number,
+  newItemAdded: boolean,
+};
+
+class MultipleFields extends Component<Props, State> {
   /**
    * Initial state
    */
-  state = {
+  public state = {
+    // TODO use typescript here.
     handle: null,
     currentIndex: -1,
     newItemAdded: false,
@@ -54,7 +61,7 @@ class MultipleFields extends Component {
    * Sets the state handle with the handle target.
    * @param {Event} event
    */
-  onMouseDown = event => {
+  public onMouseDown = (event: React.MouseEvent<HTMLDivElement>) => {
     this.setState({
       handle: event.currentTarget,
     });
@@ -64,13 +71,15 @@ class MultipleFields extends Component {
    * Sets the state value with the selected element.
    * @param {Event} event
    */
-  onDragStart = event => {
+  public onDragStart = (event: React.DragEvent<any>) => {
     const {
+      // @ts-ignore
       props: { value },
       state: { handle },
     } = this;
 
     // Don't allow dragging if not handle or only one item in props.value
+    // @ts-ignore
     if (!event.target.contains(handle) || value.length === 1) {
       event.preventDefault();
       return;
@@ -91,9 +100,11 @@ class MultipleFields extends Component {
    * value.
    * @param {Event} event
    */
-  onDragOver = event => {
+  public onDragOver = ( event: React.DragEvent<any>) => {
     event.preventDefault();
+
     const {
+      // @ts-ignore
       props: { value },
       state: { currentIndex },
     } = this;
@@ -115,7 +126,7 @@ class MultipleFields extends Component {
    * Will update the state and call the onChange method
    * once the element has been reordered.
    */
-  onDragEnd = () => {
+  public onDragEnd = () => {
     const { value, onChange } = this.props;
     this.setState(
       {
@@ -129,11 +140,16 @@ class MultipleFields extends Component {
   };
 
   /**
+   * Default function is empty.
+   */
+  public onDragLeave = () => {}
+
+  /**
    * Updated the current value of the input.
    * @param {Event} event
    * @param {String} value
    */
-  changeItem = index => value => {
+  public changeItem = (index: number) => (value: string) => {
     const { value: propsValue, onChange } = this.props;
     const newValue = [...propsValue];
     newValue[index] = value;
@@ -143,7 +159,7 @@ class MultipleFields extends Component {
   /**
    * Adds another empty string to the current set of values.
    */
-  addAnotherItem = () => {
+  public addAnotherItem = () => {
     const { value, onChange } = this.props;
     const newValue = [...value, ''];
     this.setState(
@@ -156,11 +172,14 @@ class MultipleFields extends Component {
     );
   };
 
-  createEmptyItem() {
+  public createEmptyItem = () => {
+    // TODO resolve potential bug !
+    // Should item exist on schema?
+    // @ts-ignore
     return createEntity(this.props.schema.items);
   }
 
-  render = () => {
+  public render = () => {
     const {
       onDragEnd,
       changeItem,
@@ -179,13 +198,13 @@ class MultipleFields extends Component {
       this.createEmptyItem(),
     ];
     return (
-      <FormControl margin="normal" fullWidth>
+      <FormControl margin="normal" fullWidth={true}>
         <FormLabel component="legend">{label}</FormLabel>
         <List>
           {usedValues &&
             usedValues.map((value, index) => (
               <ListItem
-                draggable
+                draggable={true}
                 // eslint-disable-next-line react/no-array-index-key
                 key={index}
                 data-key={index}
@@ -212,7 +231,7 @@ class MultipleFields extends Component {
                 </ListItemText>
                 <Fragment>
                   <Button
-                    mini
+                    mini={true}
                     variant="fab"
                     color="secondary"
                     className="remove"
@@ -245,5 +264,4 @@ class MultipleFields extends Component {
     );
   };
 }
-
 export default MultipleFields;

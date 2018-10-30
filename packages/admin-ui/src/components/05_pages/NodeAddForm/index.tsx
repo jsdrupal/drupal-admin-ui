@@ -1,6 +1,6 @@
-import React, { Fragment } from 'react';
+import * as React from 'react';
+import { Fragment } from 'react';
 import { connect } from 'react-redux';
-import PropTypes from 'prop-types';
 import LoadingBar from 'react-redux-loading-bar';
 import NodeForm from '../NodeForm';
 import {
@@ -11,19 +11,26 @@ import {
 import PageTitle from '../../02_atoms/PageTitle/PageTitle';
 import { createEntity } from '../../../utils/api/schema';
 import { requestSchema } from '../../../actions/schema';
-import SchemaPropType from '../NodeForm/SchemaPropType';
+import SchemaProp from '../NodeForm/SchemaProp';
 import { cleanupRelationships } from '../../../utils/api/content';
 
-class NodeAddForm extends React.Component {
-  static propTypes = {
-    bundle: PropTypes.string.isRequired,
-    contentAdd: PropTypes.func.isRequired,
-    entityTypeId: PropTypes.string.isRequired,
-    schema: PropTypes.oneOfType([SchemaPropType, PropTypes.bool]),
-    requestSchema: PropTypes.func.isRequired,
-    requestUser: PropTypes.func.isRequired,
-    user: PropTypes.shape({}),
-  };
+interface Props {
+  bundle: string,
+  contentAdd: ({ payload: { content } }: any) => any,
+  entityTypeId: string,
+  schema?: SchemaProp | boolean,
+  requestSchema: ({ entityTypeId, bundle }: {entityTypeId:string, bundle:string}) => any,
+  requestUser: (uid: string) => any,
+  user?: object,
+};
+
+interface State {
+  content: {user: any},
+  entityTypeId: string,
+  user: any,
+};
+
+class NodeAddForm extends React.Component<Props, State> {
 
   static defaultProps = {
     schema: false,
@@ -31,14 +38,16 @@ class NodeAddForm extends React.Component {
   };
 
   componentDidMount() {
-    this.props.requestUser(1);
+    this.props.requestUser('1');
     this.props.requestSchema({
       entityTypeId: this.props.entityTypeId,
       bundle: this.props.bundle,
     });
   }
 
-  onSave = entity => {
+  onSave = (entity: any) => {
+    // This looks like a bug the function takes only one parameter
+    // @ts-ignore
     this.props.contentAdd(
       cleanupRelationships({
         ...entity,
@@ -48,7 +57,8 @@ class NodeAddForm extends React.Component {
     );
   };
 
-  forgeEntity = schema => {
+  // @ts-ignore
+  forgeEntity = (schema) => {
     const entity = createEntity(schema);
     // Set default `Created On` attribute.
     const local = new Date();
@@ -71,9 +81,11 @@ class NodeAddForm extends React.Component {
             {this.props.bundle}
           </PageTitle>
           <LoadingBar />
+          // @ts-ignore
           <NodeForm
             {...this.props}
             entity={this.forgeEntity(this.props.schema)}
+            // @ts-ignore
             onSave={this.onSave}
           />
         </Fragment>
@@ -82,20 +94,26 @@ class NodeAddForm extends React.Component {
   }
 }
 
-const extractRestorableEntity = (state, bundle) =>
+// TODO must return an define state interface.
+// @ts-ignore
+const extractRestorableEntity = (state, bundle: string) =>
   state.content.restorableContentAddByBundle[bundle];
 
 export default connect(
   (
     state,
     {
+      // @ts-ignore
       match: {
         params: { bundle },
       },
     },
   ) => ({
+    // @ts-ignore
     schema: state.schema.schema[`node--${bundle}`],
+    // @ts-ignore
     restorableEntity: extractRestorableEntity(state, bundle),
+    // @ts-ignore
     user: state.content.user,
     entityTypeId: 'node',
     bundle,
@@ -106,4 +124,5 @@ export default connect(
     onChange: contentAddChange,
     requestUser,
   },
+  // @ts-ignore
 )(NodeAddForm);

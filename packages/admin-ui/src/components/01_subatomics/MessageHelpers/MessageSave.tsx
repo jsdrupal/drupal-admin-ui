@@ -1,20 +1,19 @@
 import * as React from 'react';
 import { Fragment } from 'react';
-import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 
-const MessageSave = ({ bundle, title, nid }) => (
+interface Props {
+  bundle: string,
+  title: string,
+  nid: string,
+};
+
+const MessageSave = ({ bundle, title, nid } : Props) => (
   <Fragment>
     <p>
       {bundle} <Link to={`/node/${nid}`}>{title}</Link> has been updated
     </p>
   </Fragment>
 );
-
-MessageSave.propTypes = {
-  bundle: PropTypes.string.isRequired,
-  title: PropTypes.string.isRequired,
-  nid: PropTypes.number.isRequired,
-};
 
 export default MessageSave;

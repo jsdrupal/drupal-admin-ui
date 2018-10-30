@@ -1,8 +1,11 @@
-import * as React from 'react';
 import { css, keyframes } from 'emotion';
+import * as React from 'react';
 
 let rotate = null;
-let styles;
+let styles: {
+  wrap:string,
+  peace:string,
+};
 
 const Loading = () => (
   <div className={styles.wrap}>

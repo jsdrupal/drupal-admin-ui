@@ -1,25 +1,41 @@
-import * as React from 'react';
-import PropTypes from 'prop-types';
-import TextField from '@material-ui/core/TextField';
 import InputAdornment from '@material-ui/core/InputAdornment';
-import WidgetPropTypes from '../../05_pages/NodeForm/WidgetPropTypes';
+import TextField from '@material-ui/core/TextField';
+import * as React from 'react';
+import WidgetProp from '../../05_pages/NodeForm/WidgetProp';
+
+interface Prop extends WidgetProp {
+  label: string,
+  classes?: object, // TODO must lock down.
+  inputProps: {
+    max: number,
+    min: number,
+    step: number,
+    suffix: string,
+    prefix: string,
+    unsigned?: boolean,
+  }
+  value: number,
+  required?: boolean,
+};
 
 const NumberTextfield = ({
-  classes,
   label,
+  classes,
   value,
   onChange,
   fieldName,
   required,
   inputProps,
-}) => (
+}: Prop) => (
   <TextField
     id={fieldName}
     value={value}
-    fullWidth
-    onChange={event => onChange(Number(event.target.value))}
+    fullWidth={true}
+    // @ts-ignore
+    onChange={(event: React.ChangeEvent<HTMLInputElement>) => onChange(Number(event.target.value))}
     InputProps={{
       ...inputProps,
+      // @ts-ignore
       unsigned: inputProps.unsigned && inputProps.unsigned.toString(),
       endAdornment: inputProps.suffix && (
         <InputAdornment position="end">{inputProps.suffix}</InputAdornment>
@@ -36,19 +52,8 @@ const NumberTextfield = ({
   />
 );
 
-NumberTextfield.propTypes = {
-  ...WidgetPropTypes,
-  inputProps: PropTypes.shape({
-    max: PropTypes.number,
-    min: PropTypes.number,
-    step: PropTypes.number,
-    suffix: PropTypes.string,
-    prefix: PropTypes.string,
-  }),
-  value: PropTypes.number,
-};
-
 NumberTextfield.defaultProps = {
+  classes: {},
   inputProps: {
     min: 0,
   },

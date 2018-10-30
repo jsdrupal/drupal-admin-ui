@@ -1,11 +1,10 @@
-import * as React from 'react';
-import { Component } from 'react';
-import PropTypes from 'prop-types';
-import styled from 'react-emotion';
 import Button from '@material-ui/core/Button';
+import LinearProgress from '@material-ui/core/LinearProgress';
 import Typography from '@material-ui/core/Typography';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
-import LinearProgress from '@material-ui/core/LinearProgress';
+import * as React from 'react';
+import { Component } from 'react';
+import styled from 'react-emotion';
 import api from '../../../utils/api/api';
 
 const Container = styled('div')`
@@ -45,37 +44,68 @@ const error = {
   paddingLeft: 0,
 };
 
-class FileUpload extends Component {
-  static propTypes = {
-    entityTypeId: PropTypes.string.isRequired,
-    bundle: PropTypes.string.isRequired,
-    fieldName: PropTypes.string.isRequired,
-    onFileUpload: PropTypes.func.isRequired,
-    multiple: PropTypes.bool.isRequired,
-    remainingUploads: PropTypes.number.isRequired,
-    inputProps: PropTypes.shape({
-      file_extensions: PropTypes.string,
-      max_filesize: PropTypes.string,
-    }).isRequired,
-  };
+export interface File {
+  // Should these names be plural, eg urls
+  url: Array<{value: string}>,
+  uuid: Array<{value: string}>
+  name: string,
+  filename: Array<{value: string}>
+};
+
+interface Error {
+  id?: string,
+  name?: string,
+  size?: string,
+  type?: string,
+};
+
+interface Props {
+  entityTypeId: string,
+  bundle: string,
+  fieldName: string,
+  onFileUpload: (files: File[]) => void,
+  multiple: boolean,
+  remainingUploads: number,
+  inputProps: {
+    file_extensions: string,
+    max_filesize: string,
+  },
+};
+
+interface State {
+  total: number,
+  files: File[],
+  errors?: Error[],
+  filesLength: number,
+  isDisabled: boolean,
+};
+
+export class FileUpload extends Component<Props, State> {
 
   /**
    * Initial state
    */
-  state = {
+  public state = {
     total: 0,
-    files: [],
     errors: [],
+    files: [],
     filesLength: 0,
     isDisabled: false,
   };
+
+  // TODO refactor -Must provide a sensible default?
+  // @ts-ignore
+  public input: HTMLInputElement = React.createRef();
+
+  // @ts-ignore
+  public element: HTMLElement =  React.createRef();
 
   /**
    * Will set the border of the element to red and
    * drop effect on drag over.
    * @param {Event} event
    */
-  onDragOver = event => {
+  public onDragOver = (event: React.DragEvent) => {
     event.stopPropagation();
     event.preventDefault();
     this.setElementStyles('red');
@@ -86,7 +116,7 @@ class FileUpload extends Component {
    * Resets the border on drag leave.
    * @param {Event} event
    */
-  onDragLeave = event => {
+  public onDragLeave = (event: React.DragEvent) => {
     event.stopPropagation();
     event.preventDefault();
     this.setElementStyles();
@@ -96,7 +126,7 @@ class FileUpload extends Component {
    * Will read the file/s that are dropped in the drop area.
    * @param {Event} event
    */
-  onDrop = event => {
+  public onDrop = (event: React.DragEvent) => {
     event.stopPropagation();
     event.preventDefault();
     this.readFile(event.dataTransfer.files);
@@ -106,7 +136,7 @@ class FileUpload extends Component {
    * Will call the click event on the input to open the file explorer
    * to allow file/s to be selected.
    */
-  onClick = () => {
+  public onClick = () => {
     this.input.click();
   };
 
@@ -115,7 +145,9 @@ class FileUpload extends Component {
    * Set the border and opacity.
    * @param {String} [color="grey"] Color of the border.
    */
-  setElementStyles = (color = 'grey') => {
+  public setElementStyles = (color = 'grey') => {
+    // TODO refactor must find a better way.
+    // @ts-ignore
     const {
       element,
       state: { isDisabled },
@@ -131,7 +163,9 @@ class FileUpload extends Component {
    * Will get the selected file/s from the file explorer.
    * @param {Event} event
    */
-  getFiles = event => {
+  public getFiles = (event: React.ChangeEvent<HTMLInputElement>) : void => {
+    // TODO refactor -Must provide correct event type that know about files.
+    // @ts-ignore
     this.readFile(event.target.files);
   };
 
@@ -139,10 +173,16 @@ class FileUpload extends Component {
    * Uploads the file to the server, updates the total and files state.
    * @param {Object} file File to be uploaded.
    */
-  uploadFile = file => {
+  public uploadFile = (file: File) => {
+    // TODO window is a unknown type?
+    // @ts-ignore
     const reader = new window.FileReader();
 
-    reader.onloadend = async ({ target: { readyState, result } }) => {
+    // TODO refactor must find a better way.
+    // @ts-ignore
+    reader.onloadend = async ({ target: { readyState, result } }: {target:{readyState: State}}) => {
+      // TODO window is a unknown type?
+      // @ts-ignore
       if (readyState === window.FileReader.DONE) {
         const {
           resetState,
@@ -171,10 +211,13 @@ class FileUpload extends Component {
         });
 
         this.setState(
-          prevState => ({
-            total: prevState.total + 1,
-            files: [...prevState.files, createdFile],
-          }),
+          (prevState: State) => {
+            const prevFiles = prevState.files;
+            return {
+              total: prevState.total + 1,
+              files: [...prevFiles, createdFile],
+            };
+          },
           () => {
             onFileUpload(this.state.files);
             resetState();
@@ -195,9 +238,9 @@ class FileUpload extends Component {
    * @param {Number} size file size.
    * @param {String} name file name.
    */
-  checkFile = ({ type, size, name, lastModified }) => {
+  public checkFile = ({ type, size, name, lastModified }: {type:string, size:number, name: string, lastModified: string}) => {
     /* eslint-disable camelcase */
-    const errors = {};
+    const error: Error = {};
     const extension = type.split('/')[1]; // <MIME_subtype>
     const {
       resetState,
@@ -209,26 +252,29 @@ class FileUpload extends Component {
     // Check file size
     if (max_filesize && size > Number(max_filesize)) {
       // TODO: Convert max_filesize to MB
-      errors.size =
+      error.size =
         'The file could not be saved because it exceeds 2 MB, the maximum allowed size for uploads.';
     }
 
     // Check file extension
     if (!file_extensions.includes(extension)) {
-      errors.type = `The image file is invalid or the image type is not allowed. Allowed types: ${file_extensions}.`;
+      error.type = `The image file is invalid or the image type is not allowed. Allowed types: ${file_extensions}.`;
     }
 
     // Check if there are errors
-    if (Object.keys(errors).length > 0) {
-      errors.name = `The specified file ${name} could not be uploaded.`;
-      errors.id = lastModified;
+    if (Object.keys(error).length > 0) {
+      error.name = `The specified file ${name} could not be uploaded.`;
+      error.id = lastModified;
 
       // Set the state with error and update total
       this.setState(
-        prevState => ({
-          total: prevState.total + 1,
-          errors: [...prevState.errors, errors],
-        }),
+        (prevState: State) => {
+          const prevErrors: Error[] = prevState.errors || [];
+          return {
+            total: prevState.total + 1,
+            errors: [...prevErrors, error],
+          }
+        },
         resetState,
       );
       return false;
@@ -241,7 +287,7 @@ class FileUpload extends Component {
   /**
    * Resets the state if all file/s have been uploaded.
    */
-  resetState = () => {
+  public resetState = () => {
     const {
       setElementStyles,
       state: { total, filesLength },
@@ -260,7 +306,7 @@ class FileUpload extends Component {
    * check for errors, if no errors then upload the file.
    * @param {Object} files Selected files.
    */
-  readFile = files => {
+  public readFile = (files:  FileList) => {
     const {
       setElementStyles,
       checkFile,
@@ -304,7 +350,7 @@ class FileUpload extends Component {
    * If disabled, then prevent all file upload events.
    * @param {Function} fn Event function.
    */
-  isEnabled = fn => {
+  public isEnabled = (fn: any) => {
     if (this.state.isDisabled) {
       return null;
     }
@@ -312,7 +358,7 @@ class FileUpload extends Component {
     return fn;
   };
 
-  render = () => {
+  public render = () => {
     const {
       onDrop,
       onClick,
@@ -358,7 +404,10 @@ class FileUpload extends Component {
             onChange={getFiles}
             multiple={multiple}
             style={{ display: 'none' }}
-            ref={element => {
+            // TODO refactor - There is a code smell with the initialization of
+            // this.element
+            // @ts-ignore
+            ref={(element: RefObject<HTMLInputElement>): void => {
               this.input = element;
             }}
           />
@@ -385,7 +434,7 @@ class FileUpload extends Component {
             </Typography>
 
             <Typography style={error} component="ul">
-              {errors.map(({ name, size, type, id }) => (
+              {errors.map(({ name, size, type, id }: Error) => (
                 <Typography style={error} component="li" key={id}>
                   {name}
                   <Typography style={error} component="ul">

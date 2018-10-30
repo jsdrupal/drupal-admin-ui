@@ -1,7 +1,7 @@
-import React, { Fragment } from 'react';
+import * as React from 'react';
+import { Fragment } from 'react';
 import { connect } from 'react-redux';
 import LoadingBar from 'react-redux-loading-bar';
-import PropTypes from 'prop-types';
 import { css } from 'emotion';
 import NodeForm from '../NodeForm';
 import {
@@ -12,11 +12,28 @@ import {
 import PageTitle from '../../02_atoms/PageTitle/PageTitle';
 import { cleanupRelationships } from '../../../utils/api/content';
 import { requestSchemaByEntityId } from '../../../actions/schema';
-import SchemaPropType from '../NodeForm/SchemaPropType';
+import SchemaProp from '../NodeForm/SchemaProp';
 
-let styles;
+let styles : {
+  bundle: string,
+};
 
-class NodeEditForm extends React.Component {
+interface Props {
+  nid: string,
+  requestSingleContent: (nid: string) => any,
+  contentSave: () => any,
+  entityTypeId: string,
+  entity: {
+    attributes: {
+      title: string,
+    },
+    type: string,
+  },
+  requestSchemaByEntityId: ({entityTypeId, entityId}:{entityTypeId: string, entityId: string}) => any,
+  schema: SchemaProp | boolean,
+};
+
+class NodeEditForm extends React.Component<Props> {
   componentDidMount() {
     this.props.requestSchemaByEntityId({
       entityTypeId: this.props.entityTypeId,
@@ -25,7 +42,8 @@ class NodeEditForm extends React.Component {
     this.props.requestSingleContent(this.props.nid);
   }
 
-  onSave = bundle => entity => {
+  onSave = (bundle: string) => (entity: any) => {
+    // @ts-ignore
     this.props.contentSave(
       cleanupRelationships({
         ...entity,
@@ -35,7 +53,7 @@ class NodeEditForm extends React.Component {
   };
 
   render() {
-    const { entity, schema } = this.props;
+    const { entity, schema } : Props = this.props;
     let result = null;
     if (entity && schema) {
       const bundle = entity.type.replace('node--', '');
@@ -51,10 +69,12 @@ class NodeEditForm extends React.Component {
           )}
           <LoadingBar />
           {entity && (
+            // @ts-ignore
             <NodeForm
               {...this.props}
               bundle={bundle}
               entity={{ data: entity }}
+              // @ts-ignore
               onSave={this.onSave(bundle)}
             />
           )}
@@ -65,32 +85,13 @@ class NodeEditForm extends React.Component {
   }
 }
 
-NodeEditForm.defaultProps = {
-  entity: null,
-  schema: null,
-};
-
-NodeEditForm.propTypes = {
-  nid: PropTypes.string.isRequired,
-  requestSingleContent: PropTypes.func.isRequired,
-  contentSave: PropTypes.func.isRequired,
-  entityTypeId: PropTypes.string.isRequired,
-  entity: PropTypes.shape({
-    attributes: PropTypes.shape({
-      title: PropTypes.string.isRequired,
-    }).isRequired,
-  }),
-  requestSchemaByEntityId: PropTypes.func.isRequired,
-  schema: PropTypes.oneOfType([SchemaPropType, PropTypes.bool]),
-};
-
 styles = {
   bundle: css`
     text-transform: capitalize;
   `,
 };
 
-const extractRestorableEntity = (state, entity) => {
+const extractRestorableEntity = (state: any, entity: any) => {
   const restorableEntity = state.content.restorableContentEditById[entity.id];
   if (
     restorableEntity &&
@@ -110,14 +111,19 @@ export default connect(
   (
     state,
     {
+      // @ts-ignore
       match: {
         params: { nid },
       },
     },
   ) => {
+
+    // @ts-ignore
     const entity = state.content.contentByNid[nid];
     return {
+      // @ts-ignore
       schema: state.schema.schema[`node--${nid}`],
+      // @ts-ignore
       entity: state.content.contentByNid[nid],
       restorableEntity: entity && extractRestorableEntity(state, entity),
       entityTypeId: 'node',

@@ -1,27 +1,26 @@
-import * as React from 'react';
-import { Fragment } from 'react';
-import PropTypes from 'prop-types';
-import styled from 'react-emotion';
-import { css } from 'emotion';
+import Button from '@material-ui/core/Button';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import Divider from '@material-ui/core/Divider';
 import FormControl from '@material-ui/core/FormControl';
 import FormLabel from '@material-ui/core/FormLabel';
-import TextField from '@material-ui/core/TextField';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
-import Button from '@material-ui/core/Button';
+import TextField from '@material-ui/core/TextField';
 import DeleteIcon from '@material-ui/icons/Delete';
+import { css } from 'emotion';
+import { Fragment } from 'react';
+import * as React from 'react';
+import styled from 'react-emotion';
 
-import WidgetPropTypes from '../../05_pages/NodeForm/WidgetPropTypes';
-import FileUpload from '../FileUpload/FileUpload';
+// import WidgetPropTypes from '../../05_pages/NodeForm/WidgetPropTypes';
+import api from '../../../utils/api/api';
 import {
   deleteItemById,
   getItemsAsArray,
   setItemById,
 } from '../../../utils/api/fieldItem';
-import api from '../../../utils/api/api';
+import { File, FileUpload } from '../FileUpload/FileUpload';
 
 const CardWrapper = styled('div')`
   margin-top: 15px;
@@ -52,12 +51,81 @@ const styles = {
   `,
 };
 
-class FileUploadWidget extends React.Component {
-  state = {
-    selectedItems: null,
+interface SelectedItemType {}
+
+interface FileProp {
+  type: string,
+  url: string,
+  id: string,
+  filename: string,
+};
+
+interface FileItemMultipleProp {
+  id: string,
+  file: FileProp,
+};
+
+interface FileItemSingleProp {
+  file: FileProp,
+};
+
+interface Props {
+  bundle: string,
+  // TODO must lock this down
+  classes: any,
+  entityTypeId: string,
+  fieldName: string,
+  inputProps: {
+    file_extensions: string,
+    // TODO should this be number?
+    max_filesize: string,
+  },
+  label: string,
+  required: boolean,
+  // TODO Must lock down.
+  value: {
+    data: {
+     file: FileItemMultipleProp[] | FileItemSingleProp,
+     meta: {
+       alt: string,
+     },
+  }},
+  schema: {
+    properties:{
+      data:{type: string}
+    },
+    maxItems: number,
+  },
+  onChange: ( {data }: {data: SelectedItemType} ) => void,
+};
+
+interface State {
+  selectedItems: SelectedItemType[],
+  inputProps?: {
+    file_extensions: string,
+    // TODO should this be number?
+    max_filesize: string,
+  },
+  value?: {
+    data: {
+     file: FileItemMultipleProp[] | FileItemSingleProp,
+     meta: {
+       alt: string,
+     },
+  }},
+};
+
+class FileUploadWidget extends React.Component<Props, State> {
+
+  public state = {
+    selectedItems: [],
+    inputProps: {
+      file_extensions: 'png gif jpg jpeg',
+      max_filesize: '2000000',
+    },
   };
 
-  componentDidMount() {
+  public componentDidMount() {
     if (
       !this.state.selectedItems &&
       this.props.value &&
@@ -67,7 +135,7 @@ class FileUploadWidget extends React.Component {
     }
   }
 
-  componentDidUpdate(prevProps) {
+  public componentDidUpdate(prevProps: Props) {
     if (
       this.props.value &&
       this.props.value.data &&
@@ -77,7 +145,8 @@ class FileUploadWidget extends React.Component {
     }
   }
 
-  setSelectedItems = items => {
+  // TODO must lock down item type.
+  public setSelectedItems = (items: any) => {
     this.setState(
       {
         selectedItems: items,
@@ -90,7 +159,7 @@ class FileUploadWidget extends React.Component {
     );
   };
 
-  recalculateSelectedItems = () => {
+  public recalculateSelectedItems = () => {
     const entityTypeId = 'file';
     const bundle = 'file';
 
@@ -101,13 +170,15 @@ class FileUploadWidget extends React.Component {
       ({ data: entities }) => {
         this.setState({
           selectedItems: entities
-            .map(({ id, attributes }, index) => ({
+            .map(({ id, attributes }: { id: string, attributes: string }, index: number) => ({
               id,
               type: 'file--file',
               [entityTypeId]: attributes,
               meta: items[index].meta,
             }))
             .reduce(
+              // TODO must lock down paramter types
+              // @ts-ignore
               (agg, item) => setItemById(multiple, item, agg),
               multiple ? [] : {},
             ),
@@ -116,7 +187,7 @@ class FileUploadWidget extends React.Component {
     );
   };
 
-  fetchEntitites = (entityTypeId, bundle, ids) =>
+  public fetchEntitites = (entityTypeId: string, bundle: string, ids: string[]) =>
     api(entityTypeId, {
       queryString: {
         filter: {
@@ -134,7 +205,7 @@ class FileUploadWidget extends React.Component {
       },
     });
 
-  render() {
+  public render() {
     const {
       value,
       label,
@@ -145,7 +216,7 @@ class FileUploadWidget extends React.Component {
       required,
       schema: { properties, maxItems },
       classes,
-    } = this.props;
+    } : Props = this.props;
 
     if (this.state.selectedItems === null) {
       return null;
@@ -166,7 +237,7 @@ class FileUploadWidget extends React.Component {
         margin="normal"
         required={required}
         classes={classes}
-        fullWidth
+        fullWidth={true}
       >
         <Element>
           <FormLabel component="legend">{label}</FormLabel>
@@ -186,7 +257,7 @@ class FileUploadWidget extends React.Component {
               inputProps={inputProps}
               entityTypeId={entityTypeId}
               remainingUploads={maxItemsCount - length}
-              onFileUpload={files => {
+              onFileUpload={(files: File[]) => {
                 const newItems = files.reduce((itemsAgg, file) => {
                   const item = {
                     file: {
@@ -232,11 +303,11 @@ class FileUploadWidget extends React.Component {
                               />
                             </Image>
                             <TextField
-                              required
+                              required={true}
                               value={alt}
                               margin="normal"
                               label="Alternative text"
-                              onChange={event =>
+                              onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
                                 this.setSelectedItems(
                                   setItemById(
                                     multiple,
@@ -252,7 +323,7 @@ class FileUploadWidget extends React.Component {
                               }
                             />
                             <Button
-                              mini
+                              mini={true}
                               id={id}
                               variant="fab"
                               color="secondary"
@@ -285,56 +356,5 @@ class FileUploadWidget extends React.Component {
     );
   }
 }
-
-const filePropType = PropTypes.shape({
-  type: PropTypes.string.isRequired,
-  url: PropTypes.string.isRequired,
-  id: PropTypes.string,
-  filename: PropTypes.string.isRequired,
-});
-
-const fileItemMultiplePropType = PropTypes.shape({
-  id: PropTypes.toString.isRequired,
-  file: filePropType.isRequired,
-});
-
-const fileItemSinglePropType = PropTypes.shape({
-  file: filePropType.isRequired,
-});
-
-FileUploadWidget.propTypes = {
-  ...WidgetPropTypes,
-  value: PropTypes.shape({
-    data: PropTypes.shape({
-      file: PropTypes.oneOfType([
-        PropTypes.arrayOf(fileItemMultiplePropType),
-        fileItemSinglePropType,
-      ]),
-      meta: PropTypes.shape({
-        alt: PropTypes.string,
-      }),
-    }),
-  }),
-  inputProps: PropTypes.shape({
-    file_extensions: PropTypes.string,
-    max_filesize: PropTypes.string,
-  }),
-  schema: PropTypes.shape({
-    maxItems: PropTypes.number,
-    properties: PropTypes.shape({
-      data: PropTypes.shape({
-        type: PropTypes.string.isRequired,
-      }),
-    }),
-  }).isRequired,
-};
-
-FileUploadWidget.defaultProps = {
-  value: { data: { file: {}, meta: {} } },
-  inputProps: {
-    file_extensions: 'png gif jpg jpeg',
-    max_filesize: '2000000',
-  },
-};
 
 export default FileUploadWidget;

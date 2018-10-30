@@ -12,6 +12,7 @@
     "serviceworker": true
   },
   "rules": {
+		"jsx-no-lambda": false,
     "react/jsx-filename-extension": [1, { "extensions": [".js"] }],
     "jsx-a11y/anchor-is-valid": [ "error", {
       "aspects": [ "noHref" ]

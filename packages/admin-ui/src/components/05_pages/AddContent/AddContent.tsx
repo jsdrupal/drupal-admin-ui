@@ -1,13 +1,14 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
-import { Markup } from 'interweave';
 import { css } from 'emotion';
+// @ts-ignore
+import { Markup } from 'interweave';
+import * as React from 'react';
+import { Component } from 'react';
+import { Link } from 'react-router-dom';
 
-import Paper from '@material-ui/core/Paper';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
+import Paper from '@material-ui/core/Paper';
 import PageTitle from '../../02_atoms/PageTitle';
 
 const styles = {
@@ -19,34 +20,36 @@ const styles = {
   `,
 };
 
-export default class extends Component {
-  static propTypes = {
-    contentTypes: PropTypes.objectOf(
-      PropTypes.shape({
-        name: PropTypes.string.isRequired,
-        description: PropTypes.string.isRequired,
-      }),
-    ).isRequired,
-    requestContentTypes: PropTypes.func.isRequired,
-  };
+interface ContentType {
+  name: string,
+  description: string,
+};
 
-  componentDidMount() {
+interface Props {
+  // TODO must lock down.
+  // @ts-ignore
+  contentTypes: Map<string, ContentType>,
+  requestContentTypes: () => void,
+};
+
+export default class extends Component<Props> {
+  public componentDidMount() {
     this.props.requestContentTypes();
   }
 
-  render = () => (
+  public render = () => (
     <div className={styles.root}>
       <PageTitle>Add content</PageTitle>
       <Paper>
         <List data-nightwatch="node-type-list">
-          {Object.keys(this.props.contentTypes).map(contentType => (
-            <ListItem component="li" key={`node-add-${contentType}`}>
-              <Link className={styles.menuLink} to={`/node/add/${contentType}`}>
+          {Object.keys(this.props.contentTypes).map((contentId: string) => (
+            <ListItem component="li" key={`node-add-${contentId}`}>
+              <Link className={styles.menuLink} to={`/node/add/${contentId}`}>
                 <ListItemText
-                  primary={this.props.contentTypes[contentType].name}
+                  primary={this.props.contentTypes[contentId].name}
                   secondary={
                     <Markup
-                      content={this.props.contentTypes[contentType].description}
+                      content={this.props.contentTypes[contentId].description}
                     />
                   }
                 />

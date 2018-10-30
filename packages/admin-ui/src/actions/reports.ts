@@ -1,12 +1,12 @@
-import { put, call, takeLatest } from 'redux-saga/effects';
 import {
-  showLoading,
   hideLoading,
   resetLoading,
+  showLoading,
 } from 'react-redux-loading-bar';
+import { call, put, takeLatest } from 'redux-saga/effects';
 import api from '../utils/api/api';
-import { setErrorMessage } from './application';
 import { ApiError } from '../utils/api/errors';
+import { setErrorMessage } from './application';
 
 export const DBLOG_COLLECTION_REQUEST = 'DBLOG_COLLECTION_REQUEST';
 export const requestDblogCollection = (options: any) => ({

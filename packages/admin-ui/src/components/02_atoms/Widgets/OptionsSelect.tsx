@@ -1,16 +1,30 @@
-import * as React from 'react';
 import { css } from 'emotion';
-import PropTypes from 'prop-types';
-import NativeSelect from '@material-ui/core/NativeSelect';
-import InputLabel from '@material-ui/core/InputLabel';
+import * as React from 'react';
+
 import FormControl from '@material-ui/core/FormControl';
 import FormHelperText from '@material-ui/core/FormHelperText';
-import WidgetPropTypes from '../../05_pages/NodeForm/WidgetPropTypes';
+import InputLabel from '@material-ui/core/InputLabel';
+import NativeSelect from '@material-ui/core/NativeSelect';
+import WidgetProp from '../../05_pages/NodeForm/WidgetProp';
 
 const styles = {
   select: css`
     min-width: 182px;
   `,
+};
+
+interface Props extends WidgetProp {
+  classes?: object, // TODO MUST lock down.
+  label: string,
+  value: string,
+  helpText: string,
+  schema: {
+    default: string,
+  },
+  inputProps: {
+    allowed_values: object,
+  },
+  required?: boolean,
 };
 
 const OptionsSelect = ({
@@ -23,14 +37,15 @@ const OptionsSelect = ({
   schema: { default: defaultValue },
   classes,
   inputProps: { allowed_values: allowedValues },
-}) => (
+}: Props) => (
   <FormControl margin="normal" classes={classes}>
     <InputLabel htmlFor={fieldName} required={required}>
       {label}
     </InputLabel>
     <NativeSelect
       value={value || defaultValue}
-      fullWidth
+      fullWidth={true}
+      // @ts-ignore
       onChange={event => onChange(event.target.value)}
       inputProps={{
         name: fieldName,
@@ -48,17 +63,7 @@ const OptionsSelect = ({
   </FormControl>
 );
 
-OptionsSelect.propTypes = {
-  ...WidgetPropTypes,
-  value: PropTypes.string,
-  helpText: PropTypes.string,
-  schema: PropTypes.shape({
-    default: PropTypes.string.isRequired,
-  }).isRequired,
-  inputProps: PropTypes.shape({
-    allowed_values: PropTypes.object.isRequired,
-  }).isRequired,
-};
+
 
 OptionsSelect.defaultProps = {
   value: '',

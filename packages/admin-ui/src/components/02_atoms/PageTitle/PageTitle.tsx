@@ -1,7 +1,6 @@
-import * as React from 'react';
-import PropTypes from 'prop-types';
-import withSideEffect from 'react-side-effect';
 import { css } from 'emotion';
+import * as React from 'react';
+import * as withSideEffect from 'react-side-effect';
 
 import Typography from '@material-ui/core/Typography';
 
@@ -11,17 +10,17 @@ const styles = {
   `,
 };
 
-const PageTitle = ({ children }) => (
+interface PageTitleProps {
+  children: React.ReactNode,
+};
+
+const PageTitle = ({ children }: PageTitleProps) => (
   <Typography variant="h4" classes={{ root: styles.title }}>
     {children}
   </Typography>
 );
 
-PageTitle.propTypes = {
-  children: PropTypes.node.isRequired,
-};
-
-const reducePropsToState = propsList => {
+const reducePropsToState = (propsList: PageTitleProps[]) => {
   const innermostProps = propsList[propsList.length - 1];
   if (innermostProps) {
     return innermostProps.children;
@@ -36,7 +35,7 @@ const reducePropsToState = propsList => {
  * @param  {(String|Array)} title
  *   Title may be an array if the number children is > 1
  */
-const handleStateChangeOnClient = title => {
+const handleStateChangeOnClient = (title: string | string[]) => {
   document.title = (Array.isArray(title) ? title : [title])
     .map(e => (e && typeof e === 'string' ? e.trim() : ''))
     .join(' ');

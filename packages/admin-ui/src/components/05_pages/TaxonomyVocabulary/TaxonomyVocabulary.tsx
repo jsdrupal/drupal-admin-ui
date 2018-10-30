@@ -1,5 +1,6 @@
-import React, { Fragment } from 'react';
-import PropTypes from 'prop-types';
+import * as React from 'react';
+import { Fragment } from 'react';
+import * as PropTypes from 'prop-types';
 
 import { Redirect } from 'react-router';
 

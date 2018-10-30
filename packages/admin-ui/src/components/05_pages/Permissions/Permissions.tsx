@@ -1,19 +1,37 @@
-import React, { Component, Fragment } from 'react';
-import { connect } from 'react-redux';
-import PropTypes from 'prop-types';
-import makeCancelable from 'makecancelable';
-import { Markup } from 'interweave';
 import { css } from 'emotion';
-import { StickyContainer, Sticky } from 'react-sticky';
+// @ts-ignore... There is no typescript support.
+import { Markup } from 'interweave';
+// @ts-ignore
+import makeCancelable from 'makecancelable';
+import * as React from 'react';
+import { Component, Fragment } from 'react';
+import { connect } from 'react-redux';
+import { Sticky, StickyContainer } from 'react-sticky';
 
-import Loading from '../../02_atoms/Loading/Loading';
 import { Table, TBody, THead } from '../../01_subatomics/Table/Table';
+import Loading from '../../02_atoms/Loading/Loading';
 
-import api from '../../../utils/api/api';
+import { clearMessage, setMessage } from '../../../actions/application';
 import { MESSAGE_SEVERITY_SUCCESS } from '../../../constants/messages';
-import { setMessage, clearMessage } from '../../../actions/application';
+import api from '../../../utils/api/api';
 
-export const filterPermissions = (input, permissions) =>
+interface Permission {
+  id: string,
+  title: string,
+  description: string | null,
+  provider_label: string,
+  provider: string,
+};
+
+interface Role {
+  attributes: {
+    id: string,
+    is_admin: boolean,
+    permissions: Permission[],
+  }
+};
+
+export const filterPermissions = (input: string, permissions: Permission[]) =>
   permissions.filter(
     ({ title, description, provider, provider_label: providerLabel }) =>
       `${title}${description}${provider}${providerLabel}`
@@ -21,43 +39,63 @@ export const filterPermissions = (input, permissions) =>
         .includes(input.toLowerCase()),
   );
 
-let styles;
+let styles : {
+  stickyBar: string,
+  saveButton: string,
+  searchInput: string,
+}
 
-const Permissions = class Permissions extends Component {
-  static propTypes = {
-    setMessage: PropTypes.func.isRequired,
-    clearMessage: PropTypes.func.isRequired,
-    match: PropTypes.shape({
-      params: PropTypes.shape({
-        role: PropTypes.string,
-      }).isRequired,
-    }).isRequired,
-  };
+interface Props {
+  setMessage: (message: string, severity: string) => any,
+  clearMessage: () => any,
+  match: {
+    params: {
+      role: string,
+    }
+  }
+};
+interface State{
+  changedRoles: Role[], // TODO must lock down
+  loaded?: boolean,
+  roles: Role[],
+  rawPermissions: Permission[],
+  renderablePermissions: Permission[],
+  working?: boolean,
+  err: string,
+};
 
-  state = {
+const Permissions = class Permissions extends Component<Props, State> {
+
+  public state = {
+    changedRoles: [],
     loaded: false,
+    roles: [],
     rawPermissions: [],
     renderablePermissions: [],
     working: false,
+    err: '',
   };
 
-  componentDidMount() {
+  cancelFetch: () => any;
+
+  public componentDidMount() {
     this.cancelFetch = this.fetchData();
   }
 
-  componentWillUnmount() {
+  public componentWillUnmount() {
     this.cancelFetch();
   }
 
-  onPermissionCheck = (roleName, permission) => {
-    this.setState(prevState => ({
+  public onPermissionCheck = (roleName: string, permission: Permission) => {
+    this.setState((prevState: State) => ({
+      // @ts-ignore
       changedRoles: [...new Set(prevState.changedRoles).add(roleName).values()],
       roles: this.togglePermission(permission, roleName, prevState.roles),
     }));
     this.props.clearMessage();
   };
 
-  fetchData = () =>
+  public fetchData = () =>
     makeCancelable(
       Promise.all([api('permissions'), api('roles')])
         .then(([permissions, { data: roles }]) =>
@@ -70,13 +108,14 @@ const Permissions = class Permissions extends Component {
             roles:
               this.props.match.params.role &&
               roles
-                .map(role => role.attributes.id)
+                .map((role:Role) => role.attributes.id)
                 .includes(this.props.match.params.role)
                 ? roles.filter(
-                    role => role.attributes.id === this.props.match.params.role,
+                    (role: Role) => role.attributes.id === this.props.match.params.role,
                   )
-                : roles.sort((a, b) => {
+                : roles.sort((a: Role, b: Role) => {
                     if (a.attributes.is_admin && b.attributes.is_admin) {
+                      // @ts-ignore // subtracting strings?
                       return a.attributes.id - b.attributes.id;
                     }
                     if (a.attributes.is_admin) {
@@ -85,6 +124,7 @@ const Permissions = class Permissions extends Component {
                     if (b.attributes.is_admin) {
                       return -1;
                     }
+                    // @ts-ignore ... subtracting strings.
                     return a.attributes.id - b.attributes.id;
                   }),
             loaded: true,
@@ -93,9 +133,11 @@ const Permissions = class Permissions extends Component {
         .catch(err => this.setState({ loaded: false, err })),
     );
 
-  togglePermission = (permission, roleName, roles) => {
-    const roleIndex = roles.map(role => role.attributes.id).indexOf(roleName);
+  public togglePermission = (permission: Permission, roleName: string, roles: Role[]): Role[] => {
+    // @ts-ignore
+    const roleIndex = roles.map((role: Role) => role.attributes.id).indexOf(roleName);
     const role = roles[roleIndex];
+    // @ts-ignore
     const index = role.attributes.permissions.indexOf(permission);
     if (index !== -1) {
       role.attributes.permissions.splice(index, 1);
@@ -106,7 +148,7 @@ const Permissions = class Permissions extends Component {
     return roles;
   };
 
-  groupPermissions = permissions =>
+  public groupPermissions = (permissions: Permission[]) =>
     Object.entries(
       permissions.reduce((acc, cur) => {
         acc[cur.provider] = acc[cur.provider] || {
@@ -118,16 +160,17 @@ const Permissions = class Permissions extends Component {
       }, {}),
     );
 
-  createTableRows = (groupedPermissions, roles) =>
+  public createTableRows = (groupedPermissions: any, roles: Role[]) =>
     [].concat(
       ...groupedPermissions.map(
+        // @ts-ignore
         ([providerMachineName, { providerLabel, permissions }]) => [
           {
             key: `permissionGroup-${providerMachineName}`,
             colspan: roles.length + 1,
             tds: [[`td-${providerMachineName}`, <b>{providerLabel}</b>]],
           },
-          ...permissions.map(permission => ({
+          ...permissions.map((permission: Permission) => ({
             key: `permissionGroup-${providerMachineName}-${permission.title}`,
             tds: [
               [
@@ -154,14 +197,18 @@ const Permissions = class Permissions extends Component {
               ...roles.map(({ attributes }, index) => [
                 `td-${providerMachineName}-${permission.title}-${index}-cb`,
                 attributes.is_admin && attributes.id === 'administrator' ? (
+<<<<<<< HEAD
                   <input type="checkbox" checked disabled />
+=======
+                  <input type="checkbox" checked={true} disabled={true} />
+>>>>>>> Not yet compiling, many errors marked by TODOs
                 ) : (
                   <input
                     type="checkbox"
                     onChange={() =>
-                      this.onPermissionCheck(attributes.id, permission.id)
+                      this.onPermissionCheck(attributes.id, permission)
                     }
-                    checked={attributes.permissions.includes(permission.id)}
+                    checked={attributes.permissions.includes(permission)}
                   />
                 ),
               ]),
@@ -171,7 +218,7 @@ const Permissions = class Permissions extends Component {
       ),
     );
 
-  handleKeyPress = event => {
+  public onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const input = event.target.value;
     this.setState(prevState => ({
       ...prevState,
@@ -179,13 +226,22 @@ const Permissions = class Permissions extends Component {
     }));
   };
 
-  saveRoles = () => {
+  public handleKeyPress = (event : React.KeyboardEvent<HTMLInputElement>) => {
+    const input = event.key;
+    this.setState(prevState => ({
+      ...prevState,
+      renderablePermissions: filterPermissions(input, prevState.rawPermissions),
+    }));
+  };
+
+  public saveRoles = () => {
     this.setState(
       prevState => ({ ...prevState, working: true }),
       () =>
         Promise.all(
           this.state.roles
-            .filter(role =>
+            .filter((role: Role) =>
+              // @ts-ignore
               this.state.changedRoles.includes(role.attributes.id),
             )
             .map(role =>
@@ -206,7 +262,7 @@ const Permissions = class Permissions extends Component {
     );
   };
 
-  render() {
+  public render() {
     if (this.state.err) {
       throw new Error('Error while loading page');
     } else if (!this.state.loaded) {
@@ -221,7 +277,7 @@ const Permissions = class Permissions extends Component {
                 type="text"
                 className={styles.searchInput}
                 placeholder="Filter by name, description or module"
-                onChange={this.handleKeyPress}
+                onChange={this.onChange}
                 onKeyDown={this.handleKeyPress}
               />
               <button

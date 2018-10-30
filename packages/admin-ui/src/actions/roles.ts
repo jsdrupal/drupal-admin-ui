@@ -1,20 +1,20 @@
 import {
-  put,
-  call,
-  takeLatest,
-  race,
-  take,
-  cancelled,
-} from 'redux-saga/effects';
-import {
-  showLoading,
   hideLoading,
   resetLoading,
+  showLoading,
 } from 'react-redux-loading-bar';
+import {
+  call,
+  cancelled,
+  put,
+  race,
+  take,
+  takeLatest,
+} from 'redux-saga/effects';
 import api from '../utils/api/api';
 
-import { setErrorMessage } from './application';
 import { ApiError } from '../utils/api/errors';
+import { setErrorMessage } from './application';
 
 export const ROLES_REQUESTED = 'ROLES_REQUESTED';
 export const requestRoles = () => ({

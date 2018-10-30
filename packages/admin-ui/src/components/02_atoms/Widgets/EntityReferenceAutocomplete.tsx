@@ -1,6 +1,5 @@
 import * as React from 'react';
-import PropTypes from 'prop-types';
-import keycode from 'keycode';
+import * as keycode from 'keycode';
 import Downshift from 'downshift';
 import { css } from 'emotion';
 
@@ -10,8 +9,8 @@ import Chip from '@material-ui/core/Chip';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 
-import WidgetPropTypes from '../../05_pages/NodeForm/WidgetPropTypes';
-import SchemaPropType from '../../05_pages/NodeForm/SchemaPropType';
+import WidgetProp from '../../05_pages/NodeForm/WidgetProp';
+import SchemaProp from '../../05_pages/NodeForm/SchemaProp';
 
 import api from '../../../utils/api/api';
 import { getItemsAsArray } from '../../../utils/api/fieldItem';
@@ -26,28 +25,44 @@ const styles = {
   `,
 };
 
-class EntityReferenceAutocomplete extends React.Component {
-  static propTypes = {
-    ...WidgetPropTypes,
-    schema: SchemaPropType.isRequired,
-    required: PropTypes.bool.isRequired,
-    inputProps: PropTypes.shape({
-      bundle: PropTypes.string,
-      type: PropTypes.string,
-    }),
-  };
+interface SelectedItem {
+  label: string,
+  id: string,
+  type: any,
+}
 
-  static defaultProps = {
+interface Props extends WidgetProp {
+  classes: object, // TODO must lock down.
+  inputProps?: any,
+  required: boolean,
+  schema: SchemaProp,
+  value: {
+    data: object,
+  }
+};
+
+ interface State {
+   label: string
+   inputValue: string,
+   selectedItems: SelectedItem[],
+   // TODO must lock this down.
+   suggestions: Map<any,any>
+ };
+
+class EntityReferenceAutocomplete extends React.Component<Props, State> {
+
+  public static defaultProps = {
     inputProps: {},
   };
 
-  state = {
+  public state = {
     inputValue: '',
-    selectedItems: null,
+    label: '',
+    selectedItems: [],
     suggestions: new Map(),
   };
 
-  componentDidMount() {
+  public componentDidMount() {
     if (
       !this.state.selectedItems &&
       this.props.value &&
@@ -57,7 +72,7 @@ class EntityReferenceAutocomplete extends React.Component {
     }
   }
 
-  componentDidUpdate(prevProps) {
+  public componentDidUpdate(prevProps: Props) {
     if (
       this.props.value &&
       this.props.value.data &&
@@ -67,7 +82,7 @@ class EntityReferenceAutocomplete extends React.Component {
     }
   }
 
-  getMaxItems = () => {
+  public getMaxItems = () => {
     const {
       schema: { maxItems, properties },
     } = this.props;
@@ -75,7 +90,7 @@ class EntityReferenceAutocomplete extends React.Component {
     return multiple ? maxItems || 100000000000 : 1;
   };
 
-  recalculateSelectedItems = () => {
+  public recalculateSelectedItems = () => {
     const [
       entityTypeId,
       [bundle],
@@ -83,17 +98,18 @@ class EntityReferenceAutocomplete extends React.Component {
 
     const multiple = this.props.schema.properties.data.type === 'array';
     const items = getItemsAsArray(multiple, this.props.value.data);
-    const ids = items.map(({ id }) => id);
+    const ids = items.map(({ id }: {id: string}) => id);
     this.fetchEntitites(entityTypeId, bundle, ids).then(
       ({ data: entities }) => {
         this.setState({
           selectedItems: entities.map(
-            ({ id, attributes: { name: label } }) => ({
+            ({ id, attributes: { name: label } }:{id: string, attributes:{name: string}}) => ({
               id,
               label,
               type: (
                 this.props.schema.properties.data.items ||
                 this.props.schema.properties.data
+                // @ts-ignore
               ).properties.type.enum[0],
             }),
           ),
@@ -102,9 +118,9 @@ class EntityReferenceAutocomplete extends React.Component {
     );
   };
 
-  handleChange = ({ id, label }) =>
+  public handleChange = ({ id, label }: SelectedItem) =>
     this.setState(
-      ({ selectedItems }) => ({
+      ({ selectedItems }: State) => ({
         inputValue: '',
         selectedItems: {
           ...selectedItems,
@@ -116,17 +132,20 @@ class EntityReferenceAutocomplete extends React.Component {
               type: (
                 this.props.schema.properties.data.items ||
                 this.props.schema.properties.data
+              // TODO must fix data structure.
+              // @ts-ignore
               ).properties.type.enum[0],
             },
           },
         },
       }),
       () => {
+        // @ts-ignore
         this.props.onChange(this.state.selectedItems);
       },
     );
 
-  handleInputChange = event => {
+  public handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (
       this.state.selectedItems &&
       this.getMaxItems() === Object.keys(this.state.selectedItems).length
@@ -151,7 +170,7 @@ class EntityReferenceAutocomplete extends React.Component {
       ).then(({ data: items }) => {
         this.setState({
           suggestions: new Map(
-            items.map(({ id, attributes: { name: label } }) => [
+            items.map(({ id, attributes: { name: label } }: {id: string, attributes:{name: string}}) => [
               id,
               { id, label },
             ]),
@@ -161,7 +180,7 @@ class EntityReferenceAutocomplete extends React.Component {
     });
   };
 
-  fetchEntitites = (entityTypeId, bundle, ids) =>
+  public fetchEntitites = (entityTypeId: string, bundle: string, ids: string[]) =>
     api(entityTypeId, {
       queryString: {
         filter: {
@@ -179,7 +198,7 @@ class EntityReferenceAutocomplete extends React.Component {
       },
     });
 
-  fetchSuggestedEntities = (bundle, type, input) =>
+  public fetchSuggestedEntities = (bundle: string, type: string, input: string) =>
     api(bundle, {
       queryString: {
         filter: {
@@ -199,7 +218,7 @@ class EntityReferenceAutocomplete extends React.Component {
       },
     });
 
-  handleKeyDown = event => {
+  public handleKeyDown = (event: number) => {
     const { inputValue, selectedItems } = this.state;
     if (
       selectedItems &&
@@ -211,31 +230,33 @@ class EntityReferenceAutocomplete extends React.Component {
         {
           selectedItems: selectedItems.slice(0, selectedItems.length - 1),
         },
+        // @ts-ignore
         () => this.props.onChange(this.state.selectedItems),
       );
     }
   };
 
-  handleDelete = id => () => {
+  public handleDelete = (id: string) => () => {
     this.setState(
       state => {
         const { selectedItems } = state;
         delete selectedItems[id];
         return { selectedItems };
       },
+      // @ts-ignore
       () => this.props.onChange(this.state.selectedItems),
     );
   };
 
-  determineEntityTypeAndBundlesFromSchema = schema => {
+  public determineEntityTypeAndBundlesFromSchema = (schema: any) => {
     // For some reason different entity references have different schema.
     const resourceNames = (
       schema.properties.data.items || schema.properties.data
     ).properties.type.enum;
     return resourceNames
-      .map(name => name.split('--'))
+      .map((name:string) => name.split('--'))
       .reduce(
-        ([, bundles = []], [entityTypeId, bundle]) => [
+        ([, bundles = []], [entityTypeId, bundle]: any) => [
           entityTypeId,
           [...bundles, entityTypeId === bundle ? undefined : bundle],
         ],
@@ -243,12 +264,18 @@ class EntityReferenceAutocomplete extends React.Component {
       );
   };
 
-  renderSuggestion = ({
+  public renderSuggestion = ({
     suggestion,
     index,
     itemProps,
     highlightedIndex,
     selectedItem: selectedItems,
+  }: {
+    suggestion: {label: string, id: string},
+    index: number,
+    itemProps: string,
+    highlightedIndex: number,
+    selectedItem: {selectedItems:SelectedItem[]},
   }) => {
     if (
       selectedItems &&
@@ -258,7 +285,10 @@ class EntityReferenceAutocomplete extends React.Component {
     }
 
     const isHighlighted = highlightedIndex === index;
+
     const isSelected =
+      // TODO must work out why this fails.
+      // @ts-ignore
       selectedItems && Object.keys(selectedItems).includes(suggestion.id);
 
     return (
@@ -275,12 +305,13 @@ class EntityReferenceAutocomplete extends React.Component {
       </MenuItem>
     );
   };
-
-  renderInput = ({ InputProps, ref, label, ...other }) => (
+  // TODO after typescript work out if ref is ever used.
+  public renderInput = ({ InputProps, ref, label, ...other }: {InputProps: any, ref?: React.RefObject<any>, label:string, fullWidth: boolean }) => (
     <TextField
       label={label}
       id={InputProps.id}
       InputProps={{
+        // is a value for refs is ever supplied?
         inputRef: ref,
         ...InputProps,
         inputProps: {
@@ -291,7 +322,7 @@ class EntityReferenceAutocomplete extends React.Component {
     />
   );
 
-  render() {
+  public render() {
     const { inputValue, selectedItems } = this.state;
     const { fieldName } = this.props;
     return (
@@ -319,12 +350,16 @@ class EntityReferenceAutocomplete extends React.Component {
                 fullWidth: true,
                 label: this.props.label,
                 InputProps: getInputProps({
+                  // TODO must fix
+                  // @ts-ignore
                   startAdornment: selectedItems
                     ? /* eslint-disable prettier/prettier */
                       Object.entries(selectedItems).map(([key, value]) => (
                         <Chip
                           key={key}
                           tabIndex={-1}
+                          // TODO Must resolve failure.
+                          // @ts-ignore
                           label={value.label}
                           className="chip"
                           onDelete={this.handleDelete(key)}
@@ -337,7 +372,8 @@ class EntityReferenceAutocomplete extends React.Component {
                   placeholder: '',
                   id: fieldName,
                 }),
-              })}
+              }
+            )}
               {isOpen ? (
                 <Paper
                   className={`${styles.results} ${styles.fullWidth}`}
@@ -350,6 +386,8 @@ class EntityReferenceAutocomplete extends React.Component {
                           suggestion,
                           index,
                           itemProps: getItemProps({ item: suggestion }),
+                          // TODO this failure look like a unresolved bug.
+                          // @ts-ignore
                           highlightedIndex,
                           selectedItem,
                         }),

@@ -23,7 +23,7 @@ import {
 
 import routes from './routes';
 
-import Content from './components/05_pages/Content/Content';
+//import Content from './components/05_pages/Content/Content';
 import Default from './components/06_wrappers/Default/Default';
 import NoMatch from './NoMatch';
 
@@ -84,7 +84,7 @@ export const localStorageStore = (state: StateInterface) => ({
   },
 });
 
-const storeState = (store: StateInterface) => {
+const storeState = (store: Store<StateInterface>) => {
   // Persist state.
   const state = store.getState();
 
@@ -97,7 +97,7 @@ const storeState = (store: StateInterface) => {
   }
 };
 
-const store: Store<any> = createStore(
+const store: Store<StateInterface> = createStore(
   combineReducers({ ...reducers, router: routerReducer }),
   deepMerge(initialState, restoreState()),
   composeWithDevTools(applyMiddleware(sagaMiddleware, middleware)),
@@ -109,9 +109,14 @@ if (typeof window === 'object') {
 }
 
 const generateClassName = createGenerateClassName();
-const jss = create(jssPreset());
-// We define a custom insertion point that JSS will look for injecting the styles in the DOM.
-jss.options.insertionPoint = document.getElementById('jss-insertion-point');
+const jss = create({
+  ...jssPreset(),
+  // We define a custom insertion point that JSS will look for injecting the styles in the DOM.
+  insertionPoint: 'jss-insertion-point',
+});
+
+// // We define a custom insertion point that JSS will look for injecting the styles in the DOM.
+// jss.options.insertionPoint = document.getElementById('jss-insertion-point');
 
 const theme = createMuiTheme({
   typography: {
@@ -127,7 +132,8 @@ const App = () => (
           <ConnectedRouter history={history}>
             <Default>
               <Switch>
-                <Route exact path="/" component={withRouter(Content)} />
+                {/* <Route exact path="/" component={withRouter(Content)} /> */}
+                <Route exact path="/" />
                 {Object.keys(routes).map(route => (
                   <Route
                     exact

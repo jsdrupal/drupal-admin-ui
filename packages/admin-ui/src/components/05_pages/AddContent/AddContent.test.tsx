@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import { mount, shallow } from 'enzyme';
 import { MemoryRouter } from 'react-router';
 import ListItemText from '@material-ui/core/ListItemText';
@@ -11,7 +11,8 @@ describe('AddContent', () => {
 
     shallow(
       <AddContent
-        contentTypes={{}}
+        // @ts-ignore
+        contentTypes={}
         requestContentTypes={requestContentTypes}
       />,
     );
@@ -20,14 +21,14 @@ describe('AddContent', () => {
 
   it('content types shown', () => {
     const requestContentTypes = jest.fn();
-    const mockContentTypes = {
-      test1: {
+    const mockContentTypes: = {
+      'test1': {
         name: 'Test 1',
         description: 'Description 1',
       },
-      test2: {
-        name: 'Test 1',
-        description: 'Description 1',
+      'test2': {
+        name: 'Test 2',
+        description: 'Description 2',
       },
     };
 

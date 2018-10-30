@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { storiesOf } from '@storybook/react';
 // eslint-disable-next-line import/no-extraneous-dependencies
@@ -42,6 +42,9 @@ storiesOf('OpsModalButton', module)
       </TableBody>
     </Table>
   ))
+  // Can remove ignore when this is fixed.
+  // https://github.com/storybooks/addon-jsx/issues/36
+  // @ts-ignore
   .addWithJSX('Inside a table column', () => (
     <OpsModalButton
       aria-label="edit"

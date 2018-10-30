@@ -30,7 +30,7 @@ export interface ParametersType {
 export interface OptionsType {
   credientials?: string,
   header?: {
-    Accept: Array<string>,
+    Accept: string[],
   },
   text?: boolean,
 };

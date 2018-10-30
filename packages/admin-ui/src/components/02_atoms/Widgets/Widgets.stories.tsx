@@ -26,7 +26,7 @@ import TextTextarea from './TextTextarea';
 const onChangeAction = action('onChange');
 onChangeAction.toString = () => "action('onChange')";
 
-const item = i => {
+const item = (i: number) => {
   const id = `id-${i}`;
   return {
     id: { id },
@@ -41,6 +41,8 @@ const item = i => {
   };
 };
 
+
+// @ts-ignore
 storiesOf('Widgets/BooleanCheckbox', module).addWithJSX('Default', () => (
   <BooleanCheckbox
     fieldName="ControlOne"
@@ -49,17 +51,18 @@ storiesOf('Widgets/BooleanCheckbox', module).addWithJSX('Default', () => (
   />
 ));
 
+// @ts-ignore
 storiesOf('Widgets/DatetimeTimestamp', module).addWithJSX('Default', () => (
   <DatetimeTimestamp
     fieldName="EventStart"
     label={text('DateTimestamp: label', 'A Simple Label')}
-    name="startTime"
     onChange={onChangeAction}
     required={boolean('DatetimeTimestamp: required', true)}
     value={number('DateTimestamp: value', 0)}
   />
 ));
 
+// @ts-ignore
 storiesOf('Widgets/EntityReferenceAutocomplete', module).addWithJSX(
   'Default',
   () => (
@@ -87,6 +90,8 @@ storiesOf('Widgets/EntityReferenceAutocomplete', module).addWithJSX(
       label="Author"
       onChange={onChangeAction}
       required={false}
+      // TODO Must lock down.
+      // @ts-ignore
       schema={object('EntityReferenceAutocomplete: schema', {
         properties: {
           data: {
@@ -123,6 +128,7 @@ storiesOf('Widgets/EntityReferenceAutocomplete', module).addWithJSX(
   ),
 );
 
+// @ts-ignore
 storiesOf('Widgets/FileUploadWidget/Single File', module).addWithJSX(
   'Default',
   () => (
@@ -133,6 +139,8 @@ storiesOf('Widgets/FileUploadWidget/Single File', module).addWithJSX(
       label={text('FileUploadWidget: label(Single)', 'File to be uploaded')}
       onChange={onChangeAction}
       value={{
+        // TODO Must reolve types
+        // @ts-ignore
         data: item(1),
       }}
       schema={object('FileUploadWidget: schema(Single)', {
@@ -141,11 +149,13 @@ storiesOf('Widgets/FileUploadWidget/Single File', module).addWithJSX(
             type: 'object',
           },
         },
+        maxItems: 1
       })}
     />
   ),
 );
 
+// @ts-ignore
 storiesOf('Widgets/FileUploadWidget/Multiple File', module).addWithJSX(
   'Default',
   () => (
@@ -157,13 +167,16 @@ storiesOf('Widgets/FileUploadWidget/Multiple File', module).addWithJSX(
       onChange={onChangeAction}
       value={{
         data: {
+          // @ts-ignore
           0: item(10),
+          // @ts-ignore
           1: item(20),
+          // @ts-ignore
           2: item(30),
         },
       }}
       schema={object('FileUploadWidget: schema(Multiple)', {
-        maxItems: 10,
+        maxItems: 3,
         properties: {
           data: {
             type: 'array',
@@ -174,6 +187,7 @@ storiesOf('Widgets/FileUploadWidget/Multiple File', module).addWithJSX(
   ),
 );
 
+// @ts-ignore
 storiesOf('Widgets/NumberTextfield', module).addWithJSX('Default', () => (
   <NumberTextfield
     fieldName="textField"
@@ -190,6 +204,7 @@ storiesOf('Widgets/NumberTextfield', module).addWithJSX('Default', () => (
   />
 ));
 
+// @ts-ignore
 storiesOf('Widgets/OptionsSelect', module).addWithJSX('Default', () => (
   <OptionsSelect
     helpText={text('OptionsSelect:helpText', 'Help text.')}
@@ -212,6 +227,8 @@ storiesOf('Widgets/OptionsSelect', module).addWithJSX('Default', () => (
     value={text('OptionsSelect: value', 'Entered text.')}
   />
 ));
+
+// @ts-ignore
 storiesOf('Widgets/StringTextfield', module).addWithJSX('Default', () => (
   <StringTextfield
     fieldName="userBio"
@@ -221,11 +238,11 @@ storiesOf('Widgets/StringTextfield', module).addWithJSX('Default', () => (
   />
 ));
 
+// @ts-ignore
 storiesOf('Widgets/TextTextarea', module).addWithJSX('Default', () => (
   <TextTextarea
     fieldName="SummaryText"
     label={text('TextTextarea: label', 'A Simple wysiwyg editor')}
-    name="summaryText"
     onChange={onChangeAction}
     value={object('TextTextarea: value', {
       value:

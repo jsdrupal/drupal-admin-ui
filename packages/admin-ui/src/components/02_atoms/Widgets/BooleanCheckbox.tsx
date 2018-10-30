@@ -1,37 +1,40 @@
-import * as React from 'react';
-import PropTypes from 'prop-types';
 import CheckBox from '@material-ui/core/Checkbox';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import { css } from 'emotion';
-import WidgetPropTypes from '../../05_pages/NodeForm/WidgetPropTypes';
+import * as React from 'react';
+import WidgetProp from '../../05_pages/NodeForm/WidgetProp';
 
-let styles;
+let styles: {root: string};
 
-const BooleanCheckbox = props => {
-  const { onChange, label, value } = props;
+interface Props extends WidgetProp{
+  fieldName: string,
+  label: string,
+  // required: boolean,
+  value?: string,
+};
+
+const BooleanCheckbox = (props: Props) => {
+  const { fieldName, onChange, label, value} = props;
 
   return (
     <FormControlLabel
-      id={`${props.fieldName}-label`}
+      id={`${fieldName}-label`}
       control={
         <CheckBox
-          id={`${props.fieldName}-cb`}
+          // @ts-ignore
+          id={`${fieldName}-cb`}
+          // @ts-ignore
           onChange={event => onChange(event.target.checked)}
-          margin="normal"
+          // margin="normal"
           value={String(value)}
           checked={value}
         />
       }
       label={label}
       classes={styles}
-      required={props.required}
+      // required={required}
     />
   );
-};
-
-BooleanCheckbox.propTypes = {
-  ...WidgetPropTypes,
-  value: PropTypes.bool,
 };
 
 BooleanCheckbox.defaultProps = {

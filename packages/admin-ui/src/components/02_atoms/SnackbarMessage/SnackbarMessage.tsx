@@ -1,5 +1,5 @@
 import * as React from 'react';
-import PropTypes from 'prop-types';
+import * as PropTypes from 'prop-types';
 import { css } from 'emotion';
 
 import Snackbar from '@material-ui/core/Snackbar';
@@ -55,7 +55,15 @@ const styles = {
   `,
 };
 
-const SnackbarMessage = props => {
+type PropsType = {
+  open: boolean,
+  message: React.ReactNode | string,
+  messageSeverity: string,
+  onClose: () => any,
+  duration?: number,
+};
+
+const SnackbarMessage = (props: PropsType) => {
   const Icon = variantIcon[props.messageSeverity];
   return (
     <Snackbar

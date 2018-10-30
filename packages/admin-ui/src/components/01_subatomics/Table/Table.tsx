@@ -1,38 +1,39 @@
-import * as React from 'react';
 import { css, cx } from 'emotion';
-import PropTypes from 'prop-types';
+import * as React from 'react';
 
-let styles;
+let styles: {
+  table: string
+  tbody: string,
+  thead: string,
+  tr: string,
+  td: string,
+};
 
-const TABLE = ({ children, ...props }) => (
+interface TableProps {
+  children: React.ReactNode,
+};
+const TABLE = ({ children, ...props }: TableProps ) => (
   <table className={styles.table} {...props}>
     {children}
   </table>
 );
-TABLE.propTypes = {
-  children: PropTypes.oneOfType([
-    PropTypes.arrayOf(PropTypes.node),
-    PropTypes.node,
-  ]).isRequired,
+
+interface TRProps {
+  children: React.ReactNode,
+  className?: string,
+  colsSpan?: number,
 };
 
-const TR = ({ children, ...props }) => <tr {...props}>{children}</tr>;
-TR.propTypes = {
-  children: PropTypes.oneOfType([
-    PropTypes.arrayOf(PropTypes.node),
-    PropTypes.node,
-  ]).isRequired,
-};
+const TR = ({ children, ...props }: TRProps ) => <tr {...props}>{children}</tr>;
 
-const TD = ({ children, ...props }) => <td {...props}>{children}</td>;
-TD.propTypes = {
-  children: PropTypes.oneOfType([
-    PropTypes.arrayOf(PropTypes.node),
-    PropTypes.node,
-  ]).isRequired,
+interface TDProps {
+  children: React.ReactNode,
+  className?: string,
+  colSpan?: number,
 };
+const TD = ({ children, ...props }: TDProps ) => <td {...props}>{children}</td>;
 
-const THEAD = ({ data }) => (
+const THEAD = ({ data }: {data:string[]}) => (
   <thead>
     <TR className={styles.tr}>
       {data.map(label => (
@@ -43,15 +44,26 @@ const THEAD = ({ data }) => (
     </TR>
   </thead>
 );
-THEAD.propTypes = {
-  data: PropTypes.arrayOf(PropTypes.string).isRequired,
+
+interface TDSFragment {
+  tdKey: string,
+  tdValue: string,
+  tdClassName?:string
 };
 
-const TBODY = ({ rows }) => (
+interface TBODYProps {
+  rows: Array<{
+    colspan: number,
+    key: string,
+    tds: TDSFragment[],
+  }>
+};
+
+const TBODY = ({ rows }: TBODYProps) => {
   <tbody className={styles.tbody}>
-    {rows.map(({ colspan, tds, key }) => (
+    {rows.map(({ colspan, tds, key }: {colspan: number, tds: TDSFragment[], key: string}) => {
       <TR key={key} className={styles.tr}>
-        {tds.map(([tdKey, tdValue, tdClassName]) => (
+        {tds.map(({tdKey, tdValue, tdClassName} : TDSFragment) => {
           <TD
             className={cx(styles.td, tdClassName || '')}
             key={tdKey}
@@ -59,22 +71,14 @@ const TBODY = ({ rows }) => (
           >
             {tdValue}
           </TD>
-        ))}
+        })}
       </TR>
-    ))}
+    })}
   </tbody>
-);
-TBODY.propTypes = {
-  rows: PropTypes.arrayOf(
-    PropTypes.shape({
-      colspan: PropTypes.number,
-      key: PropTypes.string,
-      tds: PropTypes.arrayOf(PropTypes.node).isRequired,
-    }),
-  ).isRequired,
 };
 
 styles = {
+  table: css``,
   thead: css``,
   tbody: css`
     tr:hover,

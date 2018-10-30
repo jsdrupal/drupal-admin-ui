@@ -1,33 +1,33 @@
 import * as React from 'react';
 import {
-  put,
-  call,
-  takeLatest,
-  takeEvery,
-  select,
-  all,
-} from 'redux-saga/effects';
-import {
-  showLoading,
   hideLoading,
   resetLoading,
+  showLoading,
 } from 'react-redux-loading-bar';
 import { push } from 'react-router-redux';
+import {
+  all,
+  call,
+  put,
+  select,
+  takeEvery,
+  takeLatest,
+} from 'redux-saga/effects';
 
 import api from '../utils/api/api';
 
 import {
   contentTypesSelector,
+  requestContentTypes,
   setErrorMessage,
   setSuccessMessage,
-  requestContentTypes,
 } from './application';
 
 import MessageSave from '../components/01_subatomics/MessageHelpers/MessageSave';
 import { extractContentType, mapContentTypeToName } from '../utils/api/content';
 import { ApiError } from '../utils/api/errors';
 
-interface ContentType {
+export interface Content {
     id: string,
     type: string,
     attributes: {
@@ -35,7 +35,7 @@ interface ContentType {
       sticky?: boolean,
       status?: boolean,
     },
-    links: Array<string>,
+    links: string[],
   };
 
 // type ContentAction = {
@@ -213,7 +213,7 @@ export const contentEditChange = (bundle: string, entity: string) => ({
 
 
 export const CONTENT_SAVE = 'CONTENT_SAVE';
-export const contentSave = (content: ContentType) => ({
+export const contentSave = (content: Content) => ({
   type: CONTENT_SAVE,
   payload: {
     content,
@@ -221,7 +221,7 @@ export const contentSave = (content: ContentType) => ({
 });
 
 export const CONTENT_ADD = 'CONTENT_ADD';
-export const contentAdd = (content: ContentType, bundle: string) => ({
+export const contentAdd = (content: Content, bundle: string) => ({
   type: CONTENT_ADD,
   payload: {
     content,
@@ -230,7 +230,7 @@ export const contentAdd = (content: ContentType, bundle: string) => ({
 });
 
 export const CONTENT_DELETE = 'CONTENT_DELETE';
-export const contentDelete = (content: ContentType) => ({
+export const contentDelete = (content: Content) => ({
   type: CONTENT_DELETE,
   payload: {
     content,
@@ -238,7 +238,7 @@ export const contentDelete = (content: ContentType) => ({
 });
 
 export const ACTION_EXECUTE = 'ACTION_EXECUTE';
-export const actionExecute = (action: string, nids: Array<string>) => ({
+export const actionExecute = (action: string, nids: string[]) => ({
   type: ACTION_EXECUTE,
   payload: {
     action,
@@ -268,7 +268,7 @@ export const SUPPORTED_ACTIONS = [
 export function* executeAction(
 { payload: { action, nids} }: any) {
   try {
-    const contentList = yield select((state: {content:{contentList: Array<string>}}) => state.content.contentList);
+    const contentList = yield select((state: {content:{contentList: string[]}}) => state.content.contentList);
     const actions = nids
       .map((nid: string) => {
         const node = contentList.filter(

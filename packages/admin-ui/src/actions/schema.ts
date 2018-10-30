@@ -1,13 +1,13 @@
-import { put, call, takeLatest, all } from 'redux-saga/effects';
 import {
-  showLoading,
   hideLoading,
   resetLoading,
+  showLoading,
 } from 'react-redux-loading-bar';
+import { all, call, put, takeLatest } from 'redux-saga/effects';
 
 import api from '../utils/api/api';
-import { setErrorMessage } from './application';
 import { ApiError } from '../utils/api/errors';
+import { setErrorMessage } from './application';
 
 export const UI_SCHEMA_REQUESTED = 'UI_SCHEMA_REQUESTED';
 export const requestUiSchema = ({ entityTypeId, bundle }: {entityTypeId:string, bundle:string}) => ({

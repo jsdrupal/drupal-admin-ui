@@ -1,23 +1,24 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+import * as PropTypes from 'prop-types';
+import * as React from 'react';
+import { Component } from 'react';
 import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
 import LoadingBar from 'react-redux-loading-bar';
+import { Link } from 'react-router-dom';
 
-import { requestRoles } from '../../../actions/roles';
 import { cancelTask } from '../../../actions/helpers';
+import { requestRoles } from '../../../actions/roles';
 import { Table, TBody, THead } from '../../01_subatomics/Table/Table';
 
 export const Roles = class Roles extends Component {
-  componentDidMount() {
+  public componentDidMount() {
     this.props.requestRoles();
   }
 
-  componentWillUnmount() {
+  public componentWillUnmount() {
     this.props.cancelTask();
   }
 
-  createTableRows = roles =>
+  public createTableRows = roles =>
     roles.map(({ attributes: { label, id } }) => ({
       key: `row-${label}`,
       tds: [
@@ -29,7 +30,7 @@ export const Roles = class Roles extends Component {
       ],
     }));
 
-  render = () => {
+  public render = () => {
     if (!this.props.roles) {
       return <LoadingBar />;
     }
