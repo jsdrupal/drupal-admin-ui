@@ -11,9 +11,10 @@ import {
   MESSAGE_SEVERITY_INFO,
   MESSAGE_SEVERITY_WARNING,
 } from '../constants/messages';
+
 import { ApiError } from '../utils/api/errors';
 
-interface StateType {
+interface State {
     application: {
       contentTypes: string,
       actions: string,
@@ -39,7 +40,7 @@ export const SET_MESSAGE: string = 'SET_MESSAGE';
  *  listed at constants/messages.js
  * @returns {{type: string, payload: {message: *, messageSeverity: *}}}
  */
-export const setMessage = (message: string, messageSeverity: string) => ({
+export const setMessage = (message: string | JSX.Element, messageSeverity: string) => ({
   type: SET_MESSAGE,
   payload: {
     message,
@@ -52,7 +53,7 @@ export const setMessage = (message: string, messageSeverity: string) => ({
  *
  * @returns {{type: string, payload: {message: *, messageSeverity: MESSAGE_SEVERITY_ERROR}}}
  */
-export const setErrorMessage = (message: string) =>
+export const setErrorMessage = (message: string | JSX.Element) =>
   setMessage(message, MESSAGE_SEVERITY_ERROR);
 
 /**
@@ -60,7 +61,7 @@ export const setErrorMessage = (message: string) =>
  *
  * @returns {{type: string, payload: {message: *, messageSeverity: MESSAGE_SEVERITY_SUCCESS}}}
  */
-export const setSuccessMessage = (message: string) =>
+export const setSuccessMessage = (message: string | JSX.Element) =>
   setMessage(message, MESSAGE_SEVERITY_SUCCESS);
 
 /**
@@ -68,7 +69,7 @@ export const setSuccessMessage = (message: string) =>
  *
  * @returns {{type: string, payload: {message: *, messageSeverity: MESSAGE_SEVERITY_INFO}}}
  */
-export const setInfoMessage = (message: string) =>
+export const setInfoMessage = (message: string | JSX.Element) =>
   setMessage(message, MESSAGE_SEVERITY_INFO);
 
 /**
@@ -76,7 +77,7 @@ export const setInfoMessage = (message: string) =>
  *
  * @returns {{type: string, payload: {message: *, messageSeverity: MESSAGE_SEVERITY_WARNING}}}
  */
-export const setWarningMessage = (message: string) =>
+export const setWarningMessage = (message: string | JSX.Element) =>
   setMessage(message, MESSAGE_SEVERITY_WARNING);
 
 export const CLEAR_MESSAGE: string = 'CLEAR_MESSAGE';
@@ -136,7 +137,7 @@ export const requestContentTypes = () => ({
   payload: {},
 });
 
-export const contentTypesSelector = (state: StateType) => state.application.contentTypes;
+export const contentTypesSelector = (state: State) => state.application.contentTypes;
 export const CONTENT_TYPES_LOADED = 'CONTENT_TYPES_LOADED';
 function* loadContentTypes() {
   try {
@@ -164,7 +165,7 @@ export const requestActions = () => ({
   payload: {},
 });
 
-export const getActionsCache = (state: StateType) => state.application.actions;
+export const getActionsCache = (state: State) => state.application.actions;
 export const ACTIONS_LOADED: string = 'ACTIONS_LOADED';
 function* loadActions() {
   try {

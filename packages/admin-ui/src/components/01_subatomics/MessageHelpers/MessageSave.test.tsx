@@ -1,14 +1,14 @@
-import React from 'react';
+import * as React from 'react';
+// @ts-ignore
 import { mount } from 'enzyme';
 import { MemoryRouter } from 'react-router';
-
 import MessageSave from './MessageSave';
 
 describe('Verify Message', () => {
   it('on save', () => {
     const bundle = 'Article';
     const title = 'Thai green curry';
-    const nid = 5;
+    const nid = "5";
     const message = mount(
       <MemoryRouter>
         <MessageSave bundle={bundle} title={title} nid={nid} />

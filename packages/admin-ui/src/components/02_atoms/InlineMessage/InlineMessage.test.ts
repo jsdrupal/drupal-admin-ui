@@ -1,4 +1,4 @@
-import React from 'react';
+// @ts-ignore
 import { shallow } from 'enzyme';
 import InlineMessage from './InlineMessage';
 
