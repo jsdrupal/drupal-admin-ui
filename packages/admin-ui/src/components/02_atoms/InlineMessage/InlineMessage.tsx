@@ -1,34 +1,8 @@
 import * as React from 'react';
 import { css } from 'emotion';
-import {
-  MESSAGE_SEVERITY_ERROR,
-  MESSAGE_SEVERITY_SUCCESS,
-  MESSAGE_SEVERITY_INFO,
-  MESSAGE_SEVERITY_WARNING,
-} from '../../../constants/messages';
+import { MESSAGE_SEVERITY } from '../../../constants/messages';
 
-let styles : {
-  message: string,
-  success:string,
-  error: string,
-  info: string,
-  warning: string,
-};
-
-let modifierClassMap: Map<string,string>;
-
-interface Props {
-  message: string,
-  messageSeverity: string,
-};
-
-const Message = ({ message, messageSeverity }: Props) => (
-  <div className={`${styles.message} ${modifierClassMap[messageSeverity]}`}>
-    {message}
-  </div>
-);
-
-styles = {
+const styles = {
   message: css`
     padding: 20px 25px;
     margin-bottom: 30px;
@@ -48,12 +22,23 @@ styles = {
   `,
 };
 
-modifierClassMap = new Map([
-  [MESSAGE_SEVERITY_ERROR, styles.error],
-  [MESSAGE_SEVERITY_SUCCESS, styles.success],
-  [MESSAGE_SEVERITY_WARNING, styles.warning],
-  [MESSAGE_SEVERITY_INFO, styles.info]
+const modifierClassMap: Map<MESSAGE_SEVERITY,string> = new Map([
+  [MESSAGE_SEVERITY.ERROR, styles.error],
+  [MESSAGE_SEVERITY.SUCCESS, styles.success],
+  [MESSAGE_SEVERITY.WARNING, styles.warning],
+  [MESSAGE_SEVERITY.INFO, styles.info]
   ]
+);
+
+interface Props {
+  message: string,
+  messageSeverity: MESSAGE_SEVERITY,
+};
+
+const Message = ({ message, messageSeverity }: Props) => (
+  <div className={`${styles.message} ${modifierClassMap[messageSeverity]}`}>
+    {message}
+  </div>
 );
 
 export default Message;

@@ -4,12 +4,7 @@ import { storiesOf } from '@storybook/react';
 import { text } from '@storybook/addon-knobs/react';
 /* eslint-enable import/no-extraneous-dependencies */
 import InlineMessage from './InlineMessage';
-import {
-  MESSAGE_SEVERITY_ERROR,
-  MESSAGE_SEVERITY_SUCCESS,
-  MESSAGE_SEVERITY_INFO,
-  MESSAGE_SEVERITY_WARNING,
-} from '../../../constants/messages';
+import { MESSAGE_SEVERITY } from '../../../constants/messages';
 
 const message = "I'm the operator with my pocket calculator.";
 
@@ -21,27 +16,27 @@ storiesOf('BannerMessage', module)
   .addWithJSX('Error', () => (
     <InlineMessage
       message={text('Message', message)}
-      messageSeverity={MESSAGE_SEVERITY_ERROR}
+      messageSeverity={MESSAGE_SEVERITY.ERROR}
     />
   ))
   // @ts-ignore
   .addWithJSX('Success', () => (
     <InlineMessage
       message={text('Message', message)}
-      messageSeverity={MESSAGE_SEVERITY_SUCCESS}
+      messageSeverity={MESSAGE_SEVERITY.SUCCESS}
     />
   ))
   // @ts-ignore
   .addWithJSX('Info', () => (
     <InlineMessage
       message={text('Message', message)}
-      messageSeverity={MESSAGE_SEVERITY_INFO}
+      messageSeverity={MESSAGE_SEVERITY.INFO}
     />
   ))
   // @ts-ignore
   .addWithJSX('Warning', () => (
     <InlineMessage
       message={text('Message', message)}
-      messageSeverity={MESSAGE_SEVERITY_WARNING}
+      messageSeverity={MESSAGE_SEVERITY.WARNING}
     />
   ));

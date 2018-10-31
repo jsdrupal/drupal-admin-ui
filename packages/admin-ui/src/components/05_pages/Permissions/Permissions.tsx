@@ -12,7 +12,7 @@ import { Table, TBody, THead } from '../../01_subatomics/Table/Table';
 import Loading from '../../02_atoms/Loading/Loading';
 
 import { clearMessage, setMessage } from '../../../actions/application';
-import { MESSAGE_SEVERITY_SUCCESS } from '../../../constants/messages';
+import { MESSAGE_SEVERITY } from '../../../constants/messages';
 import api from '../../../utils/api/api';
 
 interface Permission {
@@ -60,7 +60,7 @@ interface State{
   roles: Role[],
   rawPermissions: Permission[],
   renderablePermissions: Permission[],
-  working?: boolean,
+  working: boolean,
   err: string,
 };
 
@@ -252,7 +252,7 @@ const Permissions = class Permissions extends Component<Props, State> {
               }).then(() => {
                 this.props.setMessage(
                   'Changes have been saved',
-                  MESSAGE_SEVERITY_SUCCESS,
+                  MESSAGE_SEVERITY.SUCCESS,
                 );
               }),
             ),
@@ -285,6 +285,7 @@ const Permissions = class Permissions extends Component<Props, State> {
                 key="button-save-roles"
                 onClick={this.saveRoles}
                 className={styles.saveButton}
+                // @ts-ignore
                 disabled={
                   !this.state.changedRoles.length ||
                   (this.state.working && this.state.changedRoles.length)
@@ -299,10 +300,13 @@ const Permissions = class Permissions extends Component<Props, State> {
           <THead
             data={[
               'Permission',
+              // @ts-ignore
               ...this.state.roles.map(({ attributes: { label } }) => label),
             ]}
           />
+          // @ts-ignore
           <TBody
+            // @ts-ignore
             rows={this.createTableRows(
               this.groupPermissions(this.state.renderablePermissions),
               this.state.roles,
