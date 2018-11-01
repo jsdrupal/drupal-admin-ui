@@ -8,7 +8,8 @@ class LoadComponent extends React.Component {
   };
 
   static propTypes = {
-    component: PropTypes.string.isRequired,
+    component: PropTypes.oneOfType([PropTypes.string, PropTypes.func])
+      .isRequired,
     render: PropTypes.func.isRequired,
   };
 
