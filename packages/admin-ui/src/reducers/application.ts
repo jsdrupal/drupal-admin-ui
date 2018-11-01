@@ -1,51 +1,61 @@
-import { LOCATION_CHANGE } from 'react-router-redux';
-import { ROLES_LOADED } from '../actions/roles';
-import {
-  DBLOG_COLLECTION_LOADED,
-  DBLOG_FILTER_UPDATED,
-} from '../actions/reports';
-import {
-  CLOSE_DRAWER,
-  OPEN_DRAWER,
-  SET_MESSAGE,
-  CLEAR_MESSAGE,
-  CLEAR_ALL_MESSAGES,
-  MENU_LOADED,
-  CONTENT_TYPES_LOADED,
-  ACTIONS_LOADED,
-} from '../actions/application';
+import { Action } from '../actions/action';
+import { ACTION_TYPE } from '../constants/action_type';
+import { ContentType } from '../constants/content_type';
+import { MenuLink } from '../constants/menu_link';
+import { MESSAGE_SEVERITY } from '../constants/message_severity';
+
+interface Message {
+  message: string,
+  messageSeverity: MESSAGE_SEVERITY,
+  key: string,
+  open: boolean,
+};
+
+interface State {
+  actions: Action[],
+  contentTypes: ContentType[],
+  dblog?: [],
+  drawerOpen: boolean,
+  messages: Message[],
+  menuLinks: MenuLink | MenuLink[],
+  filterString: string,
+};
 
 export const initialState = {
+  actions: [],
+  contentTypes: [],
+  dblog: [],
+  drawerOpen: false,
   messages: [],
   menuLinks: [],
   filterString: '',
-  contentTypes: {},
-  actions: [],
-  drawerOpen: false,
 };
 
-export default (state = initialState, action) => {
+// @ts-ignore
+export default (state: State = initialState, action: Action) => {
   switch (action.type) {
-    case CLOSE_DRAWER: {
+    case ACTION_TYPE.CLOSE_DRAWER: {
       return {
         ...state,
         drawerOpen: false,
       };
     }
-    case OPEN_DRAWER: {
+    case ACTION_TYPE.OPEN_DRAWER: {
       return {
         ...state,
         drawerOpen: true,
       };
     }
-    case SET_MESSAGE: {
+    case ACTION_TYPE.SET_MESSAGE: {
       // This causes a new messages object to be created, instead of
       // maintaining a reference to the old data structure.
       const messages = [...state.messages];
       messages.push({
+        // @ts-ignore
         message: action.payload.message,
+        // @ts-ignore
         messageSeverity: action.payload.messageSeverity,
-        key: Date.now() + Math.random(),
+        key: String(Date.now() + Math.random()),
         open: true,
       });
       return {
@@ -53,7 +63,7 @@ export default (state = initialState, action) => {
         messages,
       };
     }
-    case CLEAR_MESSAGE: {
+    case ACTION_TYPE.CLEAR_MESSAGE: {
       const messages = [...state.messages];
       messages.splice(
         messages.findIndex(message => message.key === action.payload.key),
@@ -64,21 +74,21 @@ export default (state = initialState, action) => {
         messages,
       };
     }
-    case CLEAR_ALL_MESSAGES: {
-      const messages = [];
+    case ACTION_TYPE.CLEAR_ALL_MESSAGES: {
+      const messages: Message[] = [];
       return {
         ...state,
         messages,
       };
     }
-    case LOCATION_CHANGE: {
+    case ACTION_TYPE.LOCATION_CHANGE: {
       // Clear messages on every location change.
       return {
         ...state,
         messages: [],
       };
     }
-    case MENU_LOADED: {
+    case ACTION_TYPE.MENU_LOADED: {
       return {
         ...state,
         menuLinks: Array.isArray(action.payload.menuLinks)
@@ -86,7 +96,7 @@ export default (state = initialState, action) => {
           : [],
       };
     }
-    case DBLOG_COLLECTION_LOADED: {
+    case ACTION_TYPE.DBLOG_COLLECTION_LOADED: {
       const { dblog, ...rest } = state;
       return {
         ...rest,
@@ -94,6 +104,7 @@ export default (state = initialState, action) => {
           ...dblog,
           next:
             Object.prototype.hasOwnProperty.call(
+              // ts-ignore
               action.payload.dbLogEntries.links,
               'next',
             ) || false,
@@ -111,7 +122,7 @@ export default (state = initialState, action) => {
         },
       };
     }
-    case DBLOG_FILTER_UPDATED: {
+    case ACTION_TYPE.DBLOG_FILTER_UPDATED: {
       const { dblog, ...rest } = state;
       return {
         ...rest,
@@ -121,29 +132,27 @@ export default (state = initialState, action) => {
         },
       };
     }
-    case ROLES_LOADED: {
+    case ACTION_TYPE.ROLES_LOADED: {
       const roles = action.payload.roles.data;
       return {
         ...state,
         roles,
       };
     }
-    case CONTENT_TYPES_LOADED: {
+    case ACTION_TYPE.CONTENT_TYPES_LOADED: {
       return {
         ...state,
         contentTypes: action.payload.contentTypes.data.reduce(
           (accumulator, contentType) => ({
             ...accumulator,
-            [contentType.attributes.type]: {
-              name: contentType.attributes.name,
-              description: contentType.attributes.description,
-            },
+            // @ts-ignore
+            [contentType.attributes.type]: ContentType,
           }),
           {},
         ),
       };
     }
-    case ACTIONS_LOADED: {
+    case ACTION_TYPE.ACTIONS_LOADED: {
       return {
         ...state,
         actions: action.payload.actions.data,

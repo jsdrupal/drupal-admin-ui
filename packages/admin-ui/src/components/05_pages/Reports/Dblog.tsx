@@ -1,3 +1,5 @@
+
+// @ts-ignore
 import { Markup } from 'interweave';
 import * as React from 'react';
 import { Component, Fragment } from 'react';
@@ -7,47 +9,29 @@ import LoadingBar from 'react-redux-loading-bar';
 import { requestDblogCollection } from '../../../actions/reports';
 import { Table, TBody, THead } from '../../01_subatomics/Table/Table';
 
+interface FilterOptions {
+  sort: string, severities?: string[] | null, offset: number, types?: string[] | null,
+};
+
 interface Props {
-    requestDblogCollection: () => any,
+    requestDblogCollection: (options: FilterOptions) => any,
     entries: Array<{
       wid: number,
       messageFormattedPlain: string,
       timestamp: number,
       type: string,
     }>
-    availableTypes?: string[],
-    filterOptions?: Array<{sort: string, severities: string[], offset: number, types: string[]}>,
+    availableTypes: string[],
+    filterOptions: FilterOptions,
     next?: boolean,
 };
 
-class Dblog extends Component {
-  // static propTypes = {
-  //   requestDblogCollection: PropTypes.func.isRequired,
-  //   entries: PropTypes.arrayOf(
-  //     PropTypes.shape({
-  //       wid: PropTypes.number.isRequired,
-  //       messageFormattedPlain: PropTypes.string.isRequired,
-  //       timestamp: PropTypes.number.isRequired,
-  //       type: PropTypes.string.isRequired,
-  //     }),
-  //   ),
-  //   availableTypes: PropTypes.arrayOf(PropTypes.string),
-  //   filterOptions: PropTypes.shape({
-  //     sort: PropTypes.string,
-  //     severities: PropTypes.arrayOf(PropTypes.string),
-  //     offset: PropTypes.number,
-  //     types: PropTypes.arrayOf(PropTypes.string),
-  //   }),
-  //   next: PropTypes.bool,
-  // };
+class Dblog extends Component<Props> {
 
   public static defaultProps = {
     entries: null,
     availableTypes: null,
-    filterOptions: {
-      sort: '',
-      severities: [],
-    },
+    filterOptions: [],
     next: true,
   };
 
@@ -58,8 +42,8 @@ class Dblog extends Component {
     });
   }
 
-  public generateTableRows = entries =>
-    entries.map(({ wid, type, messageFormattedPlain, timestamp }) => ({
+  public generateTableRows = (entries: any) =>
+    entries.map(({ wid, type, messageFormattedPlain, timestamp }:{wid: string, type:string, messageFormattedPlain: string, timestamp:number}) => ({
       key: String(wid),
       tds: [
         [`type-${wid}`, type],
@@ -78,37 +62,43 @@ class Dblog extends Component {
       ],
     }));
 
-  public severityFilterHandler = e =>
+  public severityFilterHandler = (e: any) =>
+    // @ts-ignore
     this.props.requestDblogCollection({
       types: null,
       offset: 0,
       ...this.props.filterOptions,
       severities: Array.from(e.target.options)
-        .filter(option => option.selected)
-        .map(option => option.value),
+        .filter((option: any) => option.selected)
+        .map((option: {value:string}) => option.value),
     });
 
-  public typeFilterHandler = e =>
+  public typeFilterHandler = (e: any) =>
+    // @ts-ignore
     this.props.requestDblogCollection({
       severities: null,
       offset: 0,
       ...this.props.filterOptions,
       types: Array.from(e.target.options)
-        .filter(option => option.selected)
-        .map(option => option.value),
+        .filter((option: any) => option.selected)
+        .map((option: {value: string}) => option.value),
     });
 
   public nextPage = () =>
+    // @ts-ignore
     this.props.requestDblogCollection({
       severities: null,
       ...this.props.filterOptions,
+      // @ts-ignore
       offset: (this.props.filterOptions.offset || 0) + 50,
     });
 
   public previousPage = () =>
+    // @ts-ignore
     this.props.requestDblogCollection({
       severities: null,
       ...this.props.filterOptions,
+      // @ts-ignore
       offset: (this.props.filterOptions.offset || 0) - 50,
     });
 
@@ -120,13 +110,13 @@ class Dblog extends Component {
       <Fragment>
         <select
           key="select-type"
-          label="Type"
+          // label="Type"
           multiple={true}
           size={this.props.availableTypes.length}
           onBlur={this.typeFilterHandler}
-          selected={this.props.filterOptions.types}
+          //selected={this.props.filterOptions.types}
         >
-          {this.props.availableTypes.map(type => (
+          {this.props.availableTypes.map((type:string) => (
             <option value={type} key={type}>
               {type}
             </option>
@@ -134,11 +124,11 @@ class Dblog extends Component {
         </select>
         <select
           key="select-severity"
-          label="Severity"
+          // label="Severity"
           multiple={true}
           size={8}
           onBlur={this.severityFilterHandler}
-          selected={this.props.filterOptions.severities}
+          // selected={this.props.filterOptions.severities}
         >
           {[
             'Emergency',
@@ -171,6 +161,7 @@ class Dblog extends Component {
         </button>
         <Table>
           <THead data={['Type', 'Date', 'Message', 'User']} />
+          // @ts-ignore
           <TBody rows={this.generateTableRows(this.props.entries)} />
         </Table>
       </Fragment>
@@ -178,7 +169,7 @@ class Dblog extends Component {
   }
 }
 
-const mapStateToProps = ({ application: { dblog } }) => ({
+const mapStateToProps = ({ application: { dblog } }: any) => ({
   filterOptions: {
     offset: 0,
   },
@@ -188,4 +179,5 @@ const mapStateToProps = ({ application: { dblog } }) => ({
 export default connect(
   mapStateToProps,
   { requestDblogCollection },
+// @ts-ignore
 )(Dblog);

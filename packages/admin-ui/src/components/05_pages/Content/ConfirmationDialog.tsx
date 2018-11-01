@@ -12,6 +12,8 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Slide from '@material-ui/core/Slide';
 import Typography from '@material-ui/core/Typography';
 
+import { Action } from '../../../actions/action';
+
 const styles = {
   dialogActionName: css`
     text-transform: lowercase;
@@ -20,13 +22,6 @@ const styles = {
     list-style-type: disc;
     display: list-item;
   `,
-};
-
-interface Action {
-  attributes: {
-    label: string,
-    id: string,
-  }
 };
 
 interface Content {

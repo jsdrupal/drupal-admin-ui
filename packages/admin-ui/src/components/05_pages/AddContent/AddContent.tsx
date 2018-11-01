@@ -11,6 +11,8 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Paper from '@material-ui/core/Paper';
 import PageTitle from '../../02_atoms/PageTitle';
 
+import { ContentType } from '../../../constants/content_type';
+
 const styles = {
   menuLink: css`
     text-decoration: inherit;
@@ -18,11 +20,6 @@ const styles = {
   root: css`
     margin-bottom: 50px;
   `,
-};
-
-interface ContentType {
-  name: string,
-  description: string,
 };
 
 interface Props {

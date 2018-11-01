@@ -21,6 +21,9 @@ import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import AddIcon from '@material-ui/icons/Add';
 
+import { Action } from '../../../actions/action';
+import { ContentType } from '../../../constants/content_type';
+
 import PageTitle from '../../02_atoms/PageTitle';
 import ContentTable from '../../04_templates/ContentTable/ContentTable';
 import {Direction} from '../../04_templates/ContentTable/ContentTable';
@@ -79,19 +82,6 @@ const styles = {
   textField: css`
     width: 300px;
   `,
-};
-
-interface Action {
-  id: string,
-  attributes:{
-    id:string,
-    label: string,
-  }
-};
-
-export interface ContentType {
-  name: string,
-  description: string,
 };
 
 interface State {

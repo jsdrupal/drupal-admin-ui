@@ -1,4 +1,5 @@
-import React from 'react';
+import * as React from 'react';
+// @ts-ignore
 import { shallow } from 'enzyme';
 import LoadingBar from 'react-redux-loading-bar';
 
@@ -9,7 +10,8 @@ describe('Roles', () => {
     const requestRoles = jest.fn();
     const cancelTask = jest.fn();
     const root = shallow(
-      <Roles cancelTask={cancelTask} requestRoles={requestRoles} />,
+      // @ts-ignore
+      <Roles cancelTask={cancelTask} requestRoles={requestRoles} roles={null}/>,
     );
     expect(requestRoles).toHaveBeenCalled();
     expect(cancelTask).not.toHaveBeenCalled();
@@ -21,6 +23,7 @@ describe('Roles', () => {
 
   it('loading animation is shown before roles have been loaded', () => {
     const root = shallow(
+      // @ts-ignore
       <Roles cancelTask={() => {}} requestRoles={() => {}} roles={null} />,
     );
     expect(root.find(LoadingBar).length).toEqual(1);

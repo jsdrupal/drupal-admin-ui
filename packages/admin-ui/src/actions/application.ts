@@ -5,43 +5,37 @@ import {
   resetLoading,
 } from 'react-redux-loading-bar';
 import api from '../utils/api/api';
-import {
-  MESSAGE_SEVERITY_ERROR,
-  MESSAGE_SEVERITY_SUCCESS,
-  MESSAGE_SEVERITY_INFO,
-  MESSAGE_SEVERITY_WARNING,
-} from '../constants/messages';
+import { MESSAGE_SEVERITY } from '../constants/message_severity';
 
 import { ApiError } from '../utils/api/errors';
+
+import { ACTION_TYPE } from '../constants/action_type';
+import { Action } from '../actions/action';
 
 interface State {
     application: {
       contentTypes: string,
-      actions: string,
+      actions: ACTION_TYPE,
     };
 }
 
-export const OPEN_DRAWER: string = 'OPEN_DRAWER';
 export const openDrawer = () => ({
-  type: OPEN_DRAWER,
+  type: ACTION_TYPE.OPEN_DRAWER,
 });
 
-export const CLOSE_DRAWER: string = 'CLOSE_DRAWER';
 export const closeDrawer = () => ({
-  type: CLOSE_DRAWER,
+  type: ACTION_TYPE.CLOSE_DRAWER,
 });
-
-export const SET_MESSAGE: string = 'SET_MESSAGE';
 
 /**
  *
  * @param {string} message - the message content
  * @param {string} severity - the severity level of the message, one of the levels
- *  listed at constants/messages.js
+ *  listed at constants/message_severity.js
  * @returns {{type: string, payload: {message: *, messageSeverity: *}}}
  */
-export const setMessage = (message: string | JSX.Element, messageSeverity: string) => ({
-  type: SET_MESSAGE,
+export const setMessage = (message: string | JSX.Element, messageSeverity: MESSAGE_SEVERITY) => ({
+  type: ACTION_TYPE.SET_MESSAGE,
   payload: {
     message,
     messageSeverity,
@@ -54,7 +48,7 @@ export const setMessage = (message: string | JSX.Element, messageSeverity: strin
  * @returns {{type: string, payload: {message: *, messageSeverity: MESSAGE_SEVERITY_ERROR}}}
  */
 export const setErrorMessage = (message: string | JSX.Element) =>
-  setMessage(message, MESSAGE_SEVERITY_ERROR);
+  setMessage(message, MESSAGE_SEVERITY.ERROR);
 
 /**
  * @param {string} message - the message content
@@ -62,7 +56,7 @@ export const setErrorMessage = (message: string | JSX.Element) =>
  * @returns {{type: string, payload: {message: *, messageSeverity: MESSAGE_SEVERITY_SUCCESS}}}
  */
 export const setSuccessMessage = (message: string | JSX.Element) =>
-  setMessage(message, MESSAGE_SEVERITY_SUCCESS);
+  setMessage(message, MESSAGE_SEVERITY.SUCCESS);
 
 /**
  * @param {string} message - the message content
@@ -70,7 +64,7 @@ export const setSuccessMessage = (message: string | JSX.Element) =>
  * @returns {{type: string, payload: {message: *, messageSeverity: MESSAGE_SEVERITY_INFO}}}
  */
 export const setInfoMessage = (message: string | JSX.Element) =>
-  setMessage(message, MESSAGE_SEVERITY_INFO);
+  setMessage(message, MESSAGE_SEVERITY.INFO);
 
 /**
  * @param {string} message - the message content
@@ -78,37 +72,34 @@ export const setInfoMessage = (message: string | JSX.Element) =>
  * @returns {{type: string, payload: {message: *, messageSeverity: MESSAGE_SEVERITY_WARNING}}}
  */
 export const setWarningMessage = (message: string | JSX.Element) =>
-  setMessage(message, MESSAGE_SEVERITY_WARNING);
+  setMessage(message, MESSAGE_SEVERITY.WARNING);
 
-export const CLEAR_MESSAGE: string = 'CLEAR_MESSAGE';
 export const clearMessage = (key: string) => ({
-  type: CLEAR_MESSAGE,
+  type: ACTION_TYPE.CLEAR_MESSAGE,
   payload: {
     key,
   },
 });
 
-export const CLEAR_ALL_MESSAGES = 'CLEAR_MESSAGES';
 export const clearAllMessages = () => ({
-  type: CLEAR_ALL_MESSAGES,
+  type: ACTION_TYPE.CLEAR_ALL_MESSAGES,
   payload: {},
 });
 
-export const MENU_REQUESTED = 'MENU_REQUESTED';
 export const requestMenu = () => ({
-  type: MENU_REQUESTED,
+  type: ACTION_TYPE.MENU_REQUESTED,
   payload: {},
 });
 
-export const MENU_LOADED = 'MENU_LOADED';
 function* loadMenu() {
   try {
     yield put(resetLoading());
     yield put(showLoading());
+    // @ts-ignore
     const menuLinks = yield call(api, 'menu');
 
     yield put({
-      type: MENU_LOADED,
+      type: ACTION_TYPE.MENU_LOADED,
       payload: {
         menuLinks,
       },
@@ -131,9 +122,8 @@ function* loadMenu() {
 /**
  * Gets all available content types.
  */
-export const CONTENT_TYPES_REQUESTED = 'CONTENT_TYPES_REQUESTED';
 export const requestContentTypes = () => ({
-  type: CONTENT_TYPES_REQUESTED,
+  type: ACTION_TYPE.CONTENT_TYPES_REQUESTED,
   payload: {},
 });
 
@@ -141,9 +131,10 @@ export const contentTypesSelector = (state: State) => state.application.contentT
 export const CONTENT_TYPES_LOADED = 'CONTENT_TYPES_LOADED';
 function* loadContentTypes() {
   try {
+    // @ts-ignore
     const contentTypes = yield call(api, 'contentTypes');
     yield put({
-      type: CONTENT_TYPES_LOADED,
+      type: ACTION_TYPE.CONTENT_TYPES_LOADED,
       payload: {
         contentTypes,
       },
@@ -159,22 +150,21 @@ function* loadContentTypes() {
 /**
  * Gets all available action types.
  */
-export const ACTIONS_REQUESTED: string = 'ACTIONS_REQUESTED';
 export const requestActions = () => ({
-  type: ACTIONS_REQUESTED,
+  type: ACTION_TYPE.ACTIONS_REQUESTED,
   payload: {},
 });
 
 export const getActionsCache = (state: State) => state.application.actions;
-export const ACTIONS_LOADED: string = 'ACTIONS_LOADED';
 function* loadActions() {
   try {
-    let actions = { data: yield select(getActionsCache) };
+    let actions: { data: Action[]} = { data: yield select(getActionsCache) };
     if (!Object.keys(actions.data).length) {
+      // ts-ignore
       actions = yield call(api, 'actions');
     }
     yield put({
-      type: ACTIONS_LOADED,
+      type: ACTION_TYPE.ACTIONS_LOADED,
       payload: {
         actions,
       },
@@ -186,7 +176,7 @@ function* loadActions() {
 }
 
 export default function* watchRequestedMenu() {
-  yield takeLatest(MENU_REQUESTED, loadMenu);
-  yield takeLatest(CONTENT_TYPES_REQUESTED, loadContentTypes);
-  yield takeEvery(ACTIONS_REQUESTED, loadActions);
+  yield takeLatest(ACTION_TYPE.MENU_REQUESTED, loadMenu);
+  yield takeLatest(ACTION_TYPE.CONTENT_TYPES_REQUESTED, loadContentTypes);
+  yield takeEvery(ACTION_TYPE.ACTIONS_REQUESTED, loadActions);
 }

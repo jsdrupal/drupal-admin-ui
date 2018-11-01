@@ -1,13 +1,9 @@
 import * as React from 'react';
 import { Fragment } from 'react';
-import * as PropTypes from 'prop-types';
-
 import { Redirect } from 'react-router';
-
 import LoadingBar from 'react-redux-loading-bar';
 
 import Paper from '@material-ui/core/Paper';
-
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -20,36 +16,46 @@ import MenuItem from '@material-ui/core/MenuItem/MenuItem';
 
 import PageTitle from '../../02_atoms/PageTitle';
 
-export default class TaxonomyVocabulary extends React.Component {
-  static propTypes = {
-    requestTaxonomyVocabulary: PropTypes.func.isRequired,
-    taxonomyVocabulary: PropTypes.oneOfType([
-      PropTypes.bool,
-      PropTypes.arrayOf(
-        PropTypes.shape({
-          attributes: PropTypes.shape({
-            name: PropTypes.string,
-            description: PropTypes.string,
-            vid: PropTypes.string,
-          }),
-        }),
-      ),
-    ]),
-  };
+interface taxonomyVocabulary {
+  id: string,
+  attributes: {
+    name: string,
+    description: string,
+    vid: string,
+  }
+};
+
+interface Props {
+  requestTaxonomyVocabulary: () => any,
+  taxonomyVocabulary?: taxonomyVocabulary[],
+};
+
+interface State {
+  activeLink: string,
+  taxonomy: {
+    taxonomyVocabulary: taxonomyVocabulary[],
+  }
+};
+
+export default class TaxonomyVocabulary extends React.Component<Props, State> {
 
   static defaultProps = {
-    taxonomyVocabulary: null,
+    taxonomyVocabulary: [],
   };
 
+
   state = {
-    activeLink: null,
+    activeLink: '',
+    taxonomy: {
+      taxonomyVocabulary:[],
+    }
   };
 
   componentDidMount() {
     this.props.requestTaxonomyVocabulary();
   }
 
-  vocabularyOperations = vid => (
+  vocabularyOperations = (vid: string) => (
     <FormControl>
       {/* @todo Extract the select element with links out into a component */}
       <Select

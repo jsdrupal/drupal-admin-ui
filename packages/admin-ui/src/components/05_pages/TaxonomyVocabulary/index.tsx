@@ -4,6 +4,7 @@ import TaxonomyVocabulary from './TaxonomyVocabulary';
 import { requestTaxonomyVocabulary } from '../../../actions/taxonomy';
 
 export default connect(
+  // @ts-ignore
   state => ({ taxonomyVocabulary: state.taxonomy.taxonomyVocabulary }),
   { requestTaxonomyVocabulary },
 )(TaxonomyVocabulary);

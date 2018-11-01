@@ -1,6 +1,8 @@
-import React, { Fragment } from 'react';
-import PropTypes from 'prop-types';
+import * as React from 'react';
+import { Fragment } from 'react';
+
 import { Link } from 'react-router-dom';
+// @ts-ignore
 import { css } from 'emotion';
 
 import { Redirect } from 'react-router';
@@ -32,33 +34,38 @@ const styles = {
   `,
 };
 
-export default class TaxonomyTermsOverview extends React.Component {
-  static propTypes = {
-    requestTaxonomyTerms: PropTypes.func.isRequired,
-    vocabulary: PropTypes.string.isRequired,
-    taxonomyTerms: PropTypes.oneOfType([
-      PropTypes.bool,
-      PropTypes.arrayOf(
-        PropTypes.shape({
-          attributes: PropTypes.shape({
-            name: PropTypes.string,
-            description: PropTypes.string,
-            vid: PropTypes.string,
-          }),
-        }),
-      ),
-    ]),
-    taxonomyVocabulary: PropTypes.oneOfType([
-      PropTypes.bool,
-      PropTypes.shape({
-        attributes: PropTypes.shape({
-          name: PropTypes.string,
-          description: PropTypes.string,
-          vid: PropTypes.string,
-        }),
-      }),
-    ]),
-  };
+interface TaxonomyTerm {
+  attributes: {
+    uuid: string,
+    name: string,
+    description: string,
+    tid: string,
+    vid: string,
+  }
+};
+
+interface TaxonomyVocabulary {
+  attributes: {
+    uuid: string,
+    name: string,
+    description: string,
+    tid: string,
+    vid: string,
+  }
+};
+
+interface Props {
+  requestTaxonomyTerms: (terms: TaxonomyTerm) => any,
+  vocabulary: TaxonomyVocabulary,
+  taxonomyTerms: boolean | TaxonomyTerm,
+  taxonomyVocabulary: boolean | TaxonomyVocabulary,
+};
+
+interface State {
+  activeLink: string,
+};
+
+export default class TaxonomyTermsOverview extends React.Component<Props, State> {
 
   static defaultProps = {
     taxonomyTerms: null,
@@ -66,14 +73,14 @@ export default class TaxonomyTermsOverview extends React.Component {
   };
 
   state = {
-    activeLink: null,
+    activeLink: '',
   };
 
   componentDidMount() {
     this.props.requestTaxonomyTerms(this.props.vocabulary);
   }
 
-  termOperations = tid => (
+  termOperations = (tid : string)=> (
     <FormControl>
       {/* @todo Extract the select element with links out into a component */}
       <Select
@@ -93,6 +100,7 @@ export default class TaxonomyTermsOverview extends React.Component {
     return (
       <Fragment>
         {taxonomyVocabulary && (
+          // @ts-ignore
           <PageTitle>{taxonomyVocabulary.attributes.name}</PageTitle>
         )}
         <LoadingBar style={{ position: 'relative', marginBottom: '5px' }} />
@@ -106,7 +114,8 @@ export default class TaxonomyTermsOverview extends React.Component {
             </TableHead>
             <TableBody>
               {taxonomyTerms &&
-                taxonomyTerms.map(term => (
+                // @ts-ignore
+                taxonomyTerms.map((term: TaxonomyTerm) => (
                   <TableRow key={term.attributes.uuid}>
                     <TableCell>{term.attributes.name}</TableCell>
                     <TableCell>
@@ -122,6 +131,7 @@ export default class TaxonomyTermsOverview extends React.Component {
           color="primary"
           aria-label="add"
           className={styles.addButton}
+          // @ts-ignore
           component={Link}
           to={`/admin/structure/taxonomy/manage/${this.props.vocabulary}/add`}
         >

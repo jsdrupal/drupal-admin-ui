@@ -8,15 +8,22 @@ import api from '../utils/api/api';
 import { ApiError } from '../utils/api/errors';
 import { setErrorMessage } from './application';
 
-export const DBLOG_COLLECTION_REQUEST = 'DBLOG_COLLECTION_REQUEST';
+export const enum ACTION_TYPE {
+  DBLOG_FILTER_UPDATED = 'DBLOG_FILTER_UPDATED',
+  DBLOG_COLLECTION_LOADED = 'DBLOG_COLLECTION_LOADED',
+  DBLOG_COLLECTION_REQUEST = 'DBLOG_COLLECTION_REQUEST'
+}
+
+// export const DBLOG_COLLECTION_REQUEST = 'DBLOG_COLLECTION_REQUEST';
 export const requestDblogCollection = (options: any) => ({
-  type: DBLOG_COLLECTION_REQUEST,
+  type: ACTION_TYPE.DBLOG_COLLECTION_REQUEST,
   payload: { options },
 });
 
-export const DBLOG_FILTER_UPDATED = 'DBLOG_FILTER_UPDATED';
 
-export const DBLOG_COLLECTION_LOADED = 'DBLOG_COLLECTION_LOADED';
+// export const DBLOG_FILTER_UPDATED = 'DBLOG_FILTER_UPDATED';
+
+// export const DBLOG_COLLECTION_LOADED = 'DBLOG_COLLECTION_LOADED';
 export function* loadDblog({ payload: { options } }: any) {
   try {
     const queryString = {
@@ -71,7 +78,7 @@ export function* loadDblog({ payload: { options } }: any) {
     yield put(resetLoading());
     yield put(showLoading());
     yield put({
-      type: DBLOG_FILTER_UPDATED,
+      type: ACTION_TYPE.DBLOG_FILTER_UPDATED,
       payload: {
         options,
       },
@@ -79,7 +86,7 @@ export function* loadDblog({ payload: { options } }: any) {
     const dbLogEntriesTypes = yield call(api, 'dblog:types');
     const dbLogEntries = yield call(api, 'dblog', { queryString });
     yield put({
-      type: DBLOG_COLLECTION_LOADED,
+      type: ACTION_TYPE.DBLOG_COLLECTION_LOADED,
       payload: {
         dbLogEntries,
         dbLogEntriesTypes,
@@ -94,5 +101,5 @@ export function* loadDblog({ payload: { options } }: any) {
 }
 
 export const watchDblogRequests = function* watchDblogRequests() {
-  yield takeLatest(DBLOG_COLLECTION_REQUEST, loadDblog);
+  yield takeLatest(ACTION_TYPE.DBLOG_COLLECTION_REQUEST, loadDblog);
 };

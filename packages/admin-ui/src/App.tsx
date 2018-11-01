@@ -69,7 +69,7 @@ const restoreState = () => {
   return storedState;
 };
 
-interface StateInterface {
+interface State {
   content:{
     restorableContentAddByBundle: string,
     restorableContentEditById: string,
@@ -77,14 +77,14 @@ interface StateInterface {
   getState: () => any;
 };
 
-export const localStorageStore = (state: StateInterface) => ({
+export const localStorageStore = (state: State) => ({
   content: {
     restorableContentAddByBundle: state.content.restorableContentAddByBundle,
     restorableContentEditById: state.content.restorableContentEditById,
   },
 });
 
-const storeState = (store: Store<StateInterface>) => {
+const storeState = (store: Store<State>) => {
   // Persist state.
   const state = store.getState();
 
@@ -97,7 +97,9 @@ const storeState = (store: Store<StateInterface>) => {
   }
 };
 
-const store: Store<StateInterface> = createStore(
+const store: Store<State> = createStore(
+  // TODO errors here indicate I have not got the ACTION_TYPE enum correct???
+  // @ts-ignore
   combineReducers({ ...reducers, router: routerReducer }),
   deepMerge(initialState, restoreState()),
   composeWithDevTools(applyMiddleware(sagaMiddleware, middleware)),
@@ -127,6 +129,7 @@ const theme = createMuiTheme({
 const App = () => (
   <JssProvider jss={jss} generateClassName={generateClassName}>
     <MuiThemeProvider theme={theme}>
+      // @ts-ignore
       <ErrorBoundary>
         <Provider store={store}>
           <ConnectedRouter history={history}>
@@ -144,6 +147,7 @@ const App = () => (
                 ))}
                 <Route
                   path="/(vfancy/?)"
+                  // @ts-ignore
                   component={withRouter(InitialRedirect)}
                 />
                 <Route component={NoMatch} />

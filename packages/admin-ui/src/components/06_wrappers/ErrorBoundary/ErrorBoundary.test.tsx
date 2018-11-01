@@ -1,4 +1,5 @@
-import React from 'react';
+import * as React from 'react';
+// @ts-ignore
 import { mount } from 'enzyme';
 
 import ErrorBoundary from './ErrorBoundary';
@@ -10,10 +11,12 @@ describe('ErrorBoundary', () => {
   // @see https://github.com/facebook/react/issues/11098
   beforeEach(() => {
     jest.spyOn(console, 'error');
+    // @ts-ignore
     global.console.error.mockImplementation(() => {});
   });
 
   afterEach(() => {
+    // @ts-ignore
     global.console.error.mockRestore();
   });
 

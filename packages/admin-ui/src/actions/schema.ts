@@ -4,18 +4,18 @@ import {
   showLoading,
 } from 'react-redux-loading-bar';
 import { all, call, put, takeLatest } from 'redux-saga/effects';
+import { ACTION_TYPE } from '../constants/action_type';
 
 import api from '../utils/api/api';
 import { ApiError } from '../utils/api/errors';
 import { setErrorMessage } from './application';
 
-export const UI_SCHEMA_REQUESTED = 'UI_SCHEMA_REQUESTED';
-export const requestUiSchema = ({ entityTypeId, bundle }: {entityTypeId:string, bundle:string}) => ({
-  type: UI_SCHEMA_REQUESTED,
+
+export const requestUiSchema = ({ entityTypeId, bundle }: {entityTypeId: string, bundle: string}) => ({
+  type: ACTION_TYPE.UI_SCHEMA_REQUESTED,
   payload: { entityTypeId, bundle },
 });
 
-export const UI_SCHEMA_LOADED = 'UI_SCHEMA_LOADED';
 function* loadUiSchema(action: any) {
   const { entityTypeId, bundle } = action.payload;
   try {
@@ -45,7 +45,7 @@ function* loadUiSchema(action: any) {
     ]);
 
     yield put({
-      type: UI_SCHEMA_LOADED,
+      type: ACTION_TYPE.UI_SCHEMA_LOADED,
       payload: {
         entityTypeId,
         bundle,
@@ -62,13 +62,11 @@ function* loadUiSchema(action: any) {
   }
 }
 
-export const SCHEMA_REQUESTED = 'SCHEMA_REQUESTED';
 export const requestSchema = ({ entityTypeId, bundle } : {entityTypeId: string, bundle: string}) => ({
-  type: SCHEMA_REQUESTED,
+  type: ACTION_TYPE.SCHEMA_REQUESTED,
   payload: { entityTypeId, bundle },
 });
 
-export const SCHEMA_LOADED = 'SCHEMA_LOADED';
 function* loadSchema(action: any) {
   const { entityTypeId, bundle } = action.payload;
   try {
@@ -81,7 +79,7 @@ function* loadSchema(action: any) {
     });
 
     yield put({
-      type: SCHEMA_LOADED,
+      type: ACTION_TYPE.SCHEMA_LOADED,
       payload: {
         entityTypeId,
         bundle,
@@ -96,13 +94,11 @@ function* loadSchema(action: any) {
   }
 }
 
-export const SCHEMA_BY_ENTITY_ID_REQUESTED = 'SCHEMA_BY_ENTITY_ID_REQUESTED';
 export const requestSchemaByEntityId = ({ entityTypeId, entityId } : {entityTypeId: string, entityId: string}) => ({
-  type: SCHEMA_BY_ENTITY_ID_REQUESTED,
+  type: ACTION_TYPE.SCHEMA_BY_ENTITY_ID_REQUESTED,
   payload: { entityTypeId, entityId },
 });
 
-export const SCHEMA_BY_ENTITY_ID_LOADED = 'SCHEMA_BY_ENTITY_ID_LOADED';
 function* loadSchemaByEntityId(action: any) {
   const { entityTypeId, entityId } = action.payload;
   try {
@@ -114,7 +110,7 @@ function* loadSchemaByEntityId(action: any) {
     });
 
     yield put({
-      type: SCHEMA_BY_ENTITY_ID_LOADED,
+      type: ACTION_TYPE.SCHEMA_BY_ENTITY_ID_LOADED,
       payload: {
         entityTypeId,
         entityId,
@@ -129,7 +125,7 @@ function* loadSchemaByEntityId(action: any) {
 }
 
 export default function* rootSaga() {
-  yield takeLatest(SCHEMA_REQUESTED, loadSchema);
-  yield takeLatest(SCHEMA_BY_ENTITY_ID_REQUESTED, loadSchemaByEntityId);
-  yield takeLatest(UI_SCHEMA_REQUESTED, loadUiSchema);
+  yield takeLatest(ACTION_TYPE.SCHEMA_REQUESTED, loadSchema);
+  yield takeLatest(ACTION_TYPE.SCHEMA_BY_ENTITY_ID_REQUESTED, loadSchemaByEntityId);
+  yield takeLatest(ACTION_TYPE.UI_SCHEMA_REQUESTED, loadUiSchema);
 }

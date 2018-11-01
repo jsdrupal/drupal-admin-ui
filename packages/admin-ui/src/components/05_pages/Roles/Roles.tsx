@@ -1,4 +1,3 @@
-import * as PropTypes from 'prop-types';
 import * as React from 'react';
 import { Component } from 'react';
 import { connect } from 'react-redux';
@@ -9,7 +8,13 @@ import { cancelTask } from '../../../actions/helpers';
 import { requestRoles } from '../../../actions/roles';
 import { Table, TBody, THead } from '../../01_subatomics/Table/Table';
 
-export const Roles = class Roles extends Component {
+interface Props {
+  requestRoles: () => any,
+  cancelTask: () => any,
+  roles: [],
+};
+
+export const Roles = class Roles extends Component<Props> {
   public componentDidMount() {
     this.props.requestRoles();
   }
@@ -18,8 +23,8 @@ export const Roles = class Roles extends Component {
     this.props.cancelTask();
   }
 
-  public createTableRows = roles =>
-    roles.map(({ attributes: { label, id } }) => ({
+  public createTableRows = (roles: []) =>
+    roles.map(({ attributes: { label, id } }: {attributes: {label: string, id: string}}) => ({
       key: `row-${label}`,
       tds: [
         [`td-${label}`, label],
@@ -37,23 +42,20 @@ export const Roles = class Roles extends Component {
     return (
       <Table>
         <THead data={['NAME', 'OPERATIONS']} />
+        // @ts-ignore
         <TBody rows={this.createTableRows(this.props.roles)} />
       </Table>
     );
   };
 };
 
-Roles.propTypes = {
-  requestRoles: PropTypes.func.isRequired,
-  cancelTask: PropTypes.func.isRequired,
-  roles: PropTypes.arrayOf(PropTypes.object),
-};
-
+// @ts-ignore
 Roles.defaultProps = {
   roles: [],
 };
 
-const mapStateToProps = ({ application: { roles } }) => ({
+// @ts-ignore
+const mapStateToProps = ({ application: { roles } }: {attributes:{roles: []}}) => ({
   roles,
 });
 

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { css } from 'emotion';
-import { MESSAGE_SEVERITY } from '../../../constants/messages';
+import { MESSAGE_SEVERITY } from '../../../constants/message_severity';
 
 const styles = {
   message: css`

@@ -1,4 +1,5 @@
 import * as React from 'react';
+// @ts-ignore
 import { mount, shallow } from 'enzyme';
 import { MemoryRouter } from 'react-router';
 import ListItemText from '@material-ui/core/ListItemText';

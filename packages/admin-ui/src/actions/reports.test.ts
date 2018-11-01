@@ -1,7 +1,7 @@
 import { testSaga } from 'redux-saga-test-plan';
 import { resetLoading, showLoading } from 'react-redux-loading-bar';
 
-import { loadDblog, DBLOG_FILTER_UPDATED } from './reports';
+import { loadDblog, ACTION_TYPE } from './reports';
 import api from '../utils/api/api';
 import { setErrorMessage } from './application';
 
@@ -23,7 +23,7 @@ it('test with sort', () => {
     .put(showLoading())
     .next()
     .put({
-      type: DBLOG_FILTER_UPDATED,
+      type: ACTION_TYPE.DBLOG_FILTER_UPDATED,
       payload: { options: { sort: 'type' } },
     })
     .next()

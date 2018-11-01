@@ -16,11 +16,10 @@ import Typography from '@material-ui/core/Typography';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
 
-
 import OpsModalButton from '../../02_atoms/OpsModalButton/OpsModalButton';
-import ContentType from '../../05_pages/Content/Content';
 
 import { Content, contentDelete } from '../../../actions/content';
+import { ContentType } from '../../../constants/content_type';
 
 const styles = {
   button: css``,
@@ -32,11 +31,6 @@ const styles = {
 export enum Direction {
   ASC= 'ASC',
   DESC = 'DESC',
-};
-
-interface ContentType {
-  name: string,
-  description: string,
 };
 
 interface RelationShips {

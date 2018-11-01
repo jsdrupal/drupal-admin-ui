@@ -26,6 +26,7 @@ import {
 import MessageSave from '../components/01_subatomics/MessageHelpers/MessageSave';
 import { extractContentType, mapContentTypeToName } from '../utils/api/content';
 import { ApiError } from '../utils/api/errors';
+import { ACTION_TYPE } from '../constants/action_type';
 
 export interface Content {
     id: string,
@@ -38,37 +39,13 @@ export interface Content {
     links: string[],
   };
 
-// type ContentAction = {
-//   attributes?: {
-//     plugin: string,
-//   },
-//   payload: {
-//     uid: string,
-//     options?: {
-//       contentTypes: Array<any>,
-//       page?: {
-//         offset: number,
-//         limit: number,
-//       },
-//       status?: string,
-//       sort?: {
-//         path: string,
-//         direction: string,
-//       },
-//       title?: string,
-//     }
-//   }
-// }
-
-export const CONTENT_REQUESTED = 'CONTENT_REQUESTED';
 export const requestContent = (
   options = { contentTypes: [], status: null },
 ) => ({
-  type: CONTENT_REQUESTED,
+  type: ACTION_TYPE.CONTENT_REQUESTED,
   payload: { options },
 });
 
-export const CONTENT_LOADED = 'CONTENT_LOADED';
 function* loadContent(action: any) {
   const title =
     (action.payload.options && action.payload.options.title) || null;
@@ -148,7 +125,7 @@ function* loadContent(action: any) {
 
     const contentList = yield call(api, 'content', { queryString });
     yield put({
-      type: CONTENT_LOADED,
+      type: ACTION_TYPE.CONTENT_LOADED,
       payload: {
         contentList,
       },
@@ -161,13 +138,11 @@ function* loadContent(action: any) {
   }
 }
 
-export const CONTENT_SINGLE_REQUESTED = 'CONTENT_SINGLE_REQUESTED';
 export const requestSingleContent = (nid: string) => ({
-  type: CONTENT_SINGLE_REQUESTED,
+  type: ACTION_TYPE.CONTENT_SINGLE_REQUESTED,
   payload: { nid },
 });
 
-export const CONTENT_SINGLE_LOADED = 'CONTENT_SINGLE_LOADED';
 function* loadSingleContent(action: any) {
   const {
     payload: { nid },
@@ -185,7 +160,7 @@ function* loadSingleContent(action: any) {
     });
 
     yield put({
-      type: CONTENT_SINGLE_LOADED,
+      type: ACTION_TYPE.CONTENT_SINGLE_LOADED,
       payload: {
         content,
       },
@@ -198,48 +173,41 @@ function* loadSingleContent(action: any) {
   }
 }
 
-export const CONTENT_ADD_CHANGE = 'CONTENT_ADD_CHANGE';
 export const contentAddChange = (bundle: string, entity: string) => ({
-  type: CONTENT_ADD_CHANGE,
+  type: ACTION_TYPE.CONTENT_ADD_CHANGE,
   payload: { bundle, entity },
 });
 
-export const CONTENT_EDIT_CHANGE = 'CONTENT_EDIT_CHANGE';
 export const contentEditChange = (bundle: string, entity: string) => ({
-  type: CONTENT_EDIT_CHANGE,
+  type: ACTION_TYPE.CONTENT_EDIT_CHANGE,
   payload: { bundle, entity },
 });
 
 
-
-export const CONTENT_SAVE = 'CONTENT_SAVE';
 export const contentSave = (content: Content) => ({
-  type: CONTENT_SAVE,
+  type: ACTION_TYPE.CONTENT_SAVE,
   payload: {
     content,
   },
 });
 
-export const CONTENT_ADD = 'CONTENT_ADD';
 export const contentAdd = (content: Content, bundle: string) => ({
-  type: CONTENT_ADD,
+  type: ACTION_TYPE.CONTENT_ADD,
   payload: {
     content,
     bundle,
   },
 });
 
-export const CONTENT_DELETE = 'CONTENT_DELETE';
 export const contentDelete = (content: Content) => ({
-  type: CONTENT_DELETE,
+  type: ACTION_TYPE.CONTENT_DELETE,
   payload: {
     content,
   },
 });
 
-export const ACTION_EXECUTE = 'ACTION_EXECUTE';
 export const actionExecute = (action: string, nids: string[]) => ({
-  type: ACTION_EXECUTE,
+  type: ACTION_TYPE.ACTION_EXECUTE,
   payload: {
     action,
     nids,
@@ -255,12 +223,6 @@ export const SUPPORTED_ACTIONS = [
   'node_unpromote_action',
   'entity:unpublish_action:node',
 ];
-
-// type executeActionType = {
-//   attributes: {
-//     plugin: string,
-//   }
-// };
 
 // @todo How do we update the store with the new values of the nodes
 //    or the deleted nodes, see https://github.com/jsdrupal/drupal-admin-ui/issues/131
@@ -445,13 +407,11 @@ function* deleteContent({ payload: { content } }: any) {
   }
 }
 
-export const USER_REQUESTED = 'USER_REQUESTED';
 export const requestUser = (uid: string) => ({
-  type: USER_REQUESTED,
+  type: ACTION_TYPE.USER_REQUESTED,
   payload: { uid },
 });
 
-export const USER_LOADED = 'USER_LOADED';
 function* loadUser(action: any) {
   const {
     payload: { uid },
@@ -469,7 +429,7 @@ function* loadUser(action: any) {
     });
 
     yield put({
-      type: USER_LOADED,
+      type: ACTION_TYPE.USER_LOADED,
       payload: {
         user,
       },
@@ -483,11 +443,11 @@ function* loadUser(action: any) {
 }
 
 export default function* rootSaga() {
-  yield takeLatest(CONTENT_REQUESTED, loadContent);
-  yield takeEvery(CONTENT_SAVE, saveContent);
-  yield takeLatest(CONTENT_SINGLE_REQUESTED, loadSingleContent);
-  yield takeEvery(ACTION_EXECUTE, executeAction);
-  yield takeLatest(CONTENT_ADD, addContent);
-  yield takeEvery(CONTENT_DELETE, deleteContent);
-  yield takeLatest(USER_REQUESTED, loadUser);
+  yield takeLatest(ACTION_TYPE.CONTENT_REQUESTED, loadContent);
+  yield takeEvery(ACTION_TYPE.CONTENT_SAVE, saveContent);
+  yield takeLatest(ACTION_TYPE.CONTENT_SINGLE_REQUESTED, loadSingleContent);
+  yield takeEvery(ACTION_TYPE.ACTION_EXECUTE, executeAction);
+  yield takeLatest(ACTION_TYPE.CONTENT_ADD, addContent);
+  yield takeEvery(ACTION_TYPE.CONTENT_DELETE, deleteContent);
+  yield takeLatest(ACTION_TYPE.USER_REQUESTED, loadUser);
 }

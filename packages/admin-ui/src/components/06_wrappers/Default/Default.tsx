@@ -1,5 +1,4 @@
 import * as React from 'react';
-import * as PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { css } from 'emotion';
 import { Link } from 'react-router-dom';
@@ -24,6 +23,9 @@ import HelpIcon from '@material-ui/icons/Help';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 
+import { MESSAGE_SEVERITY } from '../../../constants/message_severity';
+import { MenuLink } from '../../../constants/menu_link';
+
 import Snackbar from '../../02_atoms/SnackbarMessage/SnackbarMessage';
 import ErrorBoundary from '../ErrorBoundary/ErrorBoundary';
 
@@ -35,43 +37,60 @@ import {
   clearMessage,
 } from '../../../actions/application';
 
-let styles;
-
-const iconMap = {
-  '/admin/content': <ViewListIcon />,
-  '/admin/structure': <BuildIcon />,
-  '/admin/appearance': <ColorLensIcon />,
-  '/admin/modules': <ExtensionIcon />,
-  '/admin/config': <SettingsIcon />,
-  '/admin/people': <PeopleIcon />,
-  '/admin/reports': <AssesmentIcon />,
-  '/admin/help': <HelpIcon />,
+let styles: {
+  menuLink: string,
+  menuButton: string,
+  menuButtonWrapper: string,
+  outerWrapper: string,
+  main: string,
+  drawerPaper: string,
+  drawerPaperClose: string,
 };
 
+const iconMap: Map<string, JSX.Element> = new Map([
+  ['/admin/content', <ViewListIcon key="1"/>],
+  ['/admin/structure', <BuildIcon key="2"/>],
+  ['/admin/appearance', <ColorLensIcon key="3" />],
+  ['/admin/modules', <ExtensionIcon key="4"/>],
+  ['/admin/config', <SettingsIcon key="5"/>],
+  ['/admin/people', <PeopleIcon key="6"/>],
+  ['/admin/reports', <AssesmentIcon key="7"/>],
+  ['/admin/help', <HelpIcon key="8"/>],
+]);
+
 interface Props {
-  choldren: React.ReactNodes,
+  choldren: React.ReactNode,
   classes?: any,
-  message?: {
-    message: string | React.Element,
+  message: {
+    message: string | React.ReactNode,
     type: string,
-    key: number,
+    key: string,
     open: boolean,
+    messageSeverity: MESSAGE_SEVERITY,
   },
-  menuLinks: Array<{
-    links:{
-      url: string,
-      title: string,
-    }
-  }>,
+  menuLinks: Array<MenuLink>,
   requestMenu: () => any,
   openDrawer: () => any,
   closeDrawer:() => any,
-  setMessage:() => any,
-  clearMessage:() => any,
+  setMessage:(message: string | JSX.Element, messageSeverity: MESSAGE_SEVERITY) => any,
+  clearMessage:(key: string) => any,
   drawerOpen: boolean,
 };
 
-class Default extends React.Component<Props> {
+interface State {
+  application: {
+    messages: string[] | React.ReactNode[],
+    menuLinks: MenuLink[],
+    drawerOpen: boolean,
+  },
+};
+
+class Default extends React.Component<Props, State> {
+  defaultProps = {
+    //message: '',
+    drawerOpen: false,
+  };
+
   componentDidMount() {
     this.props.requestMenu();
   }
@@ -178,20 +197,14 @@ styles = {
   `,
 };
 
-
-
-Default.defaultProps = {
-  message: null,
-  drawerOpen: false,
-};
-
-const mapStateToProps = state => ({
+const mapStateToProps = (state: State) => ({
   message: state.application.messages[0] || null,
   menuLinks: state.application.menuLinks || [],
   drawerOpen: state.application.drawerOpen,
 });
 
 export default withRouter(
+  // @ts-ignore
   connect(
     mapStateToProps,
     {
@@ -201,5 +214,6 @@ export default withRouter(
       setMessage,
       clearMessage,
     },
+    // @ts-ignore
   )(Default),
 );

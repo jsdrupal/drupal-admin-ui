@@ -2,7 +2,7 @@ import * as React from 'react';
 // @ts-ignore
 import { shallow } from 'enzyme';
 import InlineMessage from './InlineMessage';
-import { MESSAGE_SEVERITY } from '../../../constants/messages';
+import { MESSAGE_SEVERITY } from '../../../constants/message_severity';
 
 describe('inline messages', () => {
   it('severity error', () => {

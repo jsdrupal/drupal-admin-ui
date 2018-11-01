@@ -1,31 +1,36 @@
 import * as React from 'react';
-import * as PropTypes from 'prop-types';
 
 import InlineMessage from '../../02_atoms/InlineMessage/InlineMessage';
 
-import { MESSAGE_SEVERITY_ERROR } from '../../../constants/messages';
+import { MESSAGE_SEVERITY } from '../../../constants/message_severity';
 
-class ErrorBoundary extends React.Component {
-  constructor(props) {
-    super(props);
+interface State {
+  error: Error,
+};
 
-    this.state = {
-      error: null,
-    };
+class ErrorBoundary extends React.Component<{}, State> {
+  constructor(...args: any) {
+    // @ts-ignore
+    super(...args);
+
+    // this.state = {
+    //   error: null,
+    // };
   }
 
-  componentDidCatch(error) {
+  componentDidCatch(error: Error) {
     this.setState({
       error,
     });
   }
 
   render() {
+    // @ts-ignore
     if (this.state.error) {
       return (
         <InlineMessage
           message={this.state.error.toString()}
-          messageSeverity={MESSAGE_SEVERITY_ERROR}
+          messageSeverity={MESSAGE_SEVERITY.ERROR}
         />
       );
     }
@@ -33,9 +38,5 @@ class ErrorBoundary extends React.Component {
     return this.props.children;
   }
 }
-
-ErrorBoundary.propTypes = {
-  children: PropTypes.node.isRequired,
-};
 
 export default ErrorBoundary;

@@ -1,17 +1,14 @@
-import {
-  SCHEMA_LOADED,
-  UI_SCHEMA_LOADED,
-  SCHEMA_BY_ENTITY_ID_LOADED,
-} from '../actions/schema';
+import { ACTION_TYPE } from '../constants/action_type';
+import { Action } from '../actions/action';
 
 export const initialState = {
   uiSchema: {},
   schema: {},
 };
 
-export default (state = initialState, action) => {
+export default (state = initialState, action: Action) => {
   switch (action.type) {
-    case SCHEMA_LOADED: {
+    case ACTION_TYPE.SCHEMA_LOADED: {
       return {
         ...state,
         schema: {
@@ -20,7 +17,7 @@ export default (state = initialState, action) => {
         },
       };
     }
-    case SCHEMA_BY_ENTITY_ID_LOADED: {
+    case ACTION_TYPE.SCHEMA_BY_ENTITY_ID_LOADED: {
       return {
         ...state,
         schema: {
@@ -29,7 +26,8 @@ export default (state = initialState, action) => {
         },
       };
     }
-    case UI_SCHEMA_LOADED: {
+    case ACTION_TYPE.UI_SCHEMA_LOADED: {
+      // @ts-ignore
       const [
         {
           attributes: { content: formDisplaySchema },

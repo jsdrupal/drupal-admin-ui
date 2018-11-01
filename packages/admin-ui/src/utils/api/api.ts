@@ -1,4 +1,4 @@
-import qs from 'qs';
+import * as qs from 'qs';
 import { ApiError } from './errors';
 
 interface NodeType {
@@ -16,7 +16,7 @@ interface NodeType {
   type: string,
 }
 
-export interface ParametersType {
+ interface Parameters {
   body: string,
   bundle: string,
   entityTypeId: string,
@@ -27,7 +27,7 @@ export interface ParametersType {
   node: NodeType,
 };
 
-export interface OptionsType {
+ interface Options {
   credientials?: string,
   header?: {
     Accept: string[],
@@ -36,10 +36,10 @@ export interface OptionsType {
 };
 
 async function api(
-  endpoint:string,
-  ...args,
+  endpoint: string,
+  // @ts-ignore
+  {queryString = '', parameters = {}, options = {}}: { queryString?: string, parameters?: Parameters, options?: Options }
 ) : Promise<any>{
-  const{options, parameters} = args
   let url;
   options.credentials = 'include';
   options.headers = options.headers || {};

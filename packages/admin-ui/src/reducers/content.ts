@@ -1,32 +1,36 @@
-import {
-  CONTENT_LOADED,
-  CONTENT_SINGLE_LOADED,
-  CONTENT_DELETE,
-  CONTENT_ADD,
-  CONTENT_ADD_CHANGE,
-  USER_LOADED,
-  CONTENT_EDIT_CHANGE,
-} from '../actions/content';
+import { Action } from '../actions/action';
+import { ACTION_TYPE } from '../constants/action_type';
+import { ContentType } from '../constants/content_type';
 
-export const initialState = {
+interface State {
+  contentList: ContentType[],
+  contentByNid: ContentType[],
+  links: {
+
+  },
+  restorableContentAddByBundle: {},
+  restorableContentEditById: {},
+  user: ContentType[],
+}
+export const initialState: State = {
   contentList: [],
-  contentByNid: {},
+  contentByNid: [],
   links: {},
   restorableContentAddByBundle: {},
   restorableContentEditById: {},
-  user: {},
+  user: [],
 };
 
-export default (state = initialState, action) => {
+export default (state:State = initialState, action: Action) => {
   switch (action.type) {
-    case CONTENT_SINGLE_LOADED:
+    case ACTION_TYPE.CONTENT_SINGLE_LOADED:
       return {
         ...state,
         contentByNid: {
           [action.payload.content.attributes.nid]: action.payload.content,
         },
       };
-    case CONTENT_ADD_CHANGE:
+    case ACTION_TYPE.CONTENT_ADD_CHANGE:
       return {
         ...state,
         restorableContentAddByBundle: {
@@ -34,7 +38,7 @@ export default (state = initialState, action) => {
           [action.payload.bundle]: action.payload.entity,
         },
       };
-    case CONTENT_EDIT_CHANGE:
+    case ACTION_TYPE.CONTENT_EDIT_CHANGE:
       return {
         ...state,
         restorableContentEditById: {
@@ -42,14 +46,14 @@ export default (state = initialState, action) => {
           [action.payload.entity.data.id]: action.payload.entity,
         },
       };
-    case CONTENT_ADD:
+    case ACTION_TYPE.CONTENT_ADD:
       return {
         ...state,
         restorableContentAddByBundle: {
           [action.payload.bundle]: null,
         },
       };
-    case CONTENT_LOADED: {
+    case ACTION_TYPE.CONTENT_LOADED: {
       return {
         ...state,
         // Group JSON API includes by their type.
@@ -72,7 +76,7 @@ export default (state = initialState, action) => {
       };
     }
 
-    case CONTENT_DELETE: {
+    case ACTION_TYPE.CONTENT_DELETE: {
       return {
         ...state,
         contentList: state.contentList.filter(
@@ -81,7 +85,7 @@ export default (state = initialState, action) => {
       };
     }
 
-    case USER_LOADED: {
+    case ACTION_TYPE.USER_LOADED: {
       return {
         ...state,
         user: action.payload.user,

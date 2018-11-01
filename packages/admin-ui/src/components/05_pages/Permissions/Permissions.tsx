@@ -12,7 +12,7 @@ import { Table, TBody, THead } from '../../01_subatomics/Table/Table';
 import Loading from '../../02_atoms/Loading/Loading';
 
 import { clearMessage, setMessage } from '../../../actions/application';
-import { MESSAGE_SEVERITY } from '../../../constants/messages';
+import { MESSAGE_SEVERITY } from '../../../constants/message_severity';
 import api from '../../../utils/api/api';
 
 interface Permission {

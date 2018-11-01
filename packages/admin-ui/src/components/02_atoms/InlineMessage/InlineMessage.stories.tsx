@@ -4,7 +4,7 @@ import { storiesOf } from '@storybook/react';
 import { text } from '@storybook/addon-knobs/react';
 /* eslint-enable import/no-extraneous-dependencies */
 import InlineMessage from './InlineMessage';
-import { MESSAGE_SEVERITY } from '../../../constants/messages';
+import { MESSAGE_SEVERITY } from '../../../constants/message_severity';
 
 const message = "I'm the operator with my pocket calculator.";
 

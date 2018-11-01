@@ -16,20 +16,20 @@ import api from '../utils/api/api';
 import { ApiError } from '../utils/api/errors';
 import { setErrorMessage } from './application';
 
-export const ROLES_REQUESTED = 'ROLES_REQUESTED';
+import { ACTION_TYPE } from '../constants/action_type';
+
 export const requestRoles = () => ({
-  type: ROLES_REQUESTED,
+  type: ACTION_TYPE.ROLES_REQUESTED,
   payload: {},
 });
 
-export const ROLES_LOADED = 'ROLES_LOADED';
 function* loadRoles() {
   try {
     yield put(resetLoading());
     yield put(showLoading());
     const roles = yield call(api, 'roles');
     yield put({
-      type: ROLES_LOADED,
+      type: ACTION_TYPE.ROLES_LOADED,
       payload: {
         roles,
       },
@@ -47,8 +47,8 @@ function* loadRoles() {
 
 export const watchRequestedRolesWithCancel = function* watchRequestedRoles() {
   const { cancel } = yield race({
-    task: takeLatest(ROLES_REQUESTED, loadRoles),
-    cancel: take('CANCEL_TASK'),
+    task: takeLatest(ACTION_TYPE.ROLES_REQUESTED, loadRoles),
+    cancel: take(ACTION_TYPE.CANCEL_TASK),
   });
   if (cancel) {
     // do a thing.

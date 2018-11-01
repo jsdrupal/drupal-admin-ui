@@ -1,5 +1,6 @@
-export const CANCEL_TASK = 'CANCEL_TASK';
+import { ACTION_TYPE } from '../constants/action_type';
+
 export const cancelTask = () => ({
-  type: CANCEL_TASK,
+  type: ACTION_TYPE.CANCEL_TASK,
   payload: {},
 });
