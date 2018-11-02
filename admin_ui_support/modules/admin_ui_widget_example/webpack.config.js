@@ -1,6 +1,7 @@
 const path = require('path');
+const MinifyPlugin = require('babel-minify-webpack-plugin');
 
-module.exports = {
+const config = {
   entry: {
     options_buttons_widget: './js/src/options_buttons.widget.js',
   },
@@ -13,12 +14,8 @@ module.exports = {
     path: path.resolve(__dirname, 'js', 'build'),
     filename: '[name].js',
   },
-  externals: [
-    'react',
-    'react-dom',
-    '@material-ui/core',
-    /@material-ui\/core\/*./,
-  ],
+  plugins: [],
+  externals: ['react', '@material-ui/core', /@material-ui\/core\/*./],
   module: {
     rules: [
       {
@@ -44,4 +41,11 @@ module.exports = {
       },
     ],
   },
+};
+
+module.exports = (env, argv) => {
+  if (argv.mode === 'production') {
+    config.plugins.push(new MinifyPlugin());
+  }
+  return config;
 };
