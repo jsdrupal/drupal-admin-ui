@@ -51,22 +51,36 @@ const styles = {
   `,
 };
 
-interface SelectedItemType {}
-
-interface FileProp {
+interface FileItem{
   type: string,
   url: string,
   id: string,
   filename: string,
 };
 
-interface FileItemMultipleProp {
-  id: string,
-  file: FileProp,
+interface FileItemSingle {
+  file: FileItem,
 };
 
-interface FileItemSingleProp {
-  file: FileProp,
+interface FileItemMultiple {
+  id: string,
+  file: FileItem,
+};
+
+interface SelectedItemMultiple {
+  id: string,
+  file: FileItemMultiple[],
+  meta: {
+    alt: string,
+  },
+};
+
+interface SelectedItemSingle {
+  id: string,
+  file: FileItemSingle,
+  meta: {
+    alt: string,
+  },
 };
 
 interface Props {
@@ -82,25 +96,20 @@ interface Props {
   },
   label: string,
   required: boolean,
-  // TODO Must lock down.
   value: {
-    data: {
-     file: FileItemMultipleProp[] | FileItemSingleProp,
-     meta: {
-       alt: string,
-     },
-  }},
+    data: SelectedItemMultiple[] | SelectedItemSingle
+  },
   schema: {
-    properties:{
-      data:{type: string}
+    properties: {
+      data: {type: string}
     },
     maxItems: number,
   },
-  onChange: ( {data }: {data: SelectedItemType} ) => void,
+  onChange: ( {data }: {data: SelectedItemMultiple[] | SelectedItemSingle} ) => void,
 };
 
 interface State {
-  selectedItems: SelectedItemType[],
+  selectedItems: SelectedItemMultiple[] | SelectedItemSingle,
   inputProps?: {
     file_extensions: string,
     // TODO should this be number?
@@ -108,7 +117,7 @@ interface State {
   },
   value?: {
     data: {
-     file: FileItemMultipleProp[] | FileItemSingleProp,
+     file: FileItemMultiple[] | FileItemSingle,
      meta: {
        alt: string,
      },
@@ -145,8 +154,7 @@ class FileUploadWidget extends React.Component<Props, State> {
     }
   }
 
-  // TODO must lock down item type.
-  public setSelectedItems = (items: any) => {
+  public setSelectedItems = (items: SelectedItemMultiple[] | SelectedItemSingle) => {
     this.setState(
       {
         selectedItems: items,
@@ -174,6 +182,8 @@ class FileUploadWidget extends React.Component<Props, State> {
               id,
               type: 'file--file',
               [entityTypeId]: attributes,
+              // Is the iterface structure correct?
+              // @ts-ignore
               meta: items[index].meta,
             }))
             .reduce(
@@ -227,7 +237,7 @@ class FileUploadWidget extends React.Component<Props, State> {
 
     const items = getItemsAsArray(multiple, this.state.selectedItems)
       // Default schema creates stub entries, which we don't need here.
-      .filter(item => item.id);
+      .filter((item: {id: string}) => item.id);
     const length = (items && items.length) || 0;
     // maxItems is only set if array, so set to 1 as default.
     const maxItemsCount = multiple ? maxItems || 100000000000 : 1;
@@ -270,9 +280,11 @@ class FileUploadWidget extends React.Component<Props, State> {
                     id: file.uuid[0].value,
                     type: 'file--file',
                   };
+                  // @ts-ignore
                   return setItemById(multiple, item, itemsAgg);
                 }, items);
 
+                // @ts-ignore
                 this.setSelectedItems(newItems);
               }}
             />
@@ -283,10 +295,12 @@ class FileUploadWidget extends React.Component<Props, State> {
               <Card>
                 <CardContent>
                   <List>
-                    {items.map((item, index) => {
+                    {items.map((item: SelectedItemMultiple, index) => {
                       const {
                         id,
+                        // TOD Must reeolve FileItemMultple issue.
                         meta: { alt },
+                        // @ts-ignore
                         file: { url, filename },
                       } = item;
                       const last = items.length - 1 === index;
@@ -313,10 +327,12 @@ class FileUploadWidget extends React.Component<Props, State> {
                                     multiple,
                                     {
                                       ...item,
+                                      // @ts-ignore
                                       meta: {
                                         alt: event.target.value,
                                       },
                                     },
+                                    // @ts-ignore
                                     value.data,
                                   ),
                                 )
@@ -334,6 +350,7 @@ class FileUploadWidget extends React.Component<Props, State> {
                                   deleteItemById(
                                     multiple,
                                     event.currentTarget.id,
+                                    // @ts-ignore
                                     items,
                                   ),
                                 );

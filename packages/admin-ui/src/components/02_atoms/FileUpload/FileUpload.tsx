@@ -189,6 +189,7 @@ export class FileUpload extends Component<Props, State> {
           props: { entityTypeId, bundle, fieldName, onFileUpload },
         } = this;
         const { buffer } = new Uint8Array(result);
+        // @ts-ignore
         const token = await api('csrf_token');
         // Replace file name, some reason any space doesn't work
         // TODO: Find a way to fix this without changing the name

@@ -37,7 +37,7 @@ interface Props extends WidgetProp {
   required: boolean,
   schema: SchemaProp,
   value: {
-    data: object,
+    data: [],
   }
 };
 
@@ -100,6 +100,7 @@ class EntityReferenceAutocomplete extends React.Component<Props, State> {
     const items = getItemsAsArray(multiple, this.props.value.data);
     const ids = items.map(({ id }: {id: string}) => id);
     this.fetchEntitites(entityTypeId, bundle, ids).then(
+      // @ts-ignore
       ({ data: entities }) => {
         this.setState({
           selectedItems: entities.map(
@@ -167,6 +168,7 @@ class EntityReferenceAutocomplete extends React.Component<Props, State> {
         entityTypeId,
         bundle,
         this.state.inputValue,
+      // @ts-ignore
       ).then(({ data: items }) => {
         this.setState({
           suggestions: new Map(

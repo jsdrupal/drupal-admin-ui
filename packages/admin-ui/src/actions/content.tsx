@@ -27,6 +27,8 @@ import MessageSave from '../components/01_subatomics/MessageHelpers/MessageSave'
 import { extractContentType, mapContentTypeToName } from '../utils/api/content';
 import { ApiError } from '../utils/api/errors';
 import { ACTION_TYPE } from '../constants/action_type';
+import { QueryString } from '../constants/query_string';
+
 
 export interface Content {
     id: string,
@@ -59,11 +61,10 @@ function* loadContent(action: any) {
   try {
     yield put(showLoading());
 
-    const queryString = {
+    const queryString: QueryString = {
       filter: {},
       page: {},
       sort: {},
-      include: {},
     };
 
     if (page) {
@@ -119,6 +120,7 @@ function* loadContent(action: any) {
     queryString.include = 'uid';
 
     // Unset this, otherwise it'll send 'filter=' to JSON:API and cause an error.
+    // @ts-ignore
     if (!Object.keys(queryString.filter).length) {
       delete queryString.filter;
     }

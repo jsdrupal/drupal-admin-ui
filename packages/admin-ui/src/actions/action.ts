@@ -15,7 +15,6 @@ export interface Action {
       data: Array<{}>,
     }
     key: string,
-
     bundle: string,
     content: {
       id: string,
@@ -57,7 +56,9 @@ export interface Action {
     }
     entityId: string,
     entitySchema: {},
+    // TODO do we need both these values? ( below )
     entityTypeId: string,
+    entity_type: string,
     formDisplaySchema: {},
     fieldSchema: Array<{
       attributes:{

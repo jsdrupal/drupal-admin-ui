@@ -1,9 +1,11 @@
 import { testSaga } from 'redux-saga-test-plan';
 import { resetLoading, showLoading } from 'react-redux-loading-bar';
 
-import { loadDblog, ACTION_TYPE } from './reports';
+import { loadDblog } from './reports';
 import api from '../utils/api/api';
 import { setErrorMessage } from './application';
+
+import { ACTION_TYPE } from '../constants/action_type';
 
 it('test empty options', () => {
   testSaga(loadDblog, { payload: {} })

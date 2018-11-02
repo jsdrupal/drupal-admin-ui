@@ -161,7 +161,7 @@ function* loadActions() {
     let actions: { data: Action[]} = { data: yield select(getActionsCache) };
     if (!Object.keys(actions.data).length) {
       // ts-ignore
-      actions = yield call(api, 'actions');
+      // actions = yield call(api, 'actions');
     }
     yield put({
       type: ACTION_TYPE.ACTIONS_LOADED,

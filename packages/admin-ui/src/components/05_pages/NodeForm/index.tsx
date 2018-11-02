@@ -17,7 +17,7 @@ import { contentAdd } from '../../../actions/content';
 import { requestUiSchema } from '../../../actions/schema';
 import { setErrorMessage } from '../../../actions/application';
 
-import { createUISchema, sortUISchemaFields } from '../../../utils/api/schema';
+import { createUISchema, sortUISchemaFields, Schema } from '../../../utils/api/schema';
 
 import widgets from './Widgets';
 
@@ -42,7 +42,7 @@ interface Props {
   entityTypeId: string,
   bundle: string,
   requestUiSchema: (entityTypeId: string, bundle: string) => any,
-  uiSchema: {fieldSchema: {},fieldStorageConfig:{},  formDisplaySchema:{}},
+  uiSchema: {fieldSchema: Schema[], fieldStorageConfig: Schema[], formDisplaySchema: Schema[]}
   restorableEntity: Entity,
   setErrorMessage: (message: string) => any,
   onChange: (bundle: string, entity: Entity) => any,
@@ -53,15 +53,15 @@ interface State {
   entity: Entity,
   restored: boolean,
   schema: {
-    uiSchema: {},
+    uiSchema: Schema[],
   },
 };
 
 class NodeForm extends React.Component<Props,State> {
 
   static defaultProps = {
-    schema: false,
-    uiSchema: false,
+    //schema: false,
+    //uiSchema: false,
     restorableEntity: null,
     onChange: () => {},
   };
@@ -75,7 +75,7 @@ class NodeForm extends React.Component<Props,State> {
       }
     },
     schema:{
-      uiSchema: {}
+      uiSchema: []
     }
   };
 
@@ -316,6 +316,7 @@ class NodeForm extends React.Component<Props,State> {
     let result = null;
     if (this.props.schema && this.props.uiSchema && this.state.entity) {
       const { right, left } = sortUISchemaFields(
+        // @ts-ignore
         createUISchema(
           this.props.uiSchema.fieldSchema,
           this.props.uiSchema.formDisplaySchema,

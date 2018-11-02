@@ -27,6 +27,7 @@ function* loadRoles() {
   try {
     yield put(resetLoading());
     yield put(showLoading());
+    // @ts-ignore
     const roles = yield call(api, 'roles');
     yield put({
       type: ACTION_TYPE.ROLES_LOADED,

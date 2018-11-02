@@ -1,12 +1,17 @@
 import * as qs from 'qs';
 import { ApiError } from './errors';
+import { QueryString } from '../../constants/query_string';
 
-interface NodeType {
-  attribute: {
+interface Node {
+  body: {},
+  attributes: {
     nid: string,
-    revision_timestamp: string,
-    changes: boolean,
+    revision_timestamp: number,
+    changed: boolean,
   },
+  links?: {
+    self?: string,
+  }
   relationships: {
     revision_uid: string,
     type: string,
@@ -17,28 +22,34 @@ interface NodeType {
 }
 
  interface Parameters {
-  body: string,
-  bundle: string,
-  entityTypeId: string,
-  fileName: string,
-  role: {
+  body?: {},
+  bundle?: string,
+  entityId?: string,
+  entityTypeId?: string,
+  fileName?: string,
+  fieldName?: string,
+  node?: Node,
+  role?: {
     id: string,
   }
-  node: NodeType,
+  type?: string,
 };
 
  interface Options {
-  credientials?: string,
-  header?: {
-    Accept: string[],
+  body?: {},
+  credentials?: string,
+  headers?: {
+    Accept?: string,
+    'X-CSRF-Token'?: string,
+    'Content-Type'?: string,
   },
   text?: boolean,
+  method?: string,
 };
 
 async function api(
   endpoint: string,
-  // @ts-ignore
-  {queryString = '', parameters = {}, options = {}}: { queryString?: string, parameters?: Parameters, options?: Options }
+  { queryString = {}, parameters = {}, options = {}}: { queryString?: QueryString, parameters?: Parameters, options?: Options }
 ) : Promise<any>{
   let url;
   options.credentials = 'include';
@@ -64,13 +75,17 @@ async function api(
       options.headers.Accept = 'application/vnd.api+json';
       break;
     case 'role':
+      // TODO this case assume parmaters is NOT optional
+      // @ts-ignore
       url = `/jsonapi/user_role/${parameters.role.id}`;
       options.headers.Accept = 'application/vnd.api+json';
       break;
     case 'role:patch':
+      // @ts-ignore
       url = `/jsonapi/user_role/${parameters.role.id}`;
       options.headers.Accept = 'application/vnd.api+json';
       options.method = 'PATCH';
+      // @ts-ignore
       options.body = JSON.stringify({ data: parameters.role });
       options.headers['Content-Type'] = 'application/vnd.api+json';
       break;
@@ -93,6 +108,7 @@ async function api(
       options.headers.Accept = 'application/vnd.api+json';
       break;
     case 'content_single':
+      // @ts-ignore
       url = `/jsonapi/node/${parameters.bundle}/${parameters.id}`;
       options.headers.Accept = 'application/vnd.api+json';
       break;
@@ -111,13 +127,18 @@ async function api(
     case 'node:delete': {
       // Set the type to the right value for jsonapi to process.
       // @todo Ideally this should not be differnet in the first place.
+      // @ts-ignore
       parameters.node = {
         ...parameters.node,
+        // @ts-ignore
         type: parameters.node.type.includes('--')
+          // @ts-ignore
           ? parameters.node.type
+          // @ts-ignore
           : `node--${parameters.node.type}`,
       };
 
+      // @ts-ignore
       const deleteToken = await api('csrf_token');
       // @todo Delete requests sadly return non json.
       options.text = true;
@@ -125,7 +146,9 @@ async function api(
       options.headers['X-CSRF-Token'] = deleteToken;
       options.headers['Content-Type'] = 'application/vnd.api+json';
       options.method = 'DELETE';
+      // @ts-ignore
       url = parameters.node.links.self.replace(
+        // @ts-ignore
         process.env.REACT_APP_DRUPAL_BASE_URL,
         '',
       );
@@ -133,48 +156,57 @@ async function api(
     }
     case 'node:add': {
       const { node } = parameters;
-      // Set the type to the right value for jsonapi to process.
-      // @todo Ideally this should not be differnet in the first place.
-      node.type = node.type.includes('--') ? node.type : `node--${node.type}`;
+      if (node) {
+        // Set the type to the right value for jsonapi to process.
+        // @todo Ideally this should not be differnet in the first place.
+        // @ts-ignore
+        node.type = node.type.includes('--') ? node.type : `node--${node.type}`;
 
-      // Ensure that we don't have an ID when creating new content.
-      delete node.id;
-      delete node.attributes.nid;
-      delete node.attributes.revision_timestamp;
-      delete node.attributes.changed;
+        // Ensure that we don't have an ID when creating new content.
+        delete node.id;
+        delete node.attributes.nid;
+        delete node.attributes.revision_timestamp;
+        delete node.attributes.changed;
 
-      // Delete revision_uid, type, uid
-      delete node.relationships.revision_uid;
-      delete node.relationships.type;
-      delete node.relationships.uid;
+        // Delete revision_uid, type, uid
+        delete node.relationships.revision_uid;
+        delete node.relationships.type;
+        delete node.relationships.uid;
 
-      const saveToken = await api('csrf_token');
-      options.headers.Accept = 'application/vnd.api+json';
-      options.headers['X-CSRF-Token'] = saveToken;
-      options.method = 'POST';
-      options.body = JSON.stringify({ data: node });
-      url = `/jsonapi/${node.type.replace('--', '/')}`;
+        // @ts-ignore
+        const saveToken = await api('csrf_token');
+        options.headers.Accept = 'application/vnd.api+json';
+        options.headers['X-CSRF-Token'] = saveToken;
+        options.method = 'POST';
+        options.body = JSON.stringify({ data: node });
+        url = `/jsonapi/${node.type.replace('--', '/')}`;
+      }
       break;
     }
     case 'node:save': {
-      // Set the type to the right value for jsonapi to process.
-      // @todo Ideally this should not be differnet in the first place.
-      parameters.node = {
-        ...parameters.node,
-        type: parameters.node.type.includes('--')
-          ? parameters.node.type
-          : `node--${parameters.node.type}`,
-      };
+      if(parameters.node) {
+        // Set the type to the right value for jsonapi to process.
+        // @todo Ideally this should not be differnet in the first place.
+        parameters.node = {
+          ...parameters.node,
+          type: parameters.node.type.includes('--')
+            ? parameters.node.type
+            : `node--${parameters.node.type}`,
+        };
 
-      const saveToken = await api('csrf_token');
-      options.headers.Accept = 'application/vnd.api+json';
-      options.headers['X-CSRF-Token'] = saveToken;
-      options.method = 'PATCH';
-      options.body = JSON.stringify({ data: parameters.node });
-      url = parameters.node.links.self.replace(
-        process.env.REACT_APP_DRUPAL_BASE_URL,
-        '',
-      );
+        // @ts-ignore
+        const saveToken = await api('csrf_token');
+        options.headers.Accept = 'application/vnd.api+json';
+        options.headers['X-CSRF-Token'] = saveToken;
+        options.method = 'PATCH';
+        options.body = JSON.stringify({ data: parameters.node });
+        // @ts-ignore
+        url = parameters.node.links.self.replace(
+          // @ts-ignore
+          process.env.REACT_APP_DRUPAL_BASE_URL,
+          '',
+        );
+      }
       break;
     }
     case 'taxonomy_vocabulary': {
@@ -226,8 +258,9 @@ async function api(
         ? `?${qs.stringify(queryString, { arrayFormat: 'brackets' })}`
         : ''
     }`,
+    // @ts-ignore
     options,
-  ).then(res => {
+  ).then((res:{status: number, statusText: string, text: () => string, json: () => {} }) => {
     if (![200, 201, 204].includes(res.status)) {
       throw new ApiError(res.status, res.statusText, res);
     }

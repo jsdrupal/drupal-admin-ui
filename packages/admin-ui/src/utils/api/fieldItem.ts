@@ -1,4 +1,4 @@
-export const setItemById = (multiple, item, items) => {
+export const setItemById = (multiple: boolean, item: any, items: any[]) => {
   if (multiple) {
     const index = items.findIndex(i => i.id === item.id);
     if (index === -1) {
@@ -10,7 +10,7 @@ export const setItemById = (multiple, item, items) => {
   return item;
 };
 
-export const getItemsAsArray = (multiple, items) => {
+export const getItemsAsArray = (multiple: boolean, items: object) => {
   if (Array.isArray(items)) {
     return items;
   }
@@ -20,12 +20,12 @@ export const getItemsAsArray = (multiple, items) => {
   return [items];
 };
 
-export const deleteItemById = (multiple, id, items) => {
+export const deleteItemById = (multiple: boolean, id: string, items: any) => {
   if (!multiple) {
     return {};
   }
 
-  return items.filter(i => i.id !== id);
+  return items.filter((i: {id: string}) => i.id !== id);
 };
 
 export default {};

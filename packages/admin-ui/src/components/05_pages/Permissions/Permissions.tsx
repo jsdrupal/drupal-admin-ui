@@ -97,6 +97,7 @@ const Permissions = class Permissions extends Component<Props, State> {
 
   public fetchData = () =>
     makeCancelable(
+      // @ts-ignore
       Promise.all([api('permissions'), api('roles')])
         .then(([permissions, { data: roles }]) =>
           this.setState({

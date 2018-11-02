@@ -7,15 +7,19 @@
  *  'Content-Type' header signals a JSON response
  */
 class ApiError extends Error {
+  status: number;
+  statusText: string;
+  response: any;
+  message: string;
 
-  public static errorToHumanString(error) {
+  public static errorToHumanString(error: ApiError) {
     if (error.name === 'ApiError') {
       return ApiError.toHumanString(error);
     }
     return error.toString();
   }
 
-  public static async toHumanString(error) {
+  public static async toHumanString(error: ApiError) {
     try {
       switch (error.status) {
         case 403:
@@ -41,7 +45,7 @@ class ApiError extends Error {
       return error.toString();
     }
   }
-  constructor(status, statusText, response) {
+  constructor(status: number, statusText: string, response: any) {
     super();
     this.name = 'ApiError';
     this.status = status;

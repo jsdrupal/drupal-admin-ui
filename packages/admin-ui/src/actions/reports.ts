@@ -8,25 +8,17 @@ import api from '../utils/api/api';
 import { ApiError } from '../utils/api/errors';
 import { setErrorMessage } from './application';
 
-export const enum ACTION_TYPE {
-  DBLOG_FILTER_UPDATED = 'DBLOG_FILTER_UPDATED',
-  DBLOG_COLLECTION_LOADED = 'DBLOG_COLLECTION_LOADED',
-  DBLOG_COLLECTION_REQUEST = 'DBLOG_COLLECTION_REQUEST'
-}
+import { ACTION_TYPE } from '../constants/action_type';
+import { QueryString } from '../constants/query_string';
 
-// export const DBLOG_COLLECTION_REQUEST = 'DBLOG_COLLECTION_REQUEST';
 export const requestDblogCollection = (options: any) => ({
   type: ACTION_TYPE.DBLOG_COLLECTION_REQUEST,
   payload: { options },
 });
 
-
-// export const DBLOG_FILTER_UPDATED = 'DBLOG_FILTER_UPDATED';
-
-// export const DBLOG_COLLECTION_LOADED = 'DBLOG_COLLECTION_LOADED';
 export function* loadDblog({ payload: { options } }: any) {
   try {
-    const queryString = {
+    const queryString: QueryString = {
       sort: options.sort || '',
       page: {
         limit: 50,
@@ -83,6 +75,7 @@ export function* loadDblog({ payload: { options } }: any) {
         options,
       },
     });
+    // @ts-ignore
     const dbLogEntriesTypes = yield call(api, 'dblog:types');
     const dbLogEntries = yield call(api, 'dblog', { queryString });
     yield put({

@@ -115,6 +115,7 @@ storiesOf('Widgets/EntityReferenceAutocomplete', module).addWithJSX(
         title: 'Author',
         type: 'object',
       })}
+      // @ts-ignore
       value={object('EntityReferenceAutocomplete: data', {
         data: [
           {
@@ -166,6 +167,7 @@ storiesOf('Widgets/FileUploadWidget/Multiple File', module).addWithJSX(
       label={text('FileUploadWidget: label(Multiple)', 'Files to be uploaded')}
       onChange={onChangeAction}
       value={{
+        // @ts-ignore
         data: {
           // @ts-ignore
           0: item(10),

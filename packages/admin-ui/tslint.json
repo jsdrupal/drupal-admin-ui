@@ -5,7 +5,7 @@
       "object-literal-sort-keys": false,
       "member-access": [true, "no-public"],
       "ordered-imports": false,
-      "interface-name" : [true, "never-prefix"]
+      "interface-name" : [true, "never"]
       },
     "exclude": [
       "config/**/*.js",
