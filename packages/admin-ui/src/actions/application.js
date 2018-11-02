@@ -186,7 +186,7 @@ export const requestComponents = () => ({
 
 export const COMPONENTS_LOADED = 'COMPONENTS_LOADED';
 
-function* loadComponents() {
+function* loadComponentList() {
   try {
     const components = yield call(api, 'admin_ui_components');
     yield put({
@@ -211,5 +211,5 @@ export default function* watchApplication() {
   yield takeLatest(MENU_REQUESTED, loadMenu);
   yield takeLatest(CONTENT_TYPES_REQUESTED, loadContentTypes);
   yield takeEvery(ACTIONS_REQUESTED, loadActions);
-  yield takeLatest(COMPONENTS_REQUESTED, loadComponents);
+  yield takeLatest(COMPONENTS_REQUESTED, loadComponentList);
 }
