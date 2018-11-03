@@ -277,7 +277,7 @@ export class FileUpload extends Component<Props, State> {
           return {
             total: prevState.total + 1,
             errors: [...prevErrors, errorMessage],
-          }
+          };
         },
         resetState,
       );
