@@ -178,19 +178,19 @@ function* loadActions() {
   }
 }
 
-export const COMPONENTS_REQUESTED = 'COMPONENTS_REQUESTED';
-export const requestComponents = () => ({
-  type: COMPONENTS_REQUESTED,
+export const COMPONENT_INFO_REQUESTED = 'COMPONENT_INFO_REQUESTED';
+export const requestComponentInfo = () => ({
+  type: COMPONENT_INFO_REQUESTED,
   payload: {},
 });
 
-export const COMPONENTS_LOADED = 'COMPONENTS_LOADED';
+export const COMPONENT_INFO_LOADED = 'COMPONENT_INFO_LOADED';
 
-function* loadComponents() {
+function* loadComponentInfo() {
   try {
     const components = yield call(api, 'admin_ui_components');
     yield put({
-      type: COMPONENTS_LOADED,
+      type: COMPONENT_INFO_LOADED,
       payload: {
         components: {
           ...components,
@@ -211,5 +211,5 @@ export default function* watchApplication() {
   yield takeLatest(MENU_REQUESTED, loadMenu);
   yield takeLatest(CONTENT_TYPES_REQUESTED, loadContentTypes);
   yield takeEvery(ACTIONS_REQUESTED, loadActions);
-  yield takeLatest(COMPONENTS_REQUESTED, loadComponents);
+  yield takeLatest(COMPONENT_INFO_REQUESTED, loadComponentInfo);
 }
