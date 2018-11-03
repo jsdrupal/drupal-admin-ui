@@ -13,10 +13,10 @@ import { ACTION_TYPE } from '../constants/action_type';
 import { Action } from '../actions/action';
 
 interface State {
-    application: {
-      contentTypes: string,
-      actions: ACTION_TYPE,
-    };
+  application: {
+    contentTypes: string;
+    actions: ACTION_TYPE;
+  };
 }
 
 export const openDrawer = () => ({
@@ -34,7 +34,10 @@ export const closeDrawer = () => ({
  *  listed at constants/message_severity.js
  * @returns {{type: string, payload: {message: *, messageSeverity: *}}}
  */
-export const setMessage = (message: string | JSX.Element, messageSeverity: MESSAGE_SEVERITY) => ({
+export const setMessage = (
+  message: string | JSX.Element,
+  messageSeverity: MESSAGE_SEVERITY,
+) => ({
   type: ACTION_TYPE.SET_MESSAGE,
   payload: {
     message,
@@ -128,7 +131,8 @@ export const requestContentTypes = () => ({
   payload: {},
 });
 
-export const contentTypesSelector = (state: State) => state.application.contentTypes;
+export const contentTypesSelector = (state: State) =>
+  state.application.contentTypes;
 export const CONTENT_TYPES_LOADED = 'CONTENT_TYPES_LOADED';
 function* loadContentTypes() {
   try {
@@ -161,7 +165,7 @@ export const getActionsCache = (state: State) => state.application.actions;
 function* loadActions() {
   try {
     // @ts-ignore
-    let actions: { data: Action[]} = { data: yield select(getActionsCache) };
+    let actions: { data: Action[] } = { data: yield select(getActionsCache) };
     if (!Object.keys(actions.data).length) {
       // ts-ignore
       actions = yield call(api, 'actions', {});

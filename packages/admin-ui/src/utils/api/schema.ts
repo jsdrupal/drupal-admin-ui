@@ -2,7 +2,7 @@ export interface Schema {
   default?: any;
   description?: string;
   // TODO is this recursion justified.
-  properties?: {[key: string]: Schema};
+  properties?: { [key: string]: Schema };
   items?: {};
   maxItems?: number;
   required?: string[];
@@ -10,25 +10,25 @@ export interface Schema {
   type: string;
 }
 
-const createEntity = (schema: Schema): any=> {
+const createEntity = (schema: Schema): any => {
   if (typeof schema.default !== 'undefined') {
     return schema.default;
   }
   switch (schema.type) {
     case 'object':
-      if(schema.properties) {
+      if (schema.properties) {
         return Object.entries(schema.properties).reduce(
           (agg, [key, value]) => ({
             ...agg,
             [key]: createEntity(value),
-            }),
-            {},
-          );
-        } else {
-          // Error condition a schema for a object with no properties.
-          // detault to empty object.
-          return {};
-        }
+          }),
+          {},
+        );
+      } else {
+        // Error condition a schema for a object with no properties.
+        // detault to empty object.
+        return {};
+      }
 
     case 'array':
       return [];
@@ -91,8 +91,8 @@ const createUISchema = (
           ? formDisplaySchema[currentFieldName].settings
           : {}),
         ...(fieldStorageSettings
-          // @ts-ignore
-          ? fieldStorageSettings.attributes.settings
+          ? // @ts-ignore
+            fieldStorageSettings.attributes.settings
           : {}),
       };
       acc.push({
@@ -107,7 +107,10 @@ const createUISchema = (
       return acc;
     }, []);
 
-const sortUISchemaFields = (schema: Schema[], secondaryColumnFields: string[]) =>
+const sortUISchemaFields = (
+  schema: Schema[],
+  secondaryColumnFields: string[],
+) =>
   schema.reduce(
     (acc, curr) => {
       acc[

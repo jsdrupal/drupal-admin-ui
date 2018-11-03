@@ -3,7 +3,10 @@ import { ContentType } from '../../constants/content_type';
 export const extractContentType = (content: any) =>
   content && content.type && content.type.substring('node--'.length);
 
-export const mapContentTypeToName = (contentTypes: ContentType[], contentType: string): string =>
+export const mapContentTypeToName = (
+  contentTypes: ContentType[],
+  contentType: string,
+): string =>
   contentTypes &&
   contentType &&
   contentTypes[contentType] &&

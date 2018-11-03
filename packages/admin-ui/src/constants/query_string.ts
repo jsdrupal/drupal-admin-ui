@@ -2,38 +2,38 @@ interface FilterElemA {
   bundle?: string;
   entity_type?: string;
   condition?: {
-    operator?: string,
-    path: string,
-    value: string,
+    operator?: string;
+    path: string;
+    value: string;
   };
   mode?: string;
   status?: {
-    value: number,
+    value: number;
   };
   targetEntityType?: string;
   title?: {
-    path: string,
-    operator: string,
-    value: string,
+    path: string;
+    operator: string;
+    value: string;
   };
 }
 
 interface FilterElemB {
   id: {
     condition: {
-      operator: string,
-      path: string,
-      value: string[],
-    },
+      operator: string;
+      path: string;
+      value: string[];
+    };
   };
 }
 
 interface FilterElemC {
   name: {
     condition: {
-      operator: string,
-      path: string,
-      value: string,
+      operator: string;
+      path: string;
+      value: string;
     };
   };
 }

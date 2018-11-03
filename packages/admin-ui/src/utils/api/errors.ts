@@ -54,7 +54,6 @@ class ApiError extends Error {
     }
     return error.toString();
   }
-
 }
 
 // eslint-disable-next-line import/prefer-default-export

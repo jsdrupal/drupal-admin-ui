@@ -25,7 +25,7 @@ export const deleteItemById = (multiple: boolean, id: string, items: any) => {
     return {};
   }
 
-  return items.filter((i: {id: string}) => i.id !== id);
+  return items.filter((i: { id: string }) => i.id !== id);
 };
 
 export default {};

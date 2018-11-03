@@ -4,12 +4,11 @@ import routes from './routes';
 
 interface Props {
   location: {
-    pathname: string,
+    pathname: string;
   };
 }
 
 class NoMatch extends Component<Props> {
-
   componentDidMount() {
     // We want to redirect everything without a match back to Drupal.
     if (!Object.keys(routes).includes(this.props.location.pathname)) {
@@ -22,6 +21,6 @@ class NoMatch extends Component<Props> {
   render() {
     return null;
   }
-};
+}
 
 export default NoMatch;

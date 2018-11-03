@@ -97,8 +97,6 @@ const storeState = (storeP: Store<State>) => {
 };
 
 const store: Store<State> = createStore(
-  // TODO errors here indicate I have not got the ACTION_TYPE enum correct???
-  // @ts-ignore
   combineReducers({ ...reducers, router: routerReducer }),
   deepMerge(initialState, restoreState()),
   composeWithDevTools(applyMiddleware(sagaMiddleware, middleware)),

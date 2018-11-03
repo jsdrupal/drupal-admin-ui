@@ -7,73 +7,74 @@ export interface Action {
   type: ACTION_TYPE;
   id: string;
   attributes: {
-    id: string,
-    label: string,
+    id: string;
+    label: string;
   };
   payload: {
     actions: {
-      data: Array<{}>,
-    }
-    key: string,
-    bundle: string,
+      data: Array<{}>;
+    };
+    key: string;
+    bundle: string;
     content: {
-      id: string,
+      id: string;
       attributes: {
         nid: string;
-      },
+      };
     };
     contentList: {
       data: Array<{
         id: string;
         type: string;
-      }>
-      links: {},
+      }>;
+      links: {};
       included: Array<{
         id: string;
         type: string;
-      }>,
-    }
+      }>;
+    };
     contentTypes: {
-      data: ContentType[],
-    },
-    data: Array<{}>,
+      data: ContentType[];
+    };
+    data: Array<{}>;
     dbLogEntries: {
       data: Array<{
         attributes: {
-          wid: string,
-          message_formatted_plain: string,
-          timestamp: number,
-          type: string,
+          wid: string;
+          message_formatted_plain: string;
+          timestamp: number;
+          type: string;
         };
-      }>,
-      links: string[],
-    },
-    dbLogEntriesTypes: string[],
+      }>;
+      links: string[];
+    };
+    dbLogEntriesTypes: string[];
     entity: {
       data: {
-        id: string,
+        id: string;
       };
-    }
-    entityId: string,
-    entitySchema: {},
+    };
+    entityId: string;
+    entitySchema: {};
     // TODO do we need both these values? ( below )
-    entityTypeId: string,
-    entity_type: string,
-    formDisplaySchema: {},
+    entityTypeId: string;
+    entity_type: string;
+    formDisplaySchema: {};
     fieldSchema: Array<{
       attributes: {
         field_name: string;
-      }}>,
-    fieldStorageConfig: {},
-    menuLinks: MenuLink[],
-    options: {},
+      };
+    }>;
+    fieldStorageConfig: {};
+    menuLinks: MenuLink[];
+    options: {};
     roles: {
-      data: Array<{}>,
-    },
-    taxonomyVocabulary: {},
-    taxonomyTerms: {},
-    vocabulary: {},
-    user: {},
+      data: Array<{}>;
+    };
+    taxonomyVocabulary: {};
+    taxonomyTerms: {};
+    vocabulary: {};
+    user: {};
   };
 }
 

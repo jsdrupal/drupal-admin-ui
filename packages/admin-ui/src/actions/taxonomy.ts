@@ -63,7 +63,7 @@ export const requestTaxonomyTerms = (vocabulary: any) => ({
 });
 
 export const getTaxonomyVocabularyById = (
-  taxonomyVocabularyList: Array<{attributes: {vid: string}}>,
+  taxonomyVocabularyList: Array<{ attributes: { vid: string } }>,
   vocabulary: string,
 ) =>
   taxonomyVocabularyList

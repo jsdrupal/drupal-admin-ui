@@ -10,7 +10,13 @@ import api from '../utils/api/api';
 import { ApiError } from '../utils/api/errors';
 import { setErrorMessage } from './application';
 
-export const requestUiSchema = ({ entityTypeId, bundle }: {entityTypeId: string, bundle: string}) => ({
+export const requestUiSchema = ({
+  entityTypeId,
+  bundle,
+}: {
+  entityTypeId: string;
+  bundle: string;
+}) => ({
   type: ACTION_TYPE.UI_SCHEMA_REQUESTED,
   payload: { entityTypeId, bundle },
 });
@@ -62,7 +68,13 @@ function* loadUiSchema(action: any) {
   }
 }
 
-export const requestSchema = ({ entityTypeId, bundle }: {entityTypeId: string, bundle: string}) => ({
+export const requestSchema = ({
+  entityTypeId,
+  bundle,
+}: {
+  entityTypeId: string;
+  bundle: string;
+}) => ({
   type: ACTION_TYPE.SCHEMA_REQUESTED,
   payload: { entityTypeId, bundle },
 });
@@ -95,7 +107,13 @@ function* loadSchema(action: any) {
   }
 }
 
-export const requestSchemaByEntityId = ({ entityTypeId, entityId }: {entityTypeId: string, entityId: string}) => ({
+export const requestSchemaByEntityId = ({
+  entityTypeId,
+  entityId,
+}: {
+  entityTypeId: string;
+  entityId: string;
+}) => ({
   type: ACTION_TYPE.SCHEMA_BY_ENTITY_ID_REQUESTED,
   payload: { entityTypeId, entityId },
 });
@@ -127,6 +145,9 @@ function* loadSchemaByEntityId(action: any) {
 
 export default function* rootSaga() {
   yield takeLatest(ACTION_TYPE.SCHEMA_REQUESTED, loadSchema);
-  yield takeLatest(ACTION_TYPE.SCHEMA_BY_ENTITY_ID_REQUESTED, loadSchemaByEntityId);
+  yield takeLatest(
+    ACTION_TYPE.SCHEMA_BY_ENTITY_ID_REQUESTED,
+    loadSchemaByEntityId,
+  );
   yield takeLatest(ACTION_TYPE.UI_SCHEMA_REQUESTED, loadUiSchema);
 }

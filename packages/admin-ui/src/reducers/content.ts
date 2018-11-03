@@ -5,9 +5,7 @@ import { ContentType } from '../constants/content_type';
 interface State {
   contentList: ContentType[];
   contentByNid: ContentType[];
-  links: {
-
-  };
+  links: {};
   restorableContentAddByBundle: {};
   restorableContentEditById: {};
   user: ContentType[];
@@ -22,7 +20,7 @@ export const initialState: State = {
   user: [],
 };
 
-export default (state:State = initialState, action: Action) => {
+export default (state: State = initialState, action: Action) => {
   switch (action.type) {
     case ACTION_TYPE.CONTENT_SINGLE_LOADED:
       return {

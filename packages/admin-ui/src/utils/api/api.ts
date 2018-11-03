@@ -5,23 +5,23 @@ import { QueryString } from '../../constants/query_string';
 interface Node {
   body: {};
   attributes: {
-    nid: string,
-    revision_timestamp: number,
-    changed: boolean,
+    nid: string;
+    revision_timestamp: number;
+    changed: boolean;
   };
   links?: {
-    self?: string,
+    self?: string;
   };
   relationships: {
-    revision_uid: string,
-    type: string,
-    uid: string,
+    revision_uid: string;
+    type: string;
+    uid: string;
   };
   id: string;
   type: string;
 }
 
- interface Parameters {
+interface Parameters {
   body?: {};
   bundle?: string;
   entityId?: string;
@@ -30,18 +30,18 @@ interface Node {
   fieldName?: string;
   node?: Node;
   role?: {
-    id: string,
+    id: string;
   };
   type?: string;
 }
 
- interface Options {
+interface Options {
   body?: {};
   credentials?: string;
   headers?: {
-    Accept?: string,
-    'X-CSRF-Token'?: string,
-    'Content-Type'?: string,
+    Accept?: string;
+    'X-CSRF-Token'?: string;
+    'Content-Type'?: string;
   };
   text?: boolean;
   method?: string;
@@ -49,8 +49,12 @@ interface Node {
 
 async function api(
   endpoint: string,
-  { queryString = {}, parameters = {}, options = {}}: { queryString?: QueryString, parameters?: Parameters, options?: Options }
-) : Promise<any>{
+  {
+    queryString = {},
+    parameters = {},
+    options = {},
+  }: { queryString?: QueryString; parameters?: Parameters; options?: Options },
+): Promise<any> {
   let url;
   options.credentials = 'include';
   options.headers = options.headers || {};
@@ -132,10 +136,10 @@ async function api(
         ...parameters.node,
         // @ts-ignore
         type: parameters.node.type.includes('--')
-          // @ts-ignore
-          ? parameters.node.type
-          // @ts-ignore
-          : `node--${parameters.node.type}`,
+          ? // @ts-ignore
+            parameters.node.type
+          : // @ts-ignore
+            `node--${parameters.node.type}`,
       };
 
       // @ts-ignore
@@ -184,7 +188,7 @@ async function api(
       break;
     }
     case 'node:save': {
-      if(parameters.node) {
+      if (parameters.node) {
         // Set the type to the right value for jsonapi to process.
         // @todo Ideally this should not be differnet in the first place.
         parameters.node = {
@@ -260,17 +264,24 @@ async function api(
     }`,
     // @ts-ignore
     options,
-  ).then((res:{status: number, statusText: string, text: () => string, json: () => {} }) => {
-    if (![200, 201, 204].includes(res.status)) {
-      throw new ApiError(res.status, res.statusText, res);
-    }
+  ).then(
+    (res: {
+      status: number;
+      statusText: string;
+      text: () => string;
+      json: () => {};
+    }) => {
+      if (![200, 201, 204].includes(res.status)) {
+        throw new ApiError(res.status, res.statusText, res);
+      }
 
-    // CSRF tokens return text, not json.
-    if (options.text) {
-      return res.text();
-    }
-    return res.json();
-  });
+      // CSRF tokens return text, not json.
+      if (options.text) {
+        return res.text();
+      }
+      return res.json();
+    },
+  );
   return data;
 }
 

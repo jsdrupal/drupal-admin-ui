@@ -1,7 +1,7 @@
 export interface ContentType {
   id: string;
   attributes: {
-    type: 'string',
+    type: 'string';
   };
   name: string;
   description: string;
