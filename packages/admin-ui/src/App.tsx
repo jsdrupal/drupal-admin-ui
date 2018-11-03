@@ -23,7 +23,6 @@ import {
 
 import routes from './routes';
 
-//import Content from './components/05_pages/Content/Content';
 import Default from './components/06_wrappers/Default/Default';
 import NoMatch from './NoMatch';
 
@@ -70,12 +69,12 @@ const restoreState = () => {
 };
 
 interface State {
-  content:{
+  content: {
     restorableContentAddByBundle: string,
     restorableContentEditById: string,
-  }
+  };
   getState: () => any;
-};
+}
 
 export const localStorageStore = (state: State) => ({
   content: {
@@ -84,9 +83,9 @@ export const localStorageStore = (state: State) => ({
   },
 });
 
-const storeState = (store: Store<State>) => {
+const storeState = (storeP: Store<State>) => {
   // Persist state.
-  const state = store.getState();
+  const state = storeP.getState();
 
   // Save to local storage
   const stringifiedState = JSON.stringify(localStorageStore(state));
@@ -135,18 +134,19 @@ const App = () => (
           <ConnectedRouter history={history}>
             <Default>
               <Switch>
-                {/* <Route exact path="/" component={withRouter(Content)} /> */}
-                <Route exact path="/" />
-                {Object.keys(routes).map(route => (
-                  <Route
-                    exact
-                    path={route}
-                    component={withRouter(routes[route])}
-                    key={route}
-                  />
-                ))}
+                <Route exact={true} path='/' />
+                {
+                  Object.keys(routes).map((route: string) => (
+                    <Route
+                      exact={true}
+                      path={route}
+                      component={withRouter(routes[route])}
+                      key={route}
+                    />
+                  ))
+                }
                 <Route
-                  path="/(vfancy/?)"
+                  path='/(vfancy/?)'
                   // @ts-ignore
                   component={withRouter(InitialRedirect)}
                 />

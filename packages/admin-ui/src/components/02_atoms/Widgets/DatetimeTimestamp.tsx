@@ -3,12 +3,12 @@ import * as React from 'react';
 import WidgetProp from '../../05_pages/NodeForm/WidgetProp';
 
 interface Props extends WidgetProp {
-  classes?: any,
-  fieldName: string,
-  value?: number,
-  label: string,
-  required: boolean,
-};
+  classes?: any;
+  fieldName: string;
+  value?: number;
+  label: string;
+  required: boolean;
+}
 
 const DatetimeTimestamp = ({
   classes,

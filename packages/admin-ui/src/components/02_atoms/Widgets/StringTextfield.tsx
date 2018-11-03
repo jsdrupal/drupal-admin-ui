@@ -4,11 +4,11 @@ import WidgetProp from '../../05_pages/NodeForm/WidgetProp';
 
 interface Props extends WidgetProp {
   // @todo This should not be needed after https://github.com/jsdrupal/drupal-admin-ui/issues/195
-  classes?: object, // TODO must lock down.
-  value: string[] | string,
-  autoFocus?: boolean,
-  required?: boolean,
-};
+  classes?: object; // TODO must lock down.
+  value: string[] | string;
+  autoFocus?: boolean;
+  required?: boolean;
+}
 
 const StringTextfield = (props: Props) => (
   <TextField

@@ -15,14 +15,14 @@ function Transition(props: any) {
 }
 
 interface Props {
-  className?: string,
-  title: string,
-  text: string,
-  confirmText: string,
-  cancelText: string,
-  children: React.ReactNode,
-  enterAction: () => any,
-};
+  className?: string;
+  title: string;
+  text: string;
+  confirmText: string;
+  cancelText: string;
+  children: React.ReactNode;
+  enterAction: () => any;
+}
 
 /* A Drupal specific button, for use in the operations column of a table.
  *

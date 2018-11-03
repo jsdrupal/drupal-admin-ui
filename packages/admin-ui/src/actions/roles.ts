@@ -36,6 +36,7 @@ function* loadRoles() {
       },
     });
   } catch (error) {
+    // @ts-ignore
     const errorMessage = yield ApiError.errorToHumanString(error);
     yield put(setErrorMessage(errorMessage));
   } finally {

@@ -14,18 +14,18 @@ const styles = {
 };
 
 interface Props extends WidgetProp {
-  classes?: object, // TODO MUST lock down.
-  label: string,
-  value: string,
-  helpText: string,
+  classes?: object; // TODO MUST lock down.
+  label: string;
+  value: string;
+  helpText: string;
   schema: {
     default: string,
-  },
+  };
   inputProps: {
     allowed_values: object,
-  },
-  required?: boolean,
-};
+  };
+  required?: boolean;
+}
 
 const OptionsSelect = ({
   label,

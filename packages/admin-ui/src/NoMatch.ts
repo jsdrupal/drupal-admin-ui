@@ -5,10 +5,10 @@ import routes from './routes';
 interface Props {
   location: {
     pathname: string,
-  }
-};
+  };
+}
 
-const NoMatch = class NoMatch extends Component<Props> {
+class NoMatch extends Component<Props> {
 
   componentDidMount() {
     // We want to redirect everything without a match back to Drupal.

@@ -32,19 +32,19 @@ const style = {
 };
 
 interface Props {
-  label: string,
-  onChange: (value: string[]) => any,
-  component: () => any,
-  value: string[],
-  schema: SchemaProp,
-};
+  label: string;
+  onChange: (value: string[]) => any;
+  component: () => any;
+  value: string[];
+  schema: SchemaProp;
+}
 
 interface State {
   // TODO bodge use typescript here.
   handle: any;
-  currentIndex: number,
-  newItemAdded: boolean,
-};
+  currentIndex: number;
+  newItemAdded: boolean;
+}
 
 class MultipleFields extends Component<Props, State> {
   /**
@@ -142,7 +142,7 @@ class MultipleFields extends Component<Props, State> {
   /**
    * Default function is empty.
    */
-  public onDragLeave = () => {}
+  public onDragLeave = () => {};
 
   /**
    * Updated the current value of the input.

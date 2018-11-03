@@ -40,7 +40,10 @@ function registerValidSW(swUrl) {
         };
       };
     })
-    .catch(() => {});
+    .catch(() => {
+      // EMPTY
+      return;
+    });
 }
 
 function checkValidServiceWorker(swUrl) {
@@ -63,7 +66,7 @@ function checkValidServiceWorker(swUrl) {
         registerValidSW(swUrl);
       }
     })
-    .catch(() => {});
+    .catch(() => {return});
 }
 
 export default function register() {
@@ -86,7 +89,7 @@ export default function register() {
 
         // Add some additional logging to localhost, pointing developers to the
         // service worker/PWA documentation.
-        navigator.serviceWorker.ready.then(() => {});
+        navigator.serviceWorker.ready.then(() => {return});
       } else {
         // Is not local host. Just register service worker
         registerValidSW(swUrl);

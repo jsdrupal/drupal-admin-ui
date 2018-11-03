@@ -59,35 +59,35 @@ const iconMap: Map<string, JSX.Element> = new Map([
 ]);
 
 interface Props {
-  choldren: React.ReactNode,
-  classes?: any,
+  choldren: React.ReactNode;
+  classes?: any;
   message: {
     message: string | React.ReactNode,
     type: string,
     key: string,
     open: boolean,
     messageSeverity: MESSAGE_SEVERITY,
-  },
-  menuLinks: Array<MenuLink>,
-  requestMenu: () => any,
-  openDrawer: () => any,
-  closeDrawer:() => any,
-  setMessage:(message: string | JSX.Element, messageSeverity: MESSAGE_SEVERITY) => any,
-  clearMessage:(key: string) => any,
-  drawerOpen: boolean,
-};
+  };
+  menuLinks: MenuLink[];
+  requestMenu: () => any;
+  openDrawer: () => any;
+  closeDrawer:() => any;
+  setMessage:(message: string | JSX.Element, messageSeverity: MESSAGE_SEVERITY) => any;
+  clearMessage:(key: string) => any;
+  drawerOpen: boolean;
+}
 
 interface State {
   application: {
     messages: string[] | React.ReactNode[],
     menuLinks: MenuLink[],
     drawerOpen: boolean,
-  },
-};
+  };
+}
 
 class Default extends React.Component<Props, State> {
   defaultProps = {
-    //message: '',
+    // message: '',
     drawerOpen: false,
   };
 
@@ -132,7 +132,7 @@ class Default extends React.Component<Props, State> {
             <ListItem
               key={menuLink.url.replace(/\//g, '-')}
               component="li"
-              button
+              button={true}
             >
               <Link to={menuLink.url} className={styles.menuLink} role="button">
                 {iconMap[menuLink.url] ? (

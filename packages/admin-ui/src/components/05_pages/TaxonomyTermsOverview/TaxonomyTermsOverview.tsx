@@ -41,8 +41,8 @@ interface TaxonomyTerm {
     description: string,
     tid: string,
     vid: string,
-  }
-};
+  };
+}
 
 interface TaxonomyVocabulary {
   attributes: {
@@ -51,19 +51,19 @@ interface TaxonomyVocabulary {
     description: string,
     tid: string,
     vid: string,
-  }
-};
+  };
+}
 
 interface Props {
-  requestTaxonomyTerms: (terms: TaxonomyTerm) => any,
-  vocabulary: TaxonomyVocabulary,
-  taxonomyTerms: boolean | TaxonomyTerm,
-  taxonomyVocabulary: boolean | TaxonomyVocabulary,
-};
+  requestTaxonomyTerms: (terms: TaxonomyTerm) => any;
+  vocabulary: TaxonomyVocabulary;
+  taxonomyTerms: boolean | TaxonomyTerm;
+  taxonomyVocabulary: boolean | TaxonomyVocabulary;
+}
 
 interface State {
-  activeLink: string,
-};
+  activeLink: string;
+}
 
 export default class TaxonomyTermsOverview extends React.Component<Props, State> {
 
@@ -84,7 +84,7 @@ export default class TaxonomyTermsOverview extends React.Component<Props, State>
     <FormControl>
       {/* @todo Extract the select element with links out into a component */}
       <Select
-        autoWidth
+        autoWidth={true}
         onChange={e => this.setState({ activeLink: e.target.value })}
         value={this.state.activeLink}
       >

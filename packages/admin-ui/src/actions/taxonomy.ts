@@ -48,6 +48,7 @@ function* loadTaxonomyVocabulary(action: any) {
       },
     });
   } catch (error) {
+    // @ts-ignore
     const errorMessage = yield ApiError.errorToHumanString(error);
     yield put(setErrorMessage(errorMessage));
   } finally {
@@ -61,7 +62,10 @@ export const requestTaxonomyTerms = (vocabulary: any) => ({
   payload: { vocabulary },
 });
 
-export const getTaxonomyVocabularyById = (taxonomyVocabularyList: Array<any>, vocabulary: string) =>
+export const getTaxonomyVocabularyById = (
+  taxonomyVocabularyList: Array<{attributes: {vid: string}}>,
+  vocabulary: string,
+) =>
   taxonomyVocabularyList
     .filter(({ attributes: { vid } }) => vid === vocabulary)
     .shift();
@@ -104,6 +108,7 @@ function* loadTaxonomyTerms(action: any) {
       },
     });
   } catch (error) {
+    // @ts-ignore
     const errorMessage = yield ApiError.errorToHumanString(error);
     yield put(setErrorMessage(errorMessage));
   } finally {

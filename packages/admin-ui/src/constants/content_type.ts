@@ -1,10 +1,10 @@
 export interface ContentType {
-  id: string,
+  id: string;
   attributes: {
     type: 'string',
-  },
-  name: string,
-  description: string,
-};
+  };
+  name: string;
+  description: string;
+}
 
 export default ContentType;

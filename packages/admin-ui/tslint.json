@@ -1,16 +1,26 @@
 {
-  "extends": ["tslint:recommended", "tslint-react", "tslint-config-prettier"],
-  "linterOptions": {
+  "extends": [
+     "tslint:recommended",
+     "tslint-react",
+     "tslint-config-prettier"
+   ],
     "rules": {
+      "member-access": false,
+      "jsx-no-multiline-js": false,
+      "jsx-no-lambda": false,
+      "quotemark": false,
       "object-literal-sort-keys": false,
-      "member-access": [true, "no-public"],
       "ordered-imports": false,
-      "interface-name" : [true, "never"]
+      "interface-name" : [true, "never-prefix"],
+      "semicolon": { "severity": "warning" },
+      "no-empty": [true, "allow-empty-functions"]
+      },
+    "jsRules": {
+        "object-literal-sort-keys": false
       },
     "exclude": [
-      "config/**/*.js",
+      "packages/admin-ui/src/tests/Nightwatch/*",
       "node_modules/**/*.ts",
       "coverage/lcov-report/*.js"
     ]
   }
-}

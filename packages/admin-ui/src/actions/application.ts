@@ -112,6 +112,7 @@ function* loadMenu() {
         ),
       );
     }
+    // @ts-ignore
     const errorMessage = yield ApiError.errorToHumanString(error);
     yield put(setErrorMessage(errorMessage));
   } finally {
@@ -140,6 +141,7 @@ function* loadContentTypes() {
       },
     });
   } catch (error) {
+    // @ts-ignore
     const errorMessage = yield ApiError.errorToHumanString(error);
     yield put(setErrorMessage(errorMessage));
   } finally {
@@ -158,10 +160,11 @@ export const requestActions = () => ({
 export const getActionsCache = (state: State) => state.application.actions;
 function* loadActions() {
   try {
+    // @ts-ignore
     let actions: { data: Action[]} = { data: yield select(getActionsCache) };
     if (!Object.keys(actions.data).length) {
       // ts-ignore
-      // actions = yield call(api, 'actions');
+      actions = yield call(api, 'actions', {});
     }
     yield put({
       type: ACTION_TYPE.ACTIONS_LOADED,
@@ -170,6 +173,7 @@ function* loadActions() {
       },
     });
   } catch (error) {
+    // @ts-ignore
     const errorMessage: string = yield ApiError.errorToHumanString(error);
     yield put(setErrorMessage(errorMessage));
   }

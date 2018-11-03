@@ -6,12 +6,12 @@ import WidgetProp from '../../05_pages/NodeForm/WidgetProp';
 
 let styles: {root: string};
 
-interface Props extends WidgetProp{
-  fieldName: string,
-  label: string,
+interface Props extends WidgetProp {
+  fieldName: string;
+  label: string;
   // required: boolean,
-  value?: string,
-};
+  value?: string;
+}
 
 const BooleanCheckbox = (props: Props) => {
   const { fieldName, onChange, label, value} = props;

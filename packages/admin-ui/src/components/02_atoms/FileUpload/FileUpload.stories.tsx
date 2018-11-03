@@ -17,7 +17,7 @@ import FileUpload from './FileUpload';
  * in the JSX tab a toSting() method must be provided.
  */
 const onFileUploadAction = action('onFileUpload');
-onFileUploadAction.toString = () => "action('onFileUpload')";
+onFileUploadAction.toString = () => 'action(\"onFileUpload\")';
 
 // Can remove ignore when this is fixed.
 // https://github.com/storybooks/addon-jsx/issues/36
@@ -25,9 +25,9 @@ onFileUploadAction.toString = () => "action('onFileUpload')";
 // @ts-ignore
 storiesOf('FileUpload', module).addWithJSX('Default', () => (
   <FileUpload
-    entityTypeId="node"
-    bundle="Article"
-    fieldName="upload"
+    entityTypeId={'node'}
+    bundle={'Article'}
+    fieldName={'upload'}
     onFileUpload={onFileUploadAction}
     multiple={boolean('multiple', false)}
     remainingUploads={number('remainingUploads', 1)}

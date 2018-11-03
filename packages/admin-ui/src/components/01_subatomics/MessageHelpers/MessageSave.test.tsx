@@ -8,7 +8,7 @@ describe('Verify Message', () => {
   it('on save', () => {
     const bundle = 'Article';
     const title = 'Thai green curry';
-    const nid = "5";
+    const nid = '5';
     const message = mount(
       <MemoryRouter>
         <MessageSave bundle={bundle} title={title} nid={nid} />

@@ -29,17 +29,16 @@ import { ApiError } from '../utils/api/errors';
 import { ACTION_TYPE } from '../constants/action_type';
 import { QueryString } from '../constants/query_string';
 
-
 export interface Content {
-    id: string,
-    type: string,
+    id: string;
+    type: string;
     attributes: {
       promote?: boolean,
       sticky?: boolean,
       status?: boolean,
-    },
-    links: string[],
-  };
+    };
+    links: string[];
+  }
 
 export const requestContent = (
   options = { contentTypes: [], status: null },
@@ -133,6 +132,7 @@ function* loadContent(action: any) {
       },
     });
   } catch (error) {
+    // @ts-ignore
     const errorMessage = yield ApiError.errorToHumanString(error);
     yield put(setErrorMessage(errorMessage));
   } finally {
@@ -168,6 +168,7 @@ function* loadSingleContent(action: any) {
       },
     });
   } catch (error) {
+    // @ts-ignore
     const errorMessage = yield ApiError.errorToHumanString(error);
     yield put(setErrorMessage(errorMessage));
   } finally {
@@ -184,7 +185,6 @@ export const contentEditChange = (bundle: string, entity: string) => ({
   type: ACTION_TYPE.CONTENT_EDIT_CHANGE,
   payload: { bundle, entity },
 });
-
 
 export const contentSave = (content: Content) => ({
   type: ACTION_TYPE.CONTENT_SAVE,
@@ -232,11 +232,11 @@ export const SUPPORTED_ACTIONS = [
 export function* executeAction(
 { payload: { action, nids} }: any) {
   try {
-    const contentList = yield select((state: {content:{contentList: string[]}}) => state.content.contentList);
+    const contentList = yield select((state: {content: {contentList: string[]}}) => state.content.contentList);
     const actions = nids
       .map((nid: string) => {
         const node = contentList.filter(
-          (contentItem:{attributes:{nid: string}}) => String(contentItem.attributes.nid) === nid,
+          (contentItem: {attributes: {nid: string}}) => String(contentItem. attributes.nid) === nid,
         )[0];
 
         let saveAction;
@@ -321,9 +321,10 @@ export function* executeAction(
         }
         return saveAction;
       })
-      .filter((x:any) => x);
+      .filter((x: any) => x);
     yield all(actions);
   } catch (error) {
+    // @ts-ignore
     const errorMessage = yield ApiError.errorToHumanString(error);
     yield put(setErrorMessage(errorMessage));
   } finally {
@@ -331,7 +332,7 @@ export function* executeAction(
   }
 }
 
-function* saveContent({ payload: { content } } :any) {
+function* saveContent({ payload: { content } }: any) {
   try {
     yield put(resetLoading());
     yield put(showLoading());
@@ -361,6 +362,7 @@ function* saveContent({ payload: { content } } :any) {
       ),
     );
   } catch (error) {
+    // @ts-ignore
     const errorMessage = yield ApiError.errorToHumanString(error);
     yield put(setErrorMessage(errorMessage));
   } finally {
@@ -389,6 +391,7 @@ function* addContent({ payload: { content } }: any) {
     yield put(push('/admin/content'));
     yield put(setSuccessMessage(`New ${contentName} added successfully`));
   } catch (error) {
+    // @ts-ignore
     const errorMessage = yield ApiError.errorToHumanString(error);
     yield put(setErrorMessage(errorMessage));
   } finally {
@@ -402,6 +405,7 @@ function* deleteContent({ payload: { content } }: any) {
     yield put(showLoading());
     yield call(api, 'node:delete', { parameters: { node: content } });
   } catch (error) {
+    // @ts-ignore
     const errorMessage = yield ApiError.errorToHumanString(error);
     yield put(setErrorMessage(errorMessage));
   } finally {
@@ -437,6 +441,7 @@ function* loadUser(action: any) {
       },
     });
   } catch (error) {
+    // @ts-ignore
     const errorMessage = yield ApiError.errorToHumanString(error);
     yield put(setErrorMessage(errorMessage));
   } finally {

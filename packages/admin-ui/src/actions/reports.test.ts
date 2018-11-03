@@ -10,8 +10,8 @@ import { ACTION_TYPE } from '../constants/action_type';
 it('test empty options', () => {
   testSaga(loadDblog, { payload: {} })
     .next()
-    .next("TypeError: Cannot read property 'sort' of undefined")
-    .put(setErrorMessage("TypeError: Cannot read property 'sort' of undefined"))
+    .next('TypeError: Cannot read property "sort" of undefined')
+    .put(setErrorMessage('TypeError: Cannot read property "sort" of undefined'))
     .next()
     .finish()
     .isDone();

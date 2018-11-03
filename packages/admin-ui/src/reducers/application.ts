@@ -5,21 +5,21 @@ import { MenuLink } from '../constants/menu_link';
 import { MESSAGE_SEVERITY } from '../constants/message_severity';
 
 interface Message {
-  message: string,
-  messageSeverity: MESSAGE_SEVERITY,
-  key: string,
-  open: boolean,
-};
+  message: string;
+  messageSeverity: MESSAGE_SEVERITY;
+  key: string;
+  open: boolean;
+}
 
 interface State {
-  actions: Action[],
-  contentTypes: ContentType[],
-  dblog?: [],
-  drawerOpen: boolean,
-  messages: Message[],
-  menuLinks: MenuLink | MenuLink[],
-  filterString: string,
-};
+  actions: Action[];
+  contentTypes: ContentType[];
+  dblog?: [];
+  drawerOpen: boolean;
+  messages: Message[];
+  menuLinks: MenuLink | MenuLink[];
+  filterString: string;
+}
 
 export const initialState = {
   actions: [],

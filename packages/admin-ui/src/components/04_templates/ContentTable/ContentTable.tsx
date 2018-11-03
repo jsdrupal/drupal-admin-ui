@@ -31,30 +31,30 @@ const styles = {
 export enum Direction {
   ASC= 'ASC',
   DESC = 'DESC',
-};
+}
 
 interface RelationShips {
   uid: {
     data: {
       id: string,
     }
-  }
-};
+  };
+}
 
 interface Prop {
-  contentTypes: ContentType[]
-  contentList: Array<{}>,
-  contentDelete: (node: Content) => any,
-  pageChangeHandler: (event: React.MouseEvent<HTMLButtonElement> | null, page: number) => any,
-  tableSortHandler: (key: string, direction: string) => any,
+  contentTypes: ContentType[];
+  contentList: Array<{}>;
+  contentDelete: (node: Content) => any;
+  pageChangeHandler: (event: React.MouseEvent<HTMLButtonElement> | null, page: number) => any;
+  tableSortHandler: (key: string, direction: string) => any;
   // TODO must lock down.
-  setChecked: (x: object) => any,
-  includes: {'user--user': object},
-  links: {next: string},
-  page: {offset: number, limit: number },
-  sort: {path: string, direction: Direction},
-  checked: boolean[],
-};
+  setChecked: (x: object) => any;
+  includes: {'user--user': object};
+  links: {next: string};
+  page: {offset: number, limit: number };
+  sort: {path: string, direction: Direction};
+  checked: boolean[];
+}
 
 class ContentTable extends React.Component<Prop> {
 

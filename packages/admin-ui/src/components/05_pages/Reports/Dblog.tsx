@@ -10,21 +10,24 @@ import { requestDblogCollection } from '../../../actions/reports';
 import { Table, TBody, THead } from '../../01_subatomics/Table/Table';
 
 interface FilterOptions {
-  sort: string, severities?: string[] | null, offset: number, types?: string[] | null,
-};
+  sort: string;
+  severities?: string[] | null;
+  offset: number;
+  types?: string[] | null;
+}
 
 interface Props {
-    requestDblogCollection: (options: FilterOptions) => any,
+    requestDblogCollection: (options: FilterOptions) => any;
     entries: Array<{
       wid: number,
       messageFormattedPlain: string,
       timestamp: number,
       type: string,
-    }>
-    availableTypes: string[],
-    filterOptions: FilterOptions,
-    next?: boolean,
-};
+    }>;
+    availableTypes: string[];
+    filterOptions: FilterOptions;
+    next?: boolean;
+}
 
 class Dblog extends Component<Props> {
 
@@ -50,7 +53,7 @@ class Dblog extends Component<Props> {
         [`timestamp-${wid}`, timestamp],
         [
           `markup-${wid}`,
-          <Markup
+          <Markup key={String(wid)}
             content={`${
               messageFormattedPlain.length > 48
                 ? `${messageFormattedPlain.substring(0, 48)}…`
@@ -111,10 +114,10 @@ class Dblog extends Component<Props> {
         <select
           key="select-type"
           // label="Type"
-          multiple={true}
+          // multiple={true}
           size={this.props.availableTypes.length}
           onBlur={this.typeFilterHandler}
-          //selected={this.props.filterOptions.types}
+          // selected={this.props.filterOptions.types}
         >
           {this.props.availableTypes.map((type:string) => (
             <option value={type} key={type}>

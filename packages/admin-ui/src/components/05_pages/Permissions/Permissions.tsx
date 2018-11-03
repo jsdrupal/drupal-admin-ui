@@ -16,20 +16,20 @@ import { MESSAGE_SEVERITY } from '../../../constants/message_severity';
 import api from '../../../utils/api/api';
 
 interface Permission {
-  id: string,
-  title: string,
-  description: string | null,
-  provider_label: string,
-  provider: string,
-};
+  id: string;
+  title: string;
+  description: string | null;
+  provider_label: string;
+  provider: string;
+}
 
 interface Role {
   attributes: {
     id: string,
     is_admin: boolean,
     permissions: Permission[],
-  }
-};
+  };
+}
 
 export const filterPermissions = (input: string, permissions: Permission[]) =>
   permissions.filter(
@@ -43,28 +43,29 @@ let styles : {
   stickyBar: string,
   saveButton: string,
   searchInput: string,
-}
+};
 
 interface Props {
-  setMessage: (message: string, severity: string) => any,
-  clearMessage: () => any,
+  setMessage: (message: string, severity: string) => any;
+  clearMessage: () => any;
   match: {
     params: {
       role: string,
     }
-  }
-};
-interface State{
-  changedRoles: Role[], // TODO must lock down
-  loaded?: boolean,
-  roles: Role[],
-  rawPermissions: Permission[],
-  renderablePermissions: Permission[],
-  working: boolean,
-  err: string,
-};
+  };
+}
 
-const Permissions = class Permissions extends Component<Props, State> {
+interface State{
+  changedRoles: Role[];
+  loaded?: boolean;
+  roles: Role[];
+  rawPermissions: Permission[];
+  renderablePermissions: Permission[];
+  working: boolean;
+  err: string;
+}
+
+class Permissions extends Component<Props, State> {
 
   public state = {
     changedRoles: [],
@@ -136,7 +137,7 @@ const Permissions = class Permissions extends Component<Props, State> {
 
   public togglePermission = (permission: Permission, roleName: string, roles: Role[]): Role[] => {
     // @ts-ignore
-    const roleIndex = roles.map((role: Role) => role.attributes.id).indexOf(roleName);
+    const roleIndex = roles.map((roleItem: Role) => roleItem.attributes.id).indexOf(roleName);
     const role = roles[roleIndex];
     // @ts-ignore
     const index = role.attributes.permissions.indexOf(permission);
@@ -169,14 +170,16 @@ const Permissions = class Permissions extends Component<Props, State> {
           {
             key: `permissionGroup-${providerMachineName}`,
             colspan: roles.length + 1,
-            tds: [[`td-${providerMachineName}`, <b>{providerLabel}</b>]],
+            tds: [[`td-${providerMachineName}`,
+              <b key={`permissionGroup-${providerMachineName}`}>{providerLabel}</b>
+            ]],
           },
           ...permissions.map((permission: Permission) => ({
             key: `permissionGroup-${providerMachineName}-${permission.title}`,
             tds: [
               [
                 `td-${providerMachineName}-${permission.title}`,
-                <Fragment>
+                <Fragment key={`td-${providerMachineName}-${permission.title}`}>
                   <Markup content={permission.title} />
                   {permission['restrict access'] && (
                     <span>

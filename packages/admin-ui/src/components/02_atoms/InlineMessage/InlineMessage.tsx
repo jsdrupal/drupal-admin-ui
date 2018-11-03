@@ -26,14 +26,14 @@ const modifierClassMap: Map<MESSAGE_SEVERITY,string> = new Map([
   [MESSAGE_SEVERITY.ERROR, styles.error],
   [MESSAGE_SEVERITY.SUCCESS, styles.success],
   [MESSAGE_SEVERITY.WARNING, styles.warning],
-  [MESSAGE_SEVERITY.INFO, styles.info]
-  ]
+  [MESSAGE_SEVERITY.INFO, styles.info],
+],
 );
 
 interface Props {
-  message: string,
-  messageSeverity: MESSAGE_SEVERITY,
-};
+  message: string;
+  messageSeverity: MESSAGE_SEVERITY;
+}
 
 const Message = ({ message, messageSeverity }: Props) => (
   <div className={`${styles.message} ${modifierClassMap[messageSeverity]}`}>

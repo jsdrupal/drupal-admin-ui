@@ -28,18 +28,18 @@ interface Content {
   attributes: {
     nid: string,
     title: string,
-  }
-};
+  };
+}
 
 interface Props {
-  action: string,
-  actions: Action[],
-  checked: boolean[],
-  contentList: Content[],
-  dialogVisibility: boolean,
-  handleClose: () => void,
-  executeAction: () => void,
-};
+  action: string;
+  actions: Action[];
+  checked: boolean[];
+  contentList: Content[];
+  dialogVisibility: boolean;
+  handleClose: () => void;
+  executeAction: () => void;
+}
 
 const ConfirmationDialog = ({
   action,

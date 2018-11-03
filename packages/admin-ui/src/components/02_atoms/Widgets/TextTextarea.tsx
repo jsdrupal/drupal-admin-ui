@@ -15,9 +15,30 @@ let styles: {
 };
 
 interface Props extends WidgetProp {
-  value: Array<{value: string}> | {value: string},
-  required?: boolean,
+  value: Array<{value: string}> | {value: string};
+  required?: boolean;
 }
+
+const createValueFromString = (props: Props) =>
+  RichTextEditor.createValueFromString(
+    // @todo This should not be needed after https://github.com/jsdrupal/drupal-admin-ui/issues/195
+    (Array.isArray(props.value) &&
+      props.value.length &&
+      props.value[0].value) ||
+      // @ts-ignore
+      props.value.value ||
+      '',
+    'html',
+  );
+
+ const extractValueString = (props: Props) =>
+  (Array.isArray(props.value) &&
+    props.value.length &&
+    props.value[0].value) ||
+  // @ts-ignore
+  props.value.value ||
+  '';
+
 /**
  * Some basic wysiwyg editor based upon react-rte which is based upon draft.js.
  * This was designed to be as easiest as possible for the demo.
@@ -33,40 +54,19 @@ class TextTextarea extends React.Component<Props> {
     },
   };
 
-  // eslint-disable-next-line react/sort-comp
-  createValueFromString = (props: Props) =>
-    RichTextEditor.createValueFromString(
-      // @todo This should not be needed after https://github.com/jsdrupal/drupal-admin-ui/issues/195
-      (Array.isArray(props.value) &&
-        props.value.length &&
-        props.value[0].value) ||
-        // @ts-ignore
-        props.value.value ||
-        '',
-      'html',
-    );
-
-  extractValueString = (props: Props) =>
-    (Array.isArray(props.value) &&
-      props.value.length &&
-      props.value[0].value) ||
-    // @ts-ignore
-    props.value.value ||
-    '';
-
   state = {
-    value: this.createValueFromString(this.props),
-    valueString: this.extractValueString(this.props),
-  };
+      value: createValueFromString(this.props),
+      valueString: extractValueString(this.props),
+    };
 
   componentDidUpdate = (prevProps: Props) => {
     if (
       // @ts-ignore
       this.props.value.value !== prevProps.value.value &&
-      this.extractValueString(this.props) !== this.state.valueString
+      extractValueString(this.props) !== this.state.valueString
     ) {
       this.setState({
-        value: this.createValueFromString(this.props),
+        value: createValueFromString(this.props),
       });
     }
   };
@@ -87,7 +87,7 @@ class TextTextarea extends React.Component<Props> {
 
   render() {
     return (
-      <FormControl margin="normal" fullWidth required={this.props.required}>
+      <FormControl margin="normal" fullWidth={true} required={this.props.required}>
         <FormLabel classes={{ root: styles.label }}>
           {this.props.label}
         </FormLabel>
@@ -98,7 +98,7 @@ class TextTextarea extends React.Component<Props> {
         />
       </FormControl>
     );
-  };
+  }
 
 };
 

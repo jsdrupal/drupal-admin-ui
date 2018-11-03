@@ -26,28 +26,28 @@ const styles = {
 };
 
 interface SelectedItem {
-  label: string,
-  id: string,
-  type: any,
+  label: string;
+  id: string;
+  type: any;
 }
 
 interface Props extends WidgetProp {
-  classes: object, // TODO must lock down.
-  inputProps?: any,
-  required: boolean,
-  schema: SchemaProp,
+  classes: object; // TODO must lock down.
+  inputProps?: any;
+  required: boolean;
+  schema: SchemaProp;
   value: {
     data: [],
-  }
-};
+  };
+}
 
- interface State {
-   label: string
-   inputValue: string,
-   selectedItems: SelectedItem[],
+interface State {
+   label: string;
+   inputValue: string;
+   selectedItems: SelectedItem[];
    // TODO must lock this down.
-   suggestions: Map<any,any>
- };
+   suggestions: Map<any, any>;
+ }
 
 class EntityReferenceAutocomplete extends React.Component<Props, State> {
 
@@ -332,7 +332,6 @@ class EntityReferenceAutocomplete extends React.Component<Props, State> {
         margin="normal"
         required={this.props.required}
         classes={this.props.classes}
-        fullWidth
       >
         <Downshift
           inputValue={inputValue}
@@ -379,7 +378,7 @@ class EntityReferenceAutocomplete extends React.Component<Props, State> {
               {isOpen ? (
                 <Paper
                   className={`${styles.results} ${styles.fullWidth}`}
-                  square
+                  square={true}
                 >
                   {!!this.state.inputValue.length &&
                     Array.from(this.state.suggestions.values()).map(

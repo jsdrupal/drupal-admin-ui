@@ -3,12 +3,12 @@ import { Fragment } from 'react';
 import { Link } from 'react-router-dom';
 
 interface Props {
-  bundle: string,
-  title: string,
-  nid: string,
-};
+  bundle: string;
+  title: string;
+  nid: string;
+}
 
-const MessageSave = ({ bundle, title, nid } : Props) => (
+const MessageSave = ({ bundle, title, nid }: Props) => (
   <Fragment>
     <p>
       {bundle} <Link to={`/node/${nid}`}>{title}</Link> has been updated

@@ -3,15 +3,16 @@ import { ACTION_TYPE } from '../constants/action_type';
 import { ContentType } from '../constants/content_type';
 
 interface State {
-  contentList: ContentType[],
-  contentByNid: ContentType[],
+  contentList: ContentType[];
+  contentByNid: ContentType[];
   links: {
 
-  },
-  restorableContentAddByBundle: {},
-  restorableContentEditById: {},
-  user: ContentType[],
+  };
+  restorableContentAddByBundle: {};
+  restorableContentEditById: {};
+  user: ContentType[];
 }
+
 export const initialState: State = {
   contentList: [],
   contentByNid: [],

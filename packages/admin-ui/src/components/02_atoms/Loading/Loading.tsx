@@ -3,13 +3,13 @@ import * as React from 'react';
 
 let rotate = null;
 let styles: {
-  wrap:string,
-  peace:string,
+  wrap: string;
+  peace: string;
 };
 
 const Loading = () => (
   <div className={styles.wrap}>
-    <span className={styles.peace} role="img" aria-label="Peace Sign">
+    <span className={styles.peace} role={"img"} aria-label={"Peace Sign"}>
       ✌
     </span>
   </div>

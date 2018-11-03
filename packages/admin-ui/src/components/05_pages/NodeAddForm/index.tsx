@@ -15,20 +15,20 @@ import SchemaProp from '../NodeForm/SchemaProp';
 import { cleanupRelationships } from '../../../utils/api/content';
 
 interface Props {
-  bundle: string,
-  contentAdd: ({ payload: { content } }: any) => any,
-  entityTypeId: string,
-  schema?: SchemaProp | boolean,
-  requestSchema: ({ entityTypeId, bundle }: {entityTypeId:string, bundle:string}) => any,
-  requestUser: (uid: string) => any,
-  user?: object,
-};
+  bundle: string;
+  contentAdd: ({ payload: { content } }: any) => any;
+  entityTypeId: string;
+  schema?: SchemaProp | boolean;
+  requestSchema: ({ entityTypeId, bundle }: {entityTypeId:string, bundle:string}) => any;
+  requestUser: (uid: string) => any;
+  user?: object;
+}
 
 interface State {
-  content: {user: any},
-  entityTypeId: string,
-  user: any,
-};
+  content: {user: any};
+  entityTypeId: string;
+  user: any;
+}
 
 class NodeAddForm extends React.Component<Props, State> {
 

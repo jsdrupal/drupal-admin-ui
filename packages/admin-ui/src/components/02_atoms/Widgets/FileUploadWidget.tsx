@@ -51,78 +51,79 @@ const styles = {
   `,
 };
 
-interface FileItem{
-  type: string,
-  url: string,
-  id: string,
-  filename: string,
-};
+interface FileItem {
+  type: string;
+  url: string;
+  id: string;
+  filename: string;
+}
 
 interface FileItemSingle {
-  file: FileItem,
-};
+  file: FileItem;
+}
 
 interface FileItemMultiple {
-  id: string,
-  file: FileItem,
-};
+  id: string;
+  file: FileItem;
+}
 
 interface SelectedItemMultiple {
-  id: string,
-  file: FileItemMultiple[],
+  id: string;
+  file: FileItemMultiple[];
   meta: {
     alt: string,
-  },
-};
+  };
+}
 
 interface SelectedItemSingle {
-  id: string,
-  file: FileItemSingle,
+  id: string;
+  file: FileItemSingle;
   meta: {
     alt: string,
-  },
-};
+  };
+}
 
 interface Props {
-  bundle: string,
+  bundle: string;
   // TODO must lock this down
-  classes: any,
-  entityTypeId: string,
-  fieldName: string,
+  classes: any;
+  entityTypeId: string;
+  fieldName: string;
   inputProps: {
     file_extensions: string,
     // TODO should this be number?
     max_filesize: string,
-  },
-  label: string,
-  required: boolean,
+  };
+  label: string;
+  required: boolean;
   value: {
-    data: SelectedItemMultiple[] | SelectedItemSingle
-  },
+    data: SelectedItemMultiple[] | SelectedItemSingle,
+  };
   schema: {
     properties: {
-      data: {type: string}
+      data: {type: string},
     },
     maxItems: number,
-  },
-  onChange: ( {data }: {data: SelectedItemMultiple[] | SelectedItemSingle} ) => void,
-};
+  };
+  onChange: ( {data }: {data: SelectedItemMultiple[] | SelectedItemSingle} ) => void;
+}
 
 interface State {
-  selectedItems: SelectedItemMultiple[] | SelectedItemSingle,
+  selectedItems: SelectedItemMultiple[] | SelectedItemSingle;
   inputProps?: {
     file_extensions: string,
     // TODO should this be number?
     max_filesize: string,
-  },
+  };
   value?: {
     data: {
      file: FileItemMultiple[] | FileItemSingle,
      meta: {
        alt: string,
      },
-  }},
-};
+   },
+  };
+}
 
 class FileUploadWidget extends React.Component<Props, State> {
 

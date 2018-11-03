@@ -1,14 +1,14 @@
 export interface Schema {
-  default?: any,
-  description?: string,
+  default?: any;
+  description?: string;
   // TODO is this recursion justified.
-  properties?: {[key: string]: Schema},
-  items?: {},
-  maxItems?: number,
-  required?: string[],
-  title?: string,
-  type: string,
-};
+  properties?: {[key: string]: Schema};
+  items?: {};
+  maxItems?: number;
+  required?: string[];
+  title?: string;
+  type: string;
+}
 
 const createEntity = (schema: Schema): any=> {
   if (typeof schema.default !== 'undefined') {

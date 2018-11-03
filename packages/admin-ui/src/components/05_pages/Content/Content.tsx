@@ -85,34 +85,34 @@ const styles = {
 };
 
 interface State {
-  action?: string,
-  contentTypes?:  ContentType[],
-  checked: boolean[],
-  dialogVisibility: boolean,
-  status: string,
+  action?: string;
+  contentTypes?:  ContentType[];
+  checked: boolean[];
+  dialogVisibility: boolean;
+  status: string;
   sort: {
     path: string,
     direction: Direction,
-  },
+  };
   page: {
     offset: number,
     limit: number,
-  }
-  title: string,
-};
+  };
+  title: string;
+}
 
 interface ContentProps extends RouteComponentProps {
   // TODO must fix this string body
-  contentTypes: ContentType[],
-  requestContent: (state: State) => void,
-  requestContentTypes: () => void,
-  contentList: [],
-  requestActions: () => void,
-  actionExecute: (action: string, nids: string[]) => any,
-  actions: Action[],
-  includes: {'user--user': object},
-  links: {next: string},
-};
+  contentTypes: ContentType[];
+  requestContent: (state: State) => void;
+  requestContentTypes: () => void;
+  contentList: [];
+  requestActions: () => void;
+  actionExecute: (action: string, nids: string[]) => any;
+  actions: Action[];
+  includes: {'user--user': object};
+  links: {next: string};
+}
 
 class Content extends Component<ContentProps, State> {
 

@@ -3,13 +3,13 @@ import { ContentType } from '../constants/content_type';
 import { MenuLink } from '../constants/menu_link';
 
 export interface Action {
-  data: {},
-  type: ACTION_TYPE,
-  id: string,
+  data: {};
+  type: ACTION_TYPE;
+  id: string;
   attributes: {
     id: string,
     label: string,
-  }
+  };
   payload: {
     actions: {
       data: Array<{}>,
@@ -19,18 +19,18 @@ export interface Action {
     content: {
       id: string,
       attributes: {
-        nid: string
+        nid: string;
       },
-    }
+    };
     contentList: {
       data: Array<{
-        id: string,
-        type:string,
+        id: string;
+        type: string;
       }>
       links: {},
       included: Array<{
-        id: string,
-        type: string,
+        id: string;
+        type: string;
       }>,
     }
     contentTypes: {
@@ -44,7 +44,7 @@ export interface Action {
           message_formatted_plain: string,
           timestamp: number,
           type: string,
-        }
+        };
       }>,
       links: string[],
     },
@@ -52,7 +52,7 @@ export interface Action {
     entity: {
       data: {
         id: string,
-      }
+      };
     }
     entityId: string,
     entitySchema: {},
@@ -61,8 +61,8 @@ export interface Action {
     entity_type: string,
     formDisplaySchema: {},
     fieldSchema: Array<{
-      attributes:{
-        field_name: string,
+      attributes: {
+        field_name: string;
       }}>,
     fieldStorageConfig: {},
     menuLinks: MenuLink[],
@@ -74,7 +74,7 @@ export interface Action {
     taxonomyTerms: {},
     vocabulary: {},
     user: {},
-  }
-};
+  };
+}
 
 export default Action;

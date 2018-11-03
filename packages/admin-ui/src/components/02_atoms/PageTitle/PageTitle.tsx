@@ -11,8 +11,8 @@ const styles = {
 };
 
 interface PageTitleProps {
-  children: React.ReactNode,
-};
+  children: React.ReactNode;
+}
 
 const PageTitle = ({ children }: PageTitleProps) => (
   <Typography variant="h4" classes={{ root: styles.title }}>

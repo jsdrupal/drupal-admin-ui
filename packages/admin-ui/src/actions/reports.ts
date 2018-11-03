@@ -31,7 +31,7 @@ export function* loadDblog({ payload: { options } }: any) {
       filter: {
         ...(options.types && Object.keys(options.types).length
           ? options.types.reduce(
-              (acc: any, cur:string) => ({
+              (acc: any, cur: string) => ({
                 ...acc,
                 [`type${cur}`]: {
                   condition: {
@@ -86,6 +86,7 @@ export function* loadDblog({ payload: { options } }: any) {
       },
     });
   } catch (error) {
+    // @ts-ignore
     const errorMessage = yield call(ApiError.errorToHumanString, error);
     yield put(setErrorMessage(errorMessage));
   } finally {
@@ -93,6 +94,6 @@ export function* loadDblog({ payload: { options } }: any) {
   }
 }
 
-export const watchDblogRequests = function* watchDblogRequests() {
+export function* watchDblogRequests() {
   yield takeLatest(ACTION_TYPE.DBLOG_COLLECTION_REQUEST, loadDblog);
-};
+}

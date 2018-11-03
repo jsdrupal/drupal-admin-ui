@@ -33,35 +33,35 @@ interface Entity {
   data: {
     attributes: object,
     relationships: object,
-  }
+  };
 }
 
 interface Props {
-  schema: SchemaProp,
-  onSave: (data: object) => any,
-  entityTypeId: string,
-  bundle: string,
-  requestUiSchema: (entityTypeId: string, bundle: string) => any,
-  uiSchema: {fieldSchema: Schema[], fieldStorageConfig: Schema[], formDisplaySchema: Schema[]}
-  restorableEntity: Entity,
-  setErrorMessage: (message: string) => any,
-  onChange: (bundle: string, entity: Entity) => any,
-  entity: Entity,
-};
+  schema: SchemaProp;
+  onSave: (data: object) => any;
+  entityTypeId: string;
+  bundle: string;
+  requestUiSchema: (entityTypeId: string, bundle: string) => any;
+  uiSchema: {fieldSchema: Schema[], fieldStorageConfig: Schema[], formDisplaySchema: Schema[]};
+  restorableEntity: Entity;
+  setErrorMessage: (message: string) => any;
+  onChange: (bundle: string, entity: Entity) => any;
+  entity: Entity;
+}
 
 interface State {
-  entity: Entity,
-  restored: boolean,
+  entity: Entity;
+  restored: boolean;
   schema: {
     uiSchema: Schema[],
-  },
-};
+  };
+}
 
 class NodeForm extends React.Component<Props,State> {
 
   static defaultProps = {
-    //schema: false,
-    //uiSchema: false,
+    // schema: false,
+    // uiSchema: false,
     restorableEntity: null,
     onChange: () => {},
   };
@@ -274,7 +274,7 @@ class NodeForm extends React.Component<Props,State> {
         <Snackbar
           anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
           autoHideDuration={10000}
-          open
+          open={true}
           data-nightwatch="restore-content-snackbar"
           ContentProps={{
             'aria-describedby': 'message-id',

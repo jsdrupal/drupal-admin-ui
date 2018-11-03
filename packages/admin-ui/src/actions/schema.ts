@@ -10,7 +10,6 @@ import api from '../utils/api/api';
 import { ApiError } from '../utils/api/errors';
 import { setErrorMessage } from './application';
 
-
 export const requestUiSchema = ({ entityTypeId, bundle }: {entityTypeId: string, bundle: string}) => ({
   type: ACTION_TYPE.UI_SCHEMA_REQUESTED,
   payload: { entityTypeId, bundle },
@@ -55,6 +54,7 @@ function* loadUiSchema(action: any) {
       },
     });
   } catch (error) {
+    // @ts-ignore
     const errorMessage = yield ApiError.errorToHumanString(error);
     yield put(setErrorMessage(errorMessage));
   } finally {
@@ -62,7 +62,7 @@ function* loadUiSchema(action: any) {
   }
 }
 
-export const requestSchema = ({ entityTypeId, bundle } : {entityTypeId: string, bundle: string}) => ({
+export const requestSchema = ({ entityTypeId, bundle }: {entityTypeId: string, bundle: string}) => ({
   type: ACTION_TYPE.SCHEMA_REQUESTED,
   payload: { entityTypeId, bundle },
 });
@@ -87,6 +87,7 @@ function* loadSchema(action: any) {
       },
     });
   } catch (error) {
+    // @ts-ignore
     const errorMessage = yield ApiError.errorToHumanString(error);
     yield put(setErrorMessage(errorMessage));
   } finally {
@@ -94,7 +95,7 @@ function* loadSchema(action: any) {
   }
 }
 
-export const requestSchemaByEntityId = ({ entityTypeId, entityId } : {entityTypeId: string, entityId: string}) => ({
+export const requestSchemaByEntityId = ({ entityTypeId, entityId }: {entityTypeId: string, entityId: string}) => ({
   type: ACTION_TYPE.SCHEMA_BY_ENTITY_ID_REQUESTED,
   payload: { entityTypeId, entityId },
 });

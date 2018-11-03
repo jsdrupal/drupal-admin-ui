@@ -5,8 +5,8 @@ import InlineMessage from '../../02_atoms/InlineMessage/InlineMessage';
 import { MESSAGE_SEVERITY } from '../../../constants/message_severity';
 
 interface State {
-  error: Error,
-};
+  error: Error;
+}
 
 class ErrorBoundary extends React.Component<{}, State> {
   constructor(...args: any) {

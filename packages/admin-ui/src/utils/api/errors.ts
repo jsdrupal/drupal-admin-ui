@@ -12,14 +12,16 @@ class ApiError extends Error {
   response: any;
   message: string;
 
-  public static errorToHumanString(error: ApiError) {
-    if (error.name === 'ApiError') {
-      return ApiError.toHumanString(error);
-    }
-    return error.toString();
+  constructor(status: number, statusText: string, response: any) {
+    super();
+    this.name = 'ApiError';
+    this.status = status;
+    this.statusText = statusText;
+    this.response = response;
+    this.message = `${status} - ${statusText}`;
   }
 
-  public static async toHumanString(error: ApiError) {
+  async toHumanString(error: ApiError) {
     try {
       switch (error.status) {
         case 403:
@@ -45,14 +47,14 @@ class ApiError extends Error {
       return error.toString();
     }
   }
-  constructor(status: number, statusText: string, response: any) {
-    super();
-    this.name = 'ApiError';
-    this.status = status;
-    this.statusText = statusText;
-    this.response = response;
-    this.message = `${status} - ${statusText}`;
+
+  public errorToHumanString(error: ApiError) {
+    if (error.name === 'ApiError') {
+      return this.toHumanString(error);
+    }
+    return error.toString();
   }
+
 }
 
 // eslint-disable-next-line import/prefer-default-export

@@ -4,8 +4,8 @@ import * as React from 'react';
 import WidgetProp from '../../05_pages/NodeForm/WidgetProp';
 
 interface Prop extends WidgetProp {
-  label: string,
-  classes?: object, // TODO must lock down.
+  label: string;
+  classes?: object; // TODO must lock down.
   inputProps: {
     max: number,
     min: number,
@@ -13,10 +13,10 @@ interface Prop extends WidgetProp {
     suffix: string,
     prefix: string,
     unsigned?: boolean,
-  }
-  value: number,
-  required?: boolean,
-};
+  };
+  value: number;
+  required?: boolean;
+}
 
 const NumberTextfield = ({
   label,

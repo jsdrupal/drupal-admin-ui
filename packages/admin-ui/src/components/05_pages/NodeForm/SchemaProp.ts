@@ -1,14 +1,14 @@
-export const lazyFunction = (f: any) => (props: any, propName: string, componentName: string, ...rest:any) =>
-  f(props, propName, componentName, ...rest);
+// export lazyFunction(f: any) => (props: any, propName: string, componentName: string, ...rest:any) =>
+//   f(props, propName, componentName, ...rest);
 
-let schemaType: object;
-export const lazySchemaType = lazyFunction(() => schemaType);
+// let schemaType: object;
+// export lazySchemaType = lazyFunction(() => schemaType);
 
 interface SchemaProp {
-  type: string,
-  title: string,
-  description: string,
-  maxItems: number,
+  type: string;
+  title: string;
+  description: string;
+  maxItems: number;
   properties: {
     // TODO find a  better way
     lazyFunction:(props: any, propName: string, componentName: string, rest: any) => any,
@@ -34,7 +34,7 @@ interface SchemaProp {
         required: boolean[],
       }
     }
-  }
-};
+  };
+}
 
 export default SchemaProp;

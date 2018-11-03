@@ -3,49 +3,49 @@ import { ApiError } from './errors';
 import { QueryString } from '../../constants/query_string';
 
 interface Node {
-  body: {},
+  body: {};
   attributes: {
     nid: string,
     revision_timestamp: number,
     changed: boolean,
-  },
+  };
   links?: {
     self?: string,
-  }
+  };
   relationships: {
     revision_uid: string,
     type: string,
     uid: string,
-  }
-  id: string,
-  type: string,
+  };
+  id: string;
+  type: string;
 }
 
  interface Parameters {
-  body?: {},
-  bundle?: string,
-  entityId?: string,
-  entityTypeId?: string,
-  fileName?: string,
-  fieldName?: string,
-  node?: Node,
+  body?: {};
+  bundle?: string;
+  entityId?: string;
+  entityTypeId?: string;
+  fileName?: string;
+  fieldName?: string;
+  node?: Node;
   role?: {
     id: string,
-  }
-  type?: string,
-};
+  };
+  type?: string;
+}
 
  interface Options {
-  body?: {},
-  credentials?: string,
+  body?: {};
+  credentials?: string;
   headers?: {
     Accept?: string,
     'X-CSRF-Token'?: string,
     'Content-Type'?: string,
-  },
-  text?: boolean,
-  method?: string,
-};
+  };
+  text?: boolean;
+  method?: string;
+}
 
 async function api(
   endpoint: string,

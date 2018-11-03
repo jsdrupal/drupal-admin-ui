@@ -1,8 +1,8 @@
 export interface MenuLink {
-  link:{
+  link: {
     url: string,
     title: string,
-  }
-};
+  };
+}
 
 export default MenuLink;

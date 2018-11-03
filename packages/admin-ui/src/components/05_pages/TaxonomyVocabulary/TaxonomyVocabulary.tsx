@@ -16,26 +16,26 @@ import MenuItem from '@material-ui/core/MenuItem/MenuItem';
 
 import PageTitle from '../../02_atoms/PageTitle';
 
-interface taxonomyVocabulary {
-  id: string,
+interface TaxonomyVocabularyElement {
+  id: string;
   attributes: {
     name: string,
     description: string,
     vid: string,
-  }
-};
+  };
+}
 
 interface Props {
-  requestTaxonomyVocabulary: () => any,
-  taxonomyVocabulary?: taxonomyVocabulary[],
-};
+  requestTaxonomyVocabulary: () => any;
+  taxonomyVocabulary?: TaxonomyVocabularyElement[];
+}
 
 interface State {
-  activeLink: string,
+  activeLink: string;
   taxonomy: {
-    taxonomyVocabulary: taxonomyVocabulary[],
-  }
-};
+    taxonomyVocabulary: TaxonomyVocabularyElement[],
+  };
+}
 
 export default class TaxonomyVocabulary extends React.Component<Props, State> {
 
@@ -60,7 +60,7 @@ export default class TaxonomyVocabulary extends React.Component<Props, State> {
       {/* @todo Extract the select element with links out into a component */}
       <Select
         value=""
-        autoWidth
+        autoWidth={true}
         onChange={e => this.setState({ activeLink: e.target.value })}
       >
         <MenuItem value={`/admin/structure/taxonomy/manage/${vid}/overview`}>

@@ -19,19 +19,19 @@ let styles : {
 };
 
 interface Props {
-  nid: string,
-  requestSingleContent: (nid: string) => any,
-  contentSave: () => any,
-  entityTypeId: string,
+  nid: string;
+  requestSingleContent: (nid: string) => any;
+  contentSave: () => any;
+  entityTypeId: string;
   entity: {
     attributes: {
       title: string,
     },
     type: string,
-  },
-  requestSchemaByEntityId: ({entityTypeId, entityId}:{entityTypeId: string, entityId: string}) => any,
-  schema: SchemaProp | boolean,
-};
+  };
+  requestSchemaByEntityId: ({entityTypeId, entityId}:{entityTypeId: string, entityId: string}) => any;
+  schema: SchemaProp | boolean;
+}
 
 class NodeEditForm extends React.Component<Props> {
   componentDidMount() {

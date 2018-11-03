@@ -1,50 +1,50 @@
-interface filterElemA {
-  bundle?: string,
-  entity_type?: string
+interface FilterElemA {
+  bundle?: string;
+  entity_type?: string;
   condition?: {
     operator?: string,
     path: string,
     value: string,
-  },
-  mode?: string,
+  };
+  mode?: string;
   status?: {
     value: number,
-  }
-  targetEntityType?: string,
+  };
+  targetEntityType?: string;
   title?: {
     path: string,
     operator: string,
     value: string,
-  }
-};
+  };
+}
 
-interface filterElemB {
+interface FilterElemB {
   id: {
     condition: {
       operator: string,
       path: string,
       value: string[],
-    }
-  }
-};
+    },
+  };
+}
 
-interface filterElemC {
+interface FilterElemC {
   name: {
     condition: {
       operator: string,
       path: string,
       value: string,
-    }
-  }
-};
+    };
+  };
+}
 
 export interface QueryString {
-  _describes?: string,
-  _format?: string,
-  filter?: filterElemA | filterElemB | filterElemC,
-  page?: {},
-  sort?: {},
-  include?: string,
-};
+  _describes?: string;
+  _format?: string;
+  filter?: FilterElemA | FilterElemB | FilterElemC;
+  page?: {};
+  sort?: {};
+  include?: string;
+}
 
 export default QueryString;

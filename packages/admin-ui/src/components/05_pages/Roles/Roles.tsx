@@ -9,12 +9,12 @@ import { requestRoles } from '../../../actions/roles';
 import { Table, TBody, THead } from '../../01_subatomics/Table/Table';
 
 interface Props {
-  requestRoles: () => any,
-  cancelTask: () => any,
-  roles: [],
-};
+  requestRoles: () => any;
+  cancelTask: () => any;
+  roles: [];
+}
 
-export const Roles = class Roles extends Component<Props> {
+export class Roles extends Component<Props> {
   public componentDidMount() {
     this.props.requestRoles();
   }
@@ -23,14 +23,14 @@ export const Roles = class Roles extends Component<Props> {
     this.props.cancelTask();
   }
 
-  public createTableRows = (roles: []) =>
+  public createTableRows = (roles = []) =>
     roles.map(({ attributes: { label, id } }: {attributes: {label: string, id: string}}) => ({
       key: `row-${label}`,
       tds: [
         [`td-${label}`, label],
         [
           `td-${label}-actions`,
-          <Link to={`/admin/people/permissions/${id}`}>Edit Permissions</Link>,
+          <Link key={label} to={`/admin/people/permissions/${id}`}>Edit Permissions</Link>,
         ],
       ],
     }));

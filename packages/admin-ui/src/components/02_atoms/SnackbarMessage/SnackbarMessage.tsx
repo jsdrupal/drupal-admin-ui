@@ -50,12 +50,12 @@ const styles = {
 };
 
 interface Props {
-  open: boolean,
-  message: string | React.ReactNode,
-  messageSeverity: MESSAGE_SEVERITY,
-  onClose: () => any,
-  duration?: number,
-};
+  open: boolean;
+  message: string | React.ReactNode;
+  messageSeverity: MESSAGE_SEVERITY;
+  onClose: () => any;
+  duration?: number;
+}
 
 const SnackbarMessage = (props: Props) => {
   const Icon = variantIcon[props.messageSeverity];

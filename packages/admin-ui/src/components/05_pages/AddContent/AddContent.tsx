@@ -25,9 +25,9 @@ const styles = {
 interface Props {
   // TODO must lock down.
   // @ts-ignore
-  contentTypes: Map<string, ContentType>,
-  requestContentTypes: () => void,
-};
+  contentTypes: Map<string, ContentType>;
+  requestContentTypes: () => void;
+}
 
 export default class extends Component<Props> {
   public componentDidMount() {
