@@ -75,6 +75,7 @@ export interface Action {
     taxonomyTerms: {};
     vocabulary: {};
     user: {};
+    uid: string;
   };
 }
 

@@ -17,7 +17,7 @@ import { contentAdd } from '../../../actions/content';
 import { requestUiSchema } from '../../../actions/schema';
 import { setErrorMessage } from '../../../actions/application';
 
-import { createUISchema, sortUISchemaFields, Schema } from '../../../utils/api/schema';
+import { createUISchema, sortUISchemaFields, Schema, FieldStorageConfig } from '../../../utils/api/schema';
 
 import widgets from './Widgets';
 
@@ -42,7 +42,7 @@ interface Props {
   entityTypeId: string;
   bundle: string;
   requestUiSchema: (entityTypeId: string, bundle: string) => any;
-  uiSchema: {fieldSchema: Schema[], fieldStorageConfig: Schema[], formDisplaySchema: Schema[]};
+  uiSchema: {fieldSchema: Schema[], fieldStorageConfig: FieldStorageConfig[], formDisplaySchema: Schema[]};
   restorableEntity: Entity;
   setErrorMessage: (message: string) => any;
   onChange: (bundle: string, entity: Entity) => any;
@@ -57,7 +57,7 @@ interface State {
   };
 }
 
-class NodeForm extends React.Component<Props,State> {
+class NodeForm extends React.Component<Props, State> {
 
   static defaultProps = {
     // schema: false,

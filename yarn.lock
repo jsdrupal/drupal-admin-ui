@@ -9538,7 +9538,7 @@ rc@^1.0.1, rc@^1.1.6, rc@^1.2.7:
     minimist "^1.2.0"
     strip-json-comments "~2.0.1"
 
-react-axe@^3.0.1:
+react-axe@^3.0.2:
   version "3.0.2"
   resolved "https://registry.yarnpkg.com/react-axe/-/react-axe-3.0.2.tgz#91e4265b665dd1f45cf3d0254a90c72ff6fd88cb"
   integrity sha512-cYuxIyOVhZ0kF54V4LMTE33B/ATTzcZtIlU7F7XhP7/gBDWvkxsfjq1oAMLolvI2OhNNivNFEIIJa/rhYj96Pw==

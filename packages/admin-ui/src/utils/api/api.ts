@@ -2,7 +2,7 @@ import * as qs from 'qs';
 import { ApiError } from './errors';
 import { QueryString } from '../../constants/query_string';
 
-interface Node {
+export interface Node {
   body: {};
   attributes: {
     nid: string;
@@ -47,7 +47,7 @@ interface Options {
   method?: string;
 }
 
-async function api(
+export async function api(
   endpoint: string,
   {
     queryString = {},
@@ -131,17 +131,14 @@ async function api(
     case 'node:delete': {
       // Set the type to the right value for jsonapi to process.
       // @todo Ideally this should not be differnet in the first place.
-      // @ts-ignore
-      parameters.node = {
-        ...parameters.node,
-        // @ts-ignore
-        type: parameters.node.type.includes('--')
-          ? // @ts-ignore
-            parameters.node.type
-          : // @ts-ignore
-            `node--${parameters.node.type}`,
-      };
-
+      if (parameters.node) {
+        parameters.node = {
+          ...parameters.node,
+          type: parameters.node.type.includes('--')
+            ? parameters.node.type
+            : `node--${parameters.node.type}`,
+        };
+      }
       // @ts-ignore
       const deleteToken = await api('csrf_token');
       // @todo Delete requests sadly return non json.

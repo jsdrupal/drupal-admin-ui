@@ -47,10 +47,17 @@ const createEntity = (schema: Schema): any => {
   }
 };
 
+export interface FieldStorageConfig {
+  attributes: {
+    field_name: string;
+    settings: {};
+  };
+}
+
 const createUISchema = (
   fieldSchema: Schema[],
   formDisplaySchema: Schema[],
-  fieldStorageConfig: Schema[],
+  fieldStorageConfig: FieldStorageConfig[],
   widgets: object,
 ) =>
   Array.from(
