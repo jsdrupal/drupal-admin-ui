@@ -154,7 +154,7 @@ const Permissions = class Permissions extends Component {
               ...roles.map(({ attributes }, index) => [
                 `td-${providerMachineName}-${permission.title}-${index}-cb`,
                 attributes.is_admin && attributes.id === 'administrator' ? (
-                  <input type="checkbox" checked disabled="disabled" />
+                  <input type="checkbox" checked disabled={true} />
                 ) : (
                   <input
                     type="checkbox"
