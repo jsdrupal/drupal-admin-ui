@@ -1,0 +1,20 @@
+{
+  "name": "@jsdrupal/extension-points-bundler",
+  "version": "0.1.0",
+  "license": "MIT",
+  "private": true,
+  "bin": {
+    "js-drupal-build": "./index.js"
+  },
+  "dependencies": {
+    "@babel/core": "^7.1.2",
+    "@babel/plugin-proposal-class-properties": "^7.1.0",
+    "@babel/preset-env": "^7.1.0",
+    "@babel/preset-react": "^7.0.0",
+    "babel-loader": "^8.0.4",
+    "babel-minify-webpack-plugin": "^0.3.1",
+    "config": "^2.0.1",
+    "webpack": "^4.23.1",
+    "webpack-cli": "^3.1.2"
+  }
+}

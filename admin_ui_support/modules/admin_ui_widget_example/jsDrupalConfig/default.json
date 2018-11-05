@@ -1,0 +1,6 @@
+{
+  "entry": {
+    "options_buttons_widget": "./js/src/options_buttons.widget.js"
+  },
+  "mode": "production"
+}
