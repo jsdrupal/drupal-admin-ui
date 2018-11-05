@@ -17,7 +17,7 @@ import MultipleFields from '../../02_atoms/MultipleFields/MultipleFields';
 import { contentAdd } from '../../../actions/content';
 import { requestUiSchema } from '../../../actions/schema';
 import {
-  requestComponents,
+  requestComponentList,
   setErrorMessage,
 } from '../../../actions/application';
 
@@ -45,7 +45,7 @@ class NodeForm extends React.Component {
     }),
     setErrorMessage: PropTypes.func.isRequired,
     onChange: PropTypes.func,
-    requestComponents: PropTypes.func.isRequired,
+    requestComponentList: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
@@ -66,7 +66,7 @@ class NodeForm extends React.Component {
     });
 
     this.calculateState(this.props, this.state, state => this.setState(state));
-    this.props.requestComponents();
+    this.props.requestComponentList();
   }
 
   componentDidUpdate() {
@@ -366,6 +366,6 @@ export default connect(
     requestUiSchema,
     contentAdd,
     setErrorMessage,
-    requestComponents,
+    requestComponentList,
   },
 )(NodeForm);

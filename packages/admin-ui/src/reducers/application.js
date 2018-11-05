@@ -13,7 +13,7 @@ import {
   MENU_LOADED,
   CONTENT_TYPES_LOADED,
   ACTIONS_LOADED,
-  COMPONENTS_LOADED,
+  COMPONENT_LIST_LOADED,
 } from '../actions/application';
 
 export const initialState = {
@@ -151,7 +151,7 @@ export default (state = initialState, action) => {
         actions: action.payload.actions.data,
       };
     }
-    case COMPONENTS_LOADED: {
+    case COMPONENT_LIST_LOADED: {
       return {
         ...state,
         components: action.payload.components,
