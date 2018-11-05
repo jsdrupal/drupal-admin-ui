@@ -44,11 +44,12 @@ export const localStorageName = 'drupalAdminUiReduxState';
  */
 const restoreState = () => {
   let storedState = {};
+  let stringifiedState = '';
   if (typeof window === 'object') {
     try {
       // Test for Safari private browsing mode. This will throw an error if it can't set an item.
       localStorage.setItem('localStorageTest', true);
-      storedState = localStorage.getItem(localStorageName) || '{}';
+      stringifiedState = localStorage.getItem(localStorageName) || '';
     } catch (e) {
       // In case like Safari private browing mode we don't support any restoring.
       // Also note: enzyme has window but no Cookie set.
@@ -60,7 +61,7 @@ const restoreState = () => {
   }
 
   try {
-    storedState = JSON.parse(storedState);
+    storedState = JSON.parse(stringifiedState);
   } catch (e) {
     storedState = {};
   }
