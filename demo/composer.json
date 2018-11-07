@@ -22,7 +22,7 @@
         "justafish/drupal-admin-ui-support": "dev-master"
     },
     "require-dev": {
-        "webflo/drupal-core-require-dev": "~8.6",
+        "webflo/drupal-core-require-dev": "~8.7",
         "drush/drush": "^9.2"
     },
     "minimum-stability": "dev",
