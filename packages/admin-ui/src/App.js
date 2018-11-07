@@ -43,8 +43,8 @@ export const localStorageName = 'drupalAdminUiReduxState';
  * Restore from local storage.
  */
 const restoreState = () => {
-  const storedState;
-  const stringifiedState;
+  let storedState;
+  let stringifiedState;
   if (typeof window === 'object') {
     try {
       // Test for Safari private browsing mode. This will throw an error if it can't set an item.
