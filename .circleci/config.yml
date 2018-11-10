@@ -125,13 +125,12 @@ jobs:
               yarn workspace admin-ui test:functional
               cd ~/project/demo
               ./vendor/bin/phpunit -c docroot/core --log-junit reports/phpunit.xml docroot/modules/contrib/drupal-admin-ui-support
-
         - store_test_results:
-            path: ~/project/demo/drupal-admin-ui/reports/nightwatch
+            path: ~/project/packages/admin-ui/reports/nightwatch
         - store_artifacts:
-            path: ~/project/demo/drupal-admin-ui/reports/nightwatch
+            path: ~/project/packages/admin-ui/reports/nightwatch
         - store_test_results:
-            path: ~/project/demo/reports
+            path: ~/project/reports
 
   dist:
     executor:
