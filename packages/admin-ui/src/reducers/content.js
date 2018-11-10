@@ -39,7 +39,7 @@ export default (state = initialState, action) => {
         ...state,
         restorableContentEditById: {
           ...state.restorableContentEditById,
-          [action.payload.entity.data.id]: action.payload.entity,
+          [action.payload.entity.id]: action.payload.entity,
         },
       };
     case CONTENT_ADD:
