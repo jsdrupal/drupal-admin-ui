@@ -53,10 +53,10 @@ class NodeAddForm extends React.Component {
     // Set default `Created On` attribute.
     const local = new Date();
     local.setMinutes(local.getMinutes() - local.getTimezoneOffset());
-    entity.data.attributes.created = Math.round(+local / 1000);
+    entity.attributes.created = Math.round(+local / 1000);
 
     // Set default `Authored By` relationship.
-    entity.data.relationships.uid.data = { ...this.props.user };
+    entity.relationships.uid.data = { ...this.props.user };
 
     return entity;
   };

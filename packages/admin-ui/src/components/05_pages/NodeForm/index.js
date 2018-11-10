@@ -38,9 +38,7 @@ class NodeForm extends React.Component {
       }),
       PropTypes.bool,
     ]),
-    restorableEntity: PropTypes.shape({
-      data: PropTypes.object,
-    }),
+    restorableEntity: PropTypes.object,
     setErrorMessage: PropTypes.func.isRequired,
     onChange: PropTypes.func,
   };
@@ -73,12 +71,10 @@ class NodeForm extends React.Component {
     this.setState(
       prevState => ({
         entity: {
-          data: {
-            ...prevState.entity.data,
-            attributes: {
-              ...prevState.entity.data.attributes,
-              [fieldName]: data,
-            },
+          ...prevState.entity,
+          attributes: {
+            ...prevState.entity.attributes,
+            [fieldName]: data,
           },
         },
       }),
@@ -95,29 +91,20 @@ class NodeForm extends React.Component {
           : `The following field is missing, ${missingFields.join('')}.`,
       );
     } else {
-      this.props.onSave(this.state.entity.data);
+      this.props.onSave(this.state.entity);
     }
   };
 
   onRelationshipChange = fieldName => data => {
     // Support widgets with multiple cardinality.
-    let fieldData;
-    if (typeof data.data !== 'undefined') {
-      fieldData = data.data;
-    } else {
-      fieldData = Object.values(data);
-    }
+    const fieldData = Object.values(data);
     this.setState(
       prevState => ({
         entity: {
-          data: {
-            ...prevState.entity.data,
-            relationships: {
-              ...prevState.entity.data.relationships,
-              [fieldName]: {
-                data: fieldData,
-              },
-            },
+          ...prevState.entity,
+          relationships: {
+            ...prevState.entity.relationships,
+            [fieldName]: fieldData,
           },
         },
       }),
@@ -126,15 +113,15 @@ class NodeForm extends React.Component {
   };
 
   getSchemaInfo = (schema, fieldName) =>
-    schema.properties.data.properties.attributes.properties[fieldName] ||
-    schema.properties.data.properties.relationships.properties[fieldName];
+    schema.properties.attributes.properties[fieldName] ||
+    schema.properties.relationships.properties[fieldName];
 
   resolveMissingRequiredFields = () => {
     const unavailableFields = ['nid', 'uuid', 'vid', 'path'];
-    const requiredFields = this.props.schema.properties.data.properties.attributes.required.filter(
+    const requiredFields = this.props.schema.properties.attributes.required.filter(
       field => !unavailableFields.includes(field),
     );
-    return Object.entries(this.state.entity.data.attributes)
+    return Object.entries(this.state.entity.attributes)
       .filter(([fieldName]) => requiredFields.includes(fieldName))
       .filter(([fieldName, value]) => {
         // @todo Ideally the schema would identify the main property for us.
@@ -176,7 +163,7 @@ class NodeForm extends React.Component {
     };
 
     // Just contain values which are in the ui metadata.
-    state.entity.data.attributes = Object.entries(state.entity.data.attributes)
+    state.entity.attributes = Object.entries(state.entity.attributes)
       .filter(([key]) =>
         Object.keys(prevProps.uiSchema.formDisplaySchema)
           .concat(['type'])
@@ -196,7 +183,7 @@ class NodeForm extends React.Component {
     const {
       attributes,
       relationships,
-    } = this.props.schema.properties.data.properties;
+    } = this.props.schema.properties;
 
     const propType =
       (attributes.properties[fieldName] && 'attributes') ||
@@ -210,13 +197,13 @@ class NodeForm extends React.Component {
       classes: {
         root: styles.widgetRoot,
       },
-      value: this.state.entity.data[propType][fieldName],
+      value: this.state.entity[propType][fieldName],
       label: fieldSchema && fieldSchema.title,
       schema: fieldSchema,
       onChange: (propType === 'attributes'
         ? this.onAttributeChange
         : this.onRelationshipChange)(fieldName),
-      required: this.props.schema.properties.data.properties.attributes.required.includes(
+      required: this.props.schema.properties.attributes.required.includes(
         fieldName,
       ),
       inputProps,
@@ -227,8 +214,7 @@ class NodeForm extends React.Component {
     const hasMultipleDeltas =
       (fieldSchema.type && fieldSchema.type === 'array') ||
       (fieldSchema.properties &&
-        fieldSchema.properties.data &&
-        fieldSchema.properties.data.type === 'array');
+        fieldSchema.properties.type === 'array');
 
     return hasMultipleDeltas && !widgetIsMultiple ? (
       <MultipleFields component={widgetComponent} {...widgetProps} />
