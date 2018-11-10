@@ -17,6 +17,9 @@
       "aspects": [ "noHref" ]
     }],
     "jsx-a11y/label-has-for": 0,
-    "no-param-reassign": [2, { "props": false }]
+    "no-param-reassign": [2, { "props": false }],
+    "react/destructuring-assignment": ["never"],
+    "react/jsx-one-expression-per-line": ["never"],
+    "react/jsx-wrap-multilines": ["never"]
   }
 }
