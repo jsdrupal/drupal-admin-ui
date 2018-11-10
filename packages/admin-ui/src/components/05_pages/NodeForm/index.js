@@ -38,7 +38,12 @@ class NodeForm extends React.Component {
       }),
       PropTypes.bool,
     ]),
-    restorableEntity: PropTypes.object,
+    restorableEntity: PropTypes.shape({
+      id: PropTypes.string.isRequired,
+      attributes: PropTypes.shape({
+        title: PropTypes.string.isRequired,
+      }).isRequired,
+    }),
     setErrorMessage: PropTypes.func.isRequired,
     onChange: PropTypes.func,
   };

@@ -76,6 +76,7 @@ NodeEditForm.propTypes = {
   contentSave: PropTypes.func.isRequired,
   entityTypeId: PropTypes.string.isRequired,
   entity: PropTypes.shape({
+    id: PropTypes.string.isRequired,
     attributes: PropTypes.shape({
       title: PropTypes.string.isRequired,
     }).isRequired,
