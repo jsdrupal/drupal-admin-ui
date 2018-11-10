@@ -54,7 +54,7 @@ class NodeEditForm extends React.Component {
             <NodeForm
               {...this.props}
               bundle={bundle}
-              entity={ entity }
+              entity={entity}
               onSave={this.onSave(bundle)}
             />
           )}

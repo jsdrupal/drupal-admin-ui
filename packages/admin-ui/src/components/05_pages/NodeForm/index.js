@@ -185,10 +185,7 @@ class NodeForm extends React.Component {
     // making a distinction between single value fields and multi value fields.
     const fieldSchema = this.getSchemaInfo(this.props.schema, fieldName);
 
-    const {
-      attributes,
-      relationships,
-    } = this.props.schema.properties;
+    const { attributes, relationships } = this.props.schema.properties;
 
     const propType =
       (attributes.properties[fieldName] && 'attributes') ||
@@ -218,8 +215,7 @@ class NodeForm extends React.Component {
     const widgetIsMultiple = widget.multiple || false;
     const hasMultipleDeltas =
       (fieldSchema.type && fieldSchema.type === 'array') ||
-      (fieldSchema.properties &&
-        fieldSchema.properties.type === 'array');
+      (fieldSchema.properties && fieldSchema.properties.type === 'array');
 
     return hasMultipleDeltas && !widgetIsMultiple ? (
       <MultipleFields component={widgetComponent} {...widgetProps} />
