@@ -54,7 +54,7 @@ class NodeEditForm extends React.Component {
             <NodeForm
               {...this.props}
               bundle={bundle}
-              entity={{ data: entity }}
+              entity={ entity }
               onSave={this.onSave(bundle)}
             />
           )}
@@ -94,12 +94,11 @@ const extractRestorableEntity = (state, entity) => {
   const restorableEntity = state.content.restorableContentEditById[entity.id];
   if (
     restorableEntity &&
-    restorableEntity.data &&
-    restorableEntity.data.attributes &&
+    restorableEntity.attributes &&
     entity &&
     entity.attributes &&
     // Restoring content is only offered when the loaded entity wasn't changed in the meantime.
-    restorableEntity.data.attributes.changed === entity.attributes.change
+    restorableEntity.attributes.changed === entity.attributes.change
   ) {
     return restorableEntity;
   }
@@ -118,7 +117,7 @@ export default connect(
     const entity = state.content.contentByNid[nid];
     return {
       schema: state.schema.schema[`node--${nid}`],
-      entity: state.content.contentByNid[nid],
+      entity,
       restorableEntity: entity && extractRestorableEntity(state, entity),
       entityTypeId: 'node',
       nid,
