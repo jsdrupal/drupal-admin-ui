@@ -160,11 +160,6 @@ jobs:
     steps:
     - fix-php-env
     - checkout
-    - run:
-        name: Update composer.lock
-        command: |
-          cd ~/project/demo
-          composer update --lock
     - commit-and-push:
         message: "Auto update composer.lock from admin-ui-support-dist build"
         files: ~/project/demo
