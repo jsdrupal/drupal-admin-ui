@@ -1,5 +1,7 @@
 # Drupal Admin UI
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/jsdrupal/drupal-admin-ui.svg)](https://greenkeeper.io/)
+
 This is an admin UI for Drupal, built with JavaScript and based on [create-react-app](https://github.com/facebook/create-react-app).
 
 - [Drupal Admin UI](#drupal-admin-ui)
