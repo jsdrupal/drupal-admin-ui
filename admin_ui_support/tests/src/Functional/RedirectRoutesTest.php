@@ -3,6 +3,8 @@
 namespace Drupal\Tests\admin_ui_support\Functional;
 
 use Drupal\Tests\BrowserTestBase;
+use Drupal\node\Entity\Node;
+use Drupal\node\Entity\NodeType;
 
 /**
  * Tests redirects of routes.
@@ -11,7 +13,7 @@ use Drupal\Tests\BrowserTestBase;
  */
 class RedirectRoutesTest extends BrowserTestBase {
 
-  public static $modules = ['user', 'admin_ui_support'];
+  public static $modules = ['user', 'node', ''admin_ui_support'];
 
   /**
    * {@inheritdoc}
@@ -22,6 +24,15 @@ class RedirectRoutesTest extends BrowserTestBase {
       'administer permissions',
       'administer site configuration',
     ]));
+
+    NodeType::create([
+      'type' => 'page',
+    ])->save();
+
+    Node::create([
+      'type' => 'page',
+      'title' => 'Test title',
+    ])->save();
   }
 
   /**
@@ -40,6 +51,9 @@ class RedirectRoutesTest extends BrowserTestBase {
     $paths = [
       '/admin/people/permissions',
       '/admin/people/roles',
+      '/node/add',
+      '/node/add/page',
+      '/node/1/edit',
     ];
 
     /** @var \Drupal\Core\Routing\RouteProvider $route_provider */
