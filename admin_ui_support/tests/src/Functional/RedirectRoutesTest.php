@@ -32,6 +32,7 @@ class RedirectRoutesTest extends BrowserTestBase {
     Node::create([
       'type' => 'page',
       'title' => 'Test title',
+      'status' => 1,
     ])->save();
   }
 
@@ -61,8 +62,12 @@ class RedirectRoutesTest extends BrowserTestBase {
     foreach ($paths as $path) {
       $routes = $route_provider->getRoutesByPattern($path);
       $this->assertGreaterThanOrEqual(1, $routes->count());
-      foreach ($routes as $route) {
-        $this->assertEquals('Drupal\admin_ui_support\Controller\DefaultController::getAppRoute', $route->getDefault('_controller'));
+      foreach ($routes as $route_name => $route) {
+        // The canonical node route /node/1 is a route suggestion for
+        // /node/1/edit.
+        if ($route_name !== 'entity.node.canonical') {
+          $this->assertEquals('Drupal\admin_ui_support\Controller\DefaultController::getAppRoute', $route->getDefault('_controller'));
+        }
       }
     }
 
@@ -80,8 +85,12 @@ class RedirectRoutesTest extends BrowserTestBase {
     foreach ($paths as $path) {
       $routes = $route_provider->getRoutesByPattern($path);
       $this->assertGreaterThanOrEqual(1, $routes->count());
-      foreach ($routes as $route) {
-        $this->assertNotEquals('Drupal\admin_ui_support\Controller\DefaultController::getAppRoute', $route->getDefault('_controller'));
+      foreach ($routes as $route_name => $route) {
+        // The canonical node route /node/1 is a route suggestion for
+        // /node/1/edit.
+        if ($route_name !== 'entity.node.canonical') {
+          $this->assertNotEquals('Drupal\admin_ui_support\Controller\DefaultController::getAppRoute', $route->getDefault('_controller'));
+        }
       }
     }
   }
