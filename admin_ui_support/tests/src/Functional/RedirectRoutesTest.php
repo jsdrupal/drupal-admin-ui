@@ -79,7 +79,7 @@ class RedirectRoutesTest extends BrowserTestBase {
     $route_provider = \Drupal::service('router.route_provider');
     foreach ($paths as $path) {
       $routes = $route_provider->getRoutesByPattern($path);
-      $this->assertEquals(1, $routes->count());
+      $this->assertGreaterThanOrEqual(1, $routes->count());
       foreach ($routes as $route) {
         $this->assertNotEquals('Drupal\admin_ui_support\Controller\DefaultController::getAppRoute', $route->getDefault('_controller'));
       }
