@@ -201,11 +201,7 @@ class Permissions extends Component<Props, State> {
               ...roles.map(({ attributes }, index) => [
                 `td-${providerMachineName}-${permission.title}-${index}-cb`,
                 attributes.is_admin && attributes.id === 'administrator' ? (
-<<<<<<< HEAD
                   <input type="checkbox" checked disabled />
-=======
-                  <input type="checkbox" checked={true} disabled={true} />
->>>>>>> Not yet compiling, many errors marked by TODOs
                 ) : (
                   <input
                     type="checkbox"
