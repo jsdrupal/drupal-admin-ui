@@ -1,33 +1,9 @@
 import React from 'react';
 import { css } from 'emotion';
 import PropTypes from 'prop-types';
-import {
-  MESSAGE_SEVERITY_ERROR,
-  MESSAGE_SEVERITY_SUCCESS,
-  MESSAGE_SEVERITY_INFO,
-  MESSAGE_SEVERITY_WARNING,
-} from '../../../constants/messages';
+import { MESSAGE_SEVERITY } from '../../../constants/messages';
 
-let styles;
-let modifierClassMap;
-
-const Message = ({ message, messageSeverity }) => (
-  <div className={`${styles.message} ${modifierClassMap[messageSeverity]}`}>
-    {message}
-  </div>
-);
-
-Message.propTypes = {
-  message: PropTypes.string.isRequired,
-  messageSeverity: PropTypes.oneOf([
-    MESSAGE_SEVERITY_ERROR,
-    MESSAGE_SEVERITY_SUCCESS,
-    MESSAGE_SEVERITY_INFO,
-    MESSAGE_SEVERITY_WARNING,
-  ]).isRequired,
-};
-
-styles = {
+const styles = {
   message: css`
     padding: 20px 25px;
     margin-bottom: 30px;
@@ -47,11 +23,27 @@ styles = {
   `,
 };
 
-modifierClassMap = {
-  [MESSAGE_SEVERITY_ERROR]: styles.error,
-  [MESSAGE_SEVERITY_SUCCESS]: styles.success,
-  [MESSAGE_SEVERITY_WARNING]: styles.warning,
-  [MESSAGE_SEVERITY_INFO]: styles.info,
+const modifierClassMap = new Map([
+  [MESSAGE_SEVERITY.ERROR, styles.error],
+  [MESSAGE_SEVERITY.SUCCESS, styles.success],
+  [MESSAGE_SEVERITY.WARNING, styles.warning],
+  [MESSAGE_SEVERITY.INFO, styles.info],
+]);
+
+const Message = ({ message, messageSeverity }) => (
+  <div className={`${styles.message} ${modifierClassMap[messageSeverity]}`}>
+    {message}
+  </div>
+);
+
+Message.propTypes = {
+  message: PropTypes.string.isRequired,
+  messageSeverity: PropTypes.oneOf([
+    MESSAGE_SEVERITY.ERROR,
+    MESSAGE_SEVERITY.SUCCESS,
+    MESSAGE_SEVERITY.INFO,
+    MESSAGE_SEVERITY.WARNING,
+  ]).isRequired,
 };
 
 export default Message;

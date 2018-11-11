@@ -6,14 +6,9 @@ import {
 } from 'react-redux-loading-bar';
 import { ApiError } from '@drupal/admin-ui-utilities';
 import api from '../utils/api/api';
-import {
-  MESSAGE_SEVERITY_ERROR,
-  MESSAGE_SEVERITY_SUCCESS,
-  MESSAGE_SEVERITY_INFO,
-  MESSAGE_SEVERITY_WARNING,
-} from '../constants/messages';
+import api from '../utils/api/api';
+import { MESSAGE_SEVERITY } from '../constants/messages';
 import widgets from '../components/05_pages/NodeForm/Widgets';
-
 export const OPEN_DRAWER = 'OPEN_DRAWER';
 export const openDrawer = () => ({
   type: OPEN_DRAWER,
@@ -44,34 +39,34 @@ export const setMessage = (message, messageSeverity) => ({
 /**
  * @param {string} message - the message content
  *
- * @returns {{type: string, payload: {message: *, messageSeverity: MESSAGE_SEVERITY_ERROR}}}
+ * @returns {{type: string, payload: {message: *, messageSeverity: MESSAGE_SEVERITY.ERROR}}}
  */
 export const setErrorMessage = message =>
-  setMessage(message, MESSAGE_SEVERITY_ERROR);
+  setMessage(message, MESSAGE_SEVERITY.ERROR);
 
 /**
  * @param {string} message - the message content
  *
- * @returns {{type: string, payload: {message: *, messageSeverity: MESSAGE_SEVERITY_SUCCESS}}}
+ * @returns {{type: string, payload: {message: *, messageSeverity: MESSAGE_SEVERITY.SUCCESS}}}
  */
 export const setSuccessMessage = message =>
-  setMessage(message, MESSAGE_SEVERITY_SUCCESS);
+  setMessage(message, MESSAGE_SEVERITY.SUCCESS);
 
 /**
  * @param {string} message - the message content
  *
- * @returns {{type: string, payload: {message: *, messageSeverity: MESSAGE_SEVERITY_INFO}}}
+ * @returns {{type: string, payload: {message: *, messageSeverity: MESSAGE_SEVERITY.INFO}}}
  */
 export const setInfoMessage = message =>
-  setMessage(message, MESSAGE_SEVERITY_INFO);
+  setMessage(message, MESSAGE_SEVERITY.INFO);
 
 /**
  * @param {string} message - the message content
  *
- * @returns {{type: string, payload: {message: *, messageSeverity: MESSAGE_SEVERITY_WARNING}}}
+ * @returns {{type: string, payload: {message: *, messageSeverity: MESSAGE_SEVERITY.WARNING}}}
  */
 export const setWarningMessage = message =>
-  setMessage(message, MESSAGE_SEVERITY_WARNING);
+  setMessage(message, MESSAGE_SEVERITY.WARNING);
 
 export const CLEAR_MESSAGE = 'CLEAR_MESSAGE';
 export const clearMessage = key => ({

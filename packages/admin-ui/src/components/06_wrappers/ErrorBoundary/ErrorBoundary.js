@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import InlineMessage from '../../02_atoms/InlineMessage/InlineMessage';
 
-import { MESSAGE_SEVERITY_ERROR } from '../../../constants/messages';
+import { MESSAGE_SEVERITY } from '../../../constants/messages';
 
 class ErrorBoundary extends React.Component {
   constructor(props) {
@@ -25,7 +25,7 @@ class ErrorBoundary extends React.Component {
       return (
         <InlineMessage
           message={this.state.error.toString()}
-          messageSeverity={MESSAGE_SEVERITY_ERROR}
+          messageSeverity={MESSAGE_SEVERITY.ERROR}
         />
       );
     }

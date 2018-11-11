@@ -10,7 +10,7 @@ import Loading from '../../02_atoms/Loading/Loading';
 import { Table, TBody, THead } from '../../01_subatomics/Table/Table';
 
 import api from '../../../utils/api/api';
-import { MESSAGE_SEVERITY_SUCCESS } from '../../../constants/messages';
+import { MESSAGE_SEVERITY } from '../../../constants/messages';
 import { setMessage, clearMessage } from '../../../actions/application';
 
 export const filterPermissions = (input, permissions) =>
@@ -196,7 +196,7 @@ const Permissions = class Permissions extends Component {
               }).then(() => {
                 this.props.setMessage(
                   'Changes have been saved',
-                  MESSAGE_SEVERITY_SUCCESS,
+                  MESSAGE_SEVERITY.SUCCESS,
                 );
               }),
             ),
