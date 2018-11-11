@@ -11,8 +11,15 @@
     "jest": true,
     "serviceworker": true
   },
+  "settings": {
+    "import/resolver": {
+      "node": {
+        "extensions": [".js", ".jsx", ".ts", ".tsx"]
+      }
+    }
+  },
   "rules": {
-    "react/jsx-filename-extension": [1, { "extensions": [".js"] }],
+    "react/jsx-filename-extension": [1, { "extensions": [".js", ".tsx"] }],
     "jsx-a11y/anchor-is-valid": [ "error", {
       "aspects": [ "noHref" ]
     }],
