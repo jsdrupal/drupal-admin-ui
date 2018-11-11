@@ -1,186 +1,175 @@
-aliases:
-  - &default
-    docker:
-      - image: circleci/node:8-browsers
+version: 2.1
 
+aliases:
   - &node-modules-key
     v3-yarn-dependencies-{{ checksum "yarn.lock" }}
 
-  - &vendor-key
+  - &composer-cache-key
     v3-composer-dependencies-
 
-  - &restore-source
-    restore_cache:
-      keys:
-      - source-v1-{{ .Branch }}-{{ .Revision }}
-      - source-v1-{{ .Branch }}-
-      - source-v1-
-
-  - &restore-node-modules
-    restore_cache:
-      keys:
+commands:
+  build:
+    steps:
+    - checkout
+    - restore_cache:
+        keys:
         - *node-modules-key
+    - run: |
+        yarn install
+        yarn workspace admin-ui build
 
-  - &restore-vendor
-    restore_cache:
-      keys:
-        - *vendor-key
+  commit-and-push:
+    parameters:
+      message:
+        type: string
+        default: "Auto build from master"
+      files:
+        type: string
+      destination_repo:
+        type: string
+      ssh_key_fingerprint:
+        type: string
+    steps:
+      - add_ssh_keys:
+          fingerprints:
+            - << parameters.ssh_key_fingerprint >>
+      - run:
+          name: Configure git
+          command: |
+            git config --global user.name "⬅️✌️➡️"
+            git config --global user.email "no-reply@drupal.org"
+      - run:
+          name: Overwrite files with build
+          command: |
+            mv << parameters.files >> ~/build-files
+            git clone << parameters.destination_repo >> ~/build-repo
+            rm -rf ~/build-files/.git
+            mv ~/build-repo/.git ~/build-files/.git
 
-  - &fix-php-env
-      run: |
-          sudo apt-get install -y libpng-dev sqlite3
-          sudo docker-php-ext-install gd
+      - run:
+          name: Add and push
+          command: |
+              cd ~/build-files
+              git add .
+              if ! git diff-index --quiet HEAD --; then
+                git commit -m "<< parameters.message >>"
+                git push origin master
+              fi
 
-  - &step-build
-      run: |
-          yarn install
-          yarn build
+  fix-php-env:
+    steps:
+      - run:
+          name: Install Drupal requirements
+          command: |
+            sudo apt-get install -y libpng-dev sqlite3
+            sudo docker-php-ext-install gd
 
-version: 2
+executors:
+  node-executor:
+    docker:
+      - image: circleci/node:10-browsers
+  php-node-executor:
+    docker:
+      - image: circleci/php:7.1-fpm-node-browsers
+
 jobs:
   lint_unit:
-    <<: *default
+    executor:
+      name: node-executor
     steps:
-    - *restore-source
-    - checkout
-    - *restore-node-modules
-    - *step-build
-    - run: yarn test:lint
-    - run: yarn test:unit
-    - store_test_results:
-        path: reports
+    - build
     - save_cache:
         key: *node-modules-key
         paths:
         - node_modules
-    - save_cache:
-        key: source-v1-{{ .Branch }}-{{ .Revision }}
-        paths:
-        - .git
+    - run: yarn workspace admin-ui test:lint
+    - run: yarn workspace admin-ui test:unit
+    - store_test_results:
+        path: reports
+
   integration_phpunit_nightwatch:
-      docker:
-        - image: circleci/php:7.1-fpm-node-browsers
+      executor:
+        name: php-node-executor
       steps:
-        - *fix-php-env
-        - *restore-source
-        - checkout
-        - *restore-node-modules
-        - *step-build
-        - *restore-vendor
+        - fix-php-env
+        - build
+        - restore_cache:
+            keys:
+            - *composer-cache-key
         - run:
             name: Install Drupal
             command: |
-                cd ../
-                composer create-project jsdrupal/drupal-admin-ui-demo -s dev --prefer-dist --no-install
-                mv project drupal-admin-ui-demo/drupal-admin-ui
-                cd drupal-admin-ui-demo
-                composer config repositories.repo-name path "~/drupal-admin-ui-demo/drupal-admin-ui/admin_ui_support"
+                cd ~/project/demo
+                composer config repositories.repo-name path "~/project/admin_ui_support"
                 composer require justafish/drupal-admin-ui-support:dev-$CIRCLE_BRANCH
                 composer install
                 composer setup
         - save_cache:
-            key: *vendor-key
+            key: *composer-cache-key
             paths:
             - ~/.composer/cache
         - run:
             name: Start Drupal and run Nightwatch and PHPUnit tests
+            environment:
+              REACT_APP_DRUPAL_ROOT: ~/project/demo
+              REACT_APP_DRUPAL_BASE_URL: http://127.0.0.1:8888
+              SIMPLETEST_BASE_URL: http://localhost:8888
+              SYMFONY_DEPRECATIONS_HELPER: disabled
             command: |
-              cd ~/drupal-admin-ui-demo
+              cd ~/project/demo
               composer start &
               sleep 10
-              cd ~/drupal-admin-ui-demo/drupal-admin-ui
-              export REACT_APP_DRUPAL_BASE_URL="http://127.0.0.1:8888"
-              yarn start &
+              cd ~/project
+              yarn workspace admin-ui start &
               sleep 20
-              yarn test:functional
-              cd ~/drupal-admin-ui-demo
-              export SIMPLETEST_BASE_URL=http://localhost:8888
-              export SYMFONY_DEPRECATIONS_HELPER=disabled
+              yarn workspace admin-ui test:functional
+              cd ~/project/demo
               ./vendor/bin/phpunit -c docroot/core --log-junit reports/phpunit.xml docroot/modules/contrib/drupal-admin-ui-support
+
         - store_test_results:
-            path: ~/drupal-admin-ui-demo/drupal-admin-ui/reports/nightwatch
+            path: ~/project/demo/drupal-admin-ui/reports/nightwatch
         - store_artifacts:
-            path: ~/drupal-admin-ui-demo/drupal-admin-ui/reports/nightwatch
+            path: ~/project/demo/drupal-admin-ui/reports/nightwatch
         - store_test_results:
-            path: ~/drupal-admin-ui-demo/reports
+            path: ~/project/demo/reports
+
   dist:
-    <<: *default
+    executor:
+      name: node-executor
     steps:
-      - add_ssh_keys:
-          fingerprints:
-            - "82:b8:cc:fe:02:24:17:b1:31:ba:dc:30:e1:01:7a:df"
-      - *restore-source
-      - checkout
-      - *restore-node-modules
-      - *step-build
-      - run: |
-          mv ~/project/build ~
-          git config --global user.name "⬅️✌️➡️"
-          git config --global user.email "no-reply@drupal.org"
-          git clone git@github.com:jsdrupal/drupal-admin-ui-dist.git ~/build-repo
-          mv ~/build-repo/.git ~/build/.git
-          cd ~/build
-          cp ~/project/.circleci/drupal-admin-ui--composer.json composer.json
-          git add .
-          if ! git diff-index --quiet HEAD --; then
-              git commit -m "Auto build from master"
-              git push origin master
-          fi
+      - build
+      - run: cp ~/project/.circleci/drupal-admin-ui--composer.json ~/project/build/composer.json
+      - commit-and-push:
+          files: ~/project/build
+          destination_repo: git@github.com:jsdrupal/drupal-admin-ui-dist.git
+          ssh_key_fingerprint: "82:b8:cc:fe:02:24:17:b1:31:ba:dc:30:e1:01:7a:df"
+
   dist_support:
-    <<: *default
+    executor:
+      name: node-executor
     steps:
-      - add_ssh_keys:
-          fingerprints:
-            - "6c:c9:15:82:34:e7:30:e2:91:1b:ea:e2:06:b2:cf:e0"
-      - *restore-source
       - checkout
-      - *restore-node-modules
-      - *step-build
-      - run: |
-          mv ~/project/admin_ui_support ~
-          git config --global user.name "⬅️✌️➡️"
-          git config --global user.email "no-reply@drupal.org"
-          git clone git@github.com:jsdrupal/drupal-admin-ui-support-dist.git ~/build-repo
-          rm -rf ~/admin_ui_support/.git
-          mv ~/build-repo/.git ~/admin_ui_support/.git
-          cd ~/admin_ui_support
-          git add .
-          if ! git diff-index --quiet HEAD --; then
-              git commit -m "Auto build from master"
-              git push origin master
-          fi
+      - commit-and-push:
+          files: ~/project/admin_ui_support
+          destination_repo: git@github.com:jsdrupal/drupal-admin-ui-support-dist.git
+          ssh_key_fingerprint: "6c:c9:15:82:34:e7:30:e2:91:1b:ea:e2:06:b2:cf:e0"
 
   dist_demo:
-    docker:
-    - image: circleci/php:7.1-fpm-node-browsers
+    executor:
+      name: php-node-executor
     steps:
-    - add_ssh_keys:
-        fingerprints:
-          - "1e:cb:02:bc:68:40:3c:31:40:5f:45:b5:55:c8:02:24"
-    - run: |
-        sudo apt-get update
-        sudo apt-get install -y \
-                libfreetype6-dev \
-                libjpeg62-turbo-dev \
-                libpng-dev
-        sudo docker-php-ext-install -j$(nproc) iconv
-        sudo docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/
-        sudo docker-php-ext-install -j$(nproc) gd
-    # We're not going to use this checkout, but it configures git over ssh.
-    # https://circleci.com/docs/2.0/configuration-reference/#checkout
-    - *restore-source
+    - fix-php-env
     - checkout
-    - run: |
-        git config --global user.name "⬅️✌️➡️"
-        git config --global user.email "no-reply@drupal.org"
-        git clone git@github.com:jsdrupal/drupal-admin-ui-demo.git ~/drupal-admin-ui-demo
-        cd ~/drupal-admin-ui-demo
-        composer update --lock
-        git add .
-        if ! git diff-index --quiet HEAD --; then
-          git commit -m "Auto update composer.lock from admin-ui-support-dist build"
-          git push origin master
-        fi
+    - run:
+        name: Update composer.lock
+        command: |
+          cd ~/project/demo
+          composer update --lock
+    - commit-and-push:
+        message: "Auto update composer.lock from admin-ui-support-dist build"
+        files: ~/project/demo
+        destination_repo: git@github.com:jsdrupal/drupal-admin-ui-demo.git
+        ssh_key_fingerprint: "1e:cb:02:bc:68:40:3c:31:40:5f:45:b5:55:c8:02:24"
 
 workflows:
   version: 2
@@ -206,7 +195,7 @@ workflows:
               - master
       - dist_demo:
           requires:
-          - dist_support
+            - dist_support
           filters:
             branches:
               only:
