@@ -13,7 +13,7 @@ use Drupal\node\Entity\NodeType;
  */
 class RedirectRoutesTest extends BrowserTestBase {
 
-  public static $modules = ['user', 'node', ''admin_ui_support'];
+  public static $modules = ['user', 'node', 'admin_ui_support'];
 
   /**
    * {@inheritdoc}
