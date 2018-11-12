@@ -159,8 +159,13 @@ jobs:
     steps:
     - fix-php-env
     - checkout
+    - run:
+        name: Update composer.lock
+        command: |
+          cd ~/project/demo
+          composer update justafish/drupal-admin-ui-support
     - commit-and-push:
-        message: "Auto update composer.lock from admin-ui-support-dist build"
+        message: "Auto update from master"
         files: ~/project/demo
         destination_repo: git@github.com:jsdrupal/drupal-admin-ui-demo.git
         ssh_key_fingerprint: "1e:cb:02:bc:68:40:3c:31:40:5f:45:b5:55:c8:02:24"
