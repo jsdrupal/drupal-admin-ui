@@ -19,7 +19,7 @@
     "jsx": "preserve"
   },
   "include": [
-    "src"
+    "src/**/*"
   ],
   "exclude": [
     "src/tests"

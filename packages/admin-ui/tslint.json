@@ -1,0 +1,42 @@
+
+{
+  "extends": [
+     "tslint:recommended"
+   ],
+    "rules": {
+      "member-access": false,
+      "jsx-no-multiline-js": false,
+      "jsx-no-lambda": false,
+      "quotemark": false,
+      "object-literal-sort-keys": false,
+      "ordered-imports": false,
+      "interface-name" : [true, "never-prefix"],
+      "semicolon": false,
+      "no-empty": [true, "allow-empty-functions"]
+      },
+    "jsRules": {
+      "trailing-comma": false,
+      "semicolon": false,
+      "quotemark": false,
+      "object-literal-sort-keys": false,
+      "no-shadowed-variable": false,
+      "max-line-length": false,
+      "no-empty": false,
+      "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
+      "jsx-a11y/anchor-is-valid": [ "error", {
+        "aspects": [ "noHref" ]
+      }],
+      "no-param-reassign": [2, { "props": false }],
+      "react/destructuring-assignment": 0,
+      "react/jsx-one-expression-per-line": 0,
+      "react/jsx-wrap-multilines": 0
+      "jsx-a11y/anchor-is-valid": [ "error", {
+        "aspects": [ "noHref" ]
+      }],
+      },
+    "exclude": [
+      "packages/admin-ui/src/tests/Nightwatch/*",
+      "node_modules/**/*.ts",
+      "coverage/lcov-report/*.js"
+    ]
+  }
