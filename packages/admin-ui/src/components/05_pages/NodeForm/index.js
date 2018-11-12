@@ -22,7 +22,7 @@ import {
 } from '../../../actions/application';
 
 import { createUISchema, sortUISchemaFields } from '../../../utils/api/schema';
-import LoadComponent from '../../02_atoms/LoadComponent/LoadComponent';
+import EnsureComponent from '../../02_atoms/EnsureComponent/EnsureComponent';
 
 let styles;
 
@@ -234,7 +234,7 @@ class NodeForm extends React.Component {
         fieldSchema.properties.data.type === 'array');
 
     return (
-      <LoadComponent
+      <EnsureComponent
         name={widget.name}
         component={widget.component}
         render={widgetComponent =>

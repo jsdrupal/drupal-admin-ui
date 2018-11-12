@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import * as MaterialUI from '@material-ui/core';
 
-class LoadComponent extends React.Component {
+class EnsureComponent extends React.Component {
   state = {
     component: null,
   };
@@ -38,4 +38,4 @@ class LoadComponent extends React.Component {
   }
 }
 
-export default LoadComponent;
+export default EnsureComponent;
