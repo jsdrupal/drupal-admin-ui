@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "585ea7d7007ae069ad02237c764fa44c",
+    "content-hash": "a8d4acefa7662e4e4fc8f1b192d459ec",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -1374,11 +1374,6 @@
                         "status": "not-covered",
                         "message": "Alpha releases are not covered by Drupal security advisories."
                     }
-                },
-                "patches_applied": {
-                    "Small inaccuracies for JSON API schemas": "https://www.drupal.org/files/issues/2018-04-28/2967572--schemata--multiple-minor-adjustments--3.patch",
-                    "Take the field label into account for entity references": "https://www.drupal.org/files/issues/2018-07-20/2987199-2.patch",
-                    "Returning boolean type for promote to homepage": "https://www.drupal.org/files/issues/2018-08-30/promote_returning_boolean_value_instead_of_integer-2996099-2.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -1813,12 +1808,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/jsdrupal/drupal-admin-ui-dist.git",
-                "reference": "0db9a29e7d9cd2500354623d648b20a6cc7a4ab0"
+                "reference": "f773e93bd66bdb49d3b1b688e68870a96c95f92f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/jsdrupal/drupal-admin-ui-dist/zipball/0db9a29e7d9cd2500354623d648b20a6cc7a4ab0",
-                "reference": "0db9a29e7d9cd2500354623d648b20a6cc7a4ab0",
+                "url": "https://api.github.com/repos/jsdrupal/drupal-admin-ui-dist/zipball/f773e93bd66bdb49d3b1b688e68870a96c95f92f",
+                "reference": "f773e93bd66bdb49d3b1b688e68870a96c95f92f",
                 "shasum": ""
             },
             "require": {
@@ -1830,7 +1825,7 @@
                 "MIT"
             ],
             "description": "This is the v fancy React admin UI for Drupal",
-            "time": "2018-10-21T21:22:07+00:00"
+            "time": "2018-10-25T17:12:49+00:00"
         },
         {
             "name": "justafish/drupal-admin-ui-support",
@@ -7368,6 +7363,17 @@
         {
             "name": "webflo/drupal-core-require-dev",
             "version": "8.7.x-dev",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/webflo/drupal-core-require-dev.git",
+                "reference": "f551d0b71bbfd10444f5d8805ebf2052fb155a46"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/webflo/drupal-core-require-dev/zipball/f551d0b71bbfd10444f5d8805ebf2052fb155a46",
+                "reference": "f551d0b71bbfd10444f5d8805ebf2052fb155a46",
+                "shasum": ""
+            },
             "require": {
                 "behat/mink": "1.7.x-dev",
                 "behat/mink-goutte-driver": "^1.2",
