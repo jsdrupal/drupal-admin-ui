@@ -18,9 +18,10 @@
     "noEmit": true,
     "jsx": "preserve"
   },
-  "include": [
-  ],
   "exclude": [
     "src/tests"
+  ],
+  "include": [
+    "src"
   ]
 }
