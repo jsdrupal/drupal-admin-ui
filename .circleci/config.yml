@@ -125,13 +125,12 @@ jobs:
               yarn workspace admin-ui test:functional
               cd ~/project/demo
               ./vendor/bin/phpunit -c docroot/core --log-junit reports/phpunit.xml docroot/modules/contrib/drupal-admin-ui-support
-
         - store_test_results:
-            path: ~/project/demo/drupal-admin-ui/reports/nightwatch
+            path: ~/project/packages/admin-ui/reports/nightwatch
         - store_artifacts:
-            path: ~/project/demo/drupal-admin-ui/reports/nightwatch
+            path: ~/project/packages/admin-ui/reports/nightwatch
         - store_test_results:
-            path: ~/project/demo/reports
+            path: ~/project/reports
 
   dist:
     executor:
@@ -164,9 +163,9 @@ jobs:
         name: Update composer.lock
         command: |
           cd ~/project/demo
-          composer update --lock
+          composer update justafish/drupal-admin-ui-support
     - commit-and-push:
-        message: "Auto update composer.lock from admin-ui-support-dist build"
+        message: "Auto update from master"
         files: ~/project/demo
         destination_repo: git@github.com:jsdrupal/drupal-admin-ui-demo.git
         ssh_key_fingerprint: "1e:cb:02:bc:68:40:3c:31:40:5f:45:b5:55:c8:02:24"

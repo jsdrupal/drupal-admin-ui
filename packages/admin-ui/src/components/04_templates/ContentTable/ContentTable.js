@@ -60,13 +60,15 @@ class ContentTable extends React.Component {
   selectAll(checked) {
     this.props.setChecked(
       (checked &&
-        this.props.contentList.map(({ attributes: { nid } }) => nid).reduce(
-          (acc, cur) => ({
-            ...acc,
-            [cur]: true,
-          }),
-          {},
-        )) ||
+        this.props.contentList
+          .map(({ attributes: { nid } }) => nid)
+          .reduce(
+            (acc, cur) => ({
+              ...acc,
+              [cur]: true,
+            }),
+            {},
+          )) ||
         {},
     );
   }
@@ -121,31 +123,29 @@ class ContentTable extends React.Component {
                 },
               ]
                 .filter(x => x)
-                .map(
-                  ({ key, label, sortable }) =>
-                    sortable ? (
-                      <TableCell key={key}>
-                        <TableSortLabel
-                          direction={
-                            this.props.sort.path === key
-                              ? this.props.sort.direction.toLowerCase()
-                              : undefined
-                          }
-                          active={this.props.sort.path === key}
-                          onClick={this.props.tableSortHandler(
-                            key,
-                            (this.props.sort.path !== key && 'DESC') ||
-                              ((this.props.sort.direction === 'DESC' &&
-                                'ASC') ||
-                                'DESC'),
-                          )}
-                        >
-                          {label}
-                        </TableSortLabel>
-                      </TableCell>
-                    ) : (
-                      <TableCell key={key}>{label}</TableCell>
-                    ),
+                .map(({ key, label, sortable }) =>
+                  sortable ? (
+                    <TableCell key={key}>
+                      <TableSortLabel
+                        direction={
+                          this.props.sort.path === key
+                            ? this.props.sort.direction.toLowerCase()
+                            : undefined
+                        }
+                        active={this.props.sort.path === key}
+                        onClick={this.props.tableSortHandler(
+                          key,
+                          (this.props.sort.path !== key && 'DESC') ||
+                            ((this.props.sort.direction === 'DESC' && 'ASC') ||
+                              'DESC'),
+                        )}
+                      >
+                        {label}
+                      </TableSortLabel>
+                    </TableCell>
+                  ) : (
+                    <TableCell key={key}>{label}</TableCell>
+                  ),
                 )}
             </TableRow>
           </TableHead>

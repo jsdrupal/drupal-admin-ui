@@ -11,8 +11,15 @@
     "jest": true,
     "serviceworker": true
   },
+  "settings": {
+    "import/resolver": {
+      "node": {
+        "extensions": [".js", ".jsx", ".ts", ".tsx"]
+      }
+    }
+  },
   "rules": {
-    "react/jsx-filename-extension": [1, { "extensions": [".js"] }],
+    "react/jsx-filename-extension": [1, { "extensions": [".js", ".tsx"] }],
     "jsx-a11y/anchor-is-valid": [
       "error",
       {
@@ -21,8 +28,8 @@
     ],
     "jsx-a11y/label-has-for": 0,
     "no-param-reassign": [2, { "props": false }],
-    "react/destructuring-assignment": ["never"],
-    "react/jsx-one-expression-per-line": ["never"],
-    "react/jsx-wrap-multilines": ["never"]
+    "react/destructuring-assignment": 0,
+    "react/jsx-one-expression-per-line": 0,
+    "react/jsx-wrap-multilines": 0
   }
 }
