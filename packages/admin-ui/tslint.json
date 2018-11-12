@@ -29,10 +29,7 @@
       "no-param-reassign": [2, { "props": false }],
       "react/destructuring-assignment": 0,
       "react/jsx-one-expression-per-line": 0,
-      "react/jsx-wrap-multilines": 0,
-      "jsx-a11y/anchor-is-valid": [ "error", {
-        "aspects": [ "noHref" ]
-      }],
+      "react/jsx-wrap-multilines": 0
       },
     "exclude": [
       "packages/admin-ui/src/tests/Nightwatch/*",
