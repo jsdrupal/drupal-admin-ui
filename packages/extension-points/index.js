@@ -87,4 +87,8 @@ Promise.all([
         }),
       );
     });
+  })
+  .catch(err => {
+    console.error('An error occurred while building the JS files.', err);
+    process.exit(1);
   });
