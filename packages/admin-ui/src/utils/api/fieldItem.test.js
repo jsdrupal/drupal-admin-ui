@@ -97,7 +97,7 @@ describe('should delete item in fieldItem', () => {
         id: 'c6c704aa-8dd9-4e6d-9ae3-4b10714f7700',
         type: 'taxonomy_term--tags',
       }),
-    ).toEqual({});
+    ).toEqual([]);
   });
 });
 
