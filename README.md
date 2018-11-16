@@ -14,6 +14,7 @@ This is an admin UI for Drupal, built with JavaScript and based on [create-react
   * [Development guidelines](#development-guidelines)
   * [Commands](#commands)
   * [Contributing to This Repository](#contributing-to-this-repository)
+  * [Extension Points Bundler](#extension-points-bundler)
 
 ## Installation
 
@@ -91,9 +92,9 @@ See package.json for a full list
 
 
 ## Development guidelines
-  
+
 ### Testing
-  
+
 We have functional testing with [Nightwatch](http://nightwatchjs.org/), and component/unit testing with [Jest](https://jestjs.io/).
 
 When deciding which system to use to add test coverage, the general rule is Nightwatch should be used to test the common path, and Jest can be used for more detailed test coverage. Nightwatch tests will run slower as they simulate clicking around in a real browser.
@@ -135,4 +136,6 @@ If someone has made a pull request and you would like to add code to their branc
   .
   git push <your-fork> <branch-name>
   ```
-  
+## Extension Points Bundler
+
+See the documentation in `packages/extension-points` for how this tooling works.
