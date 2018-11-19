@@ -78,12 +78,13 @@
     "react-scripts": "2.1.1",
     "react-test-renderer": "^16.6.3",
     "redux-saga-test-plan": "^3.6.0",
-    "storybook-addon-jsx": "^5.3.0"
+    "storybook-addon-jsx": "^5.3.0",
+    "typescript-eslint-parser": "^21.0.1"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "eslint": "eslint ./src --max-warnings=0 --fix",
+    "eslint": "eslint ./src --ext .js,.jsx,.ts,.tsx  --max-warnings=0 --fix",
     "prettier": "prettier --write 'src/**/*.js'",
     "jest": "react-scripts test --env=jsdom",
     "nightwatch": "nightwatch --config ./src/tests/Nightwatch/nightwatch.conf.js",
@@ -92,7 +93,7 @@
     "test": "yarn test:lint && yarn test:unit && yarn test:functional",
     "test:functional": "yarn nightwatch",
     "test:unit": "CI=true JEST_JUNIT_OUTPUT=reports/jest-junit.xml react-scripts test --testResultsProcessor ../../node_modules/jest-junit --env=jsdom",
-    "test:lint": "eslint ./src --max-warnings=0 --format junit -o reports/eslint-junit.xml",
+    "test:lint": "eslint ./src  --ext .js,.jsx,.ts,.tsx --max-warnings=0 --format junit -o reports/eslint-junit.xml",
     "eject": "react-scripts eject"
   },
   "browserslist": [
