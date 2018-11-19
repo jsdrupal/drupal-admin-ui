@@ -4,16 +4,17 @@ Tooling to bundle and transpile your JavaScript to be used with the AdminUI.
 
 ## Installation
 
-Add this module to your project. All the bundling and transpile dependencies and settings are included.
+* Use `npm install --save-dev @drupal/extension-points-bundler` or `yarn add @drupal/extension-points-bundler`
+to add it to your project. All the bundling and transpile dependencies and settings are included.
 
 ```
 yarn add @drupal/extension-points-bundler
 
 # Build
-./node_modules/.bin/js-drupal-build
+./node_modules/.bin/extension-points-bundler
 
 # Build for production
-./node_modules/.bin/js-drupal-build --mode=production
+./node_modules/.bin/extension-points-bundler --mode=production
 ```
 
 ## Documentation

@@ -4,7 +4,7 @@
   "license": "MIT",
   "private": true,
   "bin": {
-    "js-drupal-build": "./index.js"
+    "extension-points-bundler": "./index.js"
   },
   "dependencies": {
     "@babel/core": "^7.1.2",
