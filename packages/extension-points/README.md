@@ -21,7 +21,7 @@ yarn add @drupal/extension-points-bundler
 
 This tooling looks for your `*.admin_ui.components.yml` file and parses it's contents to create entry points for Webpack.
 
-This tooling assumes that your source JavaScript exists at `/js/src` and it's output will be `/js/src`.
+This tooling assumes that your source JavaScript exists at `/js/src` and it's output will be `/js/build`.
 
 The bundling process automatically externalizes `React` and `@material-ui/core`.
 
