@@ -85,7 +85,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "eslint": "eslint ./src --ext .js,.jsx,.ts,.tsx  --max-warnings=0 --fix",
-    "prettier": "prettier --write 'src/**/*.js'",
+    "prettier": "prettier --write 'src/**/*.{js,jsx,ts,tsx}'",
     "jest": "react-scripts test --env=jsdom",
     "nightwatch": "nightwatch --config ./src/tests/Nightwatch/nightwatch.conf.js",
     "storybook": "start-storybook -p 9001 -c .storybook",
