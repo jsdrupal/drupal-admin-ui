@@ -3,6 +3,8 @@
 namespace Drupal\Tests\admin_ui_support\Functional;
 
 use Drupal\Tests\BrowserTestBase;
+use Drupal\node\Entity\Node;
+use Drupal\node\Entity\NodeType;
 
 /**
  * Tests redirects of routes.
@@ -11,7 +13,7 @@ use Drupal\Tests\BrowserTestBase;
  */
 class RedirectRoutesTest extends BrowserTestBase {
 
-  public static $modules = ['user', 'admin_ui_support'];
+  public static $modules = ['user', 'node', 'admin_ui_support'];
 
   /**
    * {@inheritdoc}
@@ -22,6 +24,16 @@ class RedirectRoutesTest extends BrowserTestBase {
       'administer permissions',
       'administer site configuration',
     ]));
+
+    NodeType::create([
+      'type' => 'page',
+    ])->save();
+
+    Node::create([
+      'type' => 'page',
+      'title' => 'Test title',
+      'status' => 1,
+    ])->save();
   }
 
   /**
@@ -40,15 +52,22 @@ class RedirectRoutesTest extends BrowserTestBase {
     $paths = [
       '/admin/people/permissions',
       '/admin/people/roles',
+      '/node/add',
+      '/node/add/page',
+      '/node/1/edit',
     ];
 
     /** @var \Drupal\Core\Routing\RouteProvider $route_provider */
     $route_provider = \Drupal::service('router.route_provider');
     foreach ($paths as $path) {
       $routes = $route_provider->getRoutesByPattern($path);
-      $this->assertEquals(1, $routes->count());
-      foreach ($routes as $route) {
-        $this->assertEquals('Drupal\admin_ui_support\Controller\DefaultController::getAppRoute', $route->getDefault('_controller'));
+      $this->assertGreaterThanOrEqual(1, $routes->count());
+      foreach ($routes as $route_name => $route) {
+        // The canonical node route /node/1 is a route suggestion for
+        // /node/1/edit.
+        if ($route_name !== 'entity.node.canonical') {
+          $this->assertEquals('Drupal\admin_ui_support\Controller\DefaultController::getAppRoute', $route->getDefault('_controller'));
+        }
       }
     }
 
@@ -65,9 +84,13 @@ class RedirectRoutesTest extends BrowserTestBase {
     $route_provider = \Drupal::service('router.route_provider');
     foreach ($paths as $path) {
       $routes = $route_provider->getRoutesByPattern($path);
-      $this->assertEquals(1, $routes->count());
-      foreach ($routes as $route) {
-        $this->assertNotEquals('Drupal\admin_ui_support\Controller\DefaultController::getAppRoute', $route->getDefault('_controller'));
+      $this->assertGreaterThanOrEqual(1, $routes->count());
+      foreach ($routes as $route_name => $route) {
+        // The canonical node route /node/1 is a route suggestion for
+        // /node/1/edit.
+        if ($route_name !== 'entity.node.canonical') {
+          $this->assertNotEquals('Drupal\admin_ui_support\Controller\DefaultController::getAppRoute', $route->getDefault('_controller'));
+        }
       }
     }
   }
