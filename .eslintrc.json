@@ -4,6 +4,10 @@
     "plugin:prettier/recommended",
     "plugin:jsx-a11y/recommended"
   ],
+  "parser": "typescript-eslint-parser",
+  "parserOptions": {
+    "jsx": true
+  },
   "parser": "babel-eslint",
   "env": {
     "browser": true,
