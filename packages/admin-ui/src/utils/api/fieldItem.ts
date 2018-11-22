@@ -1,8 +1,12 @@
 interface FieldItem {
-  id: string,
-};
+  id: string;
+}
 
-export const setItemById = (multiple : boolean, item : FieldItem, items : Array<FieldItem>) :  Array<FieldItem> | FieldItem => {
+export const setItemById = (
+  multiple: boolean,
+  item: FieldItem,
+  items: Array<FieldItem>,
+): Array<FieldItem> | FieldItem => {
   if (multiple) {
     const index = items.findIndex(i => i.id === item.id);
     if (index === -1) {
@@ -14,7 +18,10 @@ export const setItemById = (multiple : boolean, item : FieldItem, items : Array<
   return item;
 };
 
-export const getItemsAsArray = (multiple : boolean, items: Array<FieldItem>) : Array<FieldItem> => {
+export const getItemsAsArray = (
+  multiple: boolean,
+  items: Array<FieldItem>,
+): Array<FieldItem> => {
   if (Array.isArray(items)) {
     return items;
   }
@@ -24,7 +31,11 @@ export const getItemsAsArray = (multiple : boolean, items: Array<FieldItem>) : A
   return [items];
 };
 
-export const deleteItemById = (multiple : boolean, id:string, items: Array<FieldItem>) : Array<FieldItem> => {
+export const deleteItemById = (
+  multiple: boolean,
+  id: string,
+  items: Array<FieldItem>,
+): Array<FieldItem> => {
   if (!multiple) {
     return [];
   }
