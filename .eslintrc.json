@@ -29,7 +29,7 @@
     }
   },
   "rules": {
-    "react/jsx-filename-extension": [1, { "extensions": [".js", ".tsx"] }],
+    "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx", ".tsx"] }],
     "jsx-a11y/anchor-is-valid": [ "error", {
       "aspects": [ "noHref" ]
     }],
