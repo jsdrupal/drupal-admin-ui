@@ -84,3 +84,11 @@ admin_ui_support.node.add:
     parameters:
       node_type:
         with_config_overrides: TRUE
+
+admin_ui_support.node.edit:
+  path: '/vfancy/node/{node}/edit'
+  defaults:
+    _controller: '\Drupal\admin_ui_support\Controller\EmptyController::noop'
+  options:
+    _node_operation_route: TRUE
+    _admin_related_route: 'entity.node.edit_form'

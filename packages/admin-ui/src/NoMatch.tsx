@@ -4,8 +4,8 @@ import routes from './routes';
 
 export interface Props {
   location: {
-    [pathname: string]: string,
-  },
+    [pathname: string]: string;
+  };
 }
 
 class NoMatch extends Component<Props> {
@@ -20,6 +20,6 @@ class NoMatch extends Component<Props> {
   render() {
     return null;
   }
-};
+}
 
 export default NoMatch;
