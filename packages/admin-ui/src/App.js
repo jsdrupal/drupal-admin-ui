@@ -135,14 +135,14 @@ const App = ({ serverRoutes }) => (
                   <Route
                     exact
                     path={route}
-                    component={withRouter(() => (
+                    component={() => (
                       <EnsureComponent
                         component={component}
                         render={widgetComponent =>
-                          React.createElement(widgetComponent)
+                          React.createElement(withRouter(widgetComponent))
                         }
                       />
-                    ))}
+                    )}
                     key={route}
                   />
                 ))}
