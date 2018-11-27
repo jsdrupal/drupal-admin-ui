@@ -12,6 +12,8 @@ if (process.env.NODE_ENV !== 'production' && process.env.REACT_APP_AXE) {
   axe(React, ReactDOM);
 }
 
+// Fetch routes provided by Drupal modules.
+// This happens outsite of React and before the application starts.
 api('admin_ui_routes').then(({ routes }) => {
   ReactDOM.render(
     <App serverRoutes={routes} />,
