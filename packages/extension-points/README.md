@@ -38,7 +38,7 @@ widgets:
 
 ### Routes Configuration
 
-A single `*.admin_ui.routes.yml` file can contain as many routes as needed. Note that route will be prefixed with the key name. For example the following route would be accessible at, `/admin_ui_widget_example/test`.
+A single `*.admin_ui.routes.yml` file can contain as many routes as needed. Note that route will be prefixed with the Drupal module name. For example the following route would be accessible at, `/admin_ui_widget_example/test`.
 
 ```
 routes:
