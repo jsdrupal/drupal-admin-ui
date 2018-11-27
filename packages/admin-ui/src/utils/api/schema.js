@@ -45,14 +45,16 @@ const createUISchema = (
     )
     .sort((a, b) => formDisplaySchema[a].weight - formDisplaySchema[b].weight)
     .reduce((acc, currentFieldName) => {
-      const widget =
-        widgets[
-          Object.keys(widgets)
-            .filter(name =>
-              formDisplaySchema[currentFieldName].type.startsWith(name),
-            )
-            .shift()
-        ];
+      const widgetName = Object.keys(widgets)
+        .filter(name =>
+          formDisplaySchema[currentFieldName].type.startsWith(name),
+        )
+        .shift();
+
+      const widget = {
+        ...widgets[widgetName],
+        name: widgetName,
+      };
       const fieldStorageSettings = fieldStorageConfig
         .filter(
           ({ attributes: { field_name: fieldName } }) =>

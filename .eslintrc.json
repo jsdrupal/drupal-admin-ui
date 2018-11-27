@@ -31,7 +31,7 @@
   "rules": {
     "react/jsx-filename-extension": [1, { "extensions": [".js", ".tsx"] }],
     "jsx-a11y/anchor-is-valid": [ "error", {
-      "aspects": [ "noHref" ]
+      "aspects": ["noHref"]
     }],
     "jsx-a11y/label-has-for": 0,
     "no-param-reassign": [2, { "props": false }],
