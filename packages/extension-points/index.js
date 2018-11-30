@@ -16,21 +16,30 @@ Promise.all([
       operatingDirectory,
     )}.admin_ui.components.yml`,
   ),
+  readFilePM(
+    `${operatingDirectory}/${basename(operatingDirectory)}.admin_ui.routes.yml`,
+  ),
 ])
-  .then(([components]) => ({ components: jsyaml.safeLoad(components) }))
-  .then(({ components }) =>
-    Object.keys(components.widgets).reduce(
-      (acc, widgetName) => ({
+  .then(([components, routes]) => ({
+    components: jsyaml.safeLoad(components),
+    routes: jsyaml.safeLoad(routes),
+  }))
+  .then(({ components, routes }) => ({
+    ...Object.entries(components.widgets).reduce(
+      (acc, [key, { component }]) => ({
         ...acc,
-        ...{
-          [`${widgetName}.widget`]: `./js/src/${basename(
-            components.widgets[widgetName].component,
-          )}`,
-        },
+        ...{ [`${key}.widget`]: `./js/src/${basename(component)}` },
       }),
       {},
     ),
-  )
+    ...Object.entries(routes.routes).reduce(
+      (acc, [key, { component }]) => ({
+        ...acc,
+        ...{ [`${key}.route`]: `./js/src/${basename(component)}` },
+      }),
+      {},
+    ),
+  }))
   .then(entry => {
     const webpackConfig = {
       entry,

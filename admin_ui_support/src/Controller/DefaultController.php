@@ -53,13 +53,25 @@ class DefaultController extends ControllerBase {
    * @return \Symfony\Component\HttpFoundation\JsonResponse
    */
   public function components() {
-    $discovery = new YamlDiscovery('admin_ui.components', $this->moduleHandler()->getModuleDirectories());
-    $result = ['widgets' => []];
+    return $this->loadExtensions('admin_ui.components', 'widgets');
+  }
+
+  /**
+   * @return \Symfony\Component\HttpFoundation\JsonResponse
+   */
+  public function routes() {
+    return $this->loadExtensions('admin_ui.routes', 'routes');
+  }
+
+  private function loadExtensions($extension_point, $key) {
+    $discovery = new YamlDiscovery($extension_point, $this->moduleHandler()->getModuleDirectories());
+    $result = [$key => []];
     foreach ($discovery->findAll() as $module_name => $item) {
-      $result['widgets'] = array_merge($result['widgets'], array_map(function ($widget) use ($module_name) {
+      $result[$key] = array_merge($result[$key], array_map(function ($widget) use ($module_name) {
         $widget['component'] = file_create_url(drupal_get_path('module', $module_name) . '/' . $widget['component']);
+        $widget['moduleName'] = $module_name;
         return $widget;
-      }, $item['widgets']));
+      }, $item[$key]));
     }
     return new JsonResponse($result);
   }
