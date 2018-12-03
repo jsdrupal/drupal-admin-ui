@@ -9,8 +9,23 @@ class ModerationStateDefaultWidget extends React.Component {
   };
 
   componentDidMount() {
-    api('workflow')
-      .then(console.log);
+    api('workflow', {}, {
+      query: {
+        // @todo pull this from the schema.
+        filter: { condition: { path: 'id', value: 'test' } },
+      },
+    })
+      .then(data => {
+        this.setState({
+          loaded: true,
+          data,
+        })
+      });
+  }
+
+  render() {
+    // Use the possible options from this.state.data to
+    // use a select element.
   }
 
 }
