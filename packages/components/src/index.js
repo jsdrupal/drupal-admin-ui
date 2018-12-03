@@ -1,4 +1,5 @@
-import H1 from './Components/H1';
-import H2 from './Components/H2';
+import { colors, typography } from './Utils';
 
-export { H1, H2 };
+import AdminUIButton from './Components/Button';
+
+export { colors, typography, AdminUIButton };

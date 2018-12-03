@@ -20,7 +20,7 @@ import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import AddIcon from '@material-ui/icons/Add';
 
-import { H1 } from '@drupal/admin-ui-components';
+import { AdminUIButton } from '@drupal/admin-ui-components';
 
 import PageTitle from '../../02_atoms/PageTitle';
 import ContentTable from '../../04_templates/ContentTable/ContentTable';
@@ -171,7 +171,7 @@ class Content extends Component {
       <PageTitle>Content</PageTitle>
       <LoadingBar style={{ position: 'relative', marginBottom: '5px' }} />
       <Paper>
-        <H1>ok</H1>
+        <AdminUIButton>ok</AdminUIButton>
         {this.props.contentTypes && this.props.actions && (
           <Fragment>
             <div className={styles.filters}>

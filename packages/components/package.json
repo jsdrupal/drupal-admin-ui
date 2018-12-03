@@ -6,9 +6,12 @@
   "main": "build/index.js",
   "scripts": {
     "build": "NODE_ENV=production webpack --progress --display-modules --config webpack.config.js",
-    "watch": "webpack --progress --watch --config webpack.config.js"
+    "watch": "NODE_ENV=development webpack --progress --watch --config webpack.config.js"
   },
-  "dependencies": {},
+  "dependencies": {
+    "@material-ui/core": "^3.6.1",
+    "emotion": "^10.0.1"
+  },
   "devDependencies": {
     "@babel/core": "^7.1.6",
     "@babel/plugin-proposal-class-properties": "^7.1.0",
