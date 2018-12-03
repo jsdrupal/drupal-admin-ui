@@ -1,10 +1,13 @@
 {
-  "name": "@drupal/extension-points-bundler",
+  "name": "extension-points",
   "version": "0.1.0",
   "license": "MIT",
   "private": true,
   "bin": {
     "extension-points-bundler": "./index.js"
+  },
+  "scripts": {
+    "prettier": "prettier --write '*.{js,jsx,ts,tsx}'"
   },
   "dependencies": {
     "@babel/core": "^7.1.2",
