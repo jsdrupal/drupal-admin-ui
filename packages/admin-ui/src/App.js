@@ -161,16 +161,11 @@ const App = ({ serverRoutes }) => (
 );
 
 App.propTypes = {
-  serverRoutes: PropTypes.arrayOf(
-    PropTypes.shape({
-      route: PropTypes.string.isRequired,
-      component: PropTypes.string.isRequired,
-    }),
-  ),
-};
-
-App.defaultProps = {
-  serverRoutes: {},
+  serverRoutes: PropTypes.shape({
+    route: PropTypes.string,
+    component: PropTypes.string,
+    moduleName: PropTypes.string,
+  }).isRequired,
 };
 
 export default App;
