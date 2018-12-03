@@ -68,6 +68,9 @@ class DefaultController extends ControllerBase {
     $result = [$key => []];
     foreach ($discovery->findAll() as $module_name => $item) {
       $result[$key] = array_merge($result[$key], array_map(function ($widget) use ($module_name) {
+        assert(file_exists(drupal_get_path('module', $module_name) . '/' . $widget['component']),
+          "The {$widget['component']} bundle js file must exist. Ensure you executed the build process."
+        );
         $widget['component'] = file_create_url(drupal_get_path('module', $module_name) . '/' . $widget['component']);
         $widget['moduleName'] = $module_name;
         return $widget;
