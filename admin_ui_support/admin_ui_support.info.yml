@@ -5,9 +5,9 @@ version: VERSION
 core: 8.x
 dependencies:
   - drupal:file
+  - drupal:openapi
   - drupal:serialization
   - drupal:rest
   - jsonapi:jsonapi
   - jsonapi_tables:jsonapi_tables
   - jsonapi_support:jsonapi_support
-  - openapi:openapi
