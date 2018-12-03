@@ -99,3 +99,9 @@ admin_ui_support.components:
     _controller: '\Drupal\admin_ui_support\Controller\DefaultController::components'
   requirements:
     _access: 'TRUE'
+admin_ui_support.routes:
+  path: '/jsdrupal/routes'
+  defaults:
+    _controller: '\Drupal\admin_ui_support\Controller\DefaultController::routes'
+  requirements:
+    _access: 'TRUE'

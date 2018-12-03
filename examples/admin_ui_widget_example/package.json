@@ -1,9 +1,9 @@
 {
-  "name": "@jsdrupal/admin_ui_widget_example",
+  "name": "@drupal/admin_ui_widget_example",
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
   "dependencies": {
-    "@jsdrupal/extension-points-bundler": "file:../../packages/extension-points"
+    "@drupal/extension-points-bundler": "file:../../packages/extension-points"
   }
 }
