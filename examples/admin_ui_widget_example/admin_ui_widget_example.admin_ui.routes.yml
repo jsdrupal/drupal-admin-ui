@@ -1,0 +1,4 @@
+routes:
+  hello_world:
+    route: '/test'
+    component: js/build/hello_world.route.js
