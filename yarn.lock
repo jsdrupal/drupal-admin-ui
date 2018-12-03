@@ -959,6 +959,7 @@
   version "0.1.0"
   dependencies:
     "@material-ui/core" "^3.6.1"
+    emotion "^10.0.1"
 
 "@emotion/babel-utils@^0.6.4":
   version "0.6.10"
@@ -2602,7 +2603,7 @@ babel-plugin-dynamic-import-node@2.2.0:
   dependencies:
     object.assign "^4.1.0"
 
-babel-plugin-emotion@10.0.0:
+babel-plugin-emotion@10.0.0, babel-plugin-emotion@^10.0.0:
   version "10.0.0"
   resolved "https://registry.yarnpkg.com/babel-plugin-emotion/-/babel-plugin-emotion-10.0.0.tgz#ceb177a64d5ccba3c28d7de4a0697d0f3a66315f"
   integrity sha512-O0ykSwaJQVHuZcAd0/TuMbG6QzuArGheL9XeEoQfgBeFlcyrGEj/2JexsCk4iMMiykxW7hfulm0zKy864PWOSw==
