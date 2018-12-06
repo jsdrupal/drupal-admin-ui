@@ -109,10 +109,7 @@ async function api(
       options.headers['X-CSRF-Token'] = deleteToken;
       options.headers['Content-Type'] = 'application/vnd.api+json';
       options.method = 'DELETE';
-      url = parameters.node.links.self.replace(
-        REACT_APP_DRUPAL_BASE_URL,
-        '',
-      );
+      url = parameters.node.links.self.replace(REACT_APP_DRUPAL_BASE_URL, '');
       break;
     }
     case 'node:add': {
@@ -155,10 +152,7 @@ async function api(
       options.headers['X-CSRF-Token'] = saveToken;
       options.method = 'PATCH';
       options.body = JSON.stringify({ data: parameters.node });
-      url = parameters.node.links.self.replace(
-        REACT_APP_DRUPAL_BASE_URL,
-        '',
-      );
+      url = parameters.node.links.self.replace(REACT_APP_DRUPAL_BASE_URL, '');
       break;
     }
     case 'taxonomy_vocabulary': {
