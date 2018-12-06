@@ -13,6 +13,8 @@ import ListItem from '@material-ui/core/ListItem';
 import Button from '@material-ui/core/Button';
 import DeleteIcon from '@material-ui/icons/Delete';
 
+import { api } from '@drupal/admin-ui-utilities';
+
 import WidgetPropTypes from '../../05_pages/NodeForm/WidgetPropTypes';
 import FileUpload from '../FileUpload/FileUpload';
 import {
@@ -20,7 +22,8 @@ import {
   getItemsAsArray,
   setItemById,
 } from '../../../utils/api/fieldItem';
-import api from '../../../utils/api/api';
+
+const { REACT_APP_DRUPAL_BASE_URL } = process.env;
 
 const CardWrapper = styled('div')`
   margin-top: 15px;
@@ -116,7 +119,7 @@ class FileUploadWidget extends React.Component {
   };
 
   fetchEntitites = (entityTypeId, bundle, ids) =>
-    api(entityTypeId, {
+    api(REACT_APP_DRUPAL_BASE_URL, entityTypeId, {
       queryString: {
         filter: {
           id: {

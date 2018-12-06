@@ -1,0 +1,24 @@
+{
+  "name": "@drupal/admin-ui-utilities",
+  "description": "Utilities for Drupal Admin UI Project",
+  "version": "0.1.0",
+  "license": "MIT",
+  "private": true,
+  "main": "build/index.js",
+  "scripts": {
+    "build": "NODE_ENV=production webpack --progress --config webpack.config.js",
+    "watch": "NODE_ENV=development webpack --progress --watch --config webpack.config.js"
+  },
+  "dependencies": {
+    "qs": "^6.6.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.2.0",
+    "@babel/plugin-proposal-class-properties": "^7.2.1",
+    "@babel/preset-env": "^7.2.0",
+    "babel-loader": "^8.0.4",
+    "babel-minify-webpack-plugin": "^0.3.1",
+    "webpack": "^4.27.1",
+    "webpack-cli": "^3.1.2"
+  }
+}

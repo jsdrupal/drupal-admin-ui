@@ -4,10 +4,11 @@ import {
   hideLoading,
   resetLoading,
 } from 'react-redux-loading-bar';
+import { api, ApiError } from '@drupal/admin-ui-utilities';
 
-import api from '../utils/api/api';
 import { setErrorMessage } from './application';
-import { ApiError } from '../utils/api/errors';
+
+const { REACT_APP_DRUPAL_BASE_URL } = process.env;
 
 export const UI_SCHEMA_REQUESTED = 'UI_SCHEMA_REQUESTED';
 export const requestUiSchema = ({ entityTypeId, bundle }) => ({
@@ -75,7 +76,7 @@ function* loadSchema(action) {
     yield put(resetLoading());
     yield put(showLoading());
 
-    const entitySchema = yield call(api, 'schema', {
+    const entitySchema = yield call(api, REACT_APP_DRUPAL_BASE_URL, 'schema', {
       parameters: { entityTypeId, bundle },
       queryString: { _describes: 'api_json', _format: 'schema_json' },
     });
@@ -109,9 +110,14 @@ function* loadSchemaByEntityId(action) {
     yield put(resetLoading());
     yield put(showLoading());
 
-    const entitySchema = yield call(api, 'schema_by_id', {
-      parameters: { entityTypeId, entityId },
-    });
+    const entitySchema = yield call(
+      api,
+      REACT_APP_DRUPAL_BASE_URL,
+      'schema_by_id',
+      {
+        parameters: { entityTypeId, entityId },
+      },
+    );
 
     yield put({
       type: SCHEMA_BY_ENTITY_ID_LOADED,

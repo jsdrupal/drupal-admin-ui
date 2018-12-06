@@ -4,9 +4,10 @@ import {
   hideLoading,
   resetLoading,
 } from 'react-redux-loading-bar';
-import api from '../utils/api/api';
+import { api, ApiError } from '@drupal/admin-ui-utilities';
 import { setErrorMessage } from './application';
-import { ApiError } from '../utils/api/errors';
+
+const { REACT_APP_DRUPAL_BASE_URL } = process.env;
 
 export const DBLOG_COLLECTION_REQUEST = 'DBLOG_COLLECTION_REQUEST';
 export const requestDblogCollection = options => ({
@@ -76,8 +77,14 @@ export function* loadDblog({ payload: { options } }) {
         options,
       },
     });
-    const dbLogEntriesTypes = yield call(api, 'dblog:types');
-    const dbLogEntries = yield call(api, 'dblog', { queryString });
+    const dbLogEntriesTypes = yield call(
+      api,
+      REACT_APP_DRUPAL_BASE_URL,
+      'dblog:types',
+    );
+    const dbLogEntries = yield call(api, REACT_APP_DRUPAL_BASE_URL, 'dblog', {
+      queryString,
+    });
     yield put({
       type: DBLOG_COLLECTION_LOADED,
       payload: {

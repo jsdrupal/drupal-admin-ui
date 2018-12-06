@@ -10,11 +10,14 @@ import Chip from '@material-ui/core/Chip';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 
+import { api } from '@drupal/admin-ui-utilities';
+
 import WidgetPropTypes from '../../05_pages/NodeForm/WidgetPropTypes';
 import SchemaPropType from '../../05_pages/NodeForm/SchemaPropType';
 
-import api from '../../../utils/api/api';
 import { getItemsAsArray } from '../../../utils/api/fieldItem';
+
+const { REACT_APP_DRUPAL_BASE_URL } = process.env;
 
 const styles = {
   results: css`
@@ -162,7 +165,7 @@ class EntityReferenceAutocomplete extends React.Component {
   };
 
   fetchEntitites = (entityTypeId, bundle, ids) =>
-    api(entityTypeId, {
+    api(REACT_APP_DRUPAL_BASE_URL, entityTypeId, {
       queryString: {
         filter: {
           id: {
@@ -180,7 +183,7 @@ class EntityReferenceAutocomplete extends React.Component {
     });
 
   fetchSuggestedEntities = (bundle, type, input) =>
-    api(bundle, {
+    api(REACT_APP_DRUPAL_BASE_URL, bundle, {
       queryString: {
         filter: {
           // @todo On the longrun fetch the label_key from the entity type

@@ -11,10 +11,11 @@ import {
   hideLoading,
   resetLoading,
 } from 'react-redux-loading-bar';
-import api from '../utils/api/api';
+import { api, ApiError } from '@drupal/admin-ui-utilities';
 
 import { setErrorMessage } from './application';
-import { ApiError } from '../utils/api/errors';
+
+const { REACT_APP_DRUPAL_BASE_URL } = process.env;
 
 export const ROLES_REQUESTED = 'ROLES_REQUESTED';
 export const requestRoles = () => ({
@@ -27,7 +28,7 @@ function* loadRoles() {
   try {
     yield put(resetLoading());
     yield put(showLoading());
-    const roles = yield call(api, 'roles');
+    const roles = yield call(api, REACT_APP_DRUPAL_BASE_URL, 'roles');
     yield put({
       type: ROLES_LOADED,
       payload: {

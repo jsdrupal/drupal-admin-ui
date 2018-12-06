@@ -4,15 +4,16 @@ import {
   hideLoading,
   resetLoading,
 } from 'react-redux-loading-bar';
-import api from '../utils/api/api';
+import { api, ApiError } from '@drupal/admin-ui-utilities';
 import {
   MESSAGE_SEVERITY_ERROR,
   MESSAGE_SEVERITY_SUCCESS,
   MESSAGE_SEVERITY_INFO,
   MESSAGE_SEVERITY_WARNING,
 } from '../constants/messages';
-import { ApiError } from '../utils/api/errors';
 import widgets from '../components/05_pages/NodeForm/Widgets';
+
+const { REACT_APP_DRUPAL_BASE_URL } = process.env;
 
 export const OPEN_DRAWER = 'OPEN_DRAWER';
 export const openDrawer = () => ({
@@ -98,7 +99,7 @@ function* loadMenu() {
   try {
     yield put(resetLoading());
     yield put(showLoading());
-    const menuLinks = yield call(api, 'menu');
+    const menuLinks = yield call(api, REACT_APP_DRUPAL_BASE_URL, 'menu');
 
     yield put({
       type: MENU_LOADED,
@@ -134,7 +135,11 @@ export const contentTypesSelector = state => state.application.contentTypes;
 export const CONTENT_TYPES_LOADED = 'CONTENT_TYPES_LOADED';
 function* loadContentTypes() {
   try {
-    const contentTypes = yield call(api, 'contentTypes');
+    const contentTypes = yield call(
+      api,
+      REACT_APP_DRUPAL_BASE_URL,
+      'contentTypes',
+    );
     yield put({
       type: CONTENT_TYPES_LOADED,
       payload: {
@@ -164,7 +169,7 @@ function* loadActions() {
   try {
     let actions = { data: yield select(getActionsCache) };
     if (!Object.keys(actions.data).length) {
-      actions = yield call(api, 'actions');
+      actions = yield call(api, REACT_APP_DRUPAL_BASE_URL, 'actions');
     }
     yield put({
       type: ACTIONS_LOADED,
@@ -188,7 +193,11 @@ export const COMPONENT_LIST_LOADED = 'COMPONENT_LIST_LOADED';
 
 function* loadComponentList() {
   try {
-    const components = yield call(api, 'admin_ui_components');
+    const components = yield call(
+      api,
+      REACT_APP_DRUPAL_BASE_URL,
+      'admin_ui_components',
+    );
     yield put({
       type: COMPONENT_LIST_LOADED,
       payload: {

@@ -5,7 +5,9 @@ import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import LinearProgress from '@material-ui/core/LinearProgress';
-import api from '../../../utils/api/api';
+import { api } from '@drupal/admin-ui-utilities';
+
+const { REACT_APP_DRUPAL_BASE_URL } = process.env;
 
 const Container = styled('div')`
   width: 100%;
@@ -148,26 +150,30 @@ class FileUpload extends Component {
           props: { entityTypeId, bundle, fieldName, onFileUpload },
         } = this;
         const { buffer } = new Uint8Array(result);
-        const token = await api('csrf_token');
+        const token = await api(REACT_APP_DRUPAL_BASE_URL, 'csrf_token');
         // Replace file name, some reason any space doesn't work
         // TODO: Find a way to fix this without changing the name
         const fileName = file.name.replace(/[,#!$^&*;{}=\-+`~()[\] ]/g, '_');
 
         // Upload the file to server
-        const createdFile = await api('file:upload', {
-          parameters: {
-            bundle,
-            fileName,
-            fieldName,
-            entityTypeId,
-            body: buffer,
-          },
-          options: {
-            headers: {
-              'X-CSRF-Token': token,
+        const createdFile = await api(
+          REACT_APP_DRUPAL_BASE_URL,
+          'file:upload',
+          {
+            parameters: {
+              bundle,
+              fileName,
+              fieldName,
+              entityTypeId,
+              body: buffer,
+            },
+            options: {
+              headers: {
+                'X-CSRF-Token': token,
+              },
             },
           },
-        });
+        );
 
         this.setState(
           prevState => ({
