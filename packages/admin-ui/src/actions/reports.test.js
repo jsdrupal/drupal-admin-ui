@@ -1,11 +1,9 @@
 import { testSaga } from 'redux-saga-test-plan';
 import { resetLoading, showLoading } from 'react-redux-loading-bar';
-import { api } from '@drupal/admin-ui-utilities';
 
 import { loadDblog, DBLOG_FILTER_UPDATED } from './reports';
+import api from '../utils/api/api';
 import { setErrorMessage } from './application';
-
-const { REACT_APP_DRUPAL_BASE_URL } = process.env;
 
 it('test empty options', () => {
   testSaga(loadDblog, { payload: {} })
@@ -29,9 +27,9 @@ it('test with sort', () => {
       payload: { options: { sort: 'type' } },
     })
     .next()
-    .call(api, REACT_APP_DRUPAL_BASE_URL, 'dblog:types')
+    .call(api, 'dblog:types')
     .next()
-    .call(api, REACT_APP_DRUPAL_BASE_URL, 'dblog', {
+    .call(api, 'dblog', {
       queryString: {
         sort: 'type',
         page: {
@@ -50,7 +48,7 @@ it('test with pager', () => {
     .next()
     .next()
     .next()
-    .call(api, REACT_APP_DRUPAL_BASE_URL, 'dblog', {
+    .call(api, 'dblog', {
       queryString: {
         sort: '',
         page: {
@@ -72,7 +70,7 @@ it('test with sort and severity filter', () => {
     .next()
     .next()
     .next()
-    .call(api, REACT_APP_DRUPAL_BASE_URL, 'dblog', {
+    .call(api, 'dblog', {
       queryString: {
         sort: 'type',
         page: {

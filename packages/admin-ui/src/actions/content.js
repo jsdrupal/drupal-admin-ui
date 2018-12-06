@@ -14,7 +14,7 @@ import {
 } from 'react-redux-loading-bar';
 import { push } from 'react-router-redux';
 
-import { api, ApiError } from '@drupal/admin-ui-utilities';
+import api from '../utils/api/api';
 import {
   contentTypesSelector,
   setErrorMessage,
@@ -24,8 +24,7 @@ import {
 
 import MessageSave from '../components/01_subatomics/MessageHelpers/MessageSave';
 import { extractContentType, mapContentTypeToName } from '../utils/api/content';
-
-const { REACT_APP_DRUPAL_BASE_URL } = process.env;
+import { ApiError } from '../utils/api/errors';
 
 export const CONTENT_REQUESTED = 'CONTENT_REQUESTED';
 export const requestContent = (
@@ -110,9 +109,7 @@ function* loadContent(action) {
       delete queryString.filter;
     }
 
-    const contentList = yield call(api, REACT_APP_DRUPAL_BASE_URL, 'content', {
-      queryString,
-    });
+    const contentList = yield call(api, 'content', { queryString });
     yield put({
       type: CONTENT_LOADED,
       payload: {
@@ -144,7 +141,7 @@ function* loadSingleContent(action) {
 
     const {
       data: [content],
-    } = yield call(api, REACT_APP_DRUPAL_BASE_URL, 'content', {
+    } = yield call(api, 'content', {
       queryString: {
         filter: { condition: { path: 'nid', value: nid } },
       },
@@ -367,9 +364,7 @@ function* addContent({ payload: { content } }) {
     yield put(showLoading());
 
     yield all([
-      call(api, REACT_APP_DRUPAL_BASE_URL, 'node:add', {
-        parameters: { node: content },
-      }),
+      call(api, 'node:add', { parameters: { node: content } }),
       put(requestContentTypes()),
     ]);
 
@@ -395,9 +390,7 @@ function* deleteContent({ payload: { content } }) {
   try {
     yield put(resetLoading());
     yield put(showLoading());
-    yield call(api, REACT_APP_DRUPAL_BASE_URL, 'node:delete', {
-      parameters: { node: content },
-    });
+    yield call(api, 'node:delete', { parameters: { node: content } });
   } catch (error) {
     const errorMessage = yield ApiError.errorToHumanString(error);
     yield put(setErrorMessage(errorMessage));
@@ -423,7 +416,7 @@ function* loadUser(action) {
 
     const {
       data: [user],
-    } = yield call(api, REACT_APP_DRUPAL_BASE_URL, 'user', {
+    } = yield call(api, 'user', {
       queryString: {
         filter: { condition: { path: 'uid', value: uid } },
       },

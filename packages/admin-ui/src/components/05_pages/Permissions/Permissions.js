@@ -5,15 +5,13 @@ import makeCancelable from 'makecancelable';
 import { Markup } from 'interweave';
 import { css } from 'emotion';
 import { StickyContainer, Sticky } from 'react-sticky';
-import { api } from '@drupal/admin-ui-utilities';
 
 import Loading from '../../02_atoms/Loading/Loading';
 import { Table, TBody, THead } from '../../01_subatomics/Table/Table';
 
+import api from '../../../utils/api/api';
 import { MESSAGE_SEVERITY_SUCCESS } from '../../../constants/messages';
 import { setMessage, clearMessage } from '../../../actions/application';
-
-const { REACT_APP_DRUPAL_BASE_URL } = process.env;
 
 export const filterPermissions = (input, permissions) =>
   permissions.filter(
@@ -61,10 +59,7 @@ const Permissions = class Permissions extends Component {
 
   fetchData = () =>
     makeCancelable(
-      Promise.all([
-        api(REACT_APP_DRUPAL_BASE_URL, 'permissions'),
-        api(REACT_APP_DRUPAL_BASE_URL, 'roles'),
-      ])
+      Promise.all([api('permissions'), api('roles')])
         .then(([permissions, { data: roles }]) =>
           this.setState({
             rawPermissions: permissions,
@@ -194,7 +189,7 @@ const Permissions = class Permissions extends Component {
               this.state.changedRoles.includes(role.attributes.id),
             )
             .map(role =>
-              api(REACT_APP_DRUPAL_BASE_URL, 'role:patch', {
+              api('role:patch', {
                 parameters: {
                   role,
                 },

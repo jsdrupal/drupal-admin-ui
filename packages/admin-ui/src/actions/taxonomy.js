@@ -4,11 +4,10 @@ import {
   hideLoading,
   resetLoading,
 } from 'react-redux-loading-bar';
-import { api, ApiError } from '@drupal/admin-ui-utilities';
 
+import api from '../utils/api/api';
+import { ApiError } from '../utils/api/errors';
 import { setErrorMessage } from './application';
-
-const { REACT_APP_DRUPAL_BASE_URL } = process.env;
 
 export const TAXONOMY_VOCABULARY_REQUESTED = 'TAXONOMY_VOCABULARY_REQUESTED';
 export const requestTaxonomyVocabulary = () => ({
@@ -76,14 +75,9 @@ function* loadTaxonomyTerms(action) {
     yield put(resetLoading());
     yield put(showLoading());
 
-    const { data: taxonomyTerms } = yield call(
-      api,
-      REACT_APP_DRUPAL_BASE_URL,
-      'taxonomy_term',
-      {
-        parameters: { type: vocabulary },
-      },
-    );
+    const { data: taxonomyTerms } = yield call(api, 'taxonomy_term', {
+      parameters: { type: vocabulary },
+    });
 
     const {
       taxonomy: { taxonomyVocabulary },
