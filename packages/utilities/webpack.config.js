@@ -30,7 +30,18 @@ module.exports = {
         use: {
           loader: 'babel-loader',
           options: {
-            plugins: ['@babel/plugin-proposal-class-properties'],
+            plugins: [
+              '@babel/plugin-proposal-class-properties',
+              [
+                '@babel/plugin-transform-runtime',
+                {
+                  corejs: false,
+                  helpers: true,
+                  regenerator: true,
+                  useESModules: false,
+                },
+              ],
+            ],
             presets: [
               '@babel/preset-react',
               [
