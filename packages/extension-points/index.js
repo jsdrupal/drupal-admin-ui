@@ -66,7 +66,12 @@ Promise.all([
         filename: '[name].js',
       },
       plugins: [],
-      externals: ['react', '@material-ui/core', /@material-ui\/core\/*./],
+      externals: [
+        'react',
+        '@drupal/admin-ui-utilities',
+        '@material-ui/core',
+        /@material-ui\/core\/*./,
+      ],
       module: {
         rules: [
           {

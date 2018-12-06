@@ -1,6 +1,24 @@
 import qs from 'qs';
 import { ApiError } from './errors';
 
+/**
+ * An async helper function for making requests to a Drupal backend.
+ *
+ * @param {string} REACT_APP_DRUPAL_BASE_URL
+ *  The base url of the backend (Drupal)
+ * @param {string} endpoint
+ *  The name of the end point you want to use.
+ * @param {Object} [settings={}]
+ *  Optional settings.
+ * @param {Object} [settings.queryString=null]
+ *  Key value parameters to be processed into a query string.
+ * @param {Object} [settings.parameters={}]
+ *  Route string construction parameters.
+ * @param {Object} [settings.options={}]
+ *  HTTP request options.
+ * @return {Promise}
+ *  Result of the fetch operation.
+ */
 async function api(
   REACT_APP_DRUPAL_BASE_URL,
   endpoint,
@@ -91,7 +109,10 @@ async function api(
       options.headers['X-CSRF-Token'] = deleteToken;
       options.headers['Content-Type'] = 'application/vnd.api+json';
       options.method = 'DELETE';
-      url = parameters.node.links.self.replace(REACT_APP_DRUPAL_BASE_URL, '');
+      url = parameters.node.links.self.replace(
+        REACT_APP_DRUPAL_BASE_URL,
+        '',
+      );
       break;
     }
     case 'node:add': {
@@ -134,7 +155,10 @@ async function api(
       options.headers['X-CSRF-Token'] = saveToken;
       options.method = 'PATCH';
       options.body = JSON.stringify({ data: parameters.node });
-      url = parameters.node.links.self.replace(REACT_APP_DRUPAL_BASE_URL, '');
+      url = parameters.node.links.self.replace(
+        REACT_APP_DRUPAL_BASE_URL,
+        '',
+      );
       break;
     }
     case 'taxonomy_vocabulary': {
