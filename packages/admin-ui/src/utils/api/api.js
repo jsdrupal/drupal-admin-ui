@@ -185,6 +185,10 @@ async function api(
       url = '/jsdrupal/components';
       break;
     }
+    case 'admin_ui_routes': {
+      url = '/jsdrupal/routes';
+      break;
+    }
     default:
       break;
   }

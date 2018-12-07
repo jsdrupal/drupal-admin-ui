@@ -35,3 +35,14 @@ widgets:
     component: js/build/options_buttons.widget.js
     multiple: true
 ```
+
+### Routes Configuration
+
+A single `*.admin_ui.routes.yml` file can contain as many routes as needed. Note that route will be automatically prefixed with the Drupal module name. For example the route provided in `/examples/admin_ui_widget_example/admin_ui_widget_example.admin_ui.routes.yml` would result in the following route in the application, `/admin_ui_widget_example/test`.
+
+```
+routes:
+  hello_world:
+    route: '/test'
+    component: js/build/hello_world.route.js
+```

@@ -7,7 +7,7 @@ const jsyaml = require('js-yaml');
 const webpack = require('webpack');
 const MinifyPlugin = require('babel-minify-webpack-plugin');
 
-const [readFilePM] = [readFile].map(promisify);
+const readFilePM = promisify(readFile);
 const operatingDirectory = process.cwd();
 
 Promise.all([
@@ -15,22 +15,43 @@ Promise.all([
     `${operatingDirectory}/${basename(
       operatingDirectory,
     )}.admin_ui.components.yml`,
-  ),
+  ).catch(err => {
+    // It is fine if these extension points don't provide routes.
+    if (err.code !== 'ENOENT') {
+      throw err;
+    }
+    return null;
+  }),
+  readFilePM(
+    `${operatingDirectory}/${basename(operatingDirectory)}.admin_ui.routes.yml`,
+  ).catch(err => {
+    // It is fine if these extension points don't provide routes.
+    if (err.code !== 'ENOENT') {
+      throw err;
+    }
+    return null;
+  }),
 ])
-  .then(([components]) => ({ components: jsyaml.safeLoad(components) }))
-  .then(({ components }) =>
-    Object.keys(components.widgets).reduce(
-      (acc, widgetName) => ({
+  .then(([components, routes]) => ({
+    components: components && jsyaml.safeLoad(components),
+    routes: routes && jsyaml.safeLoad(routes),
+  }))
+  .then(({ components, routes }) => ({
+    ...Object.entries((components && components.widgets) || []).reduce(
+      (acc, [key, { component }]) => ({
         ...acc,
-        ...{
-          [`${widgetName}.widget`]: `./js/src/${basename(
-            components.widgets[widgetName].component,
-          )}`,
-        },
+        ...{ [`${key}.widget`]: `./js/src/${basename(component)}` },
       }),
       {},
     ),
-  )
+    ...Object.entries((routes && routes.routes) || []).reduce(
+      (acc, [key, { component }]) => ({
+        ...acc,
+        ...{ [`${key}.route`]: `./js/src/${basename(component)}` },
+      }),
+      {},
+    ),
+  }))
   .then(entry => {
     const webpackConfig = {
       entry,
