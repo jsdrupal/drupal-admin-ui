@@ -2,7 +2,7 @@
     "name": "justafish/drupal-admin-ui-support",
     "type": "drupal-module",
     "description": "Drupal support module for the v fancy React admin UI",
-    "license": "GPL-2.0+",
+    "license": "GPL-2.0-or-later",
     "require-dev": {
         "cweagans/composer-patches": "^1.6",
         "behat/mink-selenium2-driver": "1.3.x-dev",
