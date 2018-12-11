@@ -86,6 +86,9 @@ next time you bring your containers up (warning: this will wipe your entire Drup
 ```
 composer create-project jsdrupal/drupal-admin-ui-demo -s dev --prefer-dist
 cd drupal-admin-ui-demo
+cp demo/templates/composer.json demo
+cp demo/templates/composer.lock demo
+cp demo/templates/.ht.router.php demo/docroot
 composer setup
 ```
 

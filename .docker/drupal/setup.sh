@@ -16,14 +16,12 @@ if [ ! -f /var/www/drupal/docroot/sites/default/settings.php ]; then
     chmod 777 docroot/sites/default/files/.ht.sqlite
     drush en -y jsonapi admin_ui_support admin_ui_widget_example
     drush config:set -y system.logging error_level verbose
-    rm -f docroot/.ht.router.php
-    ln -s ../.ht.router.php docroot/.ht.router.php
 fi
 
 echo "
 ##############################################################################################
 # One time login URL                                                                         #
-# $(./vendor/bin/drush uli) #
+# $(drush user:login) #
 ##############################################################################################"
 
 apachectl start -DFOREGROUND
