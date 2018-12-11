@@ -4,15 +4,21 @@ import mkdirp from 'mkdirp';
 import path from 'path';
 import fs from 'fs';
 
+let chromedriverInstance;
+
 module.exports = {
   asyncHookTimeout: 60000,
   waitForConditionTimeout: 10000,
   before(done) {
-    chromedriver.start();
+    if (!process.env.NIGHTWATCH_CHROMEDRIVER_HOST) {
+      chromedriver.start();
+    }
     done();
   },
   after(done) {
-    chromedriver.stop();
+    if (!process.env.NIGHTWATCH_CHROMEDRIVER_HOST) {
+      chromedriver.stop();
+    }
     done();
   },
   afterEach(browser, done) {

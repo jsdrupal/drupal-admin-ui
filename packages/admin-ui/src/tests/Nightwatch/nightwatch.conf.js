@@ -8,12 +8,9 @@ process.env.NODE_ENV = 'nightwatch';
 // Ensure environment variables are read.
 require('react-scripts/config/env');
 
-const chromeArgs = ['--disable-notifications'];
-if (
-  !process.env.NIGHTWATCH_HEADLESS_CHROME ||
-  !JSON.parse(process.env.NIGHTWATCH_HEADLESS_CHROME)
-) {
-  chromeArgs.push('--headless');
+let chromeArgs = ['--disable-notifications'];
+if (process.env.NIGHTWATCH_CHROME_ARGS) {
+  chromeArgs = chromeArgs.concat(process.env.NIGHTWATCH_CHROME_ARGS.split(' '));
 }
 
 module.exports = {
@@ -28,7 +25,7 @@ module.exports = {
   test_settings: {
     default: {
       selenium_port: 9515,
-      selenium_host: 'localhost',
+      selenium_host: process.env.NIGHTWATCH_CHROMEDRIVER_HOST || 'localhost',
       request_timeout_options: {
         timeout: 30000,
         retry_attempts: 5,

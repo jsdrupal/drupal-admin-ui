@@ -1,0 +1,46 @@
+version: '3'
+
+services:
+
+  drupal:
+    container_name: drupal_admin_ui_drupal
+    environment:
+      - DRUSH_OPTIONS_URI=http://127.0.0.1
+    build:
+      context: .
+      dockerfile: ./.docker/drupal/Dockerfile
+    ports:
+      - 80:80
+    volumes:
+      - ~/.composer/cache:/root/.composer/cache
+      - ./demo:/var/www/drupal
+      - ./admin_ui_support:/var/www/admin_ui_support
+      - ./packages/admin-ui/build:/var/www/drupal/docroot/vfancy
+
+  node:
+    container_name: drupal_admin_ui_node
+    environment:
+      - REACT_APP_DRUPAL_BASE_URL=http://drupal
+      - REACT_APP_DRUPAL_ROOT=/
+      - NIGHTWATCH_CHROMEDRIVER_HOST=chrome
+      - NIGHTWATCH_CHROME_ARGS=--headless --no-sandbox
+      - NIGHTWATCH_URL=http://node:3000
+    build:
+      context: .
+      dockerfile: ./.docker/node/Dockerfile
+    ports:
+      - 3000:3000
+    volumes:
+      - .:/root/drupal-admin-ui
+      - /root/drupal-admin-ui/node_modules
+      - /root/drupal-admin-ui/packages/admin-ui/node_modules
+      - /root/drupal-admin-ui/packages/components/node_modules
+      - /root/drupal-admin-ui/packages/extension-points/node_modules
+
+  chrome:
+    container_name: drupal_admin_ui_chrome
+    build:
+      context: .
+      dockerfile: ./.docker/chrome/Dockerfile
+    depends_on:
+      - "node"
