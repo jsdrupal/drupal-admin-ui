@@ -12,10 +12,10 @@ services:
     ports:
       - 80:80
     volumes:
-      - ~/.composer/cache:/root/.composer/cache
-      - ./demo:/var/www/drupal
-      - ./admin_ui_support:/var/www/admin_ui_support
-      - ./packages/admin-ui/build:/var/www/drupal/docroot/vfancy
+      - ~/.composer/cache:/root/.composer/cache:cached
+      - ./demo:/var/www/drupal:cached
+      - ./admin_ui_support:/var/www/admin_ui_support:cached
+      - ./packages/admin-ui/build:/var/www/drupal/docroot/vfancy:cached
 
   node:
     container_name: drupal_admin_ui_node
@@ -31,7 +31,7 @@ services:
     ports:
       - 3000:3000
     volumes:
-      - .:/root/drupal-admin-ui
+      - .:/root/drupal-admin-ui:cached
       - /root/drupal-admin-ui/node_modules
       - /root/drupal-admin-ui/packages/admin-ui/node_modules
       - /root/drupal-admin-ui/packages/components/node_modules
