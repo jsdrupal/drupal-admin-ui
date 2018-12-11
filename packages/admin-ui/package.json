@@ -16,6 +16,7 @@
     ]
   },
   "dependencies": {
+    "@drupal/admin-ui-utilities": "file:../utilities",
     "@material-ui/core": "^3.2.0",
     "@material-ui/icons": "^3.0.1",
     "@types/jest": "^23.3.9",
@@ -31,7 +32,6 @@
     "keycode": "^2.2.0",
     "makecancelable": "^1.0.0",
     "prop-types": "^15.6.1",
-    "qs": "^6.5.1",
     "react": "^16.6.3",
     "react-dom": "^16.6.3",
     "react-emotion": "^9.2.5",

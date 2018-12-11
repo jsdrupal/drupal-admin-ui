@@ -163,7 +163,7 @@ jobs:
         name: Update composer.lock
         command: |
           cd ~/project/demo
-          composer update justafish/drupal-admin-ui-support
+          composer update justafish/drupal-admin-ui-support --lock
     - commit-and-push:
         message: "Auto update from master"
         files: ~/project/demo
