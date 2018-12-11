@@ -12,8 +12,9 @@ if [ ! -f /var/www/drupal/docroot/sites/default/settings.php ]; then
     composer config repositories.repo-name path "/var/www/admin_ui_support"
     composer require justafish/drupal-admin-ui-support:dev-master
     composer install
-    drush site:install -y --sites-subdir=default demo_umami --db-url=sqlite://sites/default/files/.ht.sqlite
-    chmod 777 docroot/sites/default/files/.ht.sqlite
+    chmod +x /var/www/drupal/docroot/core/scripts/drupal
+    ./docroot/core/scripts/drupal install demo_umami
+    chmod 777 docroot/sites/default/files/.sqlite
     drush en -y jsonapi admin_ui_support admin_ui_widget_example
     drush config:set -y system.logging error_level verbose
 fi
