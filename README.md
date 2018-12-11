@@ -19,6 +19,9 @@ This is an admin UI for Drupal, built with JavaScript and based on [create-react
 ## Installation
 
 ### Docker
+
+Ensure that you currently have nothing running on port 80 or port 3000.
+
 ```
 git clone git@github.com:jsdrupal/drupal-admin-ui.git
 cd drupal-admin-ui
@@ -27,6 +30,7 @@ docker-compose up
 
 As this is the first time starting the containers, the Drupal installation will take a little time.
 It will be completed once you see:
+
 ```
 drupal_admin_ui_drupal | ##############################################################################################
 drupal_admin_ui_drupal | # One time login URL                                                                         #
