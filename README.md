@@ -20,7 +20,7 @@ This is an admin UI for Drupal, built with JavaScript and based on [create-react
 
 ### Docker
 
-Ensure that you currently have nothing running on port 80 or port 3000.
+Ensure that you currently have nothing running on port 80 or port 3000, for example using ` lsof -i :80 -S`.
 
 ```
 git clone git@github.com:jsdrupal/drupal-admin-ui.git
