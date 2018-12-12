@@ -4,8 +4,6 @@ import mkdirp from 'mkdirp';
 import path from 'path';
 import fs from 'fs';
 
-let chromedriverInstance;
-
 module.exports = {
   asyncHookTimeout: 60000,
   waitForConditionTimeout: 10000,
