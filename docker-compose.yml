@@ -13,6 +13,7 @@ services:
       - 80:80
     volumes:
       - ~/.composer/cache:/root/.composer/cache:cached
+      - ./.docker:/root/.docker:cached
       - ./demo:/var/www/drupal:cached
       - ./admin_ui_support:/var/www/admin_ui_support:cached
       - ./packages/admin-ui/build:/var/www/drupal/docroot/vfancy:cached
@@ -20,7 +21,7 @@ services:
   node:
     container_name: drupal_admin_ui_node
     environment:
-      - REACT_APP_DRUPAL_BASE_URL=http://drupal
+      - REACT_APP_DRUPAL_BASE_URL=http://127.0.0.1
       - REACT_APP_DRUPAL_ROOT=/
       - NIGHTWATCH_CHROMEDRIVER_HOST=chrome
       - NIGHTWATCH_CHROME_ARGS=--headless --no-sandbox
@@ -32,6 +33,7 @@ services:
       - 3000:3000
     volumes:
       - .:/root/drupal-admin-ui:cached
+      - ~/.cache/yarn:/root/.cache/yarn:cached
       - /root/drupal-admin-ui/node_modules
       - /root/drupal-admin-ui/packages/admin-ui/node_modules
       - /root/drupal-admin-ui/packages/components/node_modules

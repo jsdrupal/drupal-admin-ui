@@ -8,7 +8,6 @@ RUN apk add php sqlite composer git \
 
 ADD demo /var/www/drupal
 ADD admin_ui_support /var/www/admin_ui_support
-ADD .docker/drupal/setup.sh /root/
 
 RUN rm -rf /var/www/localhost && \
     sed -i 's/\/var\/www\/localhost\/htdocs/\/var\/www\/drupal\/docroot/g' /etc/apache2/httpd.conf && \
@@ -16,7 +15,6 @@ RUN rm -rf /var/www/localhost && \
     sed -i '/<Directory "\/var\/www\/drupal\/docroot">/,/<\/Directory>/s/AllowOverride None/AllowOverride All/' /etc/apache2/httpd.conf && \
     sed -i 's/#ServerName www.example.com:80/ServerName 127.0.0.1:80/g' /etc/apache2/httpd.conf && \
     sed -i 's/;opcache.enable=1/opcache.enable=1/' /etc/php7/php.ini && \
-    chmod +x /root/setup.sh && \
     mkdir -p /run/apache2
 
 WORKDIR /var/www/drupal
@@ -24,4 +22,4 @@ ENV PATH="/var/www/drupal/vendor/bin:${PATH}"
 
 EXPOSE 80
 
-ENTRYPOINT ["/root/setup.sh"]
+ENTRYPOINT ["sh", "/root/.docker/drupal/setup.sh"]

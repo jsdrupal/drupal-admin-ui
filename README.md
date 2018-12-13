@@ -22,6 +22,10 @@ This is an admin UI for Drupal, built with JavaScript and based on [create-react
 
 Ensure that you currently have nothing running on port 80 or port 3000, for example using ` lsof -i :80 -S`.
 
+Optional: If you're on a Mac and already use yarn locally, may want to move your yarn cache
+folder to a standard location to speed up installs (your local and container can then share the cache).
+Move it to ~/.cache/yarn (see https://yarnpkg.com/lang/en/docs/cli/cache/ for instructions)
+
 ```
 git clone git@github.com:jsdrupal/drupal-admin-ui.git
 cd drupal-admin-ui
@@ -36,6 +40,20 @@ drupal_admin_ui_drupal | #######################################################
 drupal_admin_ui_drupal | # One time login URL                                                                         #
 drupal_admin_ui_drupal | # http://127.0.0.1/user/reset/1/1544503999/pOsRQl-VwQQKoJ25VRmKsdFw59KoWEl59Cc_L12QfZU/login #
 drupal_admin_ui_drupal | ##############################################################################################
+
+```
+
+The node container will be ready once you see
+```
+drupal_admin_ui_node | Compiled successfully!
+drupal_admin_ui_node |
+drupal_admin_ui_node | You can now view admin-ui in the browser.
+drupal_admin_ui_node |
+drupal_admin_ui_node |   Local:            http://localhost:3000/
+drupal_admin_ui_node |   On Your Network:  http://172.20.0.3:3000/
+drupal_admin_ui_node |
+drupal_admin_ui_node | Note that the development build is not optimized.
+drupal_admin_ui_node | To create a production build, use npm run build.
 
 ```
 

@@ -19,10 +19,10 @@ if [ ! -f /var/www/drupal/docroot/sites/default/settings.php ]; then
     drush config:set -y system.logging error_level verbose
 fi
 
-echo "
-##############################################################################################
+echo "##############################################################################################
 # One time login URL                                                                         #
 # $(drush user:login) #
 ##############################################################################################"
+
 
 apachectl start -DFOREGROUND
