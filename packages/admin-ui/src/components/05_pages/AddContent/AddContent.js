@@ -47,6 +47,7 @@ export default class extends Component {
                   secondary={
                     <Markup
                       content={this.props.contentTypes[contentType].description}
+                      tagName="fragment"
                     />
                   }
                 />
