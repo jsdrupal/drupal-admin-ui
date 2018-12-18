@@ -112,7 +112,9 @@ export default class TaxonomyTermsOverview extends React.Component {
                   <TableRow key={term.attributes.uuid}>
                     <TableCell>{term.attributes.name}</TableCell>
                     <TableCell>
-                      {this.termOperations(term.attributes.tid)}
+                      {this.termOperations(
+                        term.attributes.drupal_internal__tid,
+                      )}
                     </TableCell>
                   </TableRow>
                 ))}

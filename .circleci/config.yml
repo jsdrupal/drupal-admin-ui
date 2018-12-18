@@ -101,8 +101,8 @@ jobs:
             command: |
                 cd ~/project/demo
                 composer config repositories.repo-name path "~/project/admin_ui_support"
-                composer require justafish/drupal-admin-ui-support:dev-$CIRCLE_BRANCH
-                composer install
+                composer require justafish/drupal-admin-ui-support:dev-$CIRCLE_BRANCH --no-update
+                composer update
                 composer setup
         - save_cache:
             key: *composer-cache-key

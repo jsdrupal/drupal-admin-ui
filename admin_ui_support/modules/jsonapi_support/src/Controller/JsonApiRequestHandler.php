@@ -31,7 +31,8 @@ class JsonApiRequestHandler extends RequestHandler {
         $this->fieldManager,
         $this->fieldTypeManager,
         $this->linkManager,
-        $this->resourceTypeRepository
+        $this->resourceTypeRepository,
+        $this->renderer
       );
     }
     if ($resource_type instanceof CrossBundlesResourceType) {
@@ -41,7 +42,8 @@ class JsonApiRequestHandler extends RequestHandler {
         $this->fieldManager,
         $this->fieldTypeManager,
         $this->linkManager,
-        $this->resourceTypeRepository
+        $this->resourceTypeRepository,
+        $this->renderer
       );
     }
     return parent::resourceFactory($resource_type);

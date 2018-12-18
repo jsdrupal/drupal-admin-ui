@@ -63,7 +63,9 @@ export const requestTaxonomyTerms = vocabulary => ({
 
 export const getTaxonomyVocabularyById = (taxonomyVocabularyList, vocabulary) =>
   taxonomyVocabularyList
-    .filter(({ attributes: { vid } }) => vid === vocabulary)
+    .filter(
+      ({ attributes: { drupal_internal__vid: vid } }) => vid === vocabulary,
+    )
     .shift();
 
 export const TAXONOMY_TERMS_LOADED = 'TAXONOMY_TERMS_LOADED';
