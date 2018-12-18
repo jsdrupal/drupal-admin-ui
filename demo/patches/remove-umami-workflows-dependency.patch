@@ -1,5 +1,5 @@
 diff --git a/core/profiles/demo_umami/config/install/core.entity_form_display.block_content.banner_block.default.yml b/core/profiles/demo_umami/config/install/core.entity_form_display.block_content.banner_block.default.yml
-index c2727589d9..5cc98ced6c 100644
+index c2727589d9..5dd5dd513f 100644
 --- a/core/profiles/demo_umami/config/install/core.entity_form_display.block_content.banner_block.default.yml
 +++ b/core/profiles/demo_umami/config/install/core.entity_form_display.block_content.banner_block.default.yml
 @@ -56,5 +56,4 @@ content:
@@ -10,7 +10,7 @@ index c2727589d9..5cc98ced6c 100644
 -  moderation_state: true
 +hidden: {  }
 diff --git a/core/profiles/demo_umami/config/install/core.entity_form_display.block_content.basic.default.yml b/core/profiles/demo_umami/config/install/core.entity_form_display.block_content.basic.default.yml
-index a60d7db281..97f5d00feb 100644
+index a60d7db281..7ccb5b0ad3 100644
 --- a/core/profiles/demo_umami/config/install/core.entity_form_display.block_content.basic.default.yml
 +++ b/core/profiles/demo_umami/config/install/core.entity_form_display.block_content.basic.default.yml
 @@ -28,5 +28,4 @@ content:
@@ -21,7 +21,7 @@ index a60d7db281..97f5d00feb 100644
 -  moderation_state: true
 +hidden: {  }
 diff --git a/core/profiles/demo_umami/config/install/core.entity_form_display.block_content.disclaimer_block.default.yml b/core/profiles/demo_umami/config/install/core.entity_form_display.block_content.disclaimer_block.default.yml
-index 386ff59c2a..052eea190d 100644
+index 386ff59c2a..a64f7c2805 100644
 --- a/core/profiles/demo_umami/config/install/core.entity_form_display.block_content.disclaimer_block.default.yml
 +++ b/core/profiles/demo_umami/config/install/core.entity_form_display.block_content.disclaimer_block.default.yml
 @@ -36,5 +36,4 @@ content:
@@ -32,7 +32,7 @@ index 386ff59c2a..052eea190d 100644
 -  moderation_state: true
 +hidden: {  }
 diff --git a/core/profiles/demo_umami/config/install/core.entity_form_display.block_content.footer_promo_block.default.yml b/core/profiles/demo_umami/config/install/core.entity_form_display.block_content.footer_promo_block.default.yml
-index 81b95045dd..fc782fe716 100644
+index 81b95045dd..041af3772b 100644
 --- a/core/profiles/demo_umami/config/install/core.entity_form_display.block_content.footer_promo_block.default.yml
 +++ b/core/profiles/demo_umami/config/install/core.entity_form_display.block_content.footer_promo_block.default.yml
 @@ -56,5 +56,4 @@ content:
@@ -43,37 +43,40 @@ index 81b95045dd..fc782fe716 100644
 -  moderation_state: true
 +hidden: {  }
 diff --git a/core/profiles/demo_umami/config/install/core.entity_form_display.media.audio.default.yml b/core/profiles/demo_umami/config/install/core.entity_form_display.media.audio.default.yml
-index 38efab24a7..a36135b3f5 100644
+index 231e7f3bdb..81c04489de 100644
 --- a/core/profiles/demo_umami/config/install/core.entity_form_display.media.audio.default.yml
 +++ b/core/profiles/demo_umami/config/install/core.entity_form_display.media.audio.default.yml
-@@ -55,5 +55,4 @@ content:
+@@ -47,6 +47,4 @@ content:
        placeholder: ''
      region: content
      third_party_settings: {  }
 -hidden:
 -  moderation_state: true
+-  name: true
 +hidden: {  }
 diff --git a/core/profiles/demo_umami/config/install/core.entity_form_display.media.file.default.yml b/core/profiles/demo_umami/config/install/core.entity_form_display.media.file.default.yml
-index 16536c8127..db9b25551e 100644
+index a9fa8831c1..c74ec93ed4 100644
 --- a/core/profiles/demo_umami/config/install/core.entity_form_display.media.file.default.yml
 +++ b/core/profiles/demo_umami/config/install/core.entity_form_display.media.file.default.yml
-@@ -55,5 +55,4 @@ content:
+@@ -47,6 +47,4 @@ content:
        placeholder: ''
      region: content
      third_party_settings: {  }
 -hidden:
 -  moderation_state: true
+-  name: true
 +hidden: {  }
 diff --git a/core/profiles/demo_umami/config/install/core.entity_form_display.media.image.default.yml b/core/profiles/demo_umami/config/install/core.entity_form_display.media.image.default.yml
-index 06ab5d285e..c1139a8a39 100644
+index fe6cfed79f..6cbf783e44 100644
 --- a/core/profiles/demo_umami/config/install/core.entity_form_display.media.image.default.yml
 +++ b/core/profiles/demo_umami/config/install/core.entity_form_display.media.image.default.yml
-@@ -57,5 +57,4 @@ content:
+@@ -49,6 +49,4 @@ content:
        placeholder: ''
      region: content
      third_party_settings: {  }
 -hidden:
 -  moderation_state: true
+-  name: true
 +hidden: {  }
 diff --git a/core/profiles/demo_umami/config/install/core.entity_form_display.media.remote_video.default.yml b/core/profiles/demo_umami/config/install/core.entity_form_display.media.remote_video.default.yml
 index d0924b7042..098a2ecc54 100644
@@ -86,18 +89,18 @@ index d0924b7042..098a2ecc54 100644
 -  moderation_state: true
    name: true
 diff --git a/core/profiles/demo_umami/config/install/core.entity_form_display.node.article.default.yml b/core/profiles/demo_umami/config/install/core.entity_form_display.node.article.default.yml
-index 50db6035b7..122c53e37c 100644
+index bc28702427..832c76d9ad 100644
 --- a/core/profiles/demo_umami/config/install/core.entity_form_display.node.article.default.yml
 +++ b/core/profiles/demo_umami/config/install/core.entity_form_display.node.article.default.yml
-@@ -8,7 +8,6 @@ dependencies:
-     - image.style.thumbnail
+@@ -9,7 +9,6 @@ dependencies:
      - node.type.article
+     - workflows.workflow.editorial
    module:
 -    - content_moderation
      - image
      - path
      - text
-@@ -28,13 +27,13 @@ content:
+@@ -29,13 +28,13 @@ content:
      third_party_settings: {  }
    created:
      type: datetime_timestamp
@@ -113,7 +116,7 @@ index 50db6035b7..122c53e37c 100644
      region: content
      settings:
        progress_indicator: throbber
-@@ -42,22 +41,13 @@ content:
+@@ -43,22 +42,13 @@ content:
      third_party_settings: {  }
    field_tags:
      type: entity_reference_autocomplete_tags
@@ -138,7 +141,7 @@ index 50db6035b7..122c53e37c 100644
      region: content
      settings: {  }
      third_party_settings: {  }
-@@ -65,21 +55,21 @@ content:
+@@ -66,21 +56,21 @@ content:
      type: boolean_checkbox
      settings:
        display_label: true
@@ -163,7 +166,7 @@ index 50db6035b7..122c53e37c 100644
      region: content
      third_party_settings: {  }
    title:
-@@ -92,7 +82,7 @@ content:
+@@ -93,7 +83,7 @@ content:
      third_party_settings: {  }
    uid:
      type: entity_reference_autocomplete
@@ -173,18 +176,18 @@ index 50db6035b7..122c53e37c 100644
      settings:
        match_operator: CONTAINS
 diff --git a/core/profiles/demo_umami/config/install/core.entity_form_display.node.page.default.yml b/core/profiles/demo_umami/config/install/core.entity_form_display.node.page.default.yml
-index 9a896e5a33..682f1a550c 100644
+index 76b8b9fe0b..8045f246dc 100644
 --- a/core/profiles/demo_umami/config/install/core.entity_form_display.node.page.default.yml
 +++ b/core/profiles/demo_umami/config/install/core.entity_form_display.node.page.default.yml
-@@ -5,7 +5,6 @@ dependencies:
-     - field.field.node.page.body
+@@ -6,7 +6,6 @@ dependencies:
      - node.type.page
+     - workflows.workflow.editorial
    module:
 -    - content_moderation
      - path
      - text
  id: node.page.default
-@@ -15,7 +14,7 @@ mode: default
+@@ -16,7 +15,7 @@ mode: default
  content:
    body:
      type: text_textarea_with_summary
@@ -193,7 +196,7 @@ index 9a896e5a33..682f1a550c 100644
      region: content
      settings:
        rows: 9
-@@ -24,19 +23,13 @@ content:
+@@ -25,19 +24,13 @@ content:
      third_party_settings: {  }
    created:
      type: datetime_timestamp
@@ -215,7 +218,7 @@ index 9a896e5a33..682f1a550c 100644
      region: content
      settings: {  }
      third_party_settings: {  }
-@@ -44,26 +37,26 @@ content:
+@@ -45,26 +38,26 @@ content:
      type: boolean_checkbox
      settings:
        display_label: true
@@ -246,7 +249,7 @@ index 9a896e5a33..682f1a550c 100644
      region: content
      settings:
        size: 60
-@@ -71,7 +64,7 @@ content:
+@@ -72,7 +65,7 @@ content:
      third_party_settings: {  }
    uid:
      type: entity_reference_autocomplete
@@ -256,18 +259,18 @@ index 9a896e5a33..682f1a550c 100644
      settings:
        match_operator: CONTAINS
 diff --git a/core/profiles/demo_umami/config/install/core.entity_form_display.node.recipe.default.yml b/core/profiles/demo_umami/config/install/core.entity_form_display.node.recipe.default.yml
-index 5c3431958d..fa4072fb6d 100644
+index f1281c6283..b68522f851 100644
 --- a/core/profiles/demo_umami/config/install/core.entity_form_display.node.recipe.default.yml
 +++ b/core/profiles/demo_umami/config/install/core.entity_form_display.node.recipe.default.yml
-@@ -15,7 +15,6 @@ dependencies:
-     - image.style.thumbnail
+@@ -16,7 +16,6 @@ dependencies:
      - node.type.recipe
+     - workflows.workflow.editorial
    module:
 -    - content_moderation
      - image
      - path
      - text
-@@ -107,12 +106,6 @@ content:
+@@ -108,12 +107,6 @@ content:
      third_party_settings: {  }
      type: entity_reference_autocomplete_tags
      region: content
@@ -281,7 +284,7 @@ index 5c3431958d..fa4072fb6d 100644
      type: path
      weight: 16
 diff --git a/core/profiles/demo_umami/config/install/core.entity_view_display.node.article.default.yml b/core/profiles/demo_umami/config/install/core.entity_view_display.node.article.default.yml
-index 66a013a76d..6fca71afd6 100644
+index 66a013a76d..a544c6872e 100644
 --- a/core/profiles/demo_umami/config/install/core.entity_view_display.node.article.default.yml
 +++ b/core/profiles/demo_umami/config/install/core.entity_view_display.node.article.default.yml
 @@ -45,5 +45,4 @@ content:
@@ -292,7 +295,7 @@ index 66a013a76d..6fca71afd6 100644
 -  content_moderation_control: true
 +hidden: {  }
 diff --git a/core/profiles/demo_umami/config/install/core.entity_view_display.node.article.full.yml b/core/profiles/demo_umami/config/install/core.entity_view_display.node.article.full.yml
-index 55b9cc35d5..b6fd2212e5 100644
+index 55b9cc35d5..1375b02898 100644
 --- a/core/profiles/demo_umami/config/install/core.entity_view_display.node.article.full.yml
 +++ b/core/profiles/demo_umami/config/install/core.entity_view_display.node.article.full.yml
 @@ -46,5 +46,4 @@ content:
@@ -314,7 +317,7 @@ index df4d92d8ec..da445c08d2 100644
    field_image: true
    field_tags: true
 diff --git a/core/profiles/demo_umami/config/install/core.entity_view_display.node.page.default.yml b/core/profiles/demo_umami/config/install/core.entity_view_display.node.page.default.yml
-index 29e721a67f..84a0bd9f28 100644
+index 29e721a67f..8afd9423ec 100644
 --- a/core/profiles/demo_umami/config/install/core.entity_view_display.node.page.default.yml
 +++ b/core/profiles/demo_umami/config/install/core.entity_view_display.node.page.default.yml
 @@ -22,5 +22,4 @@ content:
@@ -325,7 +328,7 @@ index 29e721a67f..84a0bd9f28 100644
 -  content_moderation_control: true
 +hidden: {  }
 diff --git a/core/profiles/demo_umami/config/install/core.entity_view_display.node.page.teaser.yml b/core/profiles/demo_umami/config/install/core.entity_view_display.node.page.teaser.yml
-index ce8cd320fe..0904d2cfa6 100644
+index ce8cd320fe..bc7a68c5b5 100644
 --- a/core/profiles/demo_umami/config/install/core.entity_view_display.node.page.teaser.yml
 +++ b/core/profiles/demo_umami/config/install/core.entity_view_display.node.page.teaser.yml
 @@ -24,5 +24,4 @@ content:
