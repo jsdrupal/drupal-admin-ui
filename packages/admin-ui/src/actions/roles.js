@@ -11,10 +11,10 @@ import {
   hideLoading,
   resetLoading,
 } from 'react-redux-loading-bar';
+import { ApiError } from '@drupal/admin-ui-utilities';
 import api from '../utils/api/api';
 
 import { setErrorMessage } from './application';
-import { ApiError } from '../utils/api/errors';
 
 export const ROLES_REQUESTED = 'ROLES_REQUESTED';
 export const requestRoles = () => ({
