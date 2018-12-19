@@ -170,7 +170,7 @@ App.propTypes = {
 };
 
 App.defaultProps = {
-  serverRoutes: {},
+  serverRoutes: [],
 };
 
 export default App;
