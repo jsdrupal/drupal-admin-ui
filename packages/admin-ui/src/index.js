@@ -25,4 +25,4 @@ api('admin_ui_routes')
       document.getElementById('root'),
     );
   });
- registerServiceWorker();
+registerServiceWorker();
