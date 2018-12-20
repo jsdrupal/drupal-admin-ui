@@ -8,12 +8,9 @@ process.env.NODE_ENV = 'nightwatch';
 // Ensure environment variables are read.
 require('react-scripts/config/env');
 
-const chromeArgs = ['--disable-notifications'];
-if (
-  !process.env.NIGHTWATCH_HEADLESS_CHROME ||
-  !JSON.parse(process.env.NIGHTWATCH_HEADLESS_CHROME)
-) {
-  chromeArgs.push('--headless');
+let chromeArgs = ['--disable-notifications'];
+if (process.env.NIGHTWATCH_CHROME_ARGS) {
+  chromeArgs = chromeArgs.concat(process.env.NIGHTWATCH_CHROME_ARGS.split(' '));
 }
 
 module.exports = {
@@ -21,19 +18,14 @@ module.exports = {
   output_folder: 'reports/nightwatch',
   custom_commands_path: ['src/tests/Nightwatch/Commands'],
   page_objects_path: '',
-  globals_path: 'src/tests/Nightwatch/globals.js',
-  selenium: {
-    start_process: false,
+  webdriver: {
+    start_process: true,
+    server_path: process.env.NIGHTWATCH_CHROMEDRIVER_PATH,
+    cli_args: ['--verbose'],
+    port: 9515,
   },
   test_settings: {
     default: {
-      selenium_port: 9515,
-      selenium_host: 'localhost',
-      request_timeout_options: {
-        timeout: 30000,
-        retry_attempts: 5,
-      },
-      default_path_prefix: '',
       desiredCapabilities: {
         browserName: 'chrome',
         chromeOptions: {
@@ -52,7 +44,6 @@ module.exports = {
         on_error: true,
         path: 'reports/nightwatch/screenshots',
       },
-      end_session_on_fail: false,
     },
   },
 };

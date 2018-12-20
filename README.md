@@ -18,29 +18,113 @@ This is an admin UI for Drupal, built with JavaScript and based on [create-react
 
 ## Installation
 
-### Requirements
+### Docker
+
+Ensure that you currently have nothing running on port 80 or port 3000, for example using ` lsof -i :80 -S`.
+
+Optional: If you're on a Mac and already use yarn locally, may want to move your yarn cache
+folder to a standard location to speed up installs (your local and container can then share the cache).
+Move it to ~/.cache/yarn (see https://yarnpkg.com/lang/en/docs/cli/cache/ for instructions)
+
+```
+git clone git@github.com:jsdrupal/drupal-admin-ui.git
+cd drupal-admin-ui
+docker-compose up
+```
+
+As this is the first time starting the containers, the Drupal installation will take a little time.
+It will be completed once you see:
+
+```
+drupal_admin_ui_drupal | ##############################################################################################
+drupal_admin_ui_drupal | # One time login URL                                                                         #
+drupal_admin_ui_drupal | # http://127.0.0.1/user/reset/1/1544503999/pOsRQl-VwQQKoJ25VRmKsdFw59KoWEl59Cc_L12QfZU/login #
+drupal_admin_ui_drupal | ##############################################################################################
+
+```
+
+The node container will be ready once you see
+```
+drupal_admin_ui_node | Compiled successfully!
+drupal_admin_ui_node |
+drupal_admin_ui_node | You can now view admin-ui in the browser.
+drupal_admin_ui_node |
+drupal_admin_ui_node |   Local:            http://localhost:3000/
+drupal_admin_ui_node |   On Your Network:  http://172.20.0.3:3000/
+drupal_admin_ui_node |
+drupal_admin_ui_node | Note that the development build is not optimized.
+drupal_admin_ui_node | To create a production build, use npm run build.
+
+```
+
+Open the link in your browser to log into Drupal. You will then have the following available:
+
+| URL | Description |
+|---|---|
+| http://127.0.0.1 | Regular Drupal installation / JSON API endpoints |
+| http://127.0.0.1/admin/content | A page taken over by the new admin UI. This uses the bundled version from `packages/admin-ui/build`, run `yarn workspace admin-ui build` in the node container to re-build |
+| http://localhost:3000  | Webpack dev server with hot reloading |
+
+#### Protips
+
+##### Aliases
+
+All your commands (e.g. `docker exec -it drupal_admin_ui_drupal drush status`) should be run inside the containers. Instead of first entering the
+container to run commands (e.g. `docker exec -it drupal_admin_ui_node /bin/sh`), you can create an alias to
+run commands directly in the containers, e.g.
+```
+alias admin_ui_drupal='function _admin_ui_drupal() { docker exec -it drupal_admin_ui_drupal $@ };_admin_ui_drupal'
+admin_ui_drupal drush status
+```
+
+or
+
+```
+alias admin_ui_node='function _admin_ui_node() { docker exec -it drupal_admin_ui_node $@ };_admin_ui_node'
+admin_ui_node yarn workspace admin-ui nightwatch
+```
+
+##### Re-installing Drupal
+Deleting `demo/docroot/sites/default/settings.php` will cause the installation to run again
+next time you bring your containers up (warning: this will wipe your entire Drupal installation!)
+
+#### Nightwatch
+- If you don't know the password for admin, change it with `docker exec -it drupal_admin_ui_drupal drush user:password admin admin`
+- Run `docker exec -it -e REACT_APP_DRUPAL_BASE_URL=http://drupal drupal_admin_ui_node yarn workspace admin-ui build`, which
+creates a build that uses `http://drupal` as it's base URL, which is the URL that the node container sees Drupal on internally.
+- Run `docker exec -it -e REACT_APP_DRUPAL_BASE_URL=http://drupal -e NIGHTWATCH_LOGIN_admin_PASSWORD=admin drupal_admin_ui_node yarn workspace admin-ui nightwatch`
+or `docker exec -it -e REACT_APP_DRUPAL_BASE_URL=http://drupal -e NIGHTWATCH_LOGIN_admin_PASSWORD=admin drupal_admin_ui_node yarn test` to run all tests
+- When you're finished, restore the regular build if you want to browse the compiled version in your browser with `docker exec -it drupal_admin_ui_node yarn workspace admin-ui build`.
+This will also be restored when you restart your containers.
+
+### Local Installation
+
+#### Requirements
 
 - PHP 7.0.8 or greater
 - PHP's pdo_sqlite extension installed. You can use `php -m` to check.
 - SQLite 3 CLI package
   * For Ubuntu users, `sudo apt install sqlite3`. You can use `sqlite3 --version` to check that the CLI is available.
 
-### Steps
+#### Steps
 
 ```
 composer create-project jsdrupal/drupal-admin-ui-demo -s dev --prefer-dist
 cd drupal-admin-ui-demo
+cp demo/templates/composer.json demo
+cp demo/templates/composer.lock demo
+cp demo/templates/.ht.router.php demo/docroot
 composer setup
 ```
 
-## Running
+### Running
 ```
 composer start
 ```
 
 Try visiting one of the converted pages, e.g. the user permissions or roles page.
 
-## Developing
+### Developing
 
 - Ensure you have [Node 8](https://nodejs.org/en/) or greater and [Yarn](https://yarnpkg.com/) installed.
 - Make sure the webserver for Drupal is started with `composer start`
@@ -58,7 +142,7 @@ Drupal and the React app. If you want to test out your changes in this context, 
 `drupal-admin-ui` directory and run `yarn workspace admin-ui build`. You can then visit the URL that
 `composer start` generated.
 
-### tl;dr
+#### tl;dr
 ```
 composer start
 

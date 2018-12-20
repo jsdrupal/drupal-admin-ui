@@ -3,7 +3,7 @@ module.exports = {
   menuRenders(browser) {
     browser
       .logUserIn()
-      .relativeURL('/')
+      .relativeURL('/admin/content')
       .waitForElementVisible('button[aria-label="open drawer"]')
       .click('button[aria-label="open drawer"]')
       .waitForElementVisible('[data-nightwatch="menu"] li a[role="button"]')
