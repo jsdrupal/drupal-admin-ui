@@ -92,6 +92,8 @@ jobs:
       - run: docker exec -it drupal_admin_ui_drupal su -m apache -s /bin/sh -c "composer test"
       - store_test_results:
           path: ~/project/packages/admin-ui/reports
+      - store_artifacts:
+          path: ~/project/packages/admin-ui/reports
 
   dist:
     machine: true
