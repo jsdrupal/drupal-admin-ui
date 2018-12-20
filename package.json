@@ -9,5 +9,8 @@
   },
   "workspaces": [
     "packages/*"
-  ]
+  ],
+  "scripts": {
+    "test": "yarn workspace admin-ui test"
+  }
 }
