@@ -14,10 +14,15 @@ if (process.env.NODE_ENV !== 'production' && process.env.REACT_APP_AXE) {
 
 // Fetch routes provided by Drupal modules.
 // This happens outsite of React and before the application starts.
-api('admin_ui_routes').then(({ routes }) => {
-  ReactDOM.render(
-    <App serverRoutes={routes} />,
-    document.getElementById('root'),
-  );
-});
-registerServiceWorker();
+api('admin_ui_routes')
+  .catch(err => {
+    console.err(err); // eslint-disable-line no-console
+    return [];
+  })
+  .then(({ routes }) => {
+    ReactDOM.render(
+      <App serverRoutes={routes} />,
+      document.getElementById('root'),
+    );
+  });
+ registerServiceWorker();
