@@ -101,7 +101,7 @@ This will also be restored when you restart your containers.
 
 #### Requirements
 
-- PHP 5.5.9 or greater
+- PHP 7.0.8 or greater
 - PHP's pdo_sqlite extension installed. You can use `php -m` to check.
 - SQLite 3 CLI package
   * For Ubuntu users, `sudo apt install sqlite3`. You can use `sqlite3 --version` to check that the CLI is available.
