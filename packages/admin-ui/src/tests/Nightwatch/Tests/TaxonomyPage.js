@@ -7,15 +7,15 @@ module.exports = {
       .waitForElementVisible('th');
 
     browser.getText('th:nth-child(1)', function coloumnName(text) {
-      this.assert.equal(text.value, 'Vocabulary name');
+      this.assert.equal(text.value.toLowerCase(), 'vocabulary name');
     });
 
     browser.getText('th:nth-child(2)', function coloumnName(text) {
-      this.assert.equal(text.value, 'Description');
+      this.assert.equal(text.value.toLowerCase(), 'description');
     });
 
     browser.getText('th:nth-child(3)', function coloumnName(text) {
-      this.assert.equal(text.value, 'Operations');
+      this.assert.equal(text.value.toLowerCase(), 'operations');
     });
 
     browser
@@ -25,27 +25,27 @@ module.exports = {
     browser.waitForElementVisible('#menu-');
 
     browser.getText('#menu- ul li:nth-child(1)', function menuItem(text) {
-      this.assert.equal(text.value, 'List Terms');
+      this.assert.equal(text.value.toLowerCase(), 'list terms');
     });
 
     browser.getText('#menu- ul li:nth-child(2)', function menuItem(text) {
-      this.assert.equal(text.value, 'Edit Vocabulary');
+      this.assert.equal(text.value.toLowerCase(), 'edit vocabulary');
     });
 
     browser.getText('#menu- ul li:nth-child(3)', function menuItem(text) {
-      this.assert.equal(text.value, 'Add Terms');
+      this.assert.equal(text.value.toLowerCase(), 'add terms');
     });
 
     browser.getText('#menu- ul li:nth-child(4)', function menuItem(text) {
-      this.assert.equal(text.value, 'Manage Fields');
+      this.assert.equal(text.value.toLowerCase(), 'manage dields');
     });
 
     browser.getText('#menu- ul li:nth-child(5)', function menuItem(text) {
-      this.assert.equal(text.value, 'Manage Form Display');
+      this.assert.equal(text.value.toLowerCase(), 'manage form display');
     });
 
     browser.getText('#menu- ul li:nth-child(6)', function menuItem(text) {
-      this.assert.equal(text.value, 'Manage Display');
+      this.assert.equal(text.value.toLowerCase(), 'manage display');
     });
 
     browser.click('#menu- ul li:nth-child(1)');

@@ -69,8 +69,9 @@ Open the link in your browser to log into Drupal. You will then have the followi
 
 ##### Aliases
 
-Instead of first entering the container to run commands (e.g. `docker exec -it drupal_admin_ui_node /bin/sh`),
-you can create an alias to run commands directly in the containers, e.g.
+All your commands (e.g. `docker exec -it drupal_admin_ui_drupal drush status`) should be run inside the containers. Instead of first entering the
+container to run commands (e.g. `docker exec -it drupal_admin_ui_node /bin/sh`), you can create an alias to
+run commands directly in the containers, e.g.
 ```
 alias admin_ui_drupal='function _admin_ui_drupal() { docker exec -it drupal_admin_ui_drupal $@ };_admin_ui_drupal'
 admin_ui_drupal drush status
@@ -88,11 +89,13 @@ Deleting `demo/docroot/sites/default/settings.php` will cause the installation t
 next time you bring your containers up (warning: this will wipe your entire Drupal installation!)
 
 #### Nightwatch
-- Change your password in Drupal
-- Copy `packages/admin-ui/.env` to `packages/admin-ui/.env.local`
-- Uncomment `NIGHTWATCH_LOGIN_admin_PASSWORD=` and set it to your password
-- Restart your containers (Ctrl + C and `docker-compose up`)
-- Run `yarn workspace admin-ui nightwatch` in the node container
+- If you don't know the password for admin, change it with `docker exec -it drupal_admin_ui_drupal drush user:password admin admin`
+- Run `docker exec -it -e REACT_APP_DRUPAL_BASE_URL=http://drupal drupal_admin_ui_node yarn workspace admin-ui build`, which
+creates a build that uses `http://drupal` as it's base URL, which is the URL that the node container sees Drupal on internally.
+- Run `docker exec -it -e REACT_APP_DRUPAL_BASE_URL=http://drupal -e NIGHTWATCH_LOGIN_admin_PASSWORD=admin drupal_admin_ui_node yarn workspace admin-ui nightwatch`
+or `docker exec -it -e REACT_APP_DRUPAL_BASE_URL=http://drupal -e NIGHTWATCH_LOGIN_admin_PASSWORD=admin drupal_admin_ui_node yarn test` to run all tests
+- When you're finished, restore the regular build if you want to browse the compiled version in your browser with `docker exec -it drupal_admin_ui_node yarn workspace admin-ui build`.
+This will also be restored when you restart your containers.
 
 ### Local Installation
 

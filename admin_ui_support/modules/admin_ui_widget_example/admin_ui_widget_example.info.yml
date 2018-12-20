@@ -1,3 +1,4 @@
 name: admin_ui_widget_example
 type: module
 core: 8.x
+package: 'API Support'

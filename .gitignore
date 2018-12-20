@@ -18,6 +18,7 @@ demo/vendor/
 demo/docroot/.ht.router.php
 demo/docroot/core/
 demo/docroot/modules/
+demo/docroot/sites/simpletest
 demo/docroot/sites/default/files/
 demo/docroot/sites/default/settings.php
 demo/docroot/sites/default/services.yml
