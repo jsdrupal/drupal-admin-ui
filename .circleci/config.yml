@@ -79,9 +79,9 @@ jobs:
     machine: true
     steps:
       - start-project
-      - docker exec -it drupal_admin_ui_drupal drush user:password admin admin
-      - docker exec -it -e REACT_APP_DRUPAL_BASE_URL=http://drupal drupal_admin_ui_node yarn workspace admin-ui build
-      - docker exec -it -e REACT_APP_DRUPAL_BASE_URL=http://drupal -e NIGHTWATCH_LOGIN_admin_PASSWORD=admin drupal_admin_ui_node yarn test
+      - run: docker exec -it drupal_admin_ui_drupal drush user:password admin admin
+      - run: docker exec -it -e REACT_APP_DRUPAL_BASE_URL=http://drupal drupal_admin_ui_node yarn workspace admin-ui build
+      - run: docker exec -it -e REACT_APP_DRUPAL_BASE_URL=http://drupal -e NIGHTWATCH_LOGIN_admin_PASSWORD=admin drupal_admin_ui_node yarn test
       - store_test_results:
           path: ~/project/packages/admin-ui/reports
 
@@ -89,7 +89,7 @@ jobs:
     machine: true
     steps:
       - start-project
-      - docker exec -it drupal_admin_ui_drupal composer test
+      - run: docker exec -it drupal_admin_ui_drupal composer test
       - store_test_results:
           path: ~/project/packages/admin-ui/reports
 
