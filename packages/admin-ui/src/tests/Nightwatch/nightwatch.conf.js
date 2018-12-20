@@ -19,12 +19,10 @@ module.exports = {
   custom_commands_path: ['src/tests/Nightwatch/Commands'],
   page_objects_path: '',
   webdriver: {
-    "start_process": true,
-    "server_path": process.env.NIGHTWATCH_CHROMEDRIVER_PATH,
-    "cli_args": [
-      "--verbose"
-    ],
-    "port": 9515
+    start_process: true,
+    server_path: process.env.NIGHTWATCH_CHROMEDRIVER_PATH,
+    cli_args: ['--verbose'],
+    port: 9515,
   },
   test_settings: {
     default: {
