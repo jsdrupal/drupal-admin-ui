@@ -52,6 +52,9 @@
             "rm -rf docroot/modules/contrib/drupal-admin-ui-support",
             "ln -s ../../../drupal-admin-ui/admin_ui_support docroot/modules/contrib/drupal-admin-ui-support"
         ],
+        "test": [
+            "phpunit -c docroot/core --log-junit reports/phpunit.xml docroot/modules/contrib/drupal-admin-ui-support"
+        ],
         "pre-install-cmd": [
             "DrupalProject\\composer\\ScriptHandler::checkComposerVersion"
         ],
