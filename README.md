@@ -21,6 +21,7 @@ This is an admin UI for Drupal, built with JavaScript and based on [create-react
 ### Docker
 
 Ensure that you currently have nothing running on port 80 or port 3000, for example using ` lsof -i :80 -S`.
+This probably means you need to shut down your apache installation and maybe some local running node.
 
 Optional: If you're on a Mac and already use yarn locally, may want to move your yarn cache
 folder to a standard location to speed up installs (your local and container can then share the cache).
