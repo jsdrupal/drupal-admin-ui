@@ -84,16 +84,13 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "eslint": "eslint ./src --ext .js,.jsx,.ts,.tsx  --max-warnings=0 --fix",
-    "prettier": "prettier --write 'src/**/*.{js,jsx,ts,tsx}'",
     "jest": "react-scripts test --env=jsdom",
     "nightwatch": "nightwatch --config ./src/tests/Nightwatch/nightwatch.conf.js",
     "storybook": "start-storybook -p 9001 -c .storybook",
     "// Test commands for the CI": "⬅✌➡",
-    "test": "yarn test:lint && yarn test:unit && yarn test:functional",
+    "test": "yarn test:unit && yarn test:functional",
     "test:functional": "yarn nightwatch",
     "test:unit": "CI=true JEST_JUNIT_OUTPUT=reports/jest-junit.xml react-scripts test --testResultsProcessor ../../node_modules/jest-junit --env=jsdom",
-    "test:lint": "eslint ./src  --ext .js,.jsx,.ts,.tsx --max-warnings=0 --format junit -o reports/eslint-junit.xml",
     "eject": "react-scripts eject"
   },
   "browserslist": [
