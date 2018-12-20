@@ -89,7 +89,7 @@ jobs:
     machine: true
     steps:
       - start-project
-      - run: docker exec -it drupal_admin_ui_drupal composer test
+      - run: docker exec -it drupal_admin_ui_drupal su -m apache -s /bin/sh -c "composer test"
       - store_test_results:
           path: ~/project/packages/admin-ui/reports
 

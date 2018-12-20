@@ -22,8 +22,11 @@ if [ ! -f /var/www/drupal/docroot/sites/default/settings.php ]; then
     drush site:install demo_umami -y --db-url=mysql://drupal:drupal@mysql:3306/drupal --sites-subdir=default
     drush en -y jsonapi admin_ui_support admin_ui_widget_example
     drush config:set -y system.logging error_level verbose
-    rm -rf docroot/sites/default/files/styles
 fi
+
+rm -rf docroot/sites/default/files/styles reports
+mkdir reports
+chown apache:apache reports
 
 echo "##############################################################################################
 # One time login URL                                                                         #
