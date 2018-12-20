@@ -45,7 +45,7 @@
         ],
         "devify": [
             "git clone https://github.com/jsdrupal/drupal-admin-ui",
-            "cp drupal-admin-ui/.env drupal-admin-ui/.env.local",
+            "cp drupal-admin-ui/packages/admin-ui/.env drupal-admin-ui/packages/admin-ui/.env.local",
             "cd drupal-admin-ui && yarn install",
             "rm -rf docroot/vfancy",
             "ln -s ../drupal-admin-ui/build docroot/vfancy",

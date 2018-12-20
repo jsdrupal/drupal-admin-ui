@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import * as MaterialUI from '@material-ui/core';
+import api from '../../../utils/api/api';
 
 class EnsureComponent extends React.Component {
   state = {
@@ -17,6 +18,7 @@ class EnsureComponent extends React.Component {
     if (typeof this.props.component === 'string') {
       // Cheat and load "React"
       window.define('react', () => React);
+      window.define('@drupal/admin-ui-utilities', () => ({ api }));
       Object.keys(MaterialUI).forEach(key =>
         window.define(`@material-ui/core/${key}`, () => MaterialUI[key]),
       );

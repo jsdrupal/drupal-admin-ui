@@ -137,9 +137,9 @@ jobs:
       name: node-executor
     steps:
       - build
-      - run: cp ~/project/.circleci/drupal-admin-ui--composer.json ~/project/build/composer.json
+      - run: cp ~/project/.circleci/drupal-admin-ui--composer.json ~/project/packages/admin-ui/build/composer.json
       - commit-and-push:
-          files: ~/project/build
+          files: ~/project/packages/admin-ui/build
           destination_repo: git@github.com:jsdrupal/drupal-admin-ui-dist.git
           ssh_key_fingerprint: "82:b8:cc:fe:02:24:17:b1:31:ba:dc:30:e1:01:7a:df"
 
@@ -163,7 +163,7 @@ jobs:
         name: Update composer.lock
         command: |
           cd ~/project/demo
-          composer update justafish/drupal-admin-ui-support
+          composer update justafish/drupal-admin-ui-support --lock
     - commit-and-push:
         message: "Auto update from master"
         files: ~/project/demo

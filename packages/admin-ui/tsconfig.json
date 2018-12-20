@@ -1,8 +1,9 @@
 {
   "compilerOptions": {
     "lib": [
-      "ES7",
-      "DOM"
+      "es7",
+      "es2017",
+      "dom"
     ],
     "target": "es5",
     "allowJs": true,
