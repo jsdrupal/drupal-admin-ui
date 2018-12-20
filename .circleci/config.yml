@@ -84,6 +84,8 @@ jobs:
       - run: docker exec -it -e REACT_APP_DRUPAL_BASE_URL=http://drupal -e NIGHTWATCH_LOGIN_admin_PASSWORD=admin drupal_admin_ui_node yarn test
       - store_test_results:
           path: ~/project/packages/admin-ui/reports
+      - store_artifacts:
+          path: ~/project/packages/admin-ui/reports
 
   test_drupal:
     machine: true
@@ -91,8 +93,6 @@ jobs:
       - start-project
       - run: docker exec -it drupal_admin_ui_drupal su -m apache -s /bin/sh -c "composer test"
       - store_test_results:
-          path: ~/project/packages/admin-ui/reports
-      - store_artifacts:
           path: ~/project/packages/admin-ui/reports
 
   dist:
