@@ -93,12 +93,27 @@ admin_ui_support.node.edit:
     _node_operation_route: TRUE
     _admin_related_route: 'entity.node.edit_form'
 
+admin_ui_support.entity.taxonomy_vocabulary.collection:
+  path: '/vfancy/admin/structure/taxonomy'
+  defaults:
+    _controller: '\Drupal\admin_ui_support\Controller\EmptyController::noop'
+  options:
+    _admin_related_route: 'entity.taxonomy_vocabulary.collection'
+
+admin_ui_support.entity.taxonomy_vocabulary.overview_form:
+  path: '/vfancy/admin/structure/taxonomy/manage/{taxonomy_vocabulary}/overview'
+  defaults:
+    _controller: '\Drupal\admin_ui_support\Controller\EmptyController::noop'
+  options:
+    _admin_related_route: 'entity.taxonomy_vocabulary.overview_form'
+
 admin_ui_support.components:
   path: '/jsdrupal/components'
   defaults:
     _controller: '\Drupal\admin_ui_support\Controller\DefaultController::components'
   requirements:
     _access: 'TRUE'
+
 admin_ui_support.routes:
   path: '/jsdrupal/routes'
   defaults:
