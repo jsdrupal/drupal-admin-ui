@@ -56,6 +56,7 @@ Promise.all([
     const webpackConfig = {
       entry,
       mode,
+      devtool: 'cheap-module-source-map',
       optimization: {
         minimize: false,
       },
