@@ -46,6 +46,10 @@ commands:
       ssh_key_fingerprint:
         type: string
     steps:
+      - run:
+          name: Clear previously applied SSH key
+          command: |
+            > ~/.ssh/config
       - add_ssh_keys:
           fingerprints:
             - << parameters.ssh_key_fingerprint >>
@@ -57,9 +61,7 @@ commands:
       - run:
           name: Overwrite files with build
           command: |
-            rm -rf ~/build-files
-            rm -rf ~/build-repo
-            mv << parameters.files >> ~/build-files
+            cp -R << parameters.files >> ~/build-files
             git clone << parameters.destination_repo >> ~/build-repo
             rm -rf ~/build-files/.git
             mv ~/build-repo/.git ~/build-files/.git
@@ -73,15 +75,20 @@ commands:
                 git commit -m "<< parameters.message >>"
                 git push origin master
               fi
+              rm -rf ~/build-files
+              rm -rf ~/build-repo
 
 jobs:
   test_node:
     machine: true
     steps:
       - start-project
-      - run: docker exec -it drupal_admin_ui_drupal drush user:password admin admin
-      - run: docker exec -it -e REACT_APP_DRUPAL_BASE_URL=http://drupal drupal_admin_ui_node yarn workspace admin-ui build
-      - run: docker exec -it -e REACT_APP_DRUPAL_BASE_URL=http://drupal -e NIGHTWATCH_LOGIN_admin_PASSWORD=admin drupal_admin_ui_node yarn test
+      - run:
+          name: Run tests
+          command: |
+            docker exec -it drupal_admin_ui_drupal drush user:password admin admin
+            docker exec -it -e REACT_APP_DRUPAL_BASE_URL=http://drupal drupal_admin_ui_node yarn workspace admin-ui build
+            docker exec -it -e REACT_APP_DRUPAL_BASE_URL=http://drupal -e NIGHTWATCH_LOGIN_admin_PASSWORD=admin drupal_admin_ui_node yarn test
       - store_test_results:
           path: ~/project/packages/admin-ui/reports
       - store_artifacts:
@@ -91,7 +98,9 @@ jobs:
     machine: true
     steps:
       - start-project
-      - run: docker exec -it drupal_admin_ui_drupal su -m apache -s /bin/sh -c "composer test"
+      - run:
+          name: Run tests
+          command: docker exec -it drupal_admin_ui_drupal su -m apache -s /bin/sh -c "composer test"
       - store_test_results:
           path: ~/project/packages/admin-ui/reports
 
