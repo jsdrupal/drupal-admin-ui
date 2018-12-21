@@ -75,8 +75,8 @@ commands:
                 git commit -m "<< parameters.message >>"
                 git push origin master
               fi
-              rm -rf ~/build-files
-              rm -rf ~/build-repo
+              sudo rm -rf ~/build-files
+              sudo rm -rf ~/build-repo
 
 jobs:
   test_node:
