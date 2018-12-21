@@ -1,0 +1,57 @@
+version: '3'
+
+services:
+  mysql:
+    container_name: drupal_admin_ui_mysql
+    image: "mysql:5.7"
+    volumes:
+      - db_data:/var/lib/mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: drupal__
+      MYSQL_DATABASE: drupal
+      MYSQL_USER: drupal
+      MYSQL_PASSWORD: drupal
+  drupal:
+    container_name: drupal_admin_ui_drupal
+    depends_on:
+      - "mysql"
+    environment:
+      - DRUSH_OPTIONS_URI=http://127.0.0.1
+      - SIMPLETEST_BASE_URL=http://127.0.0.1
+      - SYMFONY_DEPRECATIONS_HELPER=disabled
+    build:
+      context: .
+      dockerfile: ./.docker/drupal/Dockerfile
+    ports:
+      - 80:80
+    volumes:
+      - ~/.composer/cache:/root/.composer/cache:cached
+      - ./.docker:/root/.docker:cached
+      - ./demo:/var/www/drupal:cached
+      - ./admin_ui_support:/var/www/admin_ui_support:cached
+      - ./packages/admin-ui/build:/var/www/drupal/docroot/vfancy:cached
+
+  node:
+    container_name: drupal_admin_ui_node
+    environment:
+      - REACT_APP_DRUPAL_BASE_URL=http://127.0.0.1
+      - REACT_APP_DRUPAL_ROOT=/
+      - NIGHTWATCH_CHROMEDRIVER_PATH=/usr/bin/chromedriver
+      - NIGHTWATCH_CHROME_ARGS=--headless --no-sandbox
+      - NIGHTWATCH_URL=http://drupal
+    build:
+      context: .
+      dockerfile: ./.docker/node/Dockerfile
+    ports:
+      - 3000:3000
+    volumes:
+      - .:/root/drupal-admin-ui:cached
+      - ~/.cache/yarn:/root/.cache/yarn:cached
+      - /root/drupal-admin-ui/node_modules
+      - /root/drupal-admin-ui/packages/admin-ui/node_modules
+      - /root/drupal-admin-ui/packages/components/node_modules
+      - /root/drupal-admin-ui/packages/extension-points/node_modules
+
+volumes:
+  db_data:
