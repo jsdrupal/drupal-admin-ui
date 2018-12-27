@@ -14,6 +14,6 @@
     "eslint": "eslint packages/*/src --ext .js,.jsx,.ts,.tsx  --max-warnings=0 --fix",
     "prettier": "prettier --write 'packages/*/src/**/*.{js,jsx,ts,tsx}'",
     "test": "yarn run test:lint && yarn workspace admin-ui test",
-    "test:lint": "eslint ./src  --ext .js,.jsx,.ts,.tsx --max-warnings=0 --format junit -o reports/eslint-junit.xml"
+    "test:lint": "eslint packages/*/src  --ext .js,.jsx,.ts,.tsx --max-warnings=0 --format junit -o reports/eslint-junit.xml"
   }
 }
