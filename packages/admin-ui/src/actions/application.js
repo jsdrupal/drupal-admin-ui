@@ -6,9 +6,9 @@ import {
 } from 'react-redux-loading-bar';
 import { ApiError } from '@drupal/admin-ui-utilities';
 import api from '../utils/api/api';
-import api from '../utils/api/api';
 import { MESSAGE_SEVERITY } from '../constants/messages';
 import widgets from '../components/05_pages/NodeForm/Widgets';
+
 export const OPEN_DRAWER = 'OPEN_DRAWER';
 export const openDrawer = () => ({
   type: OPEN_DRAWER,
