@@ -142,7 +142,7 @@ Drupal and the React app. If you want to test out your changes in this context, 
 `drupal-admin-ui` directory and run `yarn workspace admin-ui build`. You can then visit the URL that
 `composer start` generated.
 
-Further helpful commands are `yarn run eslint` and `yarn run prettier`.
+Further helpful commands are `yarn eslint` and `yarn prettier`.
 
 #### tl;dr
 ```
