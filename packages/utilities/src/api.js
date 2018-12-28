@@ -129,7 +129,7 @@ async function api(
       delete node.relationships.type;
       delete node.relationships.uid;
 
-      const saveToken = await api('csrf_token');
+      const saveToken = await api(REACT_APP_DRUPAL_BASE_URL, 'csrf_token');
       options.headers.Accept = 'application/vnd.api+json';
       options.headers['X-CSRF-Token'] = saveToken;
       options.method = 'POST';
@@ -147,7 +147,7 @@ async function api(
           : `node--${parameters.node.type}`,
       };
 
-      const saveToken = await api('csrf_token');
+      const saveToken = await api(REACT_APP_DRUPAL_BASE_URL, 'csrf_token');
       options.headers.Accept = 'application/vnd.api+json';
       options.headers['X-CSRF-Token'] = saveToken;
       options.method = 'PATCH';
