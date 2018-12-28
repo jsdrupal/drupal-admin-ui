@@ -4,9 +4,9 @@ import {
   hideLoading,
   resetLoading,
 } from 'react-redux-loading-bar';
+import { ApiError } from '@drupal/admin-ui-utilities';
 
 import api from '../utils/api/api';
-import { ApiError } from '../utils/api/errors';
 import { setErrorMessage } from './application';
 
 export const TAXONOMY_VOCABULARY_REQUESTED = 'TAXONOMY_VOCABULARY_REQUESTED';

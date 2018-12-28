@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Route, Switch, withRouter } from 'react-router-dom';
 import createBrowserHistory from 'history/createBrowserHistory';
 import deepMerge from 'deepmerge';
@@ -31,6 +32,8 @@ import actions from './actions/index';
 import reducers, { initialState } from './reducers/index';
 import ErrorBoundary from './components/06_wrappers/ErrorBoundary/ErrorBoundary';
 import InitialRedirect from './InitialRedirect';
+
+import EnsureComponent from './components/02_atoms/EnsureComponent/EnsureComponent';
 
 const history = createBrowserHistory();
 const middleware = routerMiddleware(history);
@@ -110,7 +113,7 @@ const theme = createMuiTheme({
   },
 });
 
-const App = () => (
+const App = ({ serverRoutes }) => (
   <JssProvider jss={jss} generateClassName={generateClassName}>
     <MuiThemeProvider theme={theme}>
       <ErrorBoundary>
@@ -119,11 +122,27 @@ const App = () => (
             <Default>
               <Switch>
                 <Route exact path="/" component={withRouter(Content)} />
-                {Object.keys(routes).map(route => (
+                {Object.entries({
+                  ...routes,
+                  ...Object.values(serverRoutes).reduce(
+                    (acc, { route, component, moduleName: routePrefix }) => ({
+                      ...acc,
+                      ...{ [`/${routePrefix}${route}`]: component },
+                    }),
+                    {},
+                  ),
+                }).map(([route, component]) => (
                   <Route
                     exact
                     path={route}
-                    component={withRouter(routes[route])}
+                    component={() => (
+                      <EnsureComponent
+                        component={component}
+                        render={widgetComponent =>
+                          React.createElement(withRouter(widgetComponent))
+                        }
+                      />
+                    )}
                     key={route}
                   />
                 ))}
@@ -140,5 +159,18 @@ const App = () => (
     </MuiThemeProvider>
   </JssProvider>
 );
+
+App.propTypes = {
+  serverRoutes: PropTypes.arrayOf(
+    PropTypes.shape({
+      route: PropTypes.string.isRequired,
+      component: PropTypes.string.isRequired,
+    }),
+  ),
+};
+
+App.defaultProps = {
+  serverRoutes: [],
+};
 
 export default App;

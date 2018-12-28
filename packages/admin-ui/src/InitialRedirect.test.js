@@ -14,6 +14,6 @@ it('redirect to specific page', () => {
     <InitialRedirect location={{ search: '?q=admin/people/permissions' }} />,
   );
   expect(redirect.find(Redirect).prop('to')).toEqual(
-    'admin/people/permissions',
+    '/admin/people/permissions',
   );
 });
