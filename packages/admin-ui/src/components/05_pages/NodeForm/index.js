@@ -49,6 +49,13 @@ class NodeForm extends React.Component {
     setErrorMessage: PropTypes.func.isRequired,
     onChange: PropTypes.func,
     requestComponentList: PropTypes.func.isRequired,
+    components: PropTypes.shape({
+      widgets: PropTypes.objectOf(
+        PropTypes.shape({
+          name: PropTypes.string.isRequired,
+        }),
+      ),
+    }),
   };
 
   static defaultProps = {
@@ -281,7 +288,6 @@ class NodeForm extends React.Component {
       )
     );
   }
-
   render() {
     let result = null;
     if (
