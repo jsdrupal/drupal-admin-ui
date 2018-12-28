@@ -1,6 +1,12 @@
 import React from 'react';
+import InputLabel from '@material-ui/core/InputLabel';
+import FormControl from '@material-ui/core/FormControl';
+import Select from '@material-ui/core/Select';
+import Input from '@material-ui/core/Input';
+import MenuItem from '@material-ui/core/MenuItem';
 
 import { api } from '@drupal/admin-ui-utilities';
+import { WorkflowType } from './workflow';
 
 class ModerationStateDefaultWidget extends React.Component {
   state = {
@@ -9,7 +15,6 @@ class ModerationStateDefaultWidget extends React.Component {
   };
 
   componentDidMount() {
-    console.log('props', this.props);
     api('entity', {
       parameters: {
         entityType: 'workflow',
@@ -22,17 +27,44 @@ class ModerationStateDefaultWidget extends React.Component {
       if (response.data && response.data.length) {
         this.setState({
           loaded: true,
-          workflow: response.data[0],
+          workflow: new WorkflowType(response.data[0].attributes),
         });
       }
     });
   }
 
   render() {
-    console.log('workflow', this.state.workflow);
-    // Use the possible options from this.state.data to
-    // use a select element.
-    return '123';
+    if (this.state.workflow) {
+      const stateId =
+        this.props.value ||
+        this.state.workflow.getDefaultModerationState();
+
+      return (
+        <FormControl className={this.props.class}>
+          <InputLabel htmlFor="select-multiple-checkbox">
+            Change to
+          </InputLabel>
+          <Select
+            value={stateId}
+            input={
+              <Input name={this.props.fieldName} id={this.props.fieldName} />
+            }
+            onChange={e => {
+              this.props.onChange(e.target.value);
+            }}
+          >
+            {this.state.workflow
+              .getTransitionsForState(stateId)
+              .map(transition => (
+                <MenuItem key={transition.to().id} value={transition.to().id}>
+                  {transition.to().label}
+                </MenuItem>
+              ))}
+          </Select>
+        </FormControl>
+      );
+    }
+    return null;
   }
 }
 

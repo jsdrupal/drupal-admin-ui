@@ -4,14 +4,12 @@ class State {
   label;
   weight;
 
-
   constructor(workflowType, id, label, weight) {
     this.workflowType = workflowType;
     this.id = id;
     this.label = label;
     this.weight = weight;
   }
-
 }
 
 class Transition {
@@ -61,13 +59,18 @@ const labelWeightMultiSort = (o1, o2) => {
 
 export class WorkflowType {
   states = [];
-  transitions = NULL;
+  transitions = null;
+  configuration = null;
 
-  constructor(configuration) {
-    this.configuration = configuration;
+  constructor(attributes) {
+    this.configuration = attributes.type_settings;
   }
 
-  getStates(ids) {
+  getDefaultModerationState = () => {
+    return this.configuration.default_moderation_state;
+  };
+
+  getStates = (ids) => {
     if (!this.states) {
       this.states = Object.entries(this.configuration['states'])
         .sort(([id1, state1], [id2, state2]) => {
@@ -81,13 +84,18 @@ export class WorkflowType {
       return this.states.filter(state => ids.includes(state.id));
     }
     return this.states;
-  }
+  };
 
-  getState(id) {
-    return new State(this, id, this.configuration.states[id].label, this.configuration.states[id].weight);
-  }
+  getState = (id) => {
+    return new State(
+      this,
+      id,
+      this.configuration.states[id].label,
+      this.configuration.states[id].weight,
+    );
+  };
 
-  getTransitions(ids) {
+  getTransitions = (ids) => {
     if (!this.transitions) {
       this.transitions = Object.entries(this.configuration.transitions)
         .sort(([id1, transition1], [id2, transition2]) => {
@@ -102,19 +110,24 @@ export class WorkflowType {
     }
 
     return this.transitions;
-  }
+  };
 
-  getTransition(id) {
-    return new State(this, id, this.configuration.transitions[id].label, this.configuration.transitions[id].weight);
-  }
+  getTransition = (id) => {
+    return new Transition(
+      this,
+      id,
+      this.configuration.transitions[id].label,
+      this.configuration.transitions[id].from,
+      this.configuration.transitions[id].to,
+    );
+  };
 
-  getTransitionsForState(stateId) {
-    const transitionIds =
-      Object.entries(this.configuration.transitions)
-        .filter(([id, transition]) => {
-          return transition.from.includes(stateId);
-        });
+  getTransitionsForState = (stateId) => {
+    const transitionIds = Object.entries(this.configuration.transitions).filter(
+      ([id, transition]) => {
+        return transition.from.includes(stateId);
+      },
+    ).map(([id]) => id);
     return this.getTransitions(transitionIds);
-  }
-
+  };
 }
