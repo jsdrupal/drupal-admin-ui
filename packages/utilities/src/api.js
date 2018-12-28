@@ -156,7 +156,6 @@ async function api(
       break;
     }
     case 'entity': {
-      debugger;
       const { entityType, bundle = null } = parameters;
       url = `/jsonapi/${entityType}${bundle ? `/${bundle}` : ''}`;
       options.headers.Accept = 'application/vnd.api+json';
@@ -210,6 +209,7 @@ async function api(
       break;
     }
     default:
+      console.error('Unhandled case', endpoint);
       break;
   }
 
