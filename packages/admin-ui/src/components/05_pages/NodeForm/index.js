@@ -63,6 +63,7 @@ class NodeForm extends React.Component {
     uiSchema: false,
     restorableEntity: null,
     onChange: () => {},
+    components: null,
   };
 
   state = {
@@ -288,6 +289,7 @@ class NodeForm extends React.Component {
       )
     );
   }
+
   render() {
     let result = null;
     if (
