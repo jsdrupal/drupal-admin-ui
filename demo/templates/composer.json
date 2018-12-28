@@ -16,6 +16,7 @@
         "drupal-composer/drupal-scaffold": "^2.2",
         "drupal/core": "~8.7",
         "oomphinc/composer-installers-extender": "^1.1",
+        "php": ">=7.0.8",
         "webflo/drupal-finder": "^1.0.0",
         "webmozart/path-util": "^2.3",
         "justafish/drupal-admin-ui": "dev-master",
@@ -51,6 +52,9 @@
             "ln -s ../drupal-admin-ui/build docroot/vfancy",
             "rm -rf docroot/modules/contrib/drupal-admin-ui-support",
             "ln -s ../../../drupal-admin-ui/admin_ui_support docroot/modules/contrib/drupal-admin-ui-support"
+        ],
+        "test": [
+            "phpunit -c docroot/core --log-junit reports/phpunit.xml docroot/modules/contrib/drupal-admin-ui-support"
         ],
         "pre-install-cmd": [
             "DrupalProject\\composer\\ScriptHandler::checkComposerVersion"

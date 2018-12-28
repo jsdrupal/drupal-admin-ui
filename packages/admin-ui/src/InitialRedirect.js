@@ -9,7 +9,7 @@ const InitialRedirect = ({ location: { search } }) => {
     // trim slashes on the left.
     .replace(/^\//, '');
   if (searchString) {
-    return <Redirect to={searchString} />;
+    return <Redirect to={`/${searchString}`} />;
   }
   return <Redirect to="/" />;
 };
