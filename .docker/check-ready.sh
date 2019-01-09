@@ -1,5 +1,5 @@
 #!/bin/sh
-until docker exec -it drupal_admin_ui_drupal test -e ~/.drupal-installation-complete && docker exec -it drupal_admin_ui_node test -e /root/.yarn-build-complete
+until docker exec -it drupal_admin_ui_drupal test -e ~/.drupal-installation-complete && docker exec -it drupal_admin_ui_node test -e /var/www/.yarn-build-complete
 do
     sleep 20
 done
