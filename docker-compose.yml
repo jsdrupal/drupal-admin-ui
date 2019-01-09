@@ -23,14 +23,17 @@ services:
     build:
       context: .
       dockerfile: ./.docker/drupal/Dockerfile
+      args:
+        - NGINX_UID=${UID}
+        - NGINX_GID=${GID}
     ports:
       - 80:80
     volumes:
-      - ~/.composer/cache:/root/.composer/cache:cached
-      - ./.docker:/root/.docker:cached
+      - ~/.composer/cache:/var/www/.composer/cache:cached
+      - ./.docker:/var/www/.docker:cached
       - ./demo:/var/www/drupal:cached
       - ./admin_ui_support:/var/www/admin_ui_support:cached
-      - ./packages/admin-ui/build:/var/www/drupal/docroot/vfancy:cached
+      - ./packages/admin-ui:/var/www/admin-ui:cached
 
   node:
     container_name: drupal_admin_ui_node
@@ -43,15 +46,14 @@ services:
     build:
       context: .
       dockerfile: ./.docker/node/Dockerfile
+      args:
+        - NODE_UID=${UID}
+        - NODE_GID=${GID}
     ports:
       - 3000:3000
     volumes:
-      - .:/root/drupal-admin-ui:cached
-      - ~/.cache/yarn:/root/.cache/yarn:cached
-      - /root/drupal-admin-ui/node_modules
-      - /root/drupal-admin-ui/packages/admin-ui/node_modules
-      - /root/drupal-admin-ui/packages/components/node_modules
-      - /root/drupal-admin-ui/packages/extension-points/node_modules
+      - .:/var/www/drupal-admin-ui:cached
+      - ~/.cache/yarn:/var/www/.cache/yarn:cached
 
 volumes:
   db_data:
