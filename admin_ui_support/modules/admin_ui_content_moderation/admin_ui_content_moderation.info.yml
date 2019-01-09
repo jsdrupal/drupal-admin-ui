@@ -1,0 +1,6 @@
+name: Admin UI content moderation
+type: module
+core: 8.x
+dependencies:
+  - admin_ui_support
+  - content_moderation

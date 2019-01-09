@@ -1,8 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
-import registerServiceWorker from './registerServiceWorker';
 import api from './utils/api/api';
+import registerServiceWorker from './registerServiceWorker';
 
 // Disable react-axe without an additional cli flag.
 // See README.md for more information.
@@ -16,7 +16,7 @@ if (process.env.NODE_ENV !== 'production' && process.env.REACT_APP_AXE) {
 // This happens outsite of React and before the application starts.
 api('admin_ui_routes')
   .catch(err => {
-    console.err(err); // eslint-disable-line no-console
+    console.error(err); // eslint-disable-line no-console
     return [];
   })
   .then(({ routes }) => {

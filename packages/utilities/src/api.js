@@ -155,6 +155,12 @@ async function api(
       url = parameters.node.links.self.replace(REACT_APP_DRUPAL_BASE_URL, '');
       break;
     }
+    case 'entity': {
+      const { entityType, bundle = null } = parameters;
+      url = `/jsonapi/${entityType}${bundle ? `/${bundle}` : ''}`;
+      options.headers.Accept = 'application/vnd.api+json';
+      break;
+    }
     case 'taxonomy_vocabulary': {
       url = '/jsonapi/taxonomy_vocabulary';
       options.headers.Accept = 'application/vnd.api+json';
@@ -203,6 +209,7 @@ async function api(
       break;
     }
     default:
+      console.error('Unhandled case', endpoint);
       break;
   }
 

@@ -1,0 +1,4 @@
+widgets:
+  moderation_state_default:
+    component: js/build/moderation_state_default.widget.js
+    multiple: true

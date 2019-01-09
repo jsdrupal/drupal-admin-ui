@@ -1,5 +1,5 @@
 {
-  "name": "@drupal/extension-points-bundler",
+  "name": "extension-points",
   "version": "0.1.0",
   "license": "MIT",
   "private": true,
