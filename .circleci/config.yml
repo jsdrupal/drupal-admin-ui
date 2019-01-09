@@ -22,7 +22,7 @@ commands:
           name: Start Docker
           command: |
             set -x
-            UID=$(id -u) GID=$(id -g) docker-compose build
+            uid=$(id -u) gid=$(id -g) docker-compose build
             docker-compose up -d
             ./.docker/check-ready.sh
       - save_cache:

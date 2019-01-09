@@ -29,7 +29,7 @@ Move it to ~/.cache/yarn (see https://yarnpkg.com/lang/en/docs/cli/cache/ for in
 ```
 git clone git@github.com:jsdrupal/drupal-admin-ui.git
 cd drupal-admin-ui
-UID=$(id -u) GID=$(id -g) docker-compose buil
+uid=$(id -u) gid=$(id -g) docker-compose buil
 docker-compose up
 ```
 

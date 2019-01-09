@@ -24,8 +24,8 @@ services:
       context: .
       dockerfile: ./.docker/drupal/Dockerfile
       args:
-        - NGINX_UID=${UID}
-        - NGINX_GID=${GID}
+        - NGINX_UID=${uid}
+        - NGINX_GID=${gid}
     ports:
       - 80:80
     volumes:
@@ -47,8 +47,8 @@ services:
       context: .
       dockerfile: ./.docker/node/Dockerfile
       args:
-        - NODE_UID=${UID}
-        - NODE_GID=${GID}
+        - NODE_UID=${uid}
+        - NODE_GID=${gid}
     ports:
       - 3000:3000
     volumes:
