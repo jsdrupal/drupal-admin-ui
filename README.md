@@ -98,6 +98,10 @@ or `docker exec -it -e REACT_APP_DRUPAL_BASE_URL=http://drupal -e NIGHTWATCH_LOG
 - When you're finished, restore the regular build if you want to browse the compiled version in your browser with `docker exec -it drupal_admin_ui_node yarn workspace admin-ui build`.
 This will also be restored when you restart your containers.
 
+### Drupal/Phpunit tests
+
+To execute the drupal/phpunit tests, use `docker exec -u $(id -u):$(id -g) -it drupal_admin_ui_drupal composer test`
+
 ### Local Installation
 
 #### Requirements
