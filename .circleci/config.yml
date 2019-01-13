@@ -100,7 +100,7 @@ jobs:
       - start-project
       - run:
           name: Run tests
-          command: docker exec -it drupal_admin_ui_drupal composer test
+          command: docker exec -u $(id -u):$(id -g) -it drupal_admin_ui_drupal composer test
       - store_test_results:
           path: ~/project/packages/admin-ui/reports
 
