@@ -6,7 +6,7 @@ sudo chown -R nginx:nginx /var/www/.composer/cache
 # If settings.php doesn't exist, create it and install Drupal
 if [ ! -f  docroot/sites/default/settings.php ]; then
     echo "settings.php not detected - installing Drupal (this may take some time, wait for a one-time login link to appear!)"
-    rm -rf \
+    sudo rm -rf \
       composer.json \
       composer.lock \
       config \
@@ -50,5 +50,4 @@ echo "##########################################################################
 # Create a file to indicate installation has finished
 touch ~/.drupal-installation-complete
 
-sudo php-fpm7
-sudo nginx -g 'daemon off;'
+sudo supervisord

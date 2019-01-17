@@ -17,6 +17,7 @@ services:
     depends_on:
       - "mysql"
     environment:
+      - PHP_IDE_CONFIG=serverName=127.0.0.1
       - DRUSH_OPTIONS_URI=http://127.0.0.1
       - SIMPLETEST_BASE_URL=http://127.0.0.1
       - SYMFONY_DEPRECATIONS_HELPER=disabled

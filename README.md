@@ -29,9 +29,11 @@ Move it to ~/.cache/yarn (see https://yarnpkg.com/lang/en/docs/cli/cache/ for in
 ```
 git clone git@github.com:jsdrupal/drupal-admin-ui.git
 cd drupal-admin-ui
-uid=$(id -u) gid=$(id -g) docker-compose build
-docker-compose up
+make build
+make up
 ```
+
+**The `Makefile` contains several useful commands!** e.g. enabling XDebug.
 
 As this is the first time starting the containers, the Drupal installation will take a little time.
 It will be completed once you see:
@@ -88,6 +90,7 @@ admin_ui_node yarn workspace admin-ui nightwatch
 ##### Re-installing Drupal
 Deleting `demo/docroot/sites/default/settings.php` will cause the installation to run again
 next time you bring your containers up (warning: this will wipe your entire Drupal installation!)
+You can do this with `make drupal:reinstall`
 
 #### Nightwatch
 - If you don't know the password for admin, change it with `docker exec -it drupal_admin_ui_drupal drush user:password admin admin`
