@@ -102,7 +102,7 @@ jobs:
           name: Run tests
           command: docker exec -it drupal_admin_ui_drupal composer test
       - store_test_results:
-          path: ~/project/packages/admin-ui/reports
+          path: ~/project/demo/reports
 
   dist:
     machine: true
