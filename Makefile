@@ -39,6 +39,8 @@ drupal\:xdebug\:enable:
 	 xdebug.remote_autostart=on\n\
 	 xdebug.remote_host=${IP}\n\
 	 xdebug.idekey=${IDEKEY}" > /etc/php7/conf.d/xdebug.ini'
+	 docker exec -u root -it drupal_admin_ui_drupal supervisorctl restart php-fpm
 
 drupal\:xdebug\:disable:
-	docker exec -u root -it drupal_admin_ui_drupal echo "" > /etc/php7/conf.d/xdebug
+	docker exec -u root -it drupal_admin_ui_drupal /bin/sh -c 'echo "" > /etc/php7/conf.d/xdebug.ini'
+	docker exec -u root -it drupal_admin_ui_drupal supervisorctl restart php-fpm
