@@ -7,8 +7,11 @@ ENV NODE_GID "$NODE_GID"
 
 RUN apk add shadow sudo chromium chromium-chromedriver
 
+ADD .docker/moveUser.sh /root/moveUser.sh
+
 RUN mkdir -p /var/www && \
     deluser node && \
+    HOST_UID=${NODE_UID} HOST_GID=${NODE_GID} /bin/sh /root/moveUser.sh && \
     sed -i 's/^CREATE_MAIL_SPOOL=yes/CREATE_MAIL_SPOOL=no/' /etc/default/useradd && \
     groupadd -g ${NODE_GID} node && \
     useradd -u ${NODE_UID} -d /var/www -g ${NODE_GID} node && \

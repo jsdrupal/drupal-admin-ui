@@ -5,8 +5,11 @@ ARG NGINX_GID
 ENV NGINX_UID "$NGINX_UID"
 ENV NGINX_GID "$NGINX_GID"
 
+ADD .docker/moveUser.sh /root/moveUser.sh
+
 RUN apk add shadow sudo supervisor && \
     sed -i 's/^CREATE_MAIL_SPOOL=yes/CREATE_MAIL_SPOOL=no/' /etc/default/useradd && \
+    HOST_UID=${NGINX_UID} HOST_GID=${NGINX_GID} /bin/sh /root/moveUser.sh && \
     groupadd -g ${NGINX_GID} nginx && \
     useradd -u ${NGINX_UID} -d /var/www -g ${NGINX_GID} nginx && \
     sed -e 's/# %wheel ALL=(ALL) NOPASSWD: ALL/%wheel ALL=(ALL) NOPASSWD: ALL/g' -i /etc/sudoers && \
