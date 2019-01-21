@@ -2,12 +2,13 @@
 
 rm -f /var/www/.yarn-build-complete
 
+sudo chown -R node:node /var/www/.cache
+
 if [ ! -f /var/www/drupal-admin-ui/packages/admin-ui/.env.local ]; then
     cp packages/admin-ui/.env packages/admin-ui/.env.local
     chmod 666 packages/admin-ui/.env.local
 fi
 
-sudo chown -R node:node /var/www/.cache
 yarn install
 yarn workspace admin-ui build
 

@@ -1,7 +1,8 @@
 #!/bin/sh
 
 rm -f ~/.drupal-installation-complete
-sudo chown -R nginx:nginx /var/www/.composer/cache
+
+sudo chown -R nginx:nginx /var/www/.composer
 
 # If settings.php doesn't exist, create it and install Drupal
 if [ ! -f  docroot/sites/default/settings.php ]; then

@@ -30,7 +30,7 @@ services:
     ports:
       - 80:80
     volumes:
-      - ~/.composer/cache:/var/www/.composer/cache:cached
+      - dot_composer:/var/www/.composer
       - ./.docker:/var/www/.docker:cached
       - ./demo:/var/www/drupal:cached
       - ./admin_ui_support:/var/www/admin_ui_support:cached
@@ -53,8 +53,10 @@ services:
     ports:
       - 3000:3000
     volumes:
+      - dot_cache:/var/www/.cache
       - .:/var/www/drupal-admin-ui:cached
-      - ~/.cache/yarn:/var/www/.cache/yarn:cached
 
 volumes:
   db_data:
+  dot_composer:
+  dot_cache:

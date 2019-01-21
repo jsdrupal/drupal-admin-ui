@@ -22,10 +22,6 @@ This is an admin UI for Drupal, built with JavaScript and based on [create-react
 
 Ensure that you currently have nothing running on port 80 or port 3000, for example using ` lsof -i :80 -S`.
 
-Optional: If you're on a Mac and already use yarn locally, may want to move your yarn cache
-folder to a standard location to speed up installs (your local and container can then share the cache).
-Move it to ~/.cache/yarn (see https://yarnpkg.com/lang/en/docs/cli/cache/ for instructions)
-
 ```
 git clone git@github.com:jsdrupal/drupal-admin-ui.git
 cd drupal-admin-ui
@@ -34,6 +30,7 @@ make up
 ```
 
 **The `Makefile` contains several useful commands!** e.g. enabling XDebug.
+If you have had a previous installation of this project, you may want to run `make clean` first.
 
 As this is the first time starting the containers, the Drupal installation will take a little time.
 It will be completed once you see:

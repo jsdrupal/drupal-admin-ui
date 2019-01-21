@@ -11,9 +11,13 @@ up:
 	docker-compose up
 
 clean:
+	make clean:docker
+	make clean:files
+clean\:docker:
 	docker-compose rm -vsf
 	docker-compose down -v --remove-orphans
-	sudo rm -f demo/docroot/sites/default/settings.php
+clean\:files:
+	sudo git clean -ffdX
 
 ########
 # Node #
