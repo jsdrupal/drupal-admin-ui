@@ -7,6 +7,7 @@ sudo chown -R nginx:nginx /var/www/.composer
 # If settings.php doesn't exist, create it and install Drupal
 if [ ! -f  docroot/sites/default/settings.php ]; then
     echo "settings.php not detected - installing Drupal (this may take some time, wait for a one-time login link to appear!)"
+    sudo chmod 755 docroot/sites/default
     sudo rm -rf \
       composer.json \
       composer.lock \
@@ -21,7 +22,6 @@ if [ ! -f  docroot/sites/default/settings.php ]; then
       docroot/vfancy \
       reports \
       vendor
-    chmod 755 docroot/sites/default
     cp docroot/sites/default/default.settings.php docroot/sites/default/settings.php
     echo "\$settings['trusted_host_patterns'] = [
   '^drupal\$',
