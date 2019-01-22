@@ -27,6 +27,7 @@ RUN apk add shadow sudo supervisor && \
     sed -i 's/;listen.owner = nobody/listen.owner = nginx/' /etc/php7/php-fpm.d/www.conf && \
     sed -i 's/;listen.group = nginx/listen.group = nginx/' /etc/php7/php-fpm.d/www.conf && \
     sed -i 's/;listen.mode = 0660/listen.mode = 0660/' /etc/php7/php-fpm.d/www.conf && \
+    sed -i "s/\[supervisord\]/\[supervisord\]\nuser=root    ;/" /etc/supervisord.conf && \
     mkdir -p /run/nginx && \
     chown nginx:nginx /var/www
 

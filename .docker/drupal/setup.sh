@@ -50,5 +50,4 @@ echo "##########################################################################
 
 # Create a file to indicate installation has finished
 touch ~/.drupal-installation-complete
-
-sudo supervisord
+sudo supervisord -c /etc/supervisord.conf
