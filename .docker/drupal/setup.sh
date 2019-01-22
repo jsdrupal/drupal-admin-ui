@@ -33,8 +33,8 @@ if [ ! -f  docroot/sites/default/settings.php ]; then
     echo "\$config_directories['sync'] = '../config/sync';" >> docroot/sites/default/settings.php
     mkdir docroot/sites/default/files docroot/sites/simpletest reports
     chmod 777 docroot/sites/default/files
-    composer install
-    composer config repositories.repo-name path "/var/www/admin_ui_support"
+    COMPOSER_MEMORY_LIMIT=-1 composer install
+    COMPOSER_MEMORY_LIMIT=-1 composer config repositories.repo-name path "/var/www/admin_ui_support"
     COMPOSER_MEMORY_LIMIT=-1 composer require justafish/drupal-admin-ui-support:dev-master
     drush site:install demo_umami -y --db-url=mysql://drupal:drupal@mysql:3306/drupal --sites-subdir=default
     drush en -y jsonapi admin_ui_support admin_ui_widget_example
