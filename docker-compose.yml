@@ -6,7 +6,8 @@ services:
     image: "mysql:5.7"
     volumes:
       - db_data:/var/lib/mysql
-    restart: always
+    restart: unless-stopped
+    command: --log-error-verbosity=1
     environment:
       MYSQL_ROOT_PASSWORD: drupal__
       MYSQL_DATABASE: drupal
