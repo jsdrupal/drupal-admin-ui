@@ -6,7 +6,8 @@ services:
     image: "mysql:5.7"
     volumes:
       - db_data:/var/lib/mysql
-    restart: always
+    restart: unless-stopped
+    command: --log-error-verbosity=1
     environment:
       MYSQL_ROOT_PASSWORD: drupal__
       MYSQL_DATABASE: drupal
@@ -17,20 +18,24 @@ services:
     depends_on:
       - "mysql"
     environment:
+      - PHP_IDE_CONFIG=serverName=127.0.0.1
       - DRUSH_OPTIONS_URI=http://127.0.0.1
       - SIMPLETEST_BASE_URL=http://127.0.0.1
       - SYMFONY_DEPRECATIONS_HELPER=disabled
     build:
       context: .
       dockerfile: ./.docker/drupal/Dockerfile
+      args:
+        - NGINX_UID=${uid}
+        - NGINX_GID=${gid}
     ports:
       - 80:80
     volumes:
-      - ~/.composer/cache:/root/.composer/cache:cached
-      - ./.docker:/root/.docker:cached
+      - dot_composer:/var/www/.composer
+      - ./.docker:/var/www/.docker:cached
       - ./demo:/var/www/drupal:cached
       - ./admin_ui_support:/var/www/admin_ui_support:cached
-      - ./packages/admin-ui/build:/var/www/drupal/docroot/vfancy:cached
+      - ./packages/admin-ui:/var/www/admin-ui:cached
 
   node:
     container_name: drupal_admin_ui_node
@@ -43,15 +48,16 @@ services:
     build:
       context: .
       dockerfile: ./.docker/node/Dockerfile
+      args:
+        - NODE_UID=${uid}
+        - NODE_GID=${gid}
     ports:
       - 3000:3000
     volumes:
-      - .:/root/drupal-admin-ui:cached
-      - ~/.cache/yarn:/root/.cache/yarn:cached
-      - /root/drupal-admin-ui/node_modules
-      - /root/drupal-admin-ui/packages/admin-ui/node_modules
-      - /root/drupal-admin-ui/packages/components/node_modules
-      - /root/drupal-admin-ui/packages/extension-points/node_modules
+      - dot_cache:/var/www/.cache
+      - .:/var/www/drupal-admin-ui:cached
 
 volumes:
   db_data:
+  dot_composer:
+  dot_cache:
