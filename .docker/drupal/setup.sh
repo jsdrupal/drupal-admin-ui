@@ -1,4 +1,5 @@
 #!/bin/sh
+set -e
 
 rm -f ~/.drupal-installation-complete
 

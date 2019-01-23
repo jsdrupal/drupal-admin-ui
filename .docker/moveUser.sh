@@ -1,4 +1,5 @@
 #!/bin/sh
+set -e
 
 # If a user or group exists at the specified IDs, move them to something else.
 NEW_UID=${HOST_UID}

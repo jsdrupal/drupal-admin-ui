@@ -1,4 +1,5 @@
 #!/bin/sh
+set -e
 
 rm -f /var/www/.yarn-build-complete
 
