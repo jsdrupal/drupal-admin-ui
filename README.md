@@ -30,6 +30,8 @@ make build
 make up
 ```
 
+If this fails and you see `Killed` from composer, you will need to [increase your memory allocation](https://docs.docker.com/docker-for-mac/#advanced) for Docker.
+
 **The `Makefile` contains several useful commands!** e.g. enabling XDebug.
 
 As this is the first time starting the containers, the Drupal installation will take a little time.
