@@ -21,6 +21,7 @@ This is an admin UI for Drupal, built with JavaScript and based on [create-react
 ### Docker
 
 Ensure that you currently have nothing running on port 80 or port 3000, for example using ` lsof -i :80 -S`.
+If you have had a previous installation of this project, you may want to run `make clean` first.
 
 ```
 git clone git@github.com:jsdrupal/drupal-admin-ui.git
@@ -30,7 +31,6 @@ make up
 ```
 
 **The `Makefile` contains several useful commands!** e.g. enabling XDebug.
-If you have had a previous installation of this project, you may want to run `make clean` first.
 
 As this is the first time starting the containers, the Drupal installation will take a little time.
 It will be completed once you see:
