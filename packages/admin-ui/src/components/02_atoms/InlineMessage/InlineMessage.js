@@ -13,7 +13,7 @@ let modifierClassMap;
 
 const Message = ({ message, messageSeverity }) => (
   <div className={`${styles.message} ${modifierClassMap[messageSeverity]}`}>
-    {message}
+    {message && message.replace('\\s', '<p></p>')}
   </div>
 );
 
