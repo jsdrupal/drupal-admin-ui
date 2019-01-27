@@ -1,7 +1,7 @@
 #!/bin/sh
 set -e
 
-rm -f /var/www/.yarn-build-complete
+rm -f /var/www/drupal-admin-ui/.yarn-build-complete
 
 sudo chown -R node:node /var/www/.cache
 
@@ -14,6 +14,6 @@ yarn install
 yarn workspace admin-ui build
 
 # Create a file to indicate build has finished
-touch /var/www/.yarn-build-complete
+touch /var/www/drupal-admin-ui/.yarn-build-complete
 
 yarn workspace admin-ui start

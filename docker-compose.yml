@@ -57,6 +57,18 @@ services:
       - dot_cache:/var/www/.cache
       - .:/var/www/drupal-admin-ui:cached
 
+#  storybook:
+#    image: node:10-alpine
+#    working_dir: /var/www/drupal-admin-ui
+#    environment:
+#      - NODE_ENV=production
+#    ports:
+#      - 9001:9001
+#    volumes:
+#      - dot_cache:/var/www/.cache
+#      - .:/var/www/drupal-admin-ui:cached
+#    command: .docker/storybook/setup.sh
+
 volumes:
   db_data:
   dot_composer:
