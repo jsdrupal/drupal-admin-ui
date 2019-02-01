@@ -20,7 +20,8 @@
         "webflo/drupal-finder": "^1.0.0",
         "webmozart/path-util": "^2.3",
         "justafish/drupal-admin-ui": "dev-master",
-        "justafish/drupal-admin-ui-support": "dev-master"
+        "justafish/drupal-admin-ui-support": "dev-master",
+        "zaporylie/composer-drupal-optimizations": "^1.0"
     },
     "require-dev": {
         "webflo/drupal-core-require-dev": "~8.7",
