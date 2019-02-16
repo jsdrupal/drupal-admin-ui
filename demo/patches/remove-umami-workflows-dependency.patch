@@ -46,40 +46,37 @@ diff --git a/core/profiles/demo_umami/config/install/core.entity_form_display.me
 index 38efab24a7..a36135b3f5 100644
 --- a/core/profiles/demo_umami/config/install/core.entity_form_display.media.audio.default.yml
 +++ b/core/profiles/demo_umami/config/install/core.entity_form_display.media.audio.default.yml
-@@ -55,5 +55,4 @@ content:
-       placeholder: ''
+@@ -48,5 +48,4 @@ content:
      region: content
      third_party_settings: {  }
--hidden:
+ hidden:
 -  moderation_state: true
-+hidden: {  }
+   name: true
 diff --git a/core/profiles/demo_umami/config/install/core.entity_form_display.media.file.default.yml b/core/profiles/demo_umami/config/install/core.entity_form_display.media.file.default.yml
 index 16536c8127..db9b25551e 100644
 --- a/core/profiles/demo_umami/config/install/core.entity_form_display.media.file.default.yml
 +++ b/core/profiles/demo_umami/config/install/core.entity_form_display.media.file.default.yml
-@@ -55,5 +55,4 @@ content:
-       placeholder: ''
+@@ -48,5 +48,4 @@ content:
      region: content
      third_party_settings: {  }
--hidden:
+ hidden:
 -  moderation_state: true
-+hidden: {  }
+   name: true
 diff --git a/core/profiles/demo_umami/config/install/core.entity_form_display.media.image.default.yml b/core/profiles/demo_umami/config/install/core.entity_form_display.media.image.default.yml
 index 06ab5d285e..c1139a8a39 100644
 --- a/core/profiles/demo_umami/config/install/core.entity_form_display.media.image.default.yml
 +++ b/core/profiles/demo_umami/config/install/core.entity_form_display.media.image.default.yml
-@@ -57,5 +57,4 @@ content:
-       placeholder: ''
+@@ -50,5 +50,4 @@ content:
      region: content
      third_party_settings: {  }
--hidden:
+ hidden:
 -  moderation_state: true
-+hidden: {  }
+   name: true
 diff --git a/core/profiles/demo_umami/config/install/core.entity_form_display.media.remote_video.default.yml b/core/profiles/demo_umami/config/install/core.entity_form_display.media.remote_video.default.yml
 index d0924b7042..098a2ecc54 100644
 --- a/core/profiles/demo_umami/config/install/core.entity_form_display.media.remote_video.default.yml
 +++ b/core/profiles/demo_umami/config/install/core.entity_form_display.media.remote_video.default.yml
-@@ -49,5 +49,4 @@ content:
+@@ -48,5 +48,4 @@ content:
      region: content
      third_party_settings: {  }
  hidden:
@@ -89,15 +86,17 @@ diff --git a/core/profiles/demo_umami/config/install/core.entity_form_display.no
 index 50db6035b7..122c53e37c 100644
 --- a/core/profiles/demo_umami/config/install/core.entity_form_display.node.article.default.yml
 +++ b/core/profiles/demo_umami/config/install/core.entity_form_display.node.article.default.yml
-@@ -8,7 +8,6 @@ dependencies:
+@@ -7,9 +7,7 @@ dependencies:
+     - field.field.node.article.field_tags
      - image.style.thumbnail
      - node.type.article
+-    - workflows.workflow.editorial
    module:
 -    - content_moderation
      - image
      - path
      - text
-@@ -28,13 +27,13 @@ content:
+@@ -29,13 +27,13 @@ content:
      third_party_settings: {  }
    created:
      type: datetime_timestamp
@@ -113,7 +112,7 @@ index 50db6035b7..122c53e37c 100644
      region: content
      settings:
        progress_indicator: throbber
-@@ -42,22 +41,13 @@ content:
+@@ -43,22 +41,13 @@ content:
      third_party_settings: {  }
    field_tags:
      type: entity_reference_autocomplete_tags
@@ -138,7 +137,7 @@ index 50db6035b7..122c53e37c 100644
      region: content
      settings: {  }
      third_party_settings: {  }
-@@ -65,21 +55,21 @@ content:
+@@ -66,21 +55,21 @@ content:
      type: boolean_checkbox
      settings:
        display_label: true
@@ -163,7 +162,7 @@ index 50db6035b7..122c53e37c 100644
      region: content
      third_party_settings: {  }
    title:
-@@ -92,7 +82,7 @@ content:
+@@ -93,7 +82,7 @@ content:
      third_party_settings: {  }
    uid:
      type: entity_reference_autocomplete
@@ -176,15 +175,17 @@ diff --git a/core/profiles/demo_umami/config/install/core.entity_form_display.no
 index 9a896e5a33..682f1a550c 100644
 --- a/core/profiles/demo_umami/config/install/core.entity_form_display.node.page.default.yml
 +++ b/core/profiles/demo_umami/config/install/core.entity_form_display.node.page.default.yml
-@@ -5,7 +5,6 @@ dependencies:
+@@ -4,9 +4,7 @@ dependencies:
+   config:
      - field.field.node.page.body
      - node.type.page
+-    - workflows.workflow.editorial
    module:
 -    - content_moderation
      - path
      - text
  id: node.page.default
-@@ -15,7 +14,7 @@ mode: default
+@@ -16,7 +14,7 @@ mode: default
  content:
    body:
      type: text_textarea_with_summary
@@ -193,7 +194,7 @@ index 9a896e5a33..682f1a550c 100644
      region: content
      settings:
        rows: 9
-@@ -24,19 +23,13 @@ content:
+@@ -25,19 +23,13 @@ content:
      third_party_settings: {  }
    created:
      type: datetime_timestamp
@@ -215,7 +216,7 @@ index 9a896e5a33..682f1a550c 100644
      region: content
      settings: {  }
      third_party_settings: {  }
-@@ -44,26 +37,26 @@ content:
+@@ -45,26 +37,26 @@ content:
      type: boolean_checkbox
      settings:
        display_label: true
@@ -246,7 +247,7 @@ index 9a896e5a33..682f1a550c 100644
      region: content
      settings:
        size: 60
-@@ -71,7 +64,7 @@ content:
+@@ -72,7 +64,7 @@ content:
      third_party_settings: {  }
    uid:
      type: entity_reference_autocomplete
@@ -259,15 +260,17 @@ diff --git a/core/profiles/demo_umami/config/install/core.entity_form_display.no
 index 5c3431958d..fa4072fb6d 100644
 --- a/core/profiles/demo_umami/config/install/core.entity_form_display.node.recipe.default.yml
 +++ b/core/profiles/demo_umami/config/install/core.entity_form_display.node.recipe.default.yml
-@@ -15,7 +15,6 @@ dependencies:
+@@ -14,9 +14,7 @@ dependencies:
+     - field.field.node.recipe.field_tags
      - image.style.thumbnail
      - node.type.recipe
+-    - workflows.workflow.editorial
    module:
 -    - content_moderation
      - image
      - path
      - text
-@@ -107,12 +106,6 @@ content:
+@@ -108,12 +106,6 @@ content:
      third_party_settings: {  }
      type: entity_reference_autocomplete_tags
      region: content
