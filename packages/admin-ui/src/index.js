@@ -16,7 +16,7 @@ if (process.env.NODE_ENV !== 'production' && process.env.REACT_APP_AXE) {
 // This happens outsite of React and before the application starts.
 api('admin_ui_routes')
   .catch(err => {
-    console.err(err); // eslint-disable-line no-console
+    console.error(err); // eslint-disable-line no-console
     return [];
   })
   .then(({ routes }) => {
