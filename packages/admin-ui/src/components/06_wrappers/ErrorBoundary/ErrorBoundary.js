@@ -29,6 +29,7 @@ class ErrorBoundary extends React.Component {
         <InlineMessage
           message={pe.render(this.state.error)}
           messageSeverity={MESSAGE_SEVERITY_ERROR}
+          error={this.state.error}
         />
       );
     }

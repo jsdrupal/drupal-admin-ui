@@ -11,9 +11,9 @@ import {
 let styles;
 let modifierClassMap;
 
-const Message = ({ message, messageSeverity }) => (
+const Message = ({ message, messageSeverity, error }) => (
   <div className={`${styles.message} ${modifierClassMap[messageSeverity]}`}>
-    {message}
+    {typeof error === 'string' ? <p>{message}</p> : message }
   </div>
 );
 
