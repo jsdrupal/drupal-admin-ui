@@ -18,7 +18,7 @@
   "dependencies": {
     "@drupal/admin-ui-utilities": "file:../utilities",
     "@material-ui/core": "^3.9.3",
-    "@material-ui/icons": "^3.0.1",
+    "@material-ui/icons": "^3.0.2",
     "@types/jest": "^23.3.9",
     "@types/node": "^10.12.5",
     "@types/react": "^16.7.2",
