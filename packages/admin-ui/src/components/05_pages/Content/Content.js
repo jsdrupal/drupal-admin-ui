@@ -52,7 +52,7 @@ const styles = {
     max-width: 19rem;
   `,
   formControl: css`
-    margin: 0.5rem;
+    margin: 1rem 0 0.5rem 0.5rem;
     min-width: 8rem;
     max-width: 19rem;
   `,
