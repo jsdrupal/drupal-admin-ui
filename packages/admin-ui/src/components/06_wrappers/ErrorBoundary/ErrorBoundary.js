@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import PrettyError from 'pretty-error';
 
 import InlineMessage from '../../02_atoms/InlineMessage/InlineMessage';
 
@@ -22,9 +23,11 @@ class ErrorBoundary extends React.Component {
 
   render() {
     if (this.state.error) {
+      const pe = new PrettyError();
+
       return (
         <InlineMessage
-          message={this.state.error.toString()}
+          message={pe.render(this.state.error)}
           messageSeverity={MESSAGE_SEVERITY_ERROR}
         />
       );

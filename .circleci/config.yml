@@ -22,7 +22,7 @@ commands:
           name: Start Docker
           command: |
             set -x
-            docker-compose build
+            uid=$(id -u) gid=$(id -g) docker-compose build
             docker-compose up -d
             ./.docker/check-ready.sh
       - save_cache:
@@ -46,6 +46,10 @@ commands:
       ssh_key_fingerprint:
         type: string
     steps:
+      - run:
+          name: Clear previously applied SSH key
+          command: |
+            > ~/.ssh/config
       - add_ssh_keys:
           fingerprints:
             - << parameters.ssh_key_fingerprint >>
@@ -57,9 +61,7 @@ commands:
       - run:
           name: Overwrite files with build
           command: |
-            rm -rf ~/build-files
-            rm -rf ~/build-repo
-            mv << parameters.files >> ~/build-files
+            cp -R << parameters.files >> ~/build-files
             git clone << parameters.destination_repo >> ~/build-repo
             rm -rf ~/build-files/.git
             mv ~/build-repo/.git ~/build-files/.git
@@ -73,15 +75,20 @@ commands:
                 git commit -m "<< parameters.message >>"
                 git push origin master
               fi
+              sudo rm -rf ~/build-files
+              sudo rm -rf ~/build-repo
 
 jobs:
   test_node:
     machine: true
     steps:
       - start-project
-      - run: docker exec -it drupal_admin_ui_drupal drush user:password admin admin
-      - run: docker exec -it -e REACT_APP_DRUPAL_BASE_URL=http://drupal drupal_admin_ui_node yarn workspace admin-ui build
-      - run: docker exec -it -e REACT_APP_DRUPAL_BASE_URL=http://drupal -e NIGHTWATCH_LOGIN_admin_PASSWORD=admin drupal_admin_ui_node yarn test
+      - run:
+          name: Run tests
+          command: |
+            docker exec -it drupal_admin_ui_drupal drush user:password admin admin
+            docker exec -it -e REACT_APP_DRUPAL_BASE_URL=http://drupal drupal_admin_ui_node yarn workspace admin-ui build
+            docker exec -it -e REACT_APP_DRUPAL_BASE_URL=http://drupal -e NIGHTWATCH_LOGIN_admin_PASSWORD=admin drupal_admin_ui_node yarn test
       - store_test_results:
           path: ~/project/packages/admin-ui/reports
       - store_artifacts:
@@ -91,9 +98,11 @@ jobs:
     machine: true
     steps:
       - start-project
-      - run: docker exec -it drupal_admin_ui_drupal su -m apache -s /bin/sh -c "composer test"
+      - run:
+          name: Run tests
+          command: docker exec -it drupal_admin_ui_drupal composer test
       - store_test_results:
-          path: ~/project/packages/admin-ui/reports
+          path: ~/project/demo/reports
 
   dist:
     machine: true
@@ -102,7 +111,12 @@ jobs:
 
       # This pushes to https://github.com/jsdrupal/drupal-admin-ui-dist
       # which is then distributed to https://packagist.org/packages/justafish/drupal-admin-ui
-      - run: cp ~/project/.circleci/drupal-admin-ui--composer.json ~/project/packages/admin-ui/build/composer.json
+      - run:
+          name: Fix permissions
+          command:  sudo chown -R circleci:circleci ~/project/packages/admin-ui/build
+      - run:
+          name: Copy composer file
+          command: cp ~/project/.circleci/drupal-admin-ui--composer.json ~/project/packages/admin-ui/build/composer.json
       - commit-and-push:
           files: ~/project/packages/admin-ui/build
           destination_repo: git@github.com:jsdrupal/drupal-admin-ui-dist.git
@@ -110,6 +124,9 @@ jobs:
 
       # This pushes to https://github.com/jsdrupal/drupal-admin-ui-support-dist
       # which is then distributed at https://packagist.org/packages/justafish/drupal-admin-ui-support
+      - run:
+          name: Fix permissions
+          command:  sudo chown -R circleci:circleci ~/project/admin_ui_support
       - commit-and-push:
           files: ~/project/admin_ui_support
           destination_repo: git@github.com:jsdrupal/drupal-admin-ui-support-dist.git
@@ -124,7 +141,24 @@ jobs:
             docker exec -it drupal_admin_ui_drupal cp templates/composer.json composer.json
             docker exec -it drupal_admin_ui_drupal cp templates/composer.lock composer.lock
             docker exec -it drupal_admin_ui_drupal rm -rf templates
-            docker exec -it drupal_admin_ui_drupal composer update justafish/drupal-admin-ui-support --lock
+      # Reset vfancy, otherwise composer will complain that "The .git directory is missing from docroot/vfancy"
+      # and won't run update
+      - run:
+          name: Reset vfancy
+          command: |
+            docker exec -it drupal_admin_ui_drupal rm -rf docroot/vfancy/*
+            docker exec -it drupal_admin_ui_drupal /bin/sh -c "cd docroot/vfancy && \
+              git init && \
+              git remote add origin https://github.com/jsdrupal/drupal-admin-ui-dist.git && \
+              git remote add composer https://github.com/jsdrupal/drupal-admin-ui-dist.git && \
+              git fetch origin && \
+              git reset --hard origin/master"
+      - run:
+          name: Refresh composer.lock to point to new admin-ui-support commit
+          command: docker exec -it drupal_admin_ui_drupal composer update justafish/drupal-admin-ui-support --lock
+      - run:
+          name: Fix permissions
+          command: sudo chown -R circleci:circleci ~/project/demo
       - commit-and-push:
           message: "Auto update from master"
           files: ~/project/demo
