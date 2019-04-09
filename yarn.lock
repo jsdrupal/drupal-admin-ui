@@ -1098,18 +1098,6 @@
   resolved "https://registry.yarnpkg.com/@csstools/convert-colors/-/convert-colors-1.4.0.tgz#ad495dc41b12e75d588c6db8b9834f08fa131eb7"
   integrity sha512-5a6wqoJV/xEdbRNKVo6I4hO3VjyDq//8q2f9I6PBAvMesJHFauXDorcNCsr9RzvsZnaWi5NYCcfyqP1QeFHFbw==
 
-"@drupal/admin-ui-components@file:packages/components":
-  version "0.1.0"
-  dependencies:
-    "@material-ui/core" "^3.6.1"
-    emotion "^10.0.1"
-
-"@drupal/admin-ui-utilities@file:packages/utilities":
-  version "0.1.0"
-  dependencies:
-    "@babel/runtime" "^7.2.0"
-    qs "^6.6.0"
-
 "@emotion/babel-utils@^0.6.4":
   version "0.6.10"
   resolved "https://registry.yarnpkg.com/@emotion/babel-utils/-/babel-utils-0.6.10.tgz#83dbf3dfa933fae9fc566e54fbb45f14674c6ccc"
