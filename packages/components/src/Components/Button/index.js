@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { css } from 'emotion';
 import Button from '@material-ui/core/Button';
 
@@ -13,8 +14,18 @@ const styles = css`
   }
 `;
 
-export default ({ children, variant = 'contained' }) => (
+const AdminUIButton = ({ children, variant = 'contained' }) => (
   <Button variant={variant} className={styles}>
     {children}
   </Button>
 );
+
+AdminUIButton.propTypes = {
+  children: PropTypes.oneOfType([
+    PropTypes.arrayOf(PropTypes.node),
+    PropTypes.node,
+  ]).isRequired,
+  variant: PropTypes.string.isRequired,
+};
+
+export default AdminUIButton;

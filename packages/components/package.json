@@ -11,7 +11,8 @@
   },
   "dependencies": {
     "@material-ui/core": "^3.6.1",
-    "emotion": "^10.0.1"
+    "emotion": "^10.0.1",
+    "prop-types": "^15.7.2"
   },
   "devDependencies": {
     "@babel/core": "^7.1.6",
