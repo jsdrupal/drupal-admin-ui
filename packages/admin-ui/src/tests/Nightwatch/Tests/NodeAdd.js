@@ -11,7 +11,9 @@ module.exports = {
     browser
       .relativeURL('/node/add/article')
       .waitForElementVisible('#title')
-      .waitForElementVisible('[data-nightwatch="restore-content-snackbar"] button:first-of-type');
+      .waitForElementVisible(
+        '[data-nightwatch="restore-content-snackbar"] button:first-of-type',
+      );
 
     browser.expect.element('#title').value.to.equal('');
 
