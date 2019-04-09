@@ -6,6 +6,9 @@
   "bin": {
     "extension-points-bundler": "./index.js"
   },
+  "scripts": {
+    "prettier": "prettier --write '*.{js,jsx,ts,tsx}'"
+  },
   "dependencies": {
     "@babel/core": "^7.1.2",
     "@babel/plugin-proposal-class-properties": "^7.1.0",

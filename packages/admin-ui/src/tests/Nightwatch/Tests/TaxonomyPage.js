@@ -19,8 +19,8 @@ module.exports = {
     });
 
     browser
-      .waitForElementVisible('div[class^="MuiSelect-select"]')
-      .click('div[class^="MuiSelect-select"]');
+      .waitForElementVisible('[data-nightwatch="taxonomy-operations"] > div')
+      .click('[data-nightwatch="taxonomy-operations"] > div');
 
     browser.waitForElementVisible('#menu-');
 

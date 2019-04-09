@@ -67,6 +67,7 @@ export default class TaxonomyVocabulary extends React.Component {
         value={this.state.activeLink || ''}
         autoWidth
         onChange={e => this.setState({ activeLink: e.target.value })}
+        data-nightwatch="taxonomy-operations"
       >
         <MenuItem value={`/admin/structure/taxonomy/manage/${vid}/overview`}>
           List Terms

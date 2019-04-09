@@ -13,6 +13,7 @@ import {
   resetLoading,
 } from 'react-redux-loading-bar';
 import { push } from 'react-router-redux';
+import { ApiError } from '@drupal/admin-ui-utilities';
 
 import api from '../utils/api/api';
 import {
@@ -24,7 +25,6 @@ import {
 
 import MessageSave from '../components/01_subatomics/MessageHelpers/MessageSave';
 import { extractContentType, mapContentTypeToName } from '../utils/api/content';
-import { ApiError } from '../utils/api/errors';
 
 export const CONTENT_REQUESTED = 'CONTENT_REQUESTED';
 export const requestContent = (

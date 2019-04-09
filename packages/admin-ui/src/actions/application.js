@@ -4,6 +4,7 @@ import {
   hideLoading,
   resetLoading,
 } from 'react-redux-loading-bar';
+import { ApiError } from '@drupal/admin-ui-utilities';
 import api from '../utils/api/api';
 import {
   MESSAGE_SEVERITY_ERROR,
@@ -11,7 +12,6 @@ import {
   MESSAGE_SEVERITY_INFO,
   MESSAGE_SEVERITY_WARNING,
 } from '../constants/messages';
-import { ApiError } from '../utils/api/errors';
 import widgets from '../components/05_pages/NodeForm/Widgets';
 
 export const OPEN_DRAWER = 'OPEN_DRAWER';

@@ -4,10 +4,10 @@ import {
   hideLoading,
   resetLoading,
 } from 'react-redux-loading-bar';
+import { ApiError } from '@drupal/admin-ui-utilities';
 
 import api from '../utils/api/api';
 import { setErrorMessage } from './application';
-import { ApiError } from '../utils/api/errors';
 
 export const UI_SCHEMA_REQUESTED = 'UI_SCHEMA_REQUESTED';
 export const requestUiSchema = ({ entityTypeId, bundle }) => ({
