@@ -20,6 +20,7 @@ RUN apk add shadow sudo supervisor && \
     php7-curl php7-xmlwriter php7-ctype php7-opcache php7-pdo_mysql mysql-client \
     nginx php7-fpm php7-xdebug && \
     sed -i 's/;opcache.enable=1/opcache.enable=1/' /etc/php7/php.ini && \
+    sed -i 's/memory_limit = 128M/memory_limit = 512M/' /etc/php7/php.ini && \
     sed -i 's/user = nobody/user = nginx/' /etc/php7/php-fpm.d/www.conf && \
     sed -i 's/group = nobody/group = nginx/' /etc/php7/php-fpm.d/www.conf && \
     sed -i 's/listen = 127.0.0.1:9000/listen = \/var\/run\/nginx\/php-fpm7.sock/' /etc/php7/php-fpm.d/www.conf && \
