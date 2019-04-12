@@ -23,6 +23,9 @@ module.exports = {
   },
   externals: ['react'],
   plugins: productionPluginDefine,
+  optimization: {
+    usedExports: true,
+  },
   module: {
     rules: [
       {
