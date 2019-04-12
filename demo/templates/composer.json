@@ -88,6 +88,7 @@
         "enable-patching": true,
         "patches": {
             "drupal/core": {
+                "Race condition causing 500 on cache table creation": "https://www.drupal.org/files/issues/2019-04-10/3043907-5.patch",
                 "Remove Umami dependency to Workflows because the admin UI doesn't currently support it": "patches/remove-umami-workflows-dependency.patch"
             }
         }
