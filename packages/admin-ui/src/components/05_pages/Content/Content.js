@@ -52,7 +52,7 @@ const styles = {
     max-width: 19rem;
   `,
   formControl: css`
-    margin: 0.5rem;
+    margin: 1rem 0 0.5rem 0.5rem;
     min-width: 8rem;
     max-width: 19rem;
   `,
@@ -169,10 +169,11 @@ class Content extends Component {
       <PageTitle>Content</PageTitle>
       <LoadingBar style={{ position: 'relative', marginBottom: '5px' }} />
       <Paper>
-        {this.props.contentTypes && this.props.actions && (
+        {this.props.contentTypes && this.props.actions.length && (
           <Fragment>
             <div className={styles.filters}>
-              {this.props.contentTypes && this.props.actions && (
+              {/* @TODO Get rid of duplicated condition */}
+              {this.props.contentTypes && this.props.actions.length && (
                 <Fragment>
                   <TextField
                     inputProps={{ 'aria-label': 'Title' }}
@@ -346,9 +347,12 @@ const mapStateToProps = state => ({
   contentList: state.content.contentList,
   includes: state.content.includes,
   links: state.content.links,
-  actions: state.application.actions.filter(action =>
-    SUPPORTED_ACTIONS.includes(action.attributes.plugin),
-  ),
+  actions:
+    (state.application.actions &&
+      state.application.actions.filter(action =>
+        SUPPORTED_ACTIONS.includes(action.attributes.plugin),
+      )) ||
+    [],
 });
 
 export default connect(

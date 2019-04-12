@@ -8,6 +8,7 @@ yarn-debug.log*
 yarn-error.log*
 .env.local
 reports
+/packages/components/build
 
 # Demo install
 # Also update ./docker/drupal/setup.sh if anything additional is added here.
@@ -22,4 +23,4 @@ demo/docroot/sites/simpletest
 demo/docroot/sites/default/files/
 demo/docroot/sites/default/settings.php
 demo/docroot/sites/default/services.yml
-demo/docroot/vfancy/
+demo/docroot/vfancy

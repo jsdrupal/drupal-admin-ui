@@ -20,17 +20,24 @@ This is an admin UI for Drupal, built with JavaScript and based on [create-react
 
 ### Docker
 
-Ensure that you currently have nothing running on port 80 or port 3000, for example using ` lsof -i :80 -S`.
+Ensure that you currently have nothing running on port 80 (e.g. a local webserver) or port 3000 (e.g. a local node process). You can run ` lsof -i :80 -S` to see what you currently have running.
 
 Optional: If you're on a Mac and already use yarn locally, may want to move your yarn cache
 folder to a standard location to speed up installs (your local and container can then share the cache).
 Move it to ~/.cache/yarn (see https://yarnpkg.com/lang/en/docs/cli/cache/ for instructions)
 
+If you have had a previous installation of this project, you may want to run `make clean` first.
+
 ```
 git clone git@github.com:jsdrupal/drupal-admin-ui.git
 cd drupal-admin-ui
-docker-compose up
+make build
+make up
 ```
+
+If this fails and you see `Killed` from composer, you will need to [increase your memory allocation](https://docs.docker.com/docker-for-mac/#advanced) for Docker.
+
+**The `Makefile` contains several useful commands!** e.g. enabling XDebug.
 
 As this is the first time starting the containers, the Drupal installation will take a little time.
 It will be completed once you see:
@@ -87,6 +94,7 @@ admin_ui_node yarn workspace admin-ui nightwatch
 ##### Re-installing Drupal
 Deleting `demo/docroot/sites/default/settings.php` will cause the installation to run again
 next time you bring your containers up (warning: this will wipe your entire Drupal installation!)
+You can do this with `make drupal:reinstall`
 
 #### Nightwatch
 - If you don't know the password for admin, change it with `docker exec -it drupal_admin_ui_drupal drush user:password admin admin`
@@ -141,6 +149,8 @@ The webpack dev server has hot reloading, however you won't be able to seamlessl
 Drupal and the React app. If you want to test out your changes in this context, enter the
 `drupal-admin-ui` directory and run `yarn workspace admin-ui build`. You can then visit the URL that
 `composer start` generated.
+
+Further helpful commands are `yarn eslint` and `yarn prettier`.
 
 #### tl;dr
 ```
