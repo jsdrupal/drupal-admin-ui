@@ -92,7 +92,7 @@
     "// Test commands for the CI": "⬅✌➡",
     "test": "yarn test:unit",
     "test:functional": "yarn nightwatch",
-    "test:unit": "CI=true JEST_JUNIT_OUTPUT=reports/jest-junit.xml react-scripts test --testResultsProcessor ../../node_modules/jest-junit --env=jsdom",
+    "test:unit": "CI=true JEST_JUNIT_OUTPUT=reports/jest-junit.xml react-scripts test --reporters=default --reporters=../../node_modules/jest-junit --env=jsdom",
     "eject": "react-scripts eject"
   },
   "browserslist": [
