@@ -30,3 +30,8 @@ then
   groupmod -g ${NEW_GID} ${GROUPNAME}
   find / -group ${HOST_GID} -exec chgrp -h ${GROUPNAME} {} \;
 fi
+
+# Adds a user and a corresponding group, and adds the user to sudoers.
+groupadd -g ${HOST_GID} ${NAME}
+useradd -u ${HOST_UID} -d /var/www -g ${HOST_GID} ${NAME}
+usermod -a -G wheel ${NAME}

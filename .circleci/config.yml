@@ -4,31 +4,23 @@ aliases:
   - &yarn-cache
     v4-yarn-cache
 
-  - &composer-cache
-    v4-composer-cache
-
 commands:
-
-  start-project:
+  setup-project:
     steps:
       - checkout
       - restore_cache:
           keys:
             - *yarn-cache
-      - restore_cache:
-          keys:
-            - *composer-cache
       - run:
           name: Start Docker
           command: |
             set -x
-            uid=$(id -u) gid=$(id -g) docker-compose build
+            make build
             docker-compose up -d
-            ./.docker/check-ready.sh
-      - save_cache:
-          key: *composer-cache
-          paths:
-            - ~/.composer/cache
+            sleep 15
+      - run:
+          name: Install Projects
+          command: make install
       - save_cache:
           key: *yarn-cache
           paths:
@@ -82,7 +74,7 @@ jobs:
   test_node:
     machine: true
     steps:
-      - start-project
+      - setup-project
       - run:
           name: Run tests
           command: |
@@ -97,7 +89,7 @@ jobs:
   test_drupal:
     machine: true
     steps:
-      - start-project
+      - setup-project
       - run:
           name: Run tests
           command: docker exec -it drupal_admin_ui_drupal composer test
@@ -107,7 +99,7 @@ jobs:
   dist:
     machine: true
     steps:
-      - start-project
+      - setup-project
 
       # This pushes to https://github.com/jsdrupal/drupal-admin-ui-dist
       # which is then distributed to https://packagist.org/packages/justafish/drupal-admin-ui
