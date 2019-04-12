@@ -169,11 +169,11 @@ workflows:
   version: 2
   test:
     jobs:
-      - test_node
+      # - test_node
       - test_drupal
       - dist:
           requires:
-            - test_node
+            # - test_node
             - test_drupal
           filters:
            branches:
