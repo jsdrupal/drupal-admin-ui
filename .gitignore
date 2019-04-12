@@ -8,6 +8,7 @@ yarn-debug.log*
 yarn-error.log*
 .env.local
 reports
+/packages/components/build
 
 # Demo install
 # Also update ./docker/drupal/setup.sh if anything additional is added here.
