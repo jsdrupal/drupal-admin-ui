@@ -16,7 +16,8 @@
     ]
   },
   "dependencies": {
-    "@drupal/admin-ui-utilities": "file:../utilities",
+    "@drupal/admin-ui-components": "0.1.0",
+    "@drupal/admin-ui-utilities": "0.1.0",
     "@material-ui/core": "^3.2.0",
     "@material-ui/icons": "^3.0.1",
     "@types/jest": "^24.0.0",
@@ -89,7 +90,7 @@
     "nightwatch": "nightwatch --config ./src/tests/Nightwatch/nightwatch.conf.js",
     "storybook": "start-storybook -p 9001 -c .storybook",
     "// Test commands for the CI": "⬅✌➡",
-    "test": "yarn test:unit && yarn test:functional",
+    "test": "yarn test:unit",
     "test:functional": "yarn nightwatch",
     "test:unit": "CI=true JEST_JUNIT_OUTPUT=reports/jest-junit.xml react-scripts test --testResultsProcessor ../../node_modules/jest-junit --env=jsdom",
     "eject": "react-scripts eject"

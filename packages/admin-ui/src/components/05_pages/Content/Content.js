@@ -20,6 +20,8 @@ import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import AddIcon from '@material-ui/icons/Add';
 
+import { AdminUIButton } from '@drupal/admin-ui-components';
+
 import PageTitle from '../../02_atoms/PageTitle';
 import ContentTable from '../../04_templates/ContentTable/ContentTable';
 
@@ -169,10 +171,12 @@ class Content extends Component {
       <PageTitle>Content</PageTitle>
       <LoadingBar style={{ position: 'relative', marginBottom: '5px' }} />
       <Paper>
-        {this.props.contentTypes && this.props.actions && (
+        <AdminUIButton>ok</AdminUIButton>
+        {this.props.contentTypes && this.props.actions.length && (
           <Fragment>
             <div className={styles.filters}>
-              {this.props.contentTypes && this.props.actions && (
+              {/* @TODO Get rid of duplicated condition */}
+              {this.props.contentTypes && this.props.actions.length && (
                 <Fragment>
                   <TextField
                     inputProps={{ 'aria-label': 'Title' }}
@@ -346,9 +350,12 @@ const mapStateToProps = state => ({
   contentList: state.content.contentList,
   includes: state.content.includes,
   links: state.content.links,
-  actions: state.application.actions.filter(action =>
-    SUPPORTED_ACTIONS.includes(action.attributes.plugin),
-  ),
+  actions:
+    (state.application.actions &&
+      state.application.actions.filter(action =>
+        SUPPORTED_ACTIONS.includes(action.attributes.plugin),
+      )) ||
+    [],
 });
 
 export default connect(
