@@ -1,12 +1,32 @@
 {
-  "name": "admin-ui-components",
+  "name": "@drupal/admin-ui-components",
   "version": "0.1.0",
   "license": "MIT",
   "private": true,
+  "main": "build/index.js",
+  "sideEffects": false,
+  "scripts": {
+    "build": "NODE_ENV=production webpack --progress --config webpack.config.js",
+    "watch": "NODE_ENV=development webpack --progress --watch --config webpack.config.js",
+    "postinstall": "npm run build"
+  },
   "dependencies": {
+    "@material-ui/core": "^3.6.1",
+    "emotion": "^10.0.1",
+    "prop-types": "^15.7.2"
   },
   "devDependencies": {
+    "@babel/core": "^7.1.6",
+    "@babel/plugin-proposal-class-properties": "^7.1.0",
+    "@babel/preset-env": "^7.1.6",
+    "@babel/preset-react": "^7.0.0",
+    "babel-loader": "8.0.4",
+    "babel-minify-webpack-plugin": "^0.3.1",
+    "babel-plugin-emotion": "^10.0.0",
+    "webpack": "4.19.1",
+    "webpack-cli": "^3.1.2"
   },
-  "scripts": {
+  "peerDependencies": {
+    "react": "^16.6.3"
   }
 }
