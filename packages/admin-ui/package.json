@@ -38,7 +38,7 @@
     "react-dom": "^16.6.3",
     "react-emotion": "^9.2.5",
     "react-jss": "^8.4.0",
-    "react-redux": "^7.0.0",
+    "react-redux": "^5.0.7",
     "react-redux-loading-bar": "^4.1.0",
     "react-router": "^4.3.1",
     "react-router-dom": "^4.2.2",
@@ -92,7 +92,7 @@
     "// Test commands for the CI": "⬅✌➡",
     "test": "yarn test:unit",
     "test:functional": "yarn nightwatch",
-    "test:unit": "CI=true JEST_JUNIT_OUTPUT=reports/jest-junit.xml react-scripts test --testResultsProcessor ../../node_modules/jest-junit --env=jsdom",
+    "test:unit": "CI=true JEST_JUNIT_OUTPUT=reports/jest-junit.xml react-scripts test --reporters=default --reporters=../../node_modules/jest-junit --env=jsdom",
     "eject": "react-scripts eject"
   },
   "browserslist": [
