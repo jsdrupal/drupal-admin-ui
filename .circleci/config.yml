@@ -11,8 +11,6 @@ commands:
       - restore_cache:
           keys:
             - *yarn-cache
-      - setup_remote_docker:
-          version: 18.09.3
       - run:
           name: Start Docker
           command: |
