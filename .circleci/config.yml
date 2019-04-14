@@ -34,7 +34,9 @@ commands:
             sudo apt-get update && sudo apt-get install yarn
       - run:
           name: Install Projects
-          command: make install
+          command: |
+            nvm use
+            make install
       - save_cache:
           key: *yarn-cache
           paths:
