@@ -1,4 +1,4 @@
-FROM alpine:3.8
+FROM alpine:3.8 AS dependencies
 
 ARG HOST_UID
 ARG HOST_GID
@@ -32,10 +32,12 @@ RUN apk add shadow sudo supervisor make \
 ADD .docker/images/drupal/nginx-default.conf /etc/nginx/conf.d/default.conf
 ADD .docker/images/drupal/supervisord.conf /etc/supervisor.d/default.ini
 
+FROM dependencies AS install
 USER nginx
 WORKDIR /var/www/drupal
 ENV PATH="/var/www/drupal/vendor/bin:${PATH}"
 RUN composer global require hirak/prestissimo
 
+FROM install AS start
 EXPOSE 80
-ENTRYPOINT ["sudo supervisord -c /etc/supervisord.conf"]
+ENTRYPOINT ["sudo", "supervisord", "-c", "/etc/supervisord.conf"]
