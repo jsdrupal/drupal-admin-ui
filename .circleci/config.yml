@@ -34,7 +34,10 @@ commands:
             sudo apt-get update && sudo apt-get install yarn
       - run:
           name: Install Projects
+          # TODO find a better way
           command: |
+            export NVM_DIR="/opt/circleci/.nvm"
+            [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
             nvm use
             make install
       - save_cache:
