@@ -19,7 +19,7 @@ commands:
             docker-compose up -d
             sleep 15
       - run:
-          name: Install  Node.js 10.15 with build in nvm tool
+          name: Install Node.js 10.15 with build in nvm tool
           # https://www.cloudesire.com/how-to-upgrade-node-on-circleci-machine-executor/
           command: |
             export NVM_DIR="/opt/circleci/.nvm"
@@ -36,9 +36,7 @@ commands:
           name: Install Projects
           # TODO find a better way
           command: |
-            export NVM_DIR="/opt/circleci/.nvm"
-            [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
-            nvm use
+            ./.circleci/nvm.sh
             make install
       - save_cache:
           key: *yarn-cache
@@ -97,6 +95,7 @@ jobs:
       - run:
           name: Run tests
           command: |
+            ./.circleci/nvm.sh
             docker exec -it drupal_admin_ui_drupal drush user:password admin admin
             docker exec -it -e REACT_APP_DRUPAL_BASE_URL=http://drupal drupal_admin_ui_node yarn workspace admin-ui build
             docker exec -it -e REACT_APP_DRUPAL_BASE_URL=http://drupal -e NIGHTWATCH_LOGIN_admin_PASSWORD=admin drupal_admin_ui_node yarn test
