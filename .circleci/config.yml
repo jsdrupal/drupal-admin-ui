@@ -97,8 +97,8 @@ jobs:
           command: |
             ./.circleci/nvm.sh
             docker exec -it drupal_admin_ui_drupal drush user:password admin admin
-            docker exec -it -e REACT_APP_DRUPAL_BASE_URL=http://drupal drupal_admin_ui_node yarn workspace admin-ui build
-            docker exec -it -e REACT_APP_DRUPAL_BASE_URL=http://drupal -e NIGHTWATCH_LOGIN_admin_PASSWORD=admin drupal_admin_ui_node yarn test
+            yarn workspace admin-ui build
+            REACT_APP_DRUPAL_BASE_URL=http://drupal NIGHTWATCH_LOGIN_admin_PASSWORD=admin yarn test
       - store_test_results:
           path: ~/project/packages/admin-ui/reports
       - store_artifacts:
