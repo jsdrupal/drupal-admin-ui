@@ -18,17 +18,17 @@ commands:
             make build
             docker-compose up -d
             sleep 15
-      - run:
-          name: Install Node.js 10.15 with build in nvm tool
-          # https://www.cloudesire.com/how-to-upgrade-node-on-circleci-machine-executor/
-          command: |
-            export NVM_DIR="/opt/circleci/.nvm"
-            [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
-            nvm install v10.15 && nvm use v10.15 && nvm alias default v10.15
+      - run: |
+            echo 'export NVM_DIR="/opt/circleci/.nvm"' >> $BASH_ENV
+            echo ' [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"' >> $BASH_ENV
+            - run: |
             node -v
-      - run:
-          name: Install yarn
-          command: |
+            - run: |
+            nvm install v10
+            node -v
+            nvm alias default v10
+            - run: |
+            node -v
             curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
             echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
             sudo apt-get update && sudo apt-get install yarn
