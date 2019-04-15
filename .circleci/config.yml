@@ -138,10 +138,10 @@ jobs:
       - run:
           name: Reset composer.json and composer.lock
           command: |
-            docker exec -it drupal_admin_ui_drupal rm -f composer.json composer.lock
-            docker exec -it drupal_admin_ui_drupal cp templates/composer.json composer.json
-            docker exec -it drupal_admin_ui_drupal cp templates/composer.lock composer.lock
-            docker exec -it drupal_admin_ui_drupal rm -rf templates
+            rm -f demo/composer.json demo/composer.lock
+            cp demo/templates/composer.json demo/composer.json
+            cp demo/templates/composer.lock demo/composer.lock
+            rm -rf demo/templates
       # Reset vfancy, otherwise composer will complain that "The .git directory is missing from docroot/vfancy"
       # and won't run update
       - run:
