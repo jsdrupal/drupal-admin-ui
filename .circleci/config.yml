@@ -18,17 +18,13 @@ commands:
             make build
             docker-compose up -d
             sleep 15
-      - run: |
+      - run:
+          name: Install node
+          command: |
             echo 'export NVM_DIR="/opt/circleci/.nvm"' >> $BASH_ENV
             echo ' [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"' >> $BASH_ENV
-            - run: |
-            node -v
-            - run: |
             nvm install v10
-            node -v
             nvm alias default v10
-            - run: |
-            node -v
             curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
             echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
             sudo apt-get update && sudo apt-get install yarn
