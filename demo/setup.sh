@@ -1,8 +1,6 @@
 #!/bin/sh
 set -e
 
-rm -f ~/.drupal-installation-complete
-
 sudo chown -R nginx:nginx /var/www/.composer
 
 # If settings.php doesn't exist, create it and install Drupal
@@ -48,7 +46,3 @@ echo "##########################################################################
 # One time login URL                                                                         #
 # $(drush user:login) #
 ##############################################################################################"
-
-# Create a file to indicate installation has finished
-touch ~/.drupal-installation-complete
-sudo supervisord -c /etc/supervisord.conf
