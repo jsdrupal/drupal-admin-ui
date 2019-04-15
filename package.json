@@ -1,11 +1,11 @@
 {
-  "name": "drupal-admin-ui",
+  "name": "drupal",
   "version": "0.1.0",
   "license": "MIT",
   "private": true,
   "engines": {
-    "yarn": ">= 1.9",
-    "node": ">= 8.12"
+    "yarn": ">= 1.15",
+    "node": ">= 10.15"
   },
   "workspaces": [
     "packages/*"
@@ -13,7 +13,8 @@
   "scripts": {
     "eslint": "eslint packages/*/src --ext .js,.jsx,.ts,.tsx  --max-warnings=0 --fix",
     "prettier": "prettier --write '{admin_ui_support/modules/*/js,packages/*}/src/**/*.{js,jsx,ts,tsx}'",
-    "test": "yarn run test:lint && yarn workspace admin-ui test",
+    "build": "yarn workspace @drupal/admin-ui build",
+    "test": "yarn run test:lint && yarn workspace @drupal/admin-ui test",
     "test:lint": "eslint packages/*/src  --ext .js,.jsx,.ts,.tsx --max-warnings=0 --format junit -o reports/eslint-junit.xml"
   }
 }
