@@ -138,6 +138,7 @@ jobs:
       - run:
           name: Reset composer.json and composer.lock
           command: |
+            cd demo
             rm -f composer.json composer.lock
             cp templates/composer.json composer.json
             cp templates/composer.lock composer.lock
@@ -147,6 +148,7 @@ jobs:
       - run:
           name: Reset vfancy
           command: |
+            cd demo
             rm -rf docroot/vfancy/*
             cd docroot/vfancy
             git init
