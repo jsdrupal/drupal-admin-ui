@@ -30,25 +30,22 @@ module.exports = {
         use: {
           loader: 'babel-loader',
           options: {
-            plugins: [
-              '@babel/plugin-proposal-class-properties',
-              [
-                '@babel/plugin-transform-runtime',
-                {
-                  corejs: false,
-                  helpers: true,
-                  regenerator: true,
-                  useESModules: false,
-                },
-              ],
-            ],
+            plugins: ['@babel/plugin-proposal-class-properties'],
             presets: [
               '@babel/preset-react',
               [
                 '@babel/preset-env',
                 {
                   targets: {
-                    browsers: ['last 2 versions'],
+                    browsers: [
+                      'ios >= 10.3',
+                      'chrome >= 55',
+                      'firefox >= 53',
+                      'safari >= 10.3',
+                      'ChromeAndroid >= 70',
+                      'edge >= 15',
+                      'opera >= 42',
+                    ],
                   },
                 },
               ],

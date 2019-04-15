@@ -4,31 +4,36 @@ aliases:
   - &yarn-cache
     v4-yarn-cache
 
-  - &composer-cache
-    v4-composer-cache
-
 commands:
-
-  start-project:
+  setup-project:
     steps:
       - checkout
       - restore_cache:
           keys:
             - *yarn-cache
-      - restore_cache:
-          keys:
-            - *composer-cache
+      - run:
+          name: Install Node 10 and Yarn
+          command: |
+            curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.8/install.sh | bash
+            export NVM_DIR="/opt/circleci/.nvm"
+            [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+            nvm install v10
+            nvm alias default v10
+            curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
+            echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
+            sudo apt-get update && sudo apt-get install yarn
+            echo 'export NVM_DIR="/opt/circleci/.nvm"' >> $BASH_ENV
+            echo '[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"' >> $BASH_ENV
       - run:
           name: Start Docker
           command: |
             set -x
-            uid=$(id -u) gid=$(id -g) docker-compose build
+            make build
             docker-compose up -d
-            ./.docker/check-ready.sh
-      - save_cache:
-          key: *composer-cache
-          paths:
-            - ~/.composer/cache
+            sleep 15
+      - run:
+          name: Install Projects
+          command: make install
       - save_cache:
           key: *yarn-cache
           paths:
@@ -82,13 +87,15 @@ jobs:
   test_node:
     machine: true
     steps:
-      - start-project
+      - setup-project
+      - run:
+          name: Buld projects
+          command: yarn build
       - run:
           name: Run tests
           command: |
             docker exec -it drupal_admin_ui_drupal drush user:password admin admin
-            docker exec -it -e REACT_APP_DRUPAL_BASE_URL=http://drupal drupal_admin_ui_node yarn workspace admin-ui build
-            docker exec -it -e REACT_APP_DRUPAL_BASE_URL=http://drupal -e NIGHTWATCH_LOGIN_admin_PASSWORD=admin drupal_admin_ui_node yarn test
+            REACT_APP_DRUPAL_BASE_URL=http://drupal NIGHTWATCH_LOGIN_admin_PASSWORD=admin yarn test
       - store_test_results:
           path: ~/project/packages/admin-ui/reports
       - store_artifacts:
@@ -97,7 +104,7 @@ jobs:
   test_drupal:
     machine: true
     steps:
-      - start-project
+      - setup-project
       - run:
           name: Run tests
           command: docker exec -it drupal_admin_ui_drupal composer test
@@ -107,58 +114,51 @@ jobs:
   dist:
     machine: true
     steps:
-      - start-project
-
-      # This pushes to https://github.com/jsdrupal/drupal-admin-ui-dist
-      # which is then distributed to https://packagist.org/packages/justafish/drupal-admin-ui
+      - setup-project
       - run:
-          name: Fix permissions
-          command:  sudo chown -R circleci:circleci ~/project/packages/admin-ui/build
+          name: Build admin-ui package
+          command: yarn workspace @drupal/admin-ui build
       - run:
           name: Copy composer file
           command: cp ~/project/.circleci/drupal-admin-ui--composer.json ~/project/packages/admin-ui/build/composer.json
+      # This pushes to https://github.com/jsdrupal/drupal-admin-ui-dist
+      # which is then distributed to https://packagist.org/packages/justafish/drupal-admin-ui
       - commit-and-push:
           files: ~/project/packages/admin-ui/build
           destination_repo: git@github.com:jsdrupal/drupal-admin-ui-dist.git
           ssh_key_fingerprint: "82:b8:cc:fe:02:24:17:b1:31:ba:dc:30:e1:01:7a:df"
-
       # This pushes to https://github.com/jsdrupal/drupal-admin-ui-support-dist
       # which is then distributed at https://packagist.org/packages/justafish/drupal-admin-ui-support
-      - run:
-          name: Fix permissions
-          command:  sudo chown -R circleci:circleci ~/project/admin_ui_support
       - commit-and-push:
           files: ~/project/admin_ui_support
           destination_repo: git@github.com:jsdrupal/drupal-admin-ui-support-dist.git
           ssh_key_fingerprint: "6c:c9:15:82:34:e7:30:e2:91:1b:ea:e2:06:b2:cf:e0"
-
       # This builds to https://github.com/jsdrupal/drupal-admin-ui-demo for the composer create-project demo
       # which is distributed from https://packagist.org/packages/jsdrupal/drupal-admin-ui-demo
       - run:
           name: Reset composer.json and composer.lock
           command: |
-            docker exec -it drupal_admin_ui_drupal rm -f composer.json composer.lock
-            docker exec -it drupal_admin_ui_drupal cp templates/composer.json composer.json
-            docker exec -it drupal_admin_ui_drupal cp templates/composer.lock composer.lock
-            docker exec -it drupal_admin_ui_drupal rm -rf templates
+            cd demo
+            rm -f composer.json composer.lock
+            cp templates/composer.json composer.json
+            cp templates/composer.lock composer.lock
+            rm -rf templates
       # Reset vfancy, otherwise composer will complain that "The .git directory is missing from docroot/vfancy"
       # and won't run update
       - run:
           name: Reset vfancy
           command: |
-            docker exec -it drupal_admin_ui_drupal rm -rf docroot/vfancy/*
-            docker exec -it drupal_admin_ui_drupal /bin/sh -c "cd docroot/vfancy && \
-              git init && \
-              git remote add origin https://github.com/jsdrupal/drupal-admin-ui-dist.git && \
-              git remote add composer https://github.com/jsdrupal/drupal-admin-ui-dist.git && \
-              git fetch origin && \
-              git reset --hard origin/master"
+            cd demo
+            rm -rf docroot/vfancy/*
+            cd docroot/vfancy
+            git init
+            git remote add origin https://github.com/jsdrupal/drupal-admin-ui-dist.git
+            git remote add composer https://github.com/jsdrupal/drupal-admin-ui-dist.git
+            git fetch origin
+            git reset --hard origin/master
       - run:
           name: Refresh composer.lock to point to new admin-ui-support commit
           command: docker exec -it drupal_admin_ui_drupal composer update justafish/drupal-admin-ui-support --lock
-      - run:
-          name: Fix permissions
-          command: sudo chown -R circleci:circleci ~/project/demo
       - commit-and-push:
           message: "Auto update from master"
           files: ~/project/demo

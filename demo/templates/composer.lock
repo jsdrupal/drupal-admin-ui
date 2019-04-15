@@ -7450,7 +7450,6 @@
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
-        "ext-pdo_sqlite": "*",
         "php": ">=7.0.8"
     },
     "platform-dev": []
