@@ -93,18 +93,20 @@ index 90fb03f73b..346cd9914c 100644
 -  moderation_state: true
    name: true
 diff --git a/core/profiles/demo_umami/config/install/core.entity_form_display.node.article.default.yml b/core/profiles/demo_umami/config/install/core.entity_form_display.node.article.default.yml
-index 22f2d49c2b..5577e872f1 100644
+index 22f2d49c2b..dfaf037dd8 100644
 --- a/core/profiles/demo_umami/config/install/core.entity_form_display.node.article.default.yml
 +++ b/core/profiles/demo_umami/config/install/core.entity_form_display.node.article.default.yml
-@@ -9,7 +9,6 @@ dependencies:
+@@ -7,9 +7,7 @@ dependencies:
+     - field.field.node.article.field_tags
+     - image.style.thumbnail
      - node.type.article
-     - workflows.workflow.editorial
+-    - workflows.workflow.editorial
    module:
 -    - content_moderation
      - image
      - path
      - text
-@@ -29,13 +28,13 @@ content:
+@@ -29,13 +27,13 @@ content:
      third_party_settings: {  }
    created:
      type: datetime_timestamp
@@ -120,7 +122,7 @@ index 22f2d49c2b..5577e872f1 100644
      region: content
      settings:
        progress_indicator: throbber
-@@ -57,12 +56,6 @@ content:
+@@ -57,12 +55,6 @@ content:
      settings:
        include_locked: true
      third_party_settings: {  }
@@ -134,18 +136,20 @@ index 22f2d49c2b..5577e872f1 100644
      type: path
      weight: 8
 diff --git a/core/profiles/demo_umami/config/install/core.entity_form_display.node.page.default.yml b/core/profiles/demo_umami/config/install/core.entity_form_display.node.page.default.yml
-index b54c8e0928..a8f198e60c 100644
+index b54c8e0928..3f7b20d8fa 100644
 --- a/core/profiles/demo_umami/config/install/core.entity_form_display.node.page.default.yml
 +++ b/core/profiles/demo_umami/config/install/core.entity_form_display.node.page.default.yml
-@@ -6,7 +6,6 @@ dependencies:
+@@ -4,9 +4,7 @@ dependencies:
+   config:
+     - field.field.node.page.body
      - node.type.page
-     - workflows.workflow.editorial
+-    - workflows.workflow.editorial
    module:
 -    - content_moderation
      - path
      - text
  id: node.page.default
-@@ -36,12 +35,6 @@ content:
+@@ -36,12 +34,6 @@ content:
      settings:
        include_locked: true
      third_party_settings: {  }
@@ -159,18 +163,20 @@ index b54c8e0928..a8f198e60c 100644
      type: path
      weight: 5
 diff --git a/core/profiles/demo_umami/config/install/core.entity_form_display.node.recipe.default.yml b/core/profiles/demo_umami/config/install/core.entity_form_display.node.recipe.default.yml
-index f6c8a4794b..a173845e4c 100644
+index f6c8a4794b..5b4aaf0c54 100644
 --- a/core/profiles/demo_umami/config/install/core.entity_form_display.node.recipe.default.yml
 +++ b/core/profiles/demo_umami/config/install/core.entity_form_display.node.recipe.default.yml
-@@ -16,7 +16,6 @@ dependencies:
+@@ -14,9 +14,7 @@ dependencies:
+     - field.field.node.recipe.field_tags
+     - image.style.thumbnail
      - node.type.recipe
-     - workflows.workflow.editorial
+-    - workflows.workflow.editorial
    module:
 -    - content_moderation
      - image
      - path
      - text
-@@ -115,12 +114,6 @@ content:
+@@ -115,12 +113,6 @@ content:
      settings:
        include_locked: true
      third_party_settings: {  }
