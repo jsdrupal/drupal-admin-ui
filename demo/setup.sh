@@ -38,6 +38,7 @@ if [ ! -f  docroot/sites/default/settings.php ]; then
     drush site:install demo_umami -y --db-url=mysql://drupal:drupal@mysql:3306/drupal --sites-subdir=default
     drush en -y jsonapi admin_ui_support admin_ui_widget_example
     drush config:set -y system.logging error_level verbose
+    drush config:set -y jsonapi.settings read_only false
     rm -rf docroot/vfancy
     ln -s /var/www/admin-ui/build/ docroot/vfancy
 fi
