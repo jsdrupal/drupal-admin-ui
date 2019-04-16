@@ -383,3 +383,23 @@ index 3a4044559f..57170d165a 100644
        'langcode' => 'en',
      ];
      // Fields mapping starts.
+diff --git a/core/profiles/demo_umami/tests/src/Functional/DemoUmamiProfileTest.php b/core/profiles/demo_umami/tests/src/Functional/DemoUmamiProfileTest.php
+index e27c6a19a3..39fe6fd7fe 100644
+--- a/core/profiles/demo_umami/tests/src/Functional/DemoUmamiProfileTest.php
++++ b/core/profiles/demo_umami/tests/src/Functional/DemoUmamiProfileTest.php
+@@ -95,7 +95,6 @@ public function testEditNodesByAdmin() {
+     $permissions = [
+       'administer nodes',
+       'edit any recipe content',
+-      'use editorial transition create_new_draft',
+     ];
+     $account = $this->drupalCreateUser($permissions);
+     $this->drupalLogin($account);
+@@ -134,7 +133,6 @@ public function testDemonstrationWarningMessage() {
+       'administer nodes',
+       'edit any recipe content',
+       'create recipe content',
+-      'use editorial transition create_new_draft',
+     ];
+     $account = $this->drupalCreateUser($permissions);
+     $this->drupalLogin($account);
