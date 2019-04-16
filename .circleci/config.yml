@@ -138,24 +138,22 @@ jobs:
       - run:
           name: Reset composer.json and composer.lock
           command: |
-            cd demo
-            rm -f composer.json composer.lock
-            cp templates/composer.json composer.json
-            cp templates/composer.lock composer.lock
-            rm -rf templates
+            rm -f demo/composer.json demo/composer.lock
+            cp demo/templates/composer.json demo/composer.json
+            cp demo/templates/composer.lock demo/composer.lock
+            rm -rf demo/templates
       # Reset vfancy, otherwise composer will complain that "The .git directory is missing from docroot/vfancy"
       # and won't run update
       - run:
           name: Reset vfancy
           command: |
-            cd demo
-            rm -rf docroot/vfancy/*
-            cd docroot/vfancy
-            git init
-            git remote add origin https://github.com/jsdrupal/drupal-admin-ui-dist.git
-            git remote add composer https://github.com/jsdrupal/drupal-admin-ui-dist.git
-            git fetch origin
-            git reset --hard origin/master
+            docker exec -it drupal_admin_ui_drupal rm -rf docroot/vfancy/*
+            docker exec -it drupal_admin_ui_drupal /bin/sh -c "cd docroot/vfancy && \
+            git init && \
+            git remote add origin https://github.com/jsdrupal/drupal-admin-ui-dist.git && \
+            git remote add composer https://github.com/jsdrupal/drupal-admin-ui-dist.git && \
+            git fetch origin && \
+            git reset --hard origin/master"
       - run:
           name: Refresh composer.lock to point to new admin-ui-support commit
           command: docker exec -it drupal_admin_ui_drupal composer update justafish/drupal-admin-ui-support --lock
