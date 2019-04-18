@@ -9,7 +9,7 @@ import Label from './Label';
 storiesOf('FormElements/Label', module).addWithJSX('Default', () => (
   <Label
     fieldName="ControlOne"
-    labelFor="asdf"
+    htmlFor={text('Label: htmlFor', 'test-label-for')}
     error={boolean('Label: error', false)}
     required={boolean('Label: required', false)}
     htmlAttributes={object('Label: htmlAttributes', { 'data-test': 'test' })}
