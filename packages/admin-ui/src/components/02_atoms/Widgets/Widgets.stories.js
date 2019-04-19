@@ -2,6 +2,8 @@ import React from 'react';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { storiesOf } from '@storybook/react';
 // eslint-disable-next-line import/no-extraneous-dependencies
+import figmaDecorator from 'storybook-addon-figma';
+// eslint-disable-next-line import/no-extraneous-dependencies
 import { action } from '@storybook/addon-actions';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { boolean, number, object, text } from '@storybook/addon-knobs/react';
@@ -41,13 +43,20 @@ const item = i => {
   };
 };
 
-storiesOf('Widgets/BooleanCheckbox', module).addWithJSX('Default', () => (
-  <BooleanCheckbox
-    fieldName="ControlOne"
-    label={text('BooleanCheckbox: label', 'CheckBox')}
-    onChange={onChangeAction}
-  />
-));
+storiesOf('Widgets/BooleanCheckbox', module)
+  .addDecorator(
+    figmaDecorator({
+      url:
+        'https://www.figma.com/file/OqWgzAluHtsOd5uwm1lubFeH/Drupal-Design-system?node-id=2061%3A2386',
+    }),
+  )
+  .addWithJSX('Default', () => (
+    <BooleanCheckbox
+      fieldName="ControlOne"
+      label={text('BooleanCheckbox: label', 'CheckBox')}
+      onChange={onChangeAction}
+    />
+  ));
 
 storiesOf('Widgets/DatetimeTimestamp', module).addWithJSX('Default', () => (
   <DatetimeTimestamp
@@ -190,46 +199,68 @@ storiesOf('Widgets/NumberTextfield', module).addWithJSX('Default', () => (
   />
 ));
 
-storiesOf('Widgets/OptionsSelect', module).addWithJSX('Default', () => (
-  <OptionsSelect
-    helpText={text('OptionsSelect:helpText', 'Help text.')}
-    fieldName="option"
-    inputProps={object('OptionsSelect:inputProps', {
-      allowed_values: {
-        one: 'One',
-        two: 'Two',
-        three: 'Three',
-        four: 'Four',
-      },
-      allowed_values_function: '',
-    })}
-    label={text('OptionsSelect:label', 'A Simple Label')}
-    onChange={onChangeAction}
-    schema={object('OptionsSelect: schema', {
-      enum: ['One', 'Two', 'Three', 'Four'],
-      default: 'Two',
-    })}
-    value={text('OptionsSelect: value', 'Entered text.')}
-  />
-));
-storiesOf('Widgets/StringTextfield', module).addWithJSX('Default', () => (
-  <StringTextfield
-    fieldName="userBio"
-    label={text('StringTextfield: label', 'A Simple Label')}
-    onChange={onChangeAction}
-    value={text('StringTextfield: value', 'Entered text.')}
-  />
-));
+storiesOf('Widgets/OptionsSelect', module)
+  .addDecorator(
+    figmaDecorator({
+      url:
+        'https://www.figma.com/file/OqWgzAluHtsOd5uwm1lubFeH/Drupal-Design-system?node-id=2061%3A1971',
+    }),
+  )
+  .addWithJSX('Default', () => (
+    <OptionsSelect
+      helpText={text('OptionsSelect:helpText', 'Help text.')}
+      fieldName="option"
+      inputProps={object('OptionsSelect:inputProps', {
+        allowed_values: {
+          one: 'One',
+          two: 'Two',
+          three: 'Three',
+          four: 'Four',
+        },
+        allowed_values_function: '',
+      })}
+      label={text('OptionsSelect:label', 'A Simple Label')}
+      onChange={onChangeAction}
+      schema={object('OptionsSelect: schema', {
+        enum: ['One', 'Two', 'Three', 'Four'],
+        default: 'Two',
+      })}
+      value={text('OptionsSelect: value', 'Entered text.')}
+    />
+  ));
 
-storiesOf('Widgets/TextTextarea', module).addWithJSX('Default', () => (
-  <TextTextarea
-    fieldName="SummaryText"
-    label={text('TextTextarea: label', 'A Simple wysiwyg editor')}
-    name="summaryText"
-    onChange={onChangeAction}
-    value={object('TextTextarea: value', {
-      value:
-        'Lorem ipsum dolor sit amet, <b>consectetur adipiscing elit</b>, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
-    })}
-  />
-));
+storiesOf('Widgets/StringTextfield', module)
+  .addDecorator(
+    figmaDecorator({
+      url:
+        'https://www.figma.com/file/OqWgzAluHtsOd5uwm1lubFeH/Drupal-Design-system?node-id=2057%3A1349',
+    }),
+  )
+  .addWithJSX('Default', () => (
+    <StringTextfield
+      fieldName="userBio"
+      label={text('StringTextfield: label', 'A Simple Label')}
+      onChange={onChangeAction}
+      value={text('StringTextfield: value', 'Entered text.')}
+    />
+  ));
+
+storiesOf('Widgets/TextTextarea', module)
+  .addDecorator(
+    figmaDecorator({
+      url:
+        'https://www.figma.com/file/OqWgzAluHtsOd5uwm1lubFeH/Drupal-Design-system?node-id=2061%3A1805',
+    }),
+  )
+  .addWithJSX('Default', () => (
+    <TextTextarea
+      fieldName="SummaryText"
+      label={text('TextTextarea: label', 'A Simple wysiwyg editor')}
+      name="summaryText"
+      onChange={onChangeAction}
+      value={object('TextTextarea: value', {
+        value:
+          'Lorem ipsum dolor sit amet, <b>consectetur adipiscing elit</b>, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
+      })}
+    />
+  ));
