@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { css } from 'emotion';
 import Button from '@material-ui/core/Button';
 
-import colors from '../../Utils/colors';
+import { colors } from '../../Utils/colors';
 
 const styles = css`
   padding: 1em 1.5em;
