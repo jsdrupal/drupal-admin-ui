@@ -3,6 +3,9 @@
 namespace Drupal\jsonapi_support\ResourceType;
 
 use Drupal\Core\Cache\Cache;
+use Drupal\Core\Config\Entity\ConfigEntityTypeInterface;
+use Drupal\Core\Entity\ContentEntityTypeInterface;
+use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\jsonapi\ResourceType\ResourceTypeRepository as JsonApiResourceTypeRepository;
 
 /**
@@ -70,14 +73,20 @@ class ResourceTypeRepository extends JsonApiResourceTypeRepository {
    */
   private function addResourceTypes(array &$resource_types) {
     $entity_types = $this->entityTypeManager->getDefinitions();
+
+
     foreach ($entity_types as $entity_type_id => $entity_type) {
+      $raw_fields = $this->getAllFieldNamesAcrossBundles($entity_type);
+
       $resource_type = new CrossBundlesResourceType(
         $entity_type_id,
         $entity_type_id,
         $entity_type->getClass(),
         $entity_type->isInternal(),
         TRUE,
-        FALSE
+        FALSE,
+        FALSE,
+        static::getFieldMapping($raw_fields, $entity_type, $entity_type)
       );
       $relatable_resource_types = $this->calculateRelatableResourceTypes($resource_type, $resource_types);
       if ($resource_type->getEntityTypeId() === 'taxonomy_term') {
@@ -87,6 +96,36 @@ class ResourceTypeRepository extends JsonApiResourceTypeRepository {
       }
       $resource_type->setRelatableResourceTypes($relatable_resource_types);
       $resource_types[] = $resource_type;
+    }
+  }
+
+  /**
+   * Gets all field names for a given entity type and bundle.
+   *
+   * @param \Drupal\Core\Entity\EntityTypeInterface $entity_type
+   *   The entity type for which to get all field names.
+   *
+   * @return string[]
+   *   All field names.
+   */
+  private function getAllFieldNamesAcrossBundles(EntityTypeInterface $entity_type) {
+    if ($entity_type instanceof ContentEntityTypeInterface) {
+      $field_definitions = $this->entityFieldManager->getFieldStorageDefinitions($entity_type->id());
+      return array_keys($field_definitions);
+    }
+    elseif ($entity_type instanceof ConfigEntityTypeInterface) {
+      // @todo Uncomment the first line, remove everything else once https://www.drupal.org/project/drupal/issues/2483407 lands.
+      // return array_keys($entity_type->getPropertiesToExport());
+      $export_properties = $entity_type->getPropertiesToExport();
+      if ($export_properties !== NULL) {
+        return array_keys($export_properties);
+      }
+      else {
+        return ['id', 'type', 'uuid', '_core'];
+      }
+    }
+    else {
+      throw new \LogicException("Only content and config entity types are supported.");
     }
   }
 
