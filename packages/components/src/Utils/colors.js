@@ -12,6 +12,7 @@ const colors = {
   maximumRed: '#D72222',
   sunglow: '#FFD23F',
   celadonGreen: '#228572',
+  lightningGreen: '#26A769',
   // Variations
   hover: '#003EBB',
   active: '#003B96',
@@ -28,8 +29,7 @@ const formColors = {
   colorInputBorderError: colors.maximumRed,
   colorInputBorderFocus: colors.absoluteZero,
   colorInputFg: colors.text,
-  colorInputFocusShadow:
-    'rgba(0, 74, 220, 0.3)' /* Absolute zero with opacity. */,
+  colorInputFocusShadow: colors.lightningGreen,
 };
 
 export default colors;
