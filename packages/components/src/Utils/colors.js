@@ -1,4 +1,4 @@
-export default {
+const colors = {
   // Primary
   absoluteZero: '#004ADC',
   white: '#FFFFFF',
@@ -12,6 +12,7 @@ export default {
   maximumRed: '#D72222',
   sunglow: '#FFD23F',
   celadonGreen: '#228572',
+  lightningGreen: '#26A769',
   // Variations
   hover: '#003EBB',
   active: '#003B96',
@@ -21,3 +22,15 @@ export default {
   bgRedHover: '#FDF5F5',
   bgRedActive: '#FCEDED',
 };
+
+const formColors = {
+  colorInputBg: colors.white,
+  colorInputBorder: colors.grayBlue,
+  colorInputBorderError: colors.maximumRed,
+  colorInputBorderFocus: colors.absoluteZero,
+  colorInputFg: colors.text,
+  colorInputFocusShadow: colors.lightningGreen,
+};
+
+export default colors;
+export { colors, formColors };
