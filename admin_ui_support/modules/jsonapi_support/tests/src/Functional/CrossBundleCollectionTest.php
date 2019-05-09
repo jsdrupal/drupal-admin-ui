@@ -95,9 +95,11 @@ class CrossBundleCollectionTest extends BrowserTestBase {
     );
 
     $filter = [
-      'type' => ['value' => 'article'],
+      'bundle.id' => ['value' => 'article'],
     ];
-    $data = $this->getDecodedGet('jsonapi/node', ['filter' => $filter])['data'];
+    $result = $this->getDecodedGet('jsonapi/node', ['filter' => $filter]);
+    print_r($result);
+    $data = $result['data'];
     $this->assertEquals(
       [
         'The article title',
