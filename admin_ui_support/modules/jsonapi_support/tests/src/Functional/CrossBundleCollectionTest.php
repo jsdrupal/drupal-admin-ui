@@ -98,8 +98,11 @@ class CrossBundleCollectionTest extends BrowserTestBase {
       'bundle.id' => ['value' => 'article'],
     ];
     $result = $this->getDecodedGet('jsonapi/node', ['filter' => $filter]);
+
     print_r($result);
+    return;
     $data = $result['data'];
+
     $this->assertEquals(
       [
         'The article title',
@@ -109,7 +112,7 @@ class CrossBundleCollectionTest extends BrowserTestBase {
     );
 
     $filter = [
-      'type' => ['value' => 'page'],
+      'bundle' => ['value' => 'page'],
     ];
     $data = $this->getDecodedGet('jsonapi/node', ['filter' => $filter])['data'];
 
