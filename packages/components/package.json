@@ -13,7 +13,7 @@
   },
   "dependencies": {
     "@material-ui/core": "^3.6.1",
-    "emotion": "^10.0.1",
+    "emotion": "^10.0.9",
     "prop-types": "^15.7.2"
   },
   "devDependencies": {
