@@ -18,10 +18,14 @@ module.exports = {
   output: {
     filename: 'index.js',
     path: resolve(__dirname, 'build'),
-    library: '@drupal/admin-ui-utilities',
+    library: '@drupal/admin-ui-components',
     libraryTarget: 'umd',
   },
+  externals: ['react'],
   plugins: productionPluginDefine,
+  optimization: {
+    usedExports: true,
+  },
   module: {
     rules: [
       {
@@ -30,22 +34,14 @@ module.exports = {
         use: {
           loader: 'babel-loader',
           options: {
-            plugins: ['@babel/plugin-proposal-class-properties'],
+            plugins: ['@babel/plugin-proposal-class-properties', 'emotion'],
             presets: [
               '@babel/preset-react',
               [
                 '@babel/preset-env',
                 {
                   targets: {
-                    browsers: [
-                      'ios >= 10.3',
-                      'chrome >= 55',
-                      'firefox >= 53',
-                      'safari >= 10.3',
-                      'ChromeAndroid >= 70',
-                      'edge >= 15',
-                      'opera >= 42',
-                    ],
+                    browsers: ['last 2 versions'],
                   },
                 },
               ],

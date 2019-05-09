@@ -1,4 +1,4 @@
-# @drupal/admin-ui-components
+# @drupal/admin-ui-utilities
 
 Helper utilities for Admin UI and extension point projects.
 
