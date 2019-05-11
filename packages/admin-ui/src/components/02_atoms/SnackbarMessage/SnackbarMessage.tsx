@@ -50,7 +50,15 @@ const styles = {
   `,
 };
 
-const SnackbarMessage = props => {
+interface Props {
+  open: boolean;
+  message: string | React.ReactNode;
+  messageSeverity: MESSAGE_SEVERITY;
+  onClose: () => any;
+  duration?: number;
+}
+
+const SnackbarMessage: StatelessComponent<Props> = (props: Props) => {
   const Icon = variantIcon[props.messageSeverity];
   return (
     <Snackbar
@@ -95,21 +103,8 @@ const SnackbarMessage = props => {
   );
 };
 
-SnackbarMessage.defaultProps = {
+SnackbarMessage.defaultProps: Partial<Props> = {
   duration: 5000,
-};
-
-SnackbarMessage.propTypes = {
-  open: PropTypes.bool.isRequired,
-  message: PropTypes.node.isRequired,
-  messageSeverity: PropTypes.oneOf([
-    MESSAGE_SEVERITY.ERROR,
-    MESSAGE_SEVERITY.SUCCESS,
-    MESSAGE_SEVERITY.INFO,
-    MESSAGE_SEVERITY.WARNING,
-  ]).isRequired,
-  onClose: PropTypes.func.isRequired,
-  duration: PropTypes.number,
 };
 
 export default SnackbarMessage;
