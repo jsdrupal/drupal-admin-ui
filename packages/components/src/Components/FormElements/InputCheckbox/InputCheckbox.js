@@ -142,6 +142,8 @@ const InputCheckbox = props => {
 };
 
 InputCheckbox.propTypes = {
+  checked: PropTypes.bool,
+
   children: PropTypes.oneOfType([
     PropTypes.arrayOf(PropTypes.node),
     PropTypes.node,
@@ -155,12 +157,16 @@ InputCheckbox.propTypes = {
     PropTypes.bool,
   ]),
 
+  onChange: PropTypes.func,
+
   required: PropTypes.bool,
 };
 
 InputCheckbox.defaultProps = {
+  checked: false,
   error: false,
   htmlAttributes: {},
+  onChange: () => {},
   required: false,
 };
 
