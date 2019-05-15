@@ -167,6 +167,8 @@ InputRadio.propTypes = {
   /** true if the label relates to an element with an error. */
   error: PropTypes.bool,
 
+  fieldName: PropTypes.string.isRequired,
+
   /** Any additional HTML properties to add to the label element. */
   htmlAttributes: PropTypes.objectOf([
     PropTypes.string,

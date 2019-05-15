@@ -151,6 +151,8 @@ InputCheckbox.propTypes = {
 
   error: PropTypes.bool,
 
+  fieldName: PropTypes.string.isRequired,
+
   htmlAttributes: PropTypes.objectOf([
     PropTypes.string,
     PropTypes.number,
