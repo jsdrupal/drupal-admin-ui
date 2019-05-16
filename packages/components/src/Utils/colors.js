@@ -29,6 +29,9 @@ const formColors = {
   colorInputBorderError: colors.maximumRed,
   colorInputBorderFocus: colors.absoluteZero,
   colorInputFg: colors.text,
+  colorInputPlaceholder: colors.grayBlue,
+  colorInputText: colors.text,
+  colorInputBgDisabled: colors.whiteSmoke,
   colorInputFocusShadow: colors.lightningGreen,
 };
 
