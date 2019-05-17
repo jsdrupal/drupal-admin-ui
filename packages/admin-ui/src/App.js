@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Route, Switch, withRouter } from 'react-router-dom';
-import createBrowserHistory from 'history/createBrowserHistory';
+import { createBrowserHistory } from 'history';
+
 import deepMerge from 'deepmerge';
 import { createStore, applyMiddleware, combineReducers } from 'redux';
 import {

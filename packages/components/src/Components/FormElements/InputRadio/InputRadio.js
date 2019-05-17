@@ -156,6 +156,8 @@ const InputRadio = props => {
 };
 
 InputRadio.propTypes = {
+  checked: PropTypes.bool,
+
   /** Content contained within the label element. */
   children: PropTypes.oneOfType([
     PropTypes.arrayOf(PropTypes.node),
@@ -164,6 +166,8 @@ InputRadio.propTypes = {
 
   /** true if the label relates to an element with an error. */
   error: PropTypes.bool,
+
+  fieldName: PropTypes.string.isRequired,
 
   /** Any additional HTML properties to add to the label element. */
   htmlAttributes: PropTypes.objectOf([
@@ -175,13 +179,17 @@ InputRadio.propTypes = {
   /** Content of the html "for" attribute to use for this label. */
   htmlFor: PropTypes.string.isRequired,
 
+  onChange: PropTypes.func,
+
   /** True if this label relates to an element that is required. */
   required: PropTypes.bool,
 };
 
 InputRadio.defaultProps = {
+  checked: false,
   error: false,
   htmlAttributes: {},
+  onChange: () => {},
   required: false,
 };
 
