@@ -90,7 +90,6 @@ class Default extends React.Component {
             <ListItem
               key={menuLink.url.replace(/\//g, '-')}
               component="li"
-              button
             >
               <Link to={menuLink.url} className={styles.menuLink} role="button">
                 {iconMap[menuLink.url] ? (
