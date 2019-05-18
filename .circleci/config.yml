@@ -89,7 +89,7 @@ jobs:
     steps:
       - setup-project
       - run:
-          name: Buld projects
+          name: Build projects
           command: yarn build
       - run:
           name: Run tests
