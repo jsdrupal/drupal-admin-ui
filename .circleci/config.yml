@@ -89,6 +89,9 @@ jobs:
     steps:
       - setup-project
       - run:
+          name: Install Chromium
+          command: sudo apt-get install chromium-browser
+      - run:
           name: Build projects
           command: yarn build
       - run:
