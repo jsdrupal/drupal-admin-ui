@@ -25,8 +25,6 @@ This is an admin UI for Drupal, built with JavaScript and based on [create-react
 
 ## Installation
 
-### Drupal
-
 Ensure that you currently have nothing running on port 80 (e.g. a local webserver) or port 3000 (e.g. a local node process). You can run ` lsof -i :80 -S` to see what you currently have running.
 
 ```
@@ -57,18 +55,22 @@ Open the one time login link in your browser to log into Drupal. You will then h
 | http://127.0.0.1 | Regular Drupal installation / JSON API endpoints |
 | http://127.0.0.1/admin/content | A page taken over by the new admin UI. This uses the bundled version from `packages/admin-ui/build`, run `yarn workspace admin-ui build` in the node container to re-build |
 
-### Admin UI
+## Development
 
 `yarn workspace @drupal/admin-ui start` will start the Webpack dev sever that comes with [Create React App](https://facebook.github.io/create-react-app).
 
+### Testing
+
+We have functional testing with [Nightwatch](http://nightwatchjs.org/), and component/unit testing with [Jest](https://jestjs.io/).
+
+When deciding which system to use to add test coverage, the general rule is Nightwatch should be used to test the common path, and Jest can be used for more detailed test coverage. Nightwatch tests will run slower as they simulate clicking around in a real browser.
+
 #### Nightwatch
 - If you don't know the password for admin, change it with `docker exec -it drupal_admin_ui_drupal drush user:password admin admin`
-- Run `docker exec -it -e REACT_APP_DRUPAL_BASE_URL=http://drupal drupal_admin_ui_node yarn workspace admin-ui build`, which
-creates a build that uses `http://drupal` as it's base URL, which is the URL that the node container sees Drupal on internally.
-- Run `docker exec -it -e REACT_APP_DRUPAL_BASE_URL=http://drupal -e NIGHTWATCH_LOGIN_admin_PASSWORD=admin drupal_admin_ui_node yarn workspace admin-ui nightwatch`
-or `docker exec -it -e REACT_APP_DRUPAL_BASE_URL=http://drupal -e NIGHTWATCH_LOGIN_admin_PASSWORD=admin drupal_admin_ui_node yarn test` to run all tests
-- When you're finished, restore the regular build if you want to browse the compiled version in your browser with `docker exec -it drupal_admin_ui_node yarn workspace admin-ui build`.
-This will also be restored when you restart your containers.
+- Update your `.env.local` file, setting `NIGHTWATCH_LOGIN_admin_PASSWORD` to the password you set above e.g. `NIGHTWATCH_LOGIN_admin_PASSWORD=admin`
+- If you want to test against the current JS, not the production build change set `NIGHTWATCH_URL=http://127.0.0.1:3000` in the `.env.local` file.
+- Run `yarn workspace @drupal/admin-ui build`, which creates a new production build to test.
+- Run `yarn workspace @drupal/admin-ui nightwatch` or `yarn test` to run all tests
 
 #### React AXE
 
@@ -78,15 +80,7 @@ Due to outstanding performance issues, `react-axe` is behind a flag. To enable t
 REACT_APP_AXE=true yarn workspace @drupal/admin-ui start
 ```
 
-## Development guidelines
-
-### Testing
-
-We have functional testing with [Nightwatch](http://nightwatchjs.org/), and component/unit testing with [Jest](https://jestjs.io/).
-
-When deciding which system to use to add test coverage, the general rule is Nightwatch should be used to test the common path, and Jest can be used for more detailed test coverage. Nightwatch tests will run slower as they simulate clicking around in a real browser.
-
-## Contributing to This Repository
+### Contributing to This Repository
 
 - [Fork this repo](https://help.github.com/articles/fork-a-repo/) to your own user
 - Set your fork as origin, and this repo as upstream. From inside the `drupal-admin-ui` folder:
