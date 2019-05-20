@@ -68,6 +68,7 @@ When deciding which system to use to add test coverage, the general rule is Nigh
 #### Nightwatch
 - If you don't know the password for admin, change it with `docker exec -it drupal_admin_ui_drupal drush user:password admin admin`
 - Update your `.env.local` file, setting `NIGHTWATCH_LOGIN_admin_PASSWORD` to the password you set above e.g. `NIGHTWATCH_LOGIN_admin_PASSWORD=admin`
+- If you want to test against the current JS, not the production build change set `NIGHTWATCH_URL=http://127.0.0.1:3000` in the `.env.local` file.
 - Run `yarn workspace @drupal/admin-ui build`, which creates a new production build to test.
 - Run `yarn workspace @drupal/admin-ui nightwatch` or `yarn test` to run all tests
 
