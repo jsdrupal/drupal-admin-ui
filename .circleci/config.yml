@@ -89,13 +89,22 @@ jobs:
     steps:
       - setup-project
       - run:
-          name: Buld projects
+          name: Install Chrome
+          command: |
+            sudo apt-get update
+            sudo apt-get install lsb-release libappindicator3-1
+            curl -L -o google-chrome.deb https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+            sudo dpkg -i google-chrome.deb
+            sudo sed -i 's|HERE/chrome"|HERE/chrome" --no-sandbox|g' /opt/google/chrome/google-chrome
+            rm google-chrome.deb
+      - run:
+          name: Build projects
           command: yarn build
       - run:
           name: Run tests
           command: |
             docker exec -it drupal_admin_ui_drupal drush user:password admin admin
-            REACT_APP_DRUPAL_BASE_URL=http://drupal NIGHTWATCH_LOGIN_admin_PASSWORD=admin yarn test
+            yarn test
       - store_test_results:
           path: ~/project/packages/admin-ui/reports
       - store_artifacts:
