@@ -76,6 +76,7 @@ InputText.propTypes = {
   name: PropTypes.string.isRequired,
   type: PropTypes.string,
   error: PropTypes.bool,
+  fieldName: PropTypes.string.isRequired,
   disabled: PropTypes.bool,
   required: PropTypes.bool,
   htmlAttributes: PropTypes.objectOf([
