@@ -19,8 +19,10 @@
     "@babel/plugin-proposal-class-properties": "^7.2.1",
     "@babel/plugin-transform-runtime": "^7.2.0",
     "@babel/preset-env": "^7.2.0",
+    "@types/qs": "^6.5.3",
     "babel-loader": "^8.0.4",
     "babel-minify-webpack-plugin": "^0.3.1",
+    "typescript": "^3.4.5",
     "webpack": "^4.27.1",
     "webpack-cli": "^3.1.2"
   }

@@ -1,16 +1,23 @@
 /**
  * Error class for an API response outside the 200 range
  *
- * @param {number} status - the status code of the API response
+ * @param {number} statusCode - the status code of the API response
  * @param {string} statusText - the status text of the API response
  * @param {object} response - the parsed JSON response of the API server if the
  *  'Content-Type' header signals a JSON response
  */
 class ApiError extends Error {
-  constructor(status, statusText, response) {
+
+  statusCode: number;
+
+  statusText: string;
+
+  response: ResponseInit;
+
+  constructor(statusCode: number, statusText: string, response: Response) {
     super();
     this.name = 'ApiError';
-    this.status = status;
+    this.statusCode = statusCode;
     this.statusText = statusText;
     this.response = response;
     this.message = `${status} - ${statusText}`;
