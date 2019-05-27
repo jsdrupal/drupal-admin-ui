@@ -21,18 +21,6 @@ interface Node {
   type: string;
 }
 
-// interface Options {
-//   body?: {};
-//   credentials?: string;
-//   headers?: {
-//     Accept?: string;
-//     'X-CSRF-Token'?: string;
-//     'Content-Type'?: string;
-//   };
-//   text?: boolean;
-//   method?: string;
-// }
-
 interface Parameters {
   id?: string,
   body?: BodyInit;
