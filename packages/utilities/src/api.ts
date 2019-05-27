@@ -1,6 +1,6 @@
+import * as qs  from 'qs';
 import { ApiError } from './errors';
-import { QueryString } from './queryString';
-var qs = require('qs');
+import { QueryString } from "./QueryString";
 
 interface Node {
   body: {};
@@ -57,11 +57,12 @@ interface Parameters {
 async function api(
   REACT_APP_DRUPAL_BASE_URL: string,
   endpoint?: string,
-  queryParameter?:  { queryString?: QueryString, parameters?: Parameters, options?: RequestInit }
+  queryParameters:  { queryString: QueryString, parameters: Parameters, options: RequestInit } = { queryString: {}, parameters: {}, options: {}}
 ) {
   let isResponseText: boolean = false;
-  let { queryString, parameters, options } = queryParameter;
-  let url: string ='';
+  let { queryString, parameters, options} = queryParameters;
+
+  let url: string;
   options.credentials = 'include';
   options.headers = options.headers || {};
 

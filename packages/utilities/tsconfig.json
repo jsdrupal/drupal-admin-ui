@@ -4,7 +4,7 @@
         "suppressImplicitAnyIndexErrors": true,
         "strictNullChecks": false,
         "lib": [
-            "es5", "es2015.core", "dom"
+            "es7", "es2015.core", "dom"
         ],
         "module": "commonjs",
         "moduleResolution": "node",
