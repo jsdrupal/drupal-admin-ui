@@ -6,18 +6,15 @@
  * @param {object} response - the parsed JSON response of the API server if the
  *  'Content-Type' header signals a JSON response
  */
-class ApiError extends Error {
+export class ApiError extends Error {
 
-  statusCode: number;
+  private statusText: string;
 
-  statusText: string;
+  private response: ResponseInit;
 
-  response: ResponseInit;
-
-  constructor(statusCode: number, statusText: string, response: Response) {
+  constructor(status: number, statusText: string, response: Response) {
     super();
     this.name = 'ApiError';
-    this.statusCode = statusCode;
     this.statusText = statusText;
     this.response = response;
     this.message = `${status} - ${statusText}`;
@@ -58,5 +55,3 @@ class ApiError extends Error {
   }
 }
 
-// eslint-disable-next-line import/prefer-default-export
-export { ApiError };
