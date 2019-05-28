@@ -1,7 +1,7 @@
 /**
  * Error class for an API response outside the 200 range
  *
- * @param {number} statusCode - the status code of the API response
+ * @param {number} status - the status code of the API response
  * @param {string} statusText - the status text of the API response
  * @param {object} response - the parsed JSON response of the API server if the
  *  'Content-Type' header signals a JSON response
