@@ -6,28 +6,16 @@
  * @param {object} response - the parsed JSON response of the API server if the
  *  'Content-Type' header signals a JSON response
  */
-export class ApiError extends Error {
+class ApiError extends Error {
 
-  private statusText: string;
-
-  private response: ResponseInit;
-
-  constructor(status: number, statusText: string, response: Response) {
-    super();
-    this.name = 'ApiError';
-    this.statusText = statusText;
-    this.response = response;
-    this.message = `${status} - ${statusText}`;
-  }
-
-  static errorToHumanString(error) {
+  public static errorToHumanString(error) {
     if (error.name === 'ApiError') {
       return ApiError.toHumanString(error);
     }
     return error.toString();
   }
 
-  static async toHumanString(error) {
+  private static async toHumanString(error) {
     try {
       switch (error.status) {
         case 403:
@@ -53,5 +41,18 @@ export class ApiError extends Error {
       return error.toString();
     }
   }
+
+  private statusText: string;
+
+  private response: ResponseInit;
+
+  public constructor(status: number, statusText: string, response: Response) {
+    super();
+    this.name = 'ApiError';
+    this.statusText = statusText;
+    this.response = response;
+    this.message = `${status} - ${statusText}`;
+  }
 }
 
+export { ApiError };
