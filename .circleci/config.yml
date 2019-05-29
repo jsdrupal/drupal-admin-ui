@@ -107,9 +107,10 @@ jobs:
             yarn test
       - store_test_results:
           path: ~/project/packages/admin-ui/reports
+          path: ~/project/packages/utilites/reports
       - store_artifacts:
           path: ~/project/packages/admin-ui/reports
-
+          path: ~/project/packages/utilites/reports
   test_drupal:
     machine: true
     steps:

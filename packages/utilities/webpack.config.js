@@ -5,11 +5,11 @@ const MinifyPlugin = require('babel-minify-webpack-plugin');
 const productionPluginDefine =
   process.env.NODE_ENV === 'production'
     ? [
-      new webpack.DefinePlugin({
-        'process.env.NODE_ENV': JSON.stringify('production'),
-      }),
-      new MinifyPlugin(),
-    ]
+        new webpack.DefinePlugin({
+          'process.env.NODE_ENV': JSON.stringify('production'),
+        }),
+        new MinifyPlugin(),
+      ]
     : [];
 
 const jsOptions = {

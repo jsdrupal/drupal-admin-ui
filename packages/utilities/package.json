@@ -6,7 +6,7 @@
   "private": true,
   "main": "build/index.js",
   "scripts": {
-    "test:lint": "tslint src/* --config tslintrc.json",
+    "test:lint": "tslint src/* --config tslintrc.json --format junit -o reports/tslint-junit.xml",
     "build": "NODE_ENV=production webpack --progress --config webpack.config.js",
     "watch": "NODE_ENV=development webpack --progress --watch --config webpack.config.js",
     "postinstall": "npm run build"

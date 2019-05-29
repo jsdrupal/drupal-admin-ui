@@ -58,7 +58,7 @@ async function api(
   REACT_APP_DRUPAL_BASE_URL: string,
   endpoint?: string,
   queryParameters: {
-    queryString?: QueryString;
+    queryString?: QueryString,
     parameters?: Parameters;
     options?: RequestInit;
   } = {},
@@ -68,7 +68,7 @@ async function api(
 
   let url: string;
   options.credentials = 'include';
-  options.headers = options.headers || {};
+  options.headers = new Headers(options.headers);
 
   switch (endpoint) {
     case 'menu':
@@ -76,7 +76,7 @@ async function api(
       break;
     case 'dblog':
       url = '/jsonapi/watchdog_entity/';
-      options.headers.Accept = 'application/vnd.api+json';
+      options.headers.append('Accept', 'application/vnd.api+json');
       break;
     case 'csrf_token':
       url = '/session/token';
@@ -87,15 +87,15 @@ async function api(
       break;
     case 'roles':
       url = '/jsonapi/user_role';
-      options.headers.Accept = 'application/vnd.api+json';
+      options.headers.append('Accept', 'application/vnd.api+json');
       break;
     case 'role':
       url = `/jsonapi/user_role/${parameters.role.id}`;
-      options.headers.Accept = 'application/vnd.api+json';
+      options.headers.append('Accept', 'application/vnd.api+json');
       break;
     case 'role:patch':
       url = `/jsonapi/user_role/${parameters.role.id}`;
-      options.headers.Accept = 'application/vnd.api+json';
+      options.headers.append('Accept', 'application/vnd.api+json');
       options.method = 'PATCH';
       options.body = JSON.stringify({ data: parameters.role });
       options.headers['Content-Type'] = 'application/vnd.api+json';
@@ -116,23 +116,23 @@ async function api(
       break;
     case 'content':
       url = '/jsonapi/node';
-      options.headers.Accept = 'application/vnd.api+json';
+      options.headers.append('Accept', 'application/vnd.api+json');
       break;
     case 'content_single':
       url = `/jsonapi/node/${parameters.bundle}/${parameters.id}`;
-      options.headers.Accept = 'application/vnd.api+json';
+      options.headers.append('Accept', 'application/vnd.api+json');
       break;
     case 'file':
       url = `/jsonapi/file`;
-      options.headers.Accept = 'application/vnd.api+json';
+      options.headers.append('Accept', 'application/vnd.api+json');
       break;
     case 'actions':
       url = '/jsonapi/action';
-      options.headers.Accept = 'application/vnd.api+json';
+      options.headers.append('Accept', 'application/vnd.api+json');
       break;
     case 'contentTypes':
       url = '/jsonapi/node_type';
-      options.headers.Accept = 'application/vnd.api+json';
+      options.headers.append('Accept', 'application/vnd.api+json');
       break;
     case 'node:delete': {
       // Set the type to the right value for jsonapi to process.
@@ -147,7 +147,7 @@ async function api(
       const deleteToken = await api('csrf_token');
       // @todo Delete requests sadly return non json.
       isResponseText = true;
-      options.headers.Accept = 'application/vnd.api+json';
+      options.headers.append('Accept', 'application/vnd.api+json');
       options.headers['X-CSRF-Token'] = deleteToken;
       options.headers['Content-Type'] = 'application/vnd.api+json';
       options.method = 'DELETE';
@@ -172,7 +172,7 @@ async function api(
       delete node.relationships.uid;
 
       const saveToken = await api(REACT_APP_DRUPAL_BASE_URL, 'csrf_token');
-      options.headers.Accept = 'application/vnd.api+json';
+      options.headers['Accept'] = 'application/vnd.api+json';
       options.headers['X-CSRF-Token'] = saveToken;
       options.method = 'POST';
       options.body = JSON.stringify({ data: node });
@@ -190,7 +190,7 @@ async function api(
       };
 
       const saveToken = await api(REACT_APP_DRUPAL_BASE_URL, 'csrf_token');
-      options.headers.Accept = 'application/vnd.api+json';
+      options.headers['Accept'] = 'application/vnd.api+json';
       options.headers['X-CSRF-Token'] = saveToken;
       options.method = 'PATCH';
       options.body = JSON.stringify({ data: parameters.node });
@@ -199,17 +199,17 @@ async function api(
     }
     case 'taxonomy_vocabulary': {
       url = '/jsonapi/taxonomy_vocabulary';
-      options.headers.Accept = 'application/vnd.api+json';
+      options.headers['Accept'] = 'application/vnd.api+json';
       break;
     }
     case 'taxonomy_term': {
       url = `/jsonapi/taxonomy_term/${parameters.type}`;
-      options.headers.Accept = 'application/vnd.api+json';
+      options.headers['Accept'] = 'application/vnd.api+json';
       break;
     }
     case 'user': {
       url = `/jsonapi/user`;
-      options.headers.Accept = 'application/vnd.api+json';
+      options.headers['Accept'] = 'application/vnd.api+json';
       break;
     }
     case 'schema': {
