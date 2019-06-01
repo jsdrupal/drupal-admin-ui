@@ -8,6 +8,7 @@ import ListItem from '@material-ui/core/ListItem';
 import DeleteIcon from '@material-ui/icons/Delete';
 import FormLabel from '@material-ui/core/FormLabel';
 import ReorderIcon from '@material-ui/icons/Reorder';
+import Fab from '@material-ui/core/Fab';
 import FormControl from '@material-ui/core/FormControl';
 import ListItemText from '@material-ui/core/ListItemText';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
@@ -210,9 +211,8 @@ class MultipleFields extends Component {
                   })}
                 </ListItemText>
                 <Fragment>
-                  <Button
+                  <Fab
                     mini
-                    variant="fab"
                     color="secondary"
                     className="remove"
                     aria-label="Remove Image"
@@ -224,7 +224,7 @@ class MultipleFields extends Component {
                     }}
                   >
                     <DeleteIcon />
-                  </Button>
+                  </Fab>
                 </Fragment>
               </ListItem>
             ))}
