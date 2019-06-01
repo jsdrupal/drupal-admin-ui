@@ -14,7 +14,7 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 
-import Button from '@material-ui/core/Button';
+import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
 
 import FormControl from '@material-ui/core/FormControl';
@@ -119,8 +119,7 @@ export default class TaxonomyTermsOverview extends React.Component {
             </TableBody>
           </Table>
         </Paper>
-        <Button
-          variant="fab"
+        <Fab
           color="primary"
           aria-label="add"
           className={styles.addButton}
@@ -128,7 +127,7 @@ export default class TaxonomyTermsOverview extends React.Component {
           to={`/admin/structure/taxonomy/manage/${this.props.vocabulary}/add`}
         >
           <AddIcon />
-        </Button>
+        </Fab>
       </Fragment>
     );
   }

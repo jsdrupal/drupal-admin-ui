@@ -10,7 +10,7 @@ import FormLabel from '@material-ui/core/FormLabel';
 import TextField from '@material-ui/core/TextField';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
-import Button from '@material-ui/core/Button';
+import Fab from '@material-ui/core/Fab';
 import DeleteIcon from '@material-ui/icons/Delete';
 
 import WidgetPropTypes from '../../05_pages/NodeForm/WidgetPropTypes';
@@ -250,10 +250,9 @@ class FileUploadWidget extends React.Component {
                                 )
                               }
                             />
-                            <Button
+                            <Fab
                               mini
                               id={id}
-                              variant="fab"
                               color="secondary"
                               className="remove"
                               aria-label="Remove Image"
@@ -268,7 +267,7 @@ class FileUploadWidget extends React.Component {
                               }}
                             >
                               <DeleteIcon />
-                            </Button>
+                            </Fab>
                           </ListItem>
                           {!last && <Divider />}
                         </Fragment>

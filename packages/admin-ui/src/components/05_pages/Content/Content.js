@@ -10,6 +10,7 @@ import Paper from '@material-ui/core/Paper';
 import Input from '@material-ui/core/Input';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
+import Fab from '@material-ui/core/Fab';
 import FormControl from '@material-ui/core/FormControl';
 import ListItemText from '@material-ui/core/ListItemText';
 import Select from '@material-ui/core/Select';
@@ -310,8 +311,7 @@ class Content extends Component {
                 </Fragment>
               )}
 
-              <Button
-                variant="fab"
+              <Fab
                 color="primary"
                 aria-label="add"
                 className={styles.addButton}
@@ -319,7 +319,7 @@ class Content extends Component {
                 to="/node/add"
               >
                 <AddIcon />
-              </Button>
+              </Fab>
             </div>
             <ContentTable
               pageChangeHandler={this.pageChangeHandler}
