@@ -87,11 +87,7 @@ class Default extends React.Component {
         <Divider />
         <List data-nightwatch="menu">
           {this.props.menuLinks.map(({ link: menuLink }) => (
-            <ListItem
-              key={menuLink.url.replace(/\//g, '-')}
-              component="li"
-              button
-            >
+            <ListItem key={menuLink.url.replace(/\//g, '-')} component="li">
               <Link to={menuLink.url} className={styles.menuLink} role="button">
                 {iconMap[menuLink.url] ? (
                   <ListItemIcon>{iconMap[menuLink.url]}</ListItemIcon>
