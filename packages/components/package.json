@@ -23,7 +23,7 @@
     "@babel/preset-react": "^7.0.0",
     "@storybook/addon-actions": "^5.1.1",
     "storybook-addon-figma": "^0.1.0",
-    "@storybook/addon-knobs": "^5.0.0",
+    "@storybook/addon-knobs": "^5.1.1",
     "@storybook/addons": "^5.0.0",
     "@storybook/react": "^5.0.0",
     "babel-loader": "8.0.4",
