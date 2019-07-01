@@ -3,28 +3,32 @@
     "description": "Project template for testing Drupal's React Admin user interface",
     "type": "project",
     "license": "GPL-2.0-or-later",
-    "repositories": [
-        {
+    "repositories": {
+        "0": {
             "type": "composer",
             "url": "https://packages.drupal.org/8"
+        },
+        "repo-name": {
+            "type": "path",
+            "url": "/var/www/admin_ui_support"
         }
-    ],
+    },
     "require": {
-        "composer/installers": "^1.2",
+        "composer/installers": "^1.6",
         "cweagans/composer-patches": "^1.6",
-        "drupal-composer/drupal-scaffold": "^2.2",
-        "drupal/core": "~8.7",
+        "drupal-composer/drupal-scaffold": "^2.6",
+        "drupal/core": "8.8.x-dev",
         "oomphinc/composer-installers-extender": "^1.1",
         "php": ">=7.0.8",
         "webflo/drupal-finder": "^1.0.0",
         "webmozart/path-util": "^2.3",
-        "justafish/drupal-admin-ui": "dev-master",
-        "justafish/drupal-admin-ui-support": "dev-master",
-        "zaporylie/composer-drupal-optimizations": "^1.0"
+        "zaporylie/composer-drupal-optimizations": "^1.0",
+        "drupal/admin_toolbar": "^1.26",
+        "drupal/openapi": "dev-1.x"
     },
     "require-dev": {
-        "webflo/drupal-core-require-dev": "~8.7",
-        "drush/drush": "^9.2"
+        "webflo/drupal-core-require-dev": "8.8.x-dev",
+        "drush/drush": "^9.7"
     },
     "minimum-stability": "dev",
     "prefer-stable": true,
@@ -37,21 +41,8 @@
         "process-timeout": 0
     },
     "scripts": {
-        "setup": [
-            "cd docroot && php core/scripts/drupal install demo_umami --no-interaction",
-            "cd docroot && ../vendor/bin/drush en -y jsonapi admin_ui_support"
-        ],
         "start": [
             "cd docroot && php core/scripts/drupal server"
-        ],
-        "devify": [
-            "git clone https://github.com/jsdrupal/drupal-admin-ui",
-            "cp drupal-admin-ui/packages/admin-ui/.env drupal-admin-ui/packages/admin-ui/.env.local",
-            "cd drupal-admin-ui && yarn install",
-            "rm -rf docroot/vfancy",
-            "ln -s ../drupal-admin-ui/build docroot/vfancy",
-            "rm -rf docroot/modules/contrib/drupal-admin-ui-support",
-            "ln -s ../../../drupal-admin-ui/admin_ui_support docroot/modules/contrib/drupal-admin-ui-support"
         ],
         "test": [
             "phpunit -c docroot/core --log-junit reports/phpunit.xml docroot/modules/contrib/drupal-admin-ui-support"
@@ -72,24 +63,28 @@
         ]
     },
     "extra": {
-        "installer-types": ["library"],
+        "installer-types": [
+            "library"
+        ],
         "installer-paths": {
-            "docroot/vfancy": ["justafish/drupal-admin-ui"],
-            "docroot/core": ["type:drupal-core"],
+            "docroot/core": [
+                "type:drupal-core"
+            ],
             "docroot/libraries/{$name}": [
                 "type:drupal-library",
                 "type:bower-asset"
             ],
-            "docroot/modules/contrib/{$name}": ["type:drupal-module"],
-            "docroot/profiles/contrib/{$name}": ["type:drupal-profile"],
-            "docroot/themes/contrib/{$name}": ["type:drupal-theme"]
+            "docroot/modules/contrib/{$name}": [
+                "type:drupal-module"
+            ],
+            "docroot/profiles/contrib/{$name}": [
+                "type:drupal-profile"
+            ],
+            "docroot/themes/contrib/{$name}": [
+                "type:drupal-theme"
+            ]
         },
-        "enable-patching": true,
-        "patches": {
-            "drupal/core": {
-                "Race condition causing 500 on cache table creation": "https://www.drupal.org/files/issues/2019-04-10/3043907-5.patch",
-                "Remove Umami dependency to Workflows because the admin UI doesn't currently support it": "patches/remove-umami-workflows-dependency.patch"
-            }
-        }
+        "enable-patching": false,
+        "patches": []
     }
 }
