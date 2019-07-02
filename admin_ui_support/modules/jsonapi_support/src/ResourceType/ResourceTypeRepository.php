@@ -26,22 +26,24 @@ class ResourceTypeRepository extends JsonApiResourceTypeRepository {
    * {@inheritdoc}
    */
   public function all() {
-    if (!$this->all) {
-      $this->all = parent::all();
+    $all = [];
+    //if (!$this->all) {
+      $resource_types = parent::all();
       $entity_types = $this->entityTypeManager->getDefinitions();
       foreach ($entity_types as $entity_type_id => $entity_type) {
         $resource_type = new CrossBundlesResourceType(
           $entity_type_id,
           $entity_type_id,
           $entity_type->getClass(),
-          static::shouldBeInternalResourceType($entity_type)
+          $entity_type->isInternal()
         );
+        //$relatable_resource_types = $this->calculateRelatableResourceTypes($resource_type);
         $relatable_resource_types = $this->calculateRelatableResourceTypes($resource_type);
         $resource_type->setRelatableResourceTypes($relatable_resource_types);
-        $this->all[] = $resource_type;
+        $all[] = $resource_type;
       }
-    }
-    return $this->all;
+    //}
+    return $all;
   }
 
 }
