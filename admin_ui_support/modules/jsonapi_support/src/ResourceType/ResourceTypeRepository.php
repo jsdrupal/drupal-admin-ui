@@ -37,13 +37,11 @@ class ResourceTypeRepository extends JsonApiResourceTypeRepository {
           $entity_type->getClass(),
           $entity_type->isInternal()
         );
-        //$relatable_resource_types = $this->calculateRelatableResourceTypes($resource_type);
-        $relatable_resource_types = $this->calculateRelatableResourceTypes($resource_type);
+        $relatable_resource_types = $this->calculateRelatableResourceTypes($resource_type,$resource_types);
         $resource_type->setRelatableResourceTypes($relatable_resource_types);
         $all[] = $resource_type;
       }
     //}
     return $all;
   }
-
 }
