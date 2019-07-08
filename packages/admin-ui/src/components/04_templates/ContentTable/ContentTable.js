@@ -61,7 +61,7 @@ class ContentTable extends React.Component {
     this.props.setChecked(
       (checked &&
         this.props.contentList
-          .map(({ attributes: { nid } }) => nid)
+          .map(({ attributes: { drupal_internal__nid } }) => drupal_internal__nid)
           .reduce(
             (acc, cur) => ({
               ...acc,
@@ -153,17 +153,17 @@ class ContentTable extends React.Component {
             {this.props.contentList.map(node => {
               const {
                 type,
-                attributes: { changed, nid, status, title },
+                attributes: { changed, drupal_internal__nid, status, title },
                 relationships,
               } = node;
-              const rowSelectId = `row-select-for-${String(nid)}`;
+              const rowSelectId = `row-select-for-${String(drupal_internal__nid)}`;
               return (
-                <TableRow key={nid}>
+                <TableRow key={drupal_internal__nid}>
                   {
                     <TableCell padding="checkbox">
                       <Checkbox
                         id={rowSelectId}
-                        value={String(nid)}
+                        value={String(drupal_internal__nid)}
                         onChange={(event, checked) => {
                           this.props.setChecked(
                             (() => {
@@ -171,21 +171,21 @@ class ContentTable extends React.Component {
                               const nextChecked = JSON.parse(
                                 JSON.stringify(this.props.checked),
                               );
-                              nextChecked[nid] = checked;
+                              nextChecked[drupal_internal__nid] = checked;
                               return nextChecked;
                             })(),
                           );
                         }}
-                        checked={this.props.checked[nid] || false}
+                        checked={this.props.checked[drupal_internal__nid] || false}
                       />
                     </TableCell>
                   }
                   <TableCell>
-                    <Link to={`/node/${nid}`}>
+                    <Link to={`/node/${drupal_internal__nid}`}>
                       <label htmlFor={rowSelectId}>{title}</label>
                     </Link>
                   </TableCell>
-                  <TableCell>{this.props.contentTypes[type].name}</TableCell>
+                  <TableCell>{/*this.props.contentTypes[type].name*/}{type}</TableCell>
                   {this.props.includes['user--user'] && (
                     <TableCell>
                       {this.props.includes['user--user'][
@@ -220,7 +220,7 @@ class ContentTable extends React.Component {
                       day: 'numeric',
                       hour: 'numeric',
                       minute: 'numeric',
-                    }).format(new Date(changed * 1000))}
+                    }).format(new Date(Date.parse(changed)))}
                   </TableCell>
                   <TableCell style={{ whiteSpace: 'nowrap' }}>
                     <IconButton
@@ -228,7 +228,7 @@ class ContentTable extends React.Component {
                       className={styles.button}
                       component={Link}
                       data-nightwatch={`Edit ${title}`}
-                      to={`/node/${nid}/edit`}
+                      to={`/node/${drupal_internal__nid}/edit`}
                     >
                       <EditIcon />
                     </IconButton>
