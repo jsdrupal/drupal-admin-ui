@@ -36,7 +36,7 @@ if [ ! -f  docroot/sites/default/settings.php ]; then
     composer config repositories.repo-name path "/var/www/admin_ui_support"
     COMPOSER_MEMORY_LIMIT=-1 composer require justafish/drupal-admin-ui-support:dev-master
     drush site:install demo_umami -y --db-url=mysql://drupal:drupal@mysql:3306/drupal --sites-subdir=default
-    drush en -y jsonapi admin_ui_support admin_ui_widget_example
+    drush en -y jsonapi admin_ui_support admin_ui_widget_example admin_toolbar
     drush config:set -y system.logging error_level verbose
     rm -rf docroot/vfancy
     ln -s /var/www/admin-ui/build/ docroot/vfancy

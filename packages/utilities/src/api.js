@@ -33,7 +33,7 @@ async function api(
       url = '/admin-api/menu?_format=json';
       break;
     case 'dblog':
-      url = '/jsonapi/watchdog_entity/';
+      url = '/jsonapi/watchdog_entity/watchdog_entity';
       options.headers.Accept = 'application/vnd.api+json';
       break;
     case 'csrf_token':
@@ -156,7 +156,7 @@ async function api(
       break;
     }
     case 'taxonomy_vocabulary': {
-      url = '/jsonapi/taxonomy_vocabulary';
+      url = '/jsonapi/taxonomy_vocabulary/taxonomy_vocabulary';
       options.headers.Accept = 'application/vnd.api+json';
       break;
     }

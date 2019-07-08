@@ -44,7 +44,7 @@ export default class TaxonomyTermsOverview extends React.Component {
           attributes: PropTypes.shape({
             name: PropTypes.string,
             description: PropTypes.string,
-            vid: PropTypes.string,
+            drupal_internal__vid: PropTypes.string,
           }),
         }),
       ),
@@ -55,7 +55,7 @@ export default class TaxonomyTermsOverview extends React.Component {
         attributes: PropTypes.shape({
           name: PropTypes.string,
           description: PropTypes.string,
-          vid: PropTypes.string,
+          drupal_internal__vid: PropTypes.string,
         }),
       }),
     ]),
@@ -132,3 +132,4 @@ export default class TaxonomyTermsOverview extends React.Component {
     );
   }
 }
+
