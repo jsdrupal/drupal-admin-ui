@@ -4,7 +4,7 @@ import PrettyError from 'pretty-error';
 
 import InlineMessage from '../../02_atoms/InlineMessage/InlineMessage';
 
-import { MESSAGE_SEVERITY_ERROR } from '../../../constants/messages';
+import { MESSAGE_SEVERITY } from '../../../constants/messages';
 
 class ErrorBoundary extends React.Component {
   constructor(props) {
@@ -29,7 +29,7 @@ class ErrorBoundary extends React.Component {
       return (
         <InlineMessage
           message={pe.render(this.state.error)}
-          messageSeverity={MESSAGE_SEVERITY_ERROR}
+          messageSeverity={MESSAGE_SEVERITY.ERROR}
         />
       );
     }

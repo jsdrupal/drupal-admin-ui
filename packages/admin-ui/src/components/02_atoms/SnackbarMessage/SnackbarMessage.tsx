@@ -11,19 +11,14 @@ import WarningIcon from '@material-ui/icons/Warning';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 
-import {
-  MESSAGE_SEVERITY_ERROR,
-  MESSAGE_SEVERITY_WARNING,
-  MESSAGE_SEVERITY_INFO,
-  MESSAGE_SEVERITY_SUCCESS,
-} from '../../../constants/messages';
+import { MESSAGE_SEVERITY } from '../../../constants/messages';
 
-const variantIcon = {
-  MESSAGE_SEVERITY_SUCCESS: CheckCircleIcon,
-  MESSAGE_SEVERITY_WARNING: WarningIcon,
-  MESSAGE_SEVERITY_ERROR: ErrorIcon,
-  MESSAGE_SEVERITY_INFO: InfoIcon,
-};
+const variantIcon: Map<MESSAGE_SEVERITY, any> = new Map([
+  [MESSAGE_SEVERITY.SUCCESS, CheckCircleIcon],
+  [MESSAGE_SEVERITY.WARNING, WarningIcon],
+  [MESSAGE_SEVERITY.ERROR, ErrorIcon],
+  [MESSAGE_SEVERITY.INFO, InfoIcon],
+]);
 
 const styles = {
   success: css`
@@ -55,7 +50,15 @@ const styles = {
   `,
 };
 
-const SnackbarMessage = props => {
+interface Props {
+  open: boolean;
+  message: string | React.ReactNode;
+  messageSeverity: MESSAGE_SEVERITY;
+  onClose: () => any;
+  duration?: number;
+}
+
+const SnackbarMessage: StatelessComponent<Props> = (props: Props) => {
   const Icon = variantIcon[props.messageSeverity];
   return (
     <Snackbar
@@ -67,13 +70,13 @@ const SnackbarMessage = props => {
       <SnackbarContent
         className={(severity => {
           switch (severity) {
-            case MESSAGE_SEVERITY_ERROR:
+            case MESSAGE_SEVERITY.ERROR:
               return styles.error;
-            case MESSAGE_SEVERITY_WARNING:
+            case MESSAGE_SEVERITY.WARNING:
               return styles.warning;
-            case MESSAGE_SEVERITY_INFO:
+            case MESSAGE_SEVERITY.INFO:
               return styles.info;
-            case MESSAGE_SEVERITY_SUCCESS:
+            case MESSAGE_SEVERITY.SUCCESS:
               return styles.success;
             default:
               return styles.error;
@@ -100,21 +103,8 @@ const SnackbarMessage = props => {
   );
 };
 
-SnackbarMessage.defaultProps = {
+SnackbarMessage.defaultProps: Partial<Props> = {
   duration: 5000,
-};
-
-SnackbarMessage.propTypes = {
-  open: PropTypes.bool.isRequired,
-  message: PropTypes.node.isRequired,
-  messageSeverity: PropTypes.oneOf([
-    MESSAGE_SEVERITY_ERROR,
-    MESSAGE_SEVERITY_SUCCESS,
-    MESSAGE_SEVERITY_INFO,
-    MESSAGE_SEVERITY_WARNING,
-  ]).isRequired,
-  onClose: PropTypes.func.isRequired,
-  duration: PropTypes.number,
 };
 
 export default SnackbarMessage;

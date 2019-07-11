@@ -1,11 +1,12 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import InlineMessage from './InlineMessage';
+import { MESSAGE_SEVERITY } from ' ../../../constants/messages';
 
 describe('inline messages', () => {
   it('severity error', () => {
     const inlineMessage = 'This is sample message';
-    const severity = 'MESSAGE_SEVERITY_ERROR';
+    const severity = MESSAGE_SEVERITY.ERROR;
     const message = shallow(
       <InlineMessage message={inlineMessage} messageSeverity={severity} />,
     );
