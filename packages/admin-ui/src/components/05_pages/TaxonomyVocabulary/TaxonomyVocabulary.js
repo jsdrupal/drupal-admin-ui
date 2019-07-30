@@ -120,7 +120,9 @@ export default class TaxonomyVocabulary extends React.Component {
                     <TableCell>{vocabulary.attributes.name}</TableCell>
                     <TableCell>{vocabulary.attributes.description}</TableCell>
                     <TableCell>
-                      {this.vocabularyOperations(vocabulary.attributes.vid)}
+                      {this.vocabularyOperations(
+                        vocabulary.attributes.drupal_internal__vid,
+                      )}
                     </TableCell>
                   </TableRow>
                 ))}

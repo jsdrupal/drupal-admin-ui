@@ -4,8 +4,10 @@ namespace Drupal\jsonapi_support;
 
 use Drupal\Core\DependencyInjection\ContainerBuilder;
 use Drupal\Core\DependencyInjection\ServiceProviderBase;
-use Drupal\jsonapi_support\Controller\JsonApiRequestHandler;
+use Drupal\jsonapi_support\Controller\EntityResource;
 use Drupal\jsonapi_support\ResourceType\ResourceTypeRepository;
+use Symfony\Component\DependencyInjection\Definition;
+use Symfony\Component\DependencyInjection\Reference;
 
 /**
  * Alters Jsonapi service to override the resource type repository.
@@ -24,10 +26,10 @@ class JsonapiSupportServiceProvider extends ServiceProviderBase {
       $definition->setClass(ResourceTypeRepository::class);
     }
 
-    if ($container->has('jsonapi.request_handler')) {
-      // Override the class used for Jsonapi request handler.
-      $definition = $container->getDefinition('jsonapi.request_handler');
-      $definition->setClass(JsonApiRequestHandler::class);
+    if ($container->has('jsonapi.entity_resource')) {
+      $container->register('jsonapi_support.entity_resource', EntityResource::class)
+        ->setDecoratedService('jsonapi.entity_resource', 'jsonapi.entity_resource.inner')
+        ->addArgument(new Reference('jsonapi.entity_resource.inner'));
     }
   }
 

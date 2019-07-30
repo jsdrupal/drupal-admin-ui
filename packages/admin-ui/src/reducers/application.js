@@ -136,7 +136,7 @@ export default (state = initialState, action) => {
         contentTypes: action.payload.contentTypes.data.reduce(
           (accumulator, contentType) => ({
             ...accumulator,
-            [contentType.attributes.type]: {
+            [contentType.attributes.drupal_internal__type]: {
               name: contentType.attributes.name,
               description: contentType.attributes.description,
             },

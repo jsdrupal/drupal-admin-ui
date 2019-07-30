@@ -19,6 +19,18 @@ class CrossBundlesResourceType extends ResourceType {
 
   /**
    * {@inheritdoc}
+   *
+   * 
+   */
+  public function getInternalName($field_name) {
+    if ($this->entityTypeId === 'node' && $field_name === 'bundle') {
+      return 'type';
+    }
+    return parent::getInternalName($field_name);
+  }
+
+  /**
+   * {@inheritdoc}
    */
   public function getBundle() {
     return NULL;

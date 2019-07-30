@@ -16,7 +16,6 @@
     },
     "require": {
         "php": "^5.5.9 || ^7.0",
-        "drupal/jsonapi": "^1.22",
         "drupal/openapi": "1.x-dev"
     }
 }

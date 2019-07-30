@@ -6,9 +6,9 @@ ARG HOST_GID
 ADD .docker/scripts/createUser.sh /root/createUser.sh
 
 RUN apk add shadow sudo supervisor make \
-        php sqlite composer git \
+        php sqlite composer git patch \
         php7-pdo php7-gd php7-openssl php7-json php7-mbstring php7-dom php7-session php7-xml php7-simplexml \
-        php7-tokenizer php7-curl php7-xmlwriter php7-ctype php7-opcache php7-pdo_mysql mysql-client php7-fpm \
+        php7-tokenizer php7-curl php7-xmlwriter php7-ctype php7-opcache php7-pdo_mysql mysql-client php7-fpm php7-fileinfo \
         php7-xdebug && \
     sed -i 's/^CREATE_MAIL_SPOOL=yes/CREATE_MAIL_SPOOL=no/' /etc/default/useradd && \
     sed -e 's/# %wheel ALL=(ALL) NOPASSWD: ALL/%wheel ALL=(ALL) NOPASSWD: ALL/g' -i /etc/sudoers && \

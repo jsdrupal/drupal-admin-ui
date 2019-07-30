@@ -131,6 +131,7 @@ async function api(
 
       const saveToken = await api(REACT_APP_DRUPAL_BASE_URL, 'csrf_token');
       options.headers.Accept = 'application/vnd.api+json';
+      options.headers['Content-Type'] = 'application/vnd.api+json';
       options.headers['X-CSRF-Token'] = saveToken;
       options.method = 'POST';
       options.body = JSON.stringify({ data: node });
@@ -149,10 +150,14 @@ async function api(
 
       const saveToken = await api(REACT_APP_DRUPAL_BASE_URL, 'csrf_token');
       options.headers.Accept = 'application/vnd.api+json';
+      options.headers['Content-Type'] = 'application/vnd.api+json';
       options.headers['X-CSRF-Token'] = saveToken;
       options.method = 'PATCH';
       options.body = JSON.stringify({ data: parameters.node });
-      url = parameters.node.links.self.replace(REACT_APP_DRUPAL_BASE_URL, '');
+      url = parameters.node.links.self.href.replace(
+        REACT_APP_DRUPAL_BASE_URL,
+        '',
+      );
       break;
     }
     case 'taxonomy_vocabulary': {

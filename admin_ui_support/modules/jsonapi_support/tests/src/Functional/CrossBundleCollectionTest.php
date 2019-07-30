@@ -95,9 +95,14 @@ class CrossBundleCollectionTest extends BrowserTestBase {
     );
 
     $filter = [
-      'type' => ['value' => 'article'],
+      'bundle.id' => ['value' => 'article'],
     ];
-    $data = $this->getDecodedGet('jsonapi/node', ['filter' => $filter])['data'];
+    $result = $this->getDecodedGet('jsonapi/node', ['filter' => $filter]);
+
+    print_r($result);
+    return;
+    $data = $result['data'];
+
     $this->assertEquals(
       [
         'The article title',
@@ -107,7 +112,7 @@ class CrossBundleCollectionTest extends BrowserTestBase {
     );
 
     $filter = [
-      'type' => ['value' => 'page'],
+      'bundle' => ['value' => 'page'],
     ];
     $data = $this->getDecodedGet('jsonapi/node', ['filter' => $filter])['data'];
 
@@ -142,7 +147,7 @@ class CrossBundleCollectionTest extends BrowserTestBase {
       $this->getDataTitles($data)
     );
     $node_uid_uuid = $data[0]['relationships']['uid']['data']['id'];
-    $included_uuid = $json_response['included'][0]['attributes']['uuid'];
+    $included_uuid = $json_response['included'][0]['id'];
     $this->assertEquals($node_uid_uuid, $included_uuid);
 
     // Ensure that "sort" works in query.
@@ -168,7 +173,7 @@ class CrossBundleCollectionTest extends BrowserTestBase {
     $this->assertEquals('405', $response->getStatusCode());
     foreach (['POST', 'PATCH', 'DELETE'] as $method) {
       $response = $this->httpClient->request($method, 'jsonapi/node/' . Node::load(1)->uuid(), $request_options);
-      $this->assertEquals('404', $response->getStatusCode());
+      $this->assertEquals('405', $response->getStatusCode());
     }
   }
 

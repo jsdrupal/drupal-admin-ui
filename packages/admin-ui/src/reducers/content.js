@@ -23,7 +23,8 @@ export default (state = initialState, action) => {
       return {
         ...state,
         contentByNid: {
-          [action.payload.content.attributes.nid]: action.payload.content,
+          [action.payload.content.attributes.drupal_internal__nid]:
+            action.payload.content,
         },
       };
     case CONTENT_ADD_CHANGE:
