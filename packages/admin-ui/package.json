@@ -62,7 +62,7 @@
     "babel-preset-react-app": "^7.0.0",
     "babel-register": "^6.26.0",
     "babel-runtime": "^6.26.0",
-    "chromedriver": "^2.45.0",
+    "chromedriver": "^76.0.0",
     "enzyme": "^3.3.0",
     "enzyme-adapter-react-16": "^1.1.1",
     "eslint": "5.16.0",
