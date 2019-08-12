@@ -1,5 +1,40 @@
-import qs from 'qs';
+import * as qs from 'qs';
 import { ApiError } from './errors';
+import { QueryString } from './QueryString';
+
+interface Node {
+  body: {};
+  attributes: {
+    nid: string;
+    revision_timestamp: number;
+    changed: boolean;
+  };
+  links?: {
+    self?: string;
+  };
+  relationships: {
+    revision_uid: string;
+    type: string;
+    uid: string;
+  };
+  id: string;
+  type: string;
+}
+
+interface Parameters {
+  id?: string;
+  body?: BodyInit;
+  bundle?: string;
+  entityId?: string;
+  entityTypeId?: string;
+  fileName?: string;
+  fieldName?: string;
+  node?: Node;
+  role?: {
+    id: string;
+  };
+  type?: string;
+}
 
 /**
  * An async helper function for making requests to a Drupal backend.
@@ -20,13 +55,20 @@ import { ApiError } from './errors';
  *  Result of the fetch operation.
  */
 async function api(
-  REACT_APP_DRUPAL_BASE_URL,
-  endpoint,
-  { queryString = null, parameters = {}, options = {} } = {},
+  REACT_APP_DRUPAL_BASE_URL: string,
+  endpoint?: string,
+  queryParameters: {
+    queryString?: QueryString,
+    parameters?: Parameters;
+    options?: RequestInit;
+  } = {},
 ) {
-  let url;
+  let isResponseText: boolean = false;
+  const { queryString = null, parameters = {}, options = {} } = queryParameters;
+
+  let url: string;
   options.credentials = 'include';
-  options.headers = options.headers || {};
+  options.headers = new Headers(options.headers);
 
   switch (endpoint) {
     case 'menu':
@@ -34,26 +76,26 @@ async function api(
       break;
     case 'dblog':
       url = '/jsonapi/watchdog_entity/';
-      options.headers.Accept = 'application/vnd.api+json';
+      options.headers.append('Accept', 'application/vnd.api+json');
       break;
     case 'csrf_token':
       url = '/session/token';
-      options.text = true;
+      isResponseText = true;
       break;
     case 'dblog:types':
       url = '/admin-ui-support/dblog-types?_format=json';
       break;
     case 'roles':
       url = '/jsonapi/user_role';
-      options.headers.Accept = 'application/vnd.api+json';
+      options.headers.append('Accept', 'application/vnd.api+json');
       break;
     case 'role':
       url = `/jsonapi/user_role/${parameters.role.id}`;
-      options.headers.Accept = 'application/vnd.api+json';
+      options.headers.append('Accept', 'application/vnd.api+json');
       break;
     case 'role:patch':
       url = `/jsonapi/user_role/${parameters.role.id}`;
-      options.headers.Accept = 'application/vnd.api+json';
+      options.headers.append('Accept', 'application/vnd.api+json');
       options.method = 'PATCH';
       options.body = JSON.stringify({ data: parameters.role });
       options.headers['Content-Type'] = 'application/vnd.api+json';
@@ -74,23 +116,23 @@ async function api(
       break;
     case 'content':
       url = '/jsonapi/node';
-      options.headers.Accept = 'application/vnd.api+json';
+      options.headers.append('Accept', 'application/vnd.api+json');
       break;
     case 'content_single':
       url = `/jsonapi/node/${parameters.bundle}/${parameters.id}`;
-      options.headers.Accept = 'application/vnd.api+json';
+      options.headers.append('Accept', 'application/vnd.api+json');
       break;
     case 'file':
       url = `/jsonapi/file`;
-      options.headers.Accept = 'application/vnd.api+json';
+      options.headers.append('Accept', 'application/vnd.api+json');
       break;
     case 'actions':
       url = '/jsonapi/action';
-      options.headers.Accept = 'application/vnd.api+json';
+      options.headers.append('Accept', 'application/vnd.api+json');
       break;
     case 'contentTypes':
       url = '/jsonapi/node_type';
-      options.headers.Accept = 'application/vnd.api+json';
+      options.headers.append('Accept', 'application/vnd.api+json');
       break;
     case 'node:delete': {
       // Set the type to the right value for jsonapi to process.
@@ -104,8 +146,8 @@ async function api(
 
       const deleteToken = await api('csrf_token');
       // @todo Delete requests sadly return non json.
-      options.text = true;
-      options.headers.Accept = 'application/vnd.api+json';
+      isResponseText = true;
+      options.headers.append('Accept', 'application/vnd.api+json');
       options.headers['X-CSRF-Token'] = deleteToken;
       options.headers['Content-Type'] = 'application/vnd.api+json';
       options.method = 'DELETE';
@@ -130,7 +172,7 @@ async function api(
       delete node.relationships.uid;
 
       const saveToken = await api(REACT_APP_DRUPAL_BASE_URL, 'csrf_token');
-      options.headers.Accept = 'application/vnd.api+json';
+      options.headers['Accept'] = 'application/vnd.api+json';
       options.headers['X-CSRF-Token'] = saveToken;
       options.method = 'POST';
       options.body = JSON.stringify({ data: node });
@@ -148,7 +190,7 @@ async function api(
       };
 
       const saveToken = await api(REACT_APP_DRUPAL_BASE_URL, 'csrf_token');
-      options.headers.Accept = 'application/vnd.api+json';
+      options.headers['Accept'] = 'application/vnd.api+json';
       options.headers['X-CSRF-Token'] = saveToken;
       options.method = 'PATCH';
       options.body = JSON.stringify({ data: parameters.node });
@@ -157,17 +199,17 @@ async function api(
     }
     case 'taxonomy_vocabulary': {
       url = '/jsonapi/taxonomy_vocabulary';
-      options.headers.Accept = 'application/vnd.api+json';
+      options.headers['Accept'] = 'application/vnd.api+json';
       break;
     }
     case 'taxonomy_term': {
       url = `/jsonapi/taxonomy_term/${parameters.type}`;
-      options.headers.Accept = 'application/vnd.api+json';
+      options.headers['Accept'] = 'application/vnd.api+json';
       break;
     }
     case 'user': {
       url = `/jsonapi/user`;
-      options.headers.Accept = 'application/vnd.api+json';
+      options.headers['Accept'] = 'application/vnd.api+json';
       break;
     }
     case 'schema': {
@@ -213,13 +255,13 @@ async function api(
         : ''
     }`,
     options,
-  ).then(res => {
+  ).then((res) => {
     if (![200, 201, 204].includes(res.status)) {
       throw new ApiError(res.status, res.statusText, res);
     }
 
     // CSRF tokens return text, not json.
-    if (options.text) {
+    if (isResponseText) {
       return res.text();
     }
     return res.json();

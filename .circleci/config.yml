@@ -109,7 +109,6 @@ jobs:
           path: ~/project/packages/admin-ui/reports
       - store_artifacts:
           path: ~/project/packages/admin-ui/reports
-
   test_drupal:
     machine: true
     steps:

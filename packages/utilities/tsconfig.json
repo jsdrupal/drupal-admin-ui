@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+        "target": "es5",
+        "suppressImplicitAnyIndexErrors": true,
+        "strictNullChecks": false,
+        "lib": [
+            "es7", "es2015.core", "dom"
+        ],
+        "module": "commonjs",
+        "moduleResolution": "node",
+        "outDir": "dist"
+    },
+    "include": [
+      "src/**/*.ts"
+    ]
+}

@@ -14,7 +14,7 @@
     "eslint": "eslint packages/*/src --ext .js,.jsx,.ts,.tsx  --max-warnings=0 --fix",
     "prettier": "prettier --write '{admin_ui_support/modules/*/js,packages/*}/src/**/*.{js,jsx,ts,tsx}'",
     "build": "yarn workspace @drupal/admin-ui build",
-    "test": "yarn run test:lint && yarn workspace @drupal/admin-ui test",
-    "test:lint": "eslint packages/*/src  --ext .js,.jsx,.ts,.tsx --max-warnings=0 --format junit -o reports/eslint-junit.xml"
+    "test": "yarn run test:lint && yarn workspace @drupal/admin-ui-utilities test:lint && yarn workspace @drupal/admin-ui test",
+    "test:lint": "eslint packages/*/src/*.js   --max-warnings=0 --format junit -o reports/eslint-junit.xml"
   }
 }

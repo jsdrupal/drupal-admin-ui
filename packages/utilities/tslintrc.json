@@ -1,0 +1,21 @@
+{
+  "extends": [
+    "tslint-config-airbnb",
+    "tslint-config-prettier",
+    "tslint:latest"
+  ],
+  "parser": "babel-eslint",
+  "env": {
+    "browser": true,
+    "es6": true,
+    "jest": true,
+    "serviceworker": true
+  },
+  "rules": {
+    "quotemark": [true, "single"],
+    "no-boolean-literal-compare": false,
+    "no-param-reassign": [2, { "props": false }],
+    "no-string-literal": false,
+    "interface-name": [true, "never-prefix"]
+  }
+}
