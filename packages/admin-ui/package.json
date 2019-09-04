@@ -44,7 +44,7 @@
     "react-router-dom": "^4.2.2",
     "react-router-redux": "^5.0.0-alpha.9",
     "react-rte": "^0.16.1",
-    "react-side-effect": "^1.1.5",
+    "react-side-effect": "^2.1.0",
     "react-sticky": "^6.0.2",
     "redux": "^4.0.1",
     "redux-devtools-extension": "^2.13.2",
