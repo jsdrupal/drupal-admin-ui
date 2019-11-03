@@ -26,7 +26,7 @@
     "@types/react-dom": "^16.0.9",
     "deepmerge": "^3.0.0",
     "downshift": "^3.1.4",
-    "emotion": "^10.0.0",
+    "emotion": "^10.0.23",
     "history": "^4.9.0",
     "interweave": "^9.2.1",
     "jss": "^9.8.2",
