@@ -79,7 +79,7 @@
     "react-scripts": "3.0.1",
     "react-test-renderer": "^16.6.3",
     "redux-saga-test-plan": "^3.6.0",
-    "storybook": "^1.0.0",
+    "storybook": "^5.3.7",
     "storybook-addon-figma": "^0.1.0",
     "storybook-addon-jsx": "^5.3.0",
     "typescript-eslint-parser": "^21.0.1"
